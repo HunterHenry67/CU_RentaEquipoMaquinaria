@@ -22,4 +22,6 @@ public interface IContratacionRenta{
     
     public abstract void abrirSolicitudRenta();
     
+    public abstract void ocultarTodo();
+    
 }

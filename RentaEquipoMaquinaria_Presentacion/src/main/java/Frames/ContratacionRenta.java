@@ -18,12 +18,13 @@ public class ContratacionRenta implements IContratacionRenta{
     private SolicitudRentaFrame solicitudRentaForm;
     
     public ContratacionRenta(){
-        this.iniciarSesionFrame = new InicioSesionFrame();
-        this.menuPrincipalFrame = new MenuPrincipalFrame();
-        this.identificacionClienteFrame = new IdentificacionClienteFrame();
-        this.registrarClienteFrame = new RegistroClienteFrame();
-        this.busquedaEquipoForm = new BusquedaEquipoFrame();
-        this.solicitudRentaForm = new SolicitudRentaFrame();
+        this.iniciarSesionFrame = new InicioSesionFrame(this);
+        this.menuPrincipalFrame = new MenuPrincipalFrame(this);
+        this.identificacionClienteFrame = new IdentificacionClienteFrame(this);
+        this.registrarClienteFrame = new RegistroClienteFrame(this);
+        this.busquedaEquipoForm = new BusquedaEquipoFrame(this);
+        this.solicitudRentaForm = new SolicitudRentaFrame(this);
+        this.abrirInciarSesión();
     }
 
     @Override
@@ -48,12 +49,19 @@ public class ContratacionRenta implements IContratacionRenta{
 
     @Override
     public void abrirRegistrarCliente() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        registrarClienteFrame.setVisible(true);
     }
 
     @Override
     public void abrirSolicitudRenta() {
+        solicitudRentaForm.setVisible(true);
+    }
+
+    @Override
+    public void ocultarTodo() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
+    
     
 }
