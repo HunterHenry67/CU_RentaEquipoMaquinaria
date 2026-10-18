@@ -10,10 +10,10 @@ package Frames;
  */
 public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
-    private IContratacionRenta navegacionRenta;
+    private IContratacionRenta contratacionRenta;
     
-    public BusquedaEquipoFrame(IContratacionRenta navegacionRenta) {
-        this.navegacionRenta = navegacionRenta;
+    public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
+        this.contratacionRenta = contratacionRenta;
         initComponents();
     }
 
