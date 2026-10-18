@@ -8,6 +8,18 @@ package Frames;
  *
  * @author Home
  */
-public interface IContratacionRenta {
+public interface IContratacionRenta{  
+    
+    public abstract void abrirInciarSesión();
+    
+    public  abstract void abrirMenuPrincipal();
+    
+    public abstract void abrirIdentificacionCliente();
+    
+    public abstract void abrirBusquedaEquipo();
+    
+    public abstract void abrirRegistrarCliente();
+    
+    public abstract void abrirSolicitudRenta();
     
 }
