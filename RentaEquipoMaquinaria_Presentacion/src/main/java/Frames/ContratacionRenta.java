@@ -29,37 +29,48 @@ public class ContratacionRenta implements IContratacionRenta{
 
     @Override
     public void abrirInciarSesión() {
+        ocultarTodo();
         iniciarSesionFrame.setVisible(true);
     }
 
     @Override
     public void abrirMenuPrincipal() {
+        ocultarTodo();
         menuPrincipalFrame.setVisible(true);
     }
 
     @Override
     public void abrirIdentificacionCliente() {
+        ocultarTodo();
         identificacionClienteFrame.setVisible(true);
     }
 
     @Override
     public void abrirBusquedaEquipo() {
+        ocultarTodo();
         busquedaEquipoForm.setVisible(true);
     }
 
     @Override
     public void abrirRegistrarCliente() {
+        ocultarTodo();
         registrarClienteFrame.setVisible(true);
     }
 
     @Override
     public void abrirSolicitudRenta() {
+        ocultarTodo();
         solicitudRentaForm.setVisible(true);
     }
 
     @Override
     public void ocultarTodo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(iniciarSesionFrame != null) iniciarSesionFrame.setVisible(false);
+        if(menuPrincipalFrame != null) menuPrincipalFrame.setVisible(false);
+        if(identificacionClienteFrame != null) identificacionClienteFrame.setVisible(false);
+        if(busquedaEquipoForm != null) busquedaEquipoForm.setVisible(false);
+        if(registrarClienteFrame != null) registrarClienteFrame.setVisible(false);
+        if(solicitudRentaForm != null) solicitudRentaForm.setVisible(false);
     }
     
     
