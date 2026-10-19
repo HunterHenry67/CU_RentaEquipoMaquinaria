@@ -68,14 +68,6 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
 
         jLabel7.setText("RFC:");
 
-        jTextField1.setText("jTextField1");
-
-        jTextField2.setText("jTextField2");
-
-        jTextField3.setText("jTextField3");
-
-        jTextField4.setText("jTextField4");
-
         jButton2.setText("Cancelar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,12 +89,6 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         jLabel10.setText("Teléfono:");
 
         jLabel11.setText("Puesto:");
-
-        jTextField5.setText("jTextField5");
-
-        jTextField6.setText("jTextField6");
-
-        jTextField7.setText("jTextField7");
 
         jLabel12.setText("Ingresar Identificación del Encargado");
 
