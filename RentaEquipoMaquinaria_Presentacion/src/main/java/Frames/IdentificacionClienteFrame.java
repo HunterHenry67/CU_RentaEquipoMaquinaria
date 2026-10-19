@@ -57,6 +57,11 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         btnBuscar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,21 +89,41 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         btnRegistrarNuevCliente.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrarNuevCliente.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarNuevCliente.setText("Registrar Cliente Nuevo");
+        btnRegistrarNuevCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarNuevClienteActionPerformed(evt);
+            }
+        });
 
         btnModificarDatos.setBackground(new java.awt.Color(0, 0, 0));
         btnModificarDatos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnModificarDatos.setForeground(new java.awt.Color(255, 255, 255));
         btnModificarDatos.setText("Modificar Datos");
+        btnModificarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarDatosActionPerformed(evt);
+            }
+        });
 
         btnRegistrarNuevSoli.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistrarNuevSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrarNuevSoli.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarNuevSoli.setText("Registrar Nueva Solcitud");
+        btnRegistrarNuevSoli.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarNuevSoliActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setBackground(new java.awt.Color(255, 0, 0));
         btnCancelar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(255, 255, 255));
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -159,10 +184,27 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
+        contratacionRenta.abrirRegistrarCliente();
+    }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
+
+    private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
+        contratacionRenta.abrirRegistrarCliente();
+    }//GEN-LAST:event_btnModificarDatosActionPerformed
+
+    private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
+        contratacionRenta.abrirSolicitudRenta();
+    }//GEN-LAST:event_btnRegistrarNuevSoliActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        contratacionRenta.abrirMenuPrincipal();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

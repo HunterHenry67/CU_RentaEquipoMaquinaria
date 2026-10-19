@@ -121,6 +121,11 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         btnAgregarEquipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnAgregarEquipo.setForeground(new java.awt.Color(255, 255, 255));
         btnAgregarEquipo.setText("Agregar un Equipo");
+        btnAgregarEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarEquipoActionPerformed(evt);
+            }
+        });
 
         tableEquipoSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         tableEquipoSoli.setForeground(new java.awt.Color(255, 255, 255));
@@ -189,6 +194,11 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         btnRegistrar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelSolictudNormalLayout = new javax.swing.GroupLayout(panelSolictudNormal);
         panelSolictudNormal.setLayout(panelSolictudNormalLayout);
@@ -367,6 +377,14 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
+
+    private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
+        contratacionRenta.abrirBusquedaEquipo();
+    }//GEN-LAST:event_btnAgregarEquipoActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegistrarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

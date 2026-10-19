@@ -52,6 +52,12 @@ public class InicioSesionFrame extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Contraseña:");
 
+        txtFieldCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFieldCorreoActionPerformed(evt);
+            }
+        });
+
         btnIngresar.setBackground(new java.awt.Color(0, 0, 0));
         btnIngresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnIngresar.setForeground(new java.awt.Color(255, 255, 255));
@@ -113,8 +119,12 @@ public class InicioSesionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        // TODO add your handling code here:
+        contratacionRenta.abrirMenuPrincipal();
     }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void txtFieldCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFieldCorreoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

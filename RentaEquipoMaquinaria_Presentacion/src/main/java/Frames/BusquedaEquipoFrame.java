@@ -72,11 +72,21 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
         btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         btnRegistrarEquipo.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistrarEquipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrarEquipo.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarEquipo.setText("Registrar Equipo");
+        btnRegistrarEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarEquipoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,6 +138,14 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.abrirSolicitudRenta();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void btnRegistrarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEquipoActionPerformed
+        contratacionRenta.abrirSolicitudRenta();
+    }//GEN-LAST:event_btnRegistrarEquipoActionPerformed
 
     /**
      * @param args the command line arguments
