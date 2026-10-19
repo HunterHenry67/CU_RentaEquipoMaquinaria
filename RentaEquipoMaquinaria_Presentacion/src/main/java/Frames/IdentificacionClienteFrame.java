@@ -42,15 +42,16 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Identificación Cliente");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Identificación de Cliente ");
 
         comboFiltroBusqCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Búsqueda de Cliente Por:");
 
         btnBuscar.setBackground(new java.awt.Color(0, 0, 0));
@@ -82,7 +83,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableCliente);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("¿Es un cliente nuevo?");
 
         btnRegistrarNuevCliente.setBackground(new java.awt.Color(0, 0, 0));
