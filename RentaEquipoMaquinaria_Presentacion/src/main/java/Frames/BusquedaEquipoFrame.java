@@ -15,6 +15,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

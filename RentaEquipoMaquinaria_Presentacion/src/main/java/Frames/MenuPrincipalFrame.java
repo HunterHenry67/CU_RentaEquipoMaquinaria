@@ -15,6 +15,7 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
     public MenuPrincipalFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

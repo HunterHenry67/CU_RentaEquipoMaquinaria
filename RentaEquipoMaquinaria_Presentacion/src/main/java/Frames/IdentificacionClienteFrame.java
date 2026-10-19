@@ -15,6 +15,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     public IdentificacionClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     
     

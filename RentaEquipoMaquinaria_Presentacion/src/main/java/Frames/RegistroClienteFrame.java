@@ -15,6 +15,8 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     public RegistroClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        radioBtnClientePart.setSelected(true);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -176,10 +178,20 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         radioBtnClientePart.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         radioBtnClientePart.setForeground(new java.awt.Color(0, 0, 0));
         radioBtnClientePart.setText("Cliente Particular");
+        radioBtnClientePart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBtnClientePartActionPerformed(evt);
+            }
+        });
 
         radioBtnEmpresa.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         radioBtnEmpresa.setForeground(new java.awt.Color(0, 0, 0));
         radioBtnEmpresa.setText("Empresa");
+        radioBtnEmpresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioBtnEmpresaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -268,6 +280,16 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         contratacionRenta.abrirSolicitudRenta();
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void radioBtnClientePartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBtnClientePartActionPerformed
+        panelEncargado.setVisible(false);
+        this.pack();
+    }//GEN-LAST:event_radioBtnClientePartActionPerformed
+
+    private void radioBtnEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioBtnEmpresaActionPerformed
+        panelEncargado.setVisible(true);
+        this.pack();
+    }//GEN-LAST:event_radioBtnEmpresaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

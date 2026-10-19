@@ -382,6 +382,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Cliente Particular"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioBtnClientePartActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="radioBtnEmpresa">
       <Properties>
@@ -393,6 +396,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Empresa"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="radioBtnEmpresaActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -15,6 +15,7 @@ public class InicioSesionFrame extends javax.swing.JFrame {
     public InicioSesionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
