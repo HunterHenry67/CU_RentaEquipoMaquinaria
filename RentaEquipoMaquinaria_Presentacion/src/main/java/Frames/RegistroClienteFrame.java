@@ -4,6 +4,8 @@
  */
 package Frames;
 
+import javax.swing.ButtonGroup;
+
 /**
  *
  * @author Home
@@ -15,7 +17,11 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     public RegistroClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        ButtonGroup grupo = new ButtonGroup();
+        grupo.add(radioBtnClientePart); 
+        grupo.add(radioBtnEmpresa);
         radioBtnClientePart.setSelected(true);
+        radioBtnEmpresa.setSelected(false);
         this.setLocationRelativeTo(null);
     }
 
