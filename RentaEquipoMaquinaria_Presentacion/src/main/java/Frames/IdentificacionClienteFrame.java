@@ -34,7 +34,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         txtFieldBusqCliente = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableCliente = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         btnRegistrarNuevCliente = new javax.swing.JButton();
         btnModificarDatos = new javax.swing.JButton();
@@ -58,7 +58,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("Buscar");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -74,7 +74,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableCliente);
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -175,7 +175,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableCliente;
     private javax.swing.JTextField txtFieldBusqCliente;
     // End of variables declaration//GEN-END:variables
 }
