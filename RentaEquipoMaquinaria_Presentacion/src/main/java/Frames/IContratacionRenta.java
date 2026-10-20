@@ -34,6 +34,10 @@ public interface IContratacionRenta{
     
     public abstract void abrirEvaluacionTecnica();
     
+    public abstract void abrirCotizacion();
+    
+    public abstract void abrirRequisitosRenta();
+    
     public abstract void ocultarTodo();
     
 }

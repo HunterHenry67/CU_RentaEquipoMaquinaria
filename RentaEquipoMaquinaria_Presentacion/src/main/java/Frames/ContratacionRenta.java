@@ -22,6 +22,8 @@ public class ContratacionRenta implements IContratacionRenta{
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
+    private CotizacionFrame cotizacionFrame;
+    private RequisitosRentaFrame requisitosRentaFrame;
     
     public ContratacionRenta(){
         this.iniciarSesionFrame = new InicioSesionFrame(this);
@@ -36,6 +38,8 @@ public class ContratacionRenta implements IContratacionRenta{
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
+        this.cotizacionFrame = new CotizacionFrame(this);
+        this.requisitosRentaFrame = new RequisitosRentaFrame(this);
         this.abrirInciarSesión();
     }
 
@@ -112,6 +116,19 @@ public class ContratacionRenta implements IContratacionRenta{
     }
 
     @Override
+    public void abrirCotizacion() {
+        ocultarTodo();
+        cotizacionFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirRequisitosRenta() {
+        ocultarTodo();
+        requisitosRentaFrame.mostrarRequisitos(false);
+        requisitosRentaFrame.setVisible(true);
+    }
+
+    @Override
     public void ocultarTodo() {
         if(iniciarSesionFrame != null) iniciarSesionFrame.setVisible(false);
         if(menuPrincipalFrame != null) menuPrincipalFrame.setVisible(false);
@@ -125,6 +142,8 @@ public class ContratacionRenta implements IContratacionRenta{
         if(sinEquipoCompatibleFrame != null) sinEquipoCompatibleFrame.setVisible(false);
         if(seleccionAccesoriosFrame != null) seleccionAccesoriosFrame.setVisible(false);
         if(evaluacionTecnicaFrame != null) evaluacionTecnicaFrame.setVisible(false);
+        if(cotizacionFrame != null) cotizacionFrame.setVisible(false);
+        if(requisitosRentaFrame != null) requisitosRentaFrame.setVisible(false);
     }
     
     
