@@ -22,8 +22,10 @@ public class ContratacionRenta implements IContratacionRenta{
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
+    private CotizacionFrame cotizacionFrame;
+    private RequisitosRentaFrame requisitosRentaFrame;
     
-    // Registrar decisión del cliente
+    // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
     private PropuestaPendienteFrame propuestaPendienteFrame;
     private VerificacionCondicionFrame verificacionCondicionFrame;
@@ -43,6 +45,9 @@ public class ContratacionRenta implements IContratacionRenta{
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
         
+        // Inicialización unificada de todas las pantallas
+        this.cotizacionFrame = new CotizacionFrame(this);
+        this.requisitosRentaFrame = new RequisitosRentaFrame(this);
         this.propuestaRentaFrame = new PropuestaRentaFrame(this);
         this.propuestaPendienteFrame = new PropuestaPendienteFrame(this);
         this.verificacionCondicionFrame = new VerificacionCondicionFrame(this);
@@ -150,6 +155,19 @@ public class ContratacionRenta implements IContratacionRenta{
     }
 
     @Override
+    public void abrirCotizacion() {
+        ocultarTodo();
+        cotizacionFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirRequisitosRenta() {
+        ocultarTodo();
+        requisitosRentaFrame.mostrarRequisitos(false);
+        requisitosRentaFrame.setVisible(true);
+    }
+
+    @Override
     public void ocultarTodo() {
         if(iniciarSesionFrame != null) iniciarSesionFrame.setVisible(false);
         if(menuPrincipalFrame != null) menuPrincipalFrame.setVisible(false);
@@ -164,13 +182,11 @@ public class ContratacionRenta implements IContratacionRenta{
         if(seleccionAccesoriosFrame != null) seleccionAccesoriosFrame.setVisible(false);
         if(evaluacionTecnicaFrame != null) evaluacionTecnicaFrame.setVisible(false);
         
-        if (propuestaRentaFrame != null) propuestaRentaFrame.setVisible(false);
-        if (propuestaPendienteFrame != null) propuestaPendienteFrame.setVisible(false);
-        if (verificacionCondicionFrame != null) verificacionCondicionFrame.setVisible(false);
-        if (ordenEntregaFrame != null) ordenEntregaFrame.setVisible(false);
+        if(cotizacionFrame != null) cotizacionFrame.setVisible(false);
+        if(requisitosRentaFrame != null) requisitosRentaFrame.setVisible(false);
+        if(propuestaRentaFrame != null) propuestaRentaFrame.setVisible(false);
+        if(propuestaPendienteFrame != null) propuestaPendienteFrame.setVisible(false);
+        if(verificacionCondicionFrame != null) verificacionCondicionFrame.setVisible(false);
+        if(ordenEntregaFrame != null) ordenEntregaFrame.setVisible(false);
     }
-
-    
-    
-    
 }

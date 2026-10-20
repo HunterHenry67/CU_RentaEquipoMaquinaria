@@ -240,7 +240,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
             "Evaluación técnica registrada con éxito.\nSolicitud enviada a Verificación de Disponibilidad (F3).",
             "F2 — Evaluación Técnica",
             javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirMenuPrincipal();
+        contratacionRenta.abrirCotizacion();
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
 
 

@@ -8,11 +8,11 @@ package Frames;
  *
  * @author Home
  */
-public interface IContratacionRenta{  
+public interface IContratacionRenta {  
     
     public abstract void abrirInciarSesión();
     
-    public  abstract void abrirMenuPrincipal();
+    public abstract void abrirMenuPrincipal();
     
     public abstract void abrirIdentificacionCliente();
     
@@ -34,16 +34,18 @@ public interface IContratacionRenta{
     
     public abstract void abrirEvaluacionTecnica();
     
-    // ---- Registrar decisión del cliente ----
-
-    void abrirPropuestaRenta();
-
-    void abrirPropuestaPendiente();
-
-    void abrirVerificacionCondicion(boolean conCucharon);
-
-    void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
+    public abstract void abrirCotizacion();
+    
+    public abstract void abrirRequisitosRenta();
+    
+    // Métodos para el flujo de propuesta y orden de entrega (Pantallas-OrdenEntrega)
+    public abstract void abrirPropuestaRenta();
+    
+    public abstract void abrirPropuestaPendiente();
+    
+    public abstract void abrirVerificacionCondicion(boolean conCucharon);
+    
+    public abstract void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
     
     public abstract void ocultarTodo();
-    
 }

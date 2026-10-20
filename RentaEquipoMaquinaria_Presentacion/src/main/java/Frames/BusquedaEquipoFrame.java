@@ -36,6 +36,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
         btnRegistrarEquipo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Búsqueda Equipo");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
