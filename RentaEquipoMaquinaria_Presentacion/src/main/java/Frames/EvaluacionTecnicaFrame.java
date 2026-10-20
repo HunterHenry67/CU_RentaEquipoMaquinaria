@@ -236,7 +236,11 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEnviarVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarVerificacionActionPerformed
-        // Pasa a F3 (verificación de disponibilidad) cuando esté su pantalla.
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "Evaluación técnica registrada con éxito.\nSolicitud enviada a Verificación de Disponibilidad (F3).",
+            "F2 — Evaluación Técnica",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        contratacionRenta.abrirMenuPrincipal();
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
 
 
