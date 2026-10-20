@@ -34,6 +34,16 @@ public interface IContratacionRenta{
     
     public abstract void abrirEvaluacionTecnica();
     
+    // ---- Registrar decisión del cliente ----
+
+    void abrirPropuestaRenta();
+
+    void abrirPropuestaPendiente();
+
+    void abrirVerificacionCondicion(boolean conCucharon);
+
+    void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
+    
     public abstract void ocultarTodo();
     
 }

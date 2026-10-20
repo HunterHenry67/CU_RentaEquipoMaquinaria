@@ -469,7 +469,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // TODO add your handling code here:
+        contratacionRenta.abrirAnalisisRequerimiento();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
 

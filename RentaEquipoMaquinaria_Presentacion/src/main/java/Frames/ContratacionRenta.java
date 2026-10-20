@@ -23,6 +23,12 @@ public class ContratacionRenta implements IContratacionRenta{
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
     
+    // Registrar decisión del cliente
+    private PropuestaRentaFrame propuestaRentaFrame;
+    private PropuestaPendienteFrame propuestaPendienteFrame;
+    private VerificacionCondicionFrame verificacionCondicionFrame;
+    private OrdenEntregaFrame ordenEntregaFrame;
+    
     public ContratacionRenta(){
         this.iniciarSesionFrame = new InicioSesionFrame(this);
         this.menuPrincipalFrame = new MenuPrincipalFrame(this);
@@ -36,6 +42,12 @@ public class ContratacionRenta implements IContratacionRenta{
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
+        
+        this.propuestaRentaFrame = new PropuestaRentaFrame(this);
+        this.propuestaPendienteFrame = new PropuestaPendienteFrame(this);
+        this.verificacionCondicionFrame = new VerificacionCondicionFrame(this);
+        this.ordenEntregaFrame = new OrdenEntregaFrame(this);
+        
         this.abrirInciarSesión();
     }
 
@@ -110,6 +122,32 @@ public class ContratacionRenta implements IContratacionRenta{
         ocultarTodo();
         evaluacionTecnicaFrame.setVisible(true);
     }
+    
+    @Override
+    public void abrirPropuestaRenta() {
+        ocultarTodo();
+        propuestaRentaFrame.reiniciar();
+        propuestaRentaFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirPropuestaPendiente() {
+        ocultarTodo();
+        propuestaPendienteFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirVerificacionCondicion(boolean conCucharon) {
+        ocultarTodo();
+        verificacionCondicionFrame.configurar(conCucharon);
+        verificacionCondicionFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirOrdenEntrega(boolean conCucharon, boolean finalizada) {
+        ordenEntregaFrame.configurar(conCucharon, finalizada);
+        ordenEntregaFrame.setVisible(true);
+    }
 
     @Override
     public void ocultarTodo() {
@@ -125,7 +163,13 @@ public class ContratacionRenta implements IContratacionRenta{
         if(sinEquipoCompatibleFrame != null) sinEquipoCompatibleFrame.setVisible(false);
         if(seleccionAccesoriosFrame != null) seleccionAccesoriosFrame.setVisible(false);
         if(evaluacionTecnicaFrame != null) evaluacionTecnicaFrame.setVisible(false);
+        
+        if (propuestaRentaFrame != null) propuestaRentaFrame.setVisible(false);
+        if (propuestaPendienteFrame != null) propuestaPendienteFrame.setVisible(false);
+        if (verificacionCondicionFrame != null) verificacionCondicionFrame.setVisible(false);
+        if (ordenEntregaFrame != null) ordenEntregaFrame.setVisible(false);
     }
+
     
     
     

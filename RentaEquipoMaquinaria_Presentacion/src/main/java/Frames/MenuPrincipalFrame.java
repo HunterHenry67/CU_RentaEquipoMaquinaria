@@ -93,7 +93,7 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnContratacionEquipoActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
-        // TODO add your handling code here:
+        contratacionRenta.abrirInciarSesión();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
    
