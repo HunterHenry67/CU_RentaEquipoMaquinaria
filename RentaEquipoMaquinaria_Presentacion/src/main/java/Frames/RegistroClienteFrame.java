@@ -283,6 +283,10 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "El cliente ha sido registrado correctamente.",
+            "Registro Cliente",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
         contratacionRenta.abrirSolicitudRenta();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 

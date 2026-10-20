@@ -472,6 +472,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        javax.swing.JOptionPane.showMessageDialog(this,
+            "La Solcitud de Renta ha sido Registrada Correctamente.",
+            "Solictud Renta",
+            javax.swing.JOptionPane.INFORMATION_MESSAGE);
         contratacionRenta.abrirAnalisisRequerimiento();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
