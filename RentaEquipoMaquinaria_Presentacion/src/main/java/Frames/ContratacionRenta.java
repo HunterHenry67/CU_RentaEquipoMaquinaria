@@ -16,6 +16,12 @@ public class ContratacionRenta implements IContratacionRenta{
     private RegistroClienteFrame registrarClienteFrame;
     private BusquedaEquipoFrame busquedaEquipoForm;
     private SolicitudRentaFrame solicitudRentaForm;
+    private AnalisisRequerimientoFrame analisisRequerimientoFrame;
+    private SolicitudDatosFaltantesFrame solicitudDatosFaltantesFrame;
+    private EquiposCompatiblesFrame equiposCompatiblesFrame;
+    private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
+    private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
+    private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
     
     public ContratacionRenta(){
         this.iniciarSesionFrame = new InicioSesionFrame(this);
@@ -24,6 +30,12 @@ public class ContratacionRenta implements IContratacionRenta{
         this.registrarClienteFrame = new RegistroClienteFrame(this);
         this.busquedaEquipoForm = new BusquedaEquipoFrame(this);
         this.solicitudRentaForm = new SolicitudRentaFrame(this);
+        this.analisisRequerimientoFrame = new AnalisisRequerimientoFrame(this);
+        this.solicitudDatosFaltantesFrame = new SolicitudDatosFaltantesFrame(this);
+        this.equiposCompatiblesFrame = new EquiposCompatiblesFrame(this);
+        this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
+        this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
+        this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
         this.abrirInciarSesión();
     }
 
@@ -64,6 +76,42 @@ public class ContratacionRenta implements IContratacionRenta{
     }
 
     @Override
+    public void abrirAnalisisRequerimiento() {
+        ocultarTodo();
+        analisisRequerimientoFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirSolicitudDatosFaltantes() {
+        ocultarTodo();
+        solicitudDatosFaltantesFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirEquiposCompatibles() {
+        ocultarTodo();
+        equiposCompatiblesFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirSinEquipoCompatible() {
+        ocultarTodo();
+        sinEquipoCompatibleFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirSeleccionAccesorios() {
+        ocultarTodo();
+        seleccionAccesoriosFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirEvaluacionTecnica() {
+        ocultarTodo();
+        evaluacionTecnicaFrame.setVisible(true);
+    }
+
+    @Override
     public void ocultarTodo() {
         if(iniciarSesionFrame != null) iniciarSesionFrame.setVisible(false);
         if(menuPrincipalFrame != null) menuPrincipalFrame.setVisible(false);
@@ -71,6 +119,12 @@ public class ContratacionRenta implements IContratacionRenta{
         if(busquedaEquipoForm != null) busquedaEquipoForm.setVisible(false);
         if(registrarClienteFrame != null) registrarClienteFrame.setVisible(false);
         if(solicitudRentaForm != null) solicitudRentaForm.setVisible(false);
+        if(analisisRequerimientoFrame != null) analisisRequerimientoFrame.setVisible(false);
+        if(solicitudDatosFaltantesFrame != null) solicitudDatosFaltantesFrame.setVisible(false);
+        if(equiposCompatiblesFrame != null) equiposCompatiblesFrame.setVisible(false);
+        if(sinEquipoCompatibleFrame != null) sinEquipoCompatibleFrame.setVisible(false);
+        if(seleccionAccesoriosFrame != null) seleccionAccesoriosFrame.setVisible(false);
+        if(evaluacionTecnicaFrame != null) evaluacionTecnicaFrame.setVisible(false);
     }
     
     

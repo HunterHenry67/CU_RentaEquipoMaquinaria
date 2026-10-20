@@ -22,6 +22,18 @@ public interface IContratacionRenta{
     
     public abstract void abrirSolicitudRenta();
     
+    public abstract void abrirAnalisisRequerimiento();
+    
+    public abstract void abrirSolicitudDatosFaltantes();
+    
+    public abstract void abrirEquiposCompatibles();
+    
+    public abstract void abrirSinEquipoCompatible();
+    
+    public abstract void abrirSeleccionAccesorios();
+    
+    public abstract void abrirEvaluacionTecnica();
+    
     public abstract void ocultarTodo();
     
 }
