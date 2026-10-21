@@ -58,7 +58,9 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         comboFiltroBusqCliente.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         comboFiltroBusqCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RFC", "Nombre", "Teléfono" }));
 
+        txtFieldBusqCliente.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldBusqCliente.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldBusqCliente.setForeground(new java.awt.Color(0, 0, 0));
 
         btnBuscar.setBackground(new java.awt.Color(44, 44, 44));
         btnBuscar.setBorderPainted(false);
@@ -73,6 +75,8 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
             }
         });
 
+        tableCliente.setBackground(new java.awt.Color(255, 255, 255));
+        tableCliente.setForeground(new java.awt.Color(0, 0, 0));
         tableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

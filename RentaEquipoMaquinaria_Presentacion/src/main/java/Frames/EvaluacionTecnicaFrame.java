@@ -73,6 +73,8 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("EQUIPOS A VERIFICAR");
 
+        tableEquipos.setBackground(new java.awt.Color(255, 255, 255));
+        tableEquipos.setForeground(new java.awt.Color(0, 0, 0));
         tableEquipos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -95,6 +97,8 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("ACCESORIOS");
 
+        tableAccesorios.setBackground(new java.awt.Color(255, 255, 255));
+        tableAccesorios.setForeground(new java.awt.Color(0, 0, 0));
         tableAccesorios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

@@ -46,7 +46,9 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Búsqueda de Equipo");
 
+        txtFieldBusqueda.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldBusqueda.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldBusqueda.setForeground(new java.awt.Color(0, 0, 0));
 
         btnBuscar.setBackground(new java.awt.Color(44, 44, 44));
         btnBuscar.setBorderPainted(false);
@@ -61,6 +63,8 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
             }
         });
 
+        tableEquipoCatalogo.setBackground(new java.awt.Color(255, 255, 255));
+        tableEquipoCatalogo.setForeground(new java.awt.Color(0, 0, 0));
         tableEquipoCatalogo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

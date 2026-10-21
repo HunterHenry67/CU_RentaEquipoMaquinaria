@@ -62,6 +62,8 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("SELECCIÓN DE EQUIPO");
 
+        tableEquipos.setBackground(new java.awt.Color(255, 255, 255));
+        tableEquipos.setForeground(new java.awt.Color(0, 0, 0));
         tableEquipos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

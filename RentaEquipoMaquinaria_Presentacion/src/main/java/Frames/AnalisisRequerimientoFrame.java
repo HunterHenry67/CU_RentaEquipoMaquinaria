@@ -78,9 +78,11 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Actividad declarada por el cliente");
 
+        txtAreaActividad.setBackground(new java.awt.Color(255, 255, 255));
         txtAreaActividad.setColumns(20);
         txtAreaActividad.setEditable(false);
         txtAreaActividad.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaActividad.setForeground(new java.awt.Color(0, 0, 0));
         txtAreaActividad.setLineWrap(true);
         txtAreaActividad.setRows(3);
         txtAreaActividad.setWrapStyleWord(true);
@@ -94,25 +96,33 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Profundidad de trabajo");
 
+        txtFieldProfundidad.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldProfundidad.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldProfundidad.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Potencia mínima");
 
+        txtFieldPotencia.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldPotencia.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldPotencia.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Tipo de alimentación");
 
+        txtFieldAlimentacion.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldAlimentacion.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldAlimentacion.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Peso máximo permitido");
 
+        txtFieldPesoMaximo.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldPesoMaximo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldPesoMaximo.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
@@ -122,13 +132,17 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Tipo de terreno");
 
+        txtFieldTipoTerreno.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldTipoTerreno.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Ancho de acceso");
 
+        txtFieldAnchoAcceso.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldAnchoAcceso.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldAnchoAcceso.setForeground(new java.awt.Color(0, 0, 0));
 
         btnBuscarEquipos.setBackground(new java.awt.Color(44, 44, 44));
         btnBuscarEquipos.setBorderPainted(false);

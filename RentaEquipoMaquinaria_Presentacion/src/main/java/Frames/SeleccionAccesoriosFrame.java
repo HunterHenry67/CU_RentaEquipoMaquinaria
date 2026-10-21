@@ -64,6 +64,8 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("ACCESORIO INDISPENSABLE");
 
+        tableIndispensables.setBackground(new java.awt.Color(255, 255, 255));
+        tableIndispensables.setForeground(new java.awt.Color(0, 0, 0));
         tableIndispensables.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -86,6 +88,8 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("ACCESORIO OPCIONAL");
 
+        tableOpcionales.setBackground(new java.awt.Color(255, 255, 255));
+        tableOpcionales.setForeground(new java.awt.Color(0, 0, 0));
         tableOpcionales.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

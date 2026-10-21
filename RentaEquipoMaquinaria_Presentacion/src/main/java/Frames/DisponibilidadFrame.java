@@ -69,13 +69,17 @@ public class DisponibilidadFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Inicio");
 
+        txtFieldInicio.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldInicio.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldInicio.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Fin");
 
+        txtFieldFin.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldFin.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldFin.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));

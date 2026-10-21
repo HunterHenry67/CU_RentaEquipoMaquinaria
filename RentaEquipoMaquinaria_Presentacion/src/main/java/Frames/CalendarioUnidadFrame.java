@@ -63,6 +63,8 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
         lblPeriodo.setForeground(new java.awt.Color(0, 0, 0));
         lblPeriodo.setText("Periodo:");
 
+        tableDias.setBackground(new java.awt.Color(255, 255, 255));
+        tableDias.setForeground(new java.awt.Color(0, 0, 0));
         tableDias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

@@ -79,6 +79,8 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("REQUISITOS APLICABLES");
 
+        tableRequisitos.setBackground(new java.awt.Color(255, 255, 255));
+        tableRequisitos.setForeground(new java.awt.Color(0, 0, 0));
         tableRequisitos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

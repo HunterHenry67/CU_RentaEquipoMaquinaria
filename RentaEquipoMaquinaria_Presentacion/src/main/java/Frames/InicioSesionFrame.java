@@ -54,7 +54,9 @@ public class InicioSesionFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Correo:");
 
+        txtFieldCorreo.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldCorreo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldCorreo.setForeground(new java.awt.Color(0, 0, 0));
         txtFieldCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFieldCorreoActionPerformed(evt);
@@ -65,7 +67,9 @@ public class InicioSesionFrame extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Contraseña:");
 
+        psswFiledContrasenia.setBackground(new java.awt.Color(255, 255, 255));
         psswFiledContrasenia.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        psswFiledContrasenia.setForeground(new java.awt.Color(0, 0, 0));
 
         btnIngresar.setBackground(new java.awt.Color(44, 44, 44));
         btnIngresar.setBorderPainted(false);

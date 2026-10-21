@@ -104,25 +104,33 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Nombre:");
 
+        txtFieldNombre.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldNombre.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldNombre.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Correo Electrónico:");
 
+        txtFieldCorreoElectro.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldCorreoElectro.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldCorreoElectro.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Teléfono:");
 
+        txtFieldTelefono.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldTelefono.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldTelefono.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("RFC:");
 
+        txtFieldRFC.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldRFC.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldRFC.setForeground(new java.awt.Color(0, 0, 0));
 
         panelEncargado.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -134,19 +142,25 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Nombre:");
 
+        txtFileldNombreEncargado.setBackground(new java.awt.Color(255, 255, 255));
         txtFileldNombreEncargado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFileldNombreEncargado.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Teléfono:");
 
+        txtFieldTelefonoEncragado.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldTelefonoEncragado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldTelefonoEncragado.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Puesto:");
 
+        txtFieldPuestoEncargado.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldPuestoEncargado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldPuestoEncargado.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));

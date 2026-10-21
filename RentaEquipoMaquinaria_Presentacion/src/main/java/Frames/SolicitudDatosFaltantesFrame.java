@@ -73,13 +73,17 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Ancho de acceso a la obra");
 
+        txtFieldAnchoAcceso.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldAnchoAcceso.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldAnchoAcceso.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Tipo de terreno");
 
+        txtFieldTipoTerreno.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldTipoTerreno.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));

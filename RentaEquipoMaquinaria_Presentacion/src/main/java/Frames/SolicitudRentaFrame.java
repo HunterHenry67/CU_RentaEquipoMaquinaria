@@ -110,13 +110,17 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Inicio:");
 
+        formtxtFechaInicio.setBackground(new java.awt.Color(255, 255, 255));
         formtxtFechaInicio.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        formtxtFechaInicio.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Final:");
 
+        formtxtFechaFinal.setBackground(new java.awt.Color(255, 255, 255));
         formtxtFechaFinal.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        formtxtFechaFinal.setForeground(new java.awt.Color(0, 0, 0));
         formtxtFechaFinal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 formtxtFechaFinalActionPerformed(evt);
@@ -131,13 +135,17 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Nombre de la Obra:");
 
+        txtFieldNombreObra.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldNombreObra.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldNombreObra.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Dirección:");
 
+        txtFieldDireccion.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldDireccion.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldDireccion.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel12.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
@@ -156,6 +164,8 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
+        tableEquipoSoli.setBackground(new java.awt.Color(255, 255, 255));
+        tableEquipoSoli.setForeground(new java.awt.Color(0, 0, 0));
         tableEquipoSoli.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -183,8 +193,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(0, 0, 0));
         jLabel14.setText("ACTIVIDAD QUE VA A REALIZAR EL CLIENTE");
 
+        txtAreaActividadRealizar.setBackground(new java.awt.Color(255, 255, 255));
         txtAreaActividadRealizar.setColumns(20);
         txtAreaActividadRealizar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaActividadRealizar.setForeground(new java.awt.Color(0, 0, 0));
         txtAreaActividadRealizar.setLineWrap(true);
         txtAreaActividadRealizar.setRows(3);
         txtAreaActividadRealizar.setWrapStyleWord(true);
@@ -194,8 +206,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
         jLabel15.setText("CONDICIONES A TOMAR EN CUENTA");
 
+        txtAreaCondicionExtra.setBackground(new java.awt.Color(255, 255, 255));
         txtAreaCondicionExtra.setColumns(20);
         txtAreaCondicionExtra.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaCondicionExtra.setForeground(new java.awt.Color(0, 0, 0));
         txtAreaCondicionExtra.setLineWrap(true);
         txtAreaCondicionExtra.setRows(3);
         txtAreaCondicionExtra.setWrapStyleWord(true);
@@ -506,8 +520,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
         jLabel23.setText("RAZÓN DE CANCELACIÓN DE PROCESO DE SOLICITUD");
 
+        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jTextArea1.setForeground(new java.awt.Color(0, 0, 0));
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(3);
         jTextArea1.setWrapStyleWord(true);

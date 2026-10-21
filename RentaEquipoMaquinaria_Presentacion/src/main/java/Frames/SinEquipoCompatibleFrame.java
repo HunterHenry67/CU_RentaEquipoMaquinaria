@@ -67,8 +67,10 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Motivo registrado");
 
+        txtAreaMotivo.setBackground(new java.awt.Color(255, 255, 255));
         txtAreaMotivo.setColumns(20);
         txtAreaMotivo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaMotivo.setForeground(new java.awt.Color(0, 0, 0));
         txtAreaMotivo.setLineWrap(true);
         txtAreaMotivo.setRows(3);
         txtAreaMotivo.setWrapStyleWord(true);
