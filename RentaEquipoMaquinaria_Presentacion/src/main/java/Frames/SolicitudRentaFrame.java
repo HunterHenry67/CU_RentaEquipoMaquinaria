@@ -33,19 +33,20 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         panelSolictudNormal = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         formtxtFechaInicio = new javax.swing.JFormattedTextField();
+        jLabel8 = new javax.swing.JLabel();
         formtxtFechaFinal = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         txtFieldNombreObra = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
         txtFieldDireccion = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         btnAgregarEquipo = new javax.swing.JButton();
@@ -53,18 +54,17 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         tableEquipoSoli = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtAreaActividadRealizar = new javax.swing.JTextArea();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtAreaCondicionExtra = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtAreaActividadRealizar = new javax.swing.JTextArea();
         jLabel16 = new javax.swing.JLabel();
+        comboTipoTrabajo = new javax.swing.JComboBox<>();
         jLabel17 = new javax.swing.JLabel();
         comboTipoTerreno = new javax.swing.JComboBox<>();
         btnCancelarSoli = new javax.swing.JButton();
-        comboTipoTrabajo = new javax.swing.JComboBox<>();
         btnRegistrar = new javax.swing.JButton();
-        jLabel18 = new javax.swing.JLabel();
         panelCancelacionSolicitud = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
@@ -77,61 +77,78 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Solicitud de Renta");
+        setResizable(false);
         getContentPane().setLayout(new java.awt.CardLayout());
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        panelSolictudNormal.setBackground(new java.awt.Color(217, 217, 217));
+
+        jLabel18.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel18.setText("Solicitud de Renta");
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Datos del Cliente");
+        jLabel2.setText("DATOS DEL CLIENTE");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Nombre del Cliente: ");
+        jLabel3.setText("Nombre del Cliente:");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Folio: ");
+        jLabel4.setText("Folio:");
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("RFC:");
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Periódo de Uso de Equipo");
+        jLabel6.setText("PERIODO DE USO DE EQUIPO");
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Inicio: ");
+        jLabel7.setText("Inicio:");
+
+        formtxtFechaInicio.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Final:");
 
+        formtxtFechaFinal.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         formtxtFechaFinal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 formtxtFechaFinalActionPerformed(evt);
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Ubiacación de la Obra:");
+        jLabel9.setText("UBICACIÓN DE LA OBRA");
 
-        jLabel10.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Nombre de la Obra:");
 
-        jLabel11.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        txtFieldNombreObra.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+
+        jLabel11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Dirección:");
 
-        jLabel12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel12.setText("Selección de Equipo");
+        txtFieldDireccion.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
-        btnAgregarEquipo.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("SELECCIÓN DE EQUIPO");
+
+        btnAgregarEquipo.setBackground(new java.awt.Color(44, 44, 44));
+        btnAgregarEquipo.setBorderPainted(false);
+        btnAgregarEquipo.setFocusPainted(false);
         btnAgregarEquipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnAgregarEquipo.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregarEquipo.setOpaque(true);
         btnAgregarEquipo.setText("Agregar un Equipo");
         btnAgregarEquipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,8 +156,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
-        tableEquipoSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        tableEquipoSoli.setForeground(new java.awt.Color(255, 255, 255));
         tableEquipoSoli.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -159,39 +174,53 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableEquipoSoli);
 
-        jLabel13.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel13.setText("Nota: El equipo seleccionado puede ser modificado por profesionales dependiendo de la necesidad requerida.");
+        jLabel13.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(70, 70, 70));
+        jLabel13.setText("<html>Nota: El equipo seleccionado puede ser modificado por profesionales dependiendo de la necesidad requerida.</html>");
+        jLabel13.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jLabel14.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel14.setText("Actividad que va a realizar el cliente");
-
-        jLabel15.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel15.setText("Condiciones a Tomar en Cuenta");
-
-        txtAreaCondicionExtra.setColumns(20);
-        txtAreaCondicionExtra.setRows(5);
-        jScrollPane2.setViewportView(txtAreaCondicionExtra);
+        jLabel14.setText("ACTIVIDAD QUE VA A REALIZAR EL CLIENTE");
 
         txtAreaActividadRealizar.setColumns(20);
-        txtAreaActividadRealizar.setRows(5);
+        txtAreaActividadRealizar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaActividadRealizar.setLineWrap(true);
+        txtAreaActividadRealizar.setRows(3);
+        txtAreaActividadRealizar.setWrapStyleWord(true);
         jScrollPane3.setViewportView(txtAreaActividadRealizar);
+
+        jLabel15.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel15.setText("CONDICIONES A TOMAR EN CUENTA");
+
+        txtAreaCondicionExtra.setColumns(20);
+        txtAreaCondicionExtra.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaCondicionExtra.setLineWrap(true);
+        txtAreaCondicionExtra.setRows(3);
+        txtAreaCondicionExtra.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(txtAreaCondicionExtra);
 
         jLabel16.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Tipo de Trabajo:");
 
+        comboTipoTrabajo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboTipoTrabajo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Excavación de cepas", "Sin especificar" }));
+
         jLabel17.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(0, 0, 0));
         jLabel17.setText("Tipo de Terreno:");
 
-        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar" }));
 
-        btnCancelarSoli.setBackground(new java.awt.Color(255, 0, 0));
+        btnCancelarSoli.setBackground(new java.awt.Color(236, 34, 31));
+        btnCancelarSoli.setBorderPainted(false);
+        btnCancelarSoli.setFocusPainted(false);
         btnCancelarSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnCancelarSoli.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelarSoli.setOpaque(true);
         btnCancelarSoli.setText("Cancelar Solicitud");
         btnCancelarSoli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,11 +228,12 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
-        comboTipoTrabajo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        btnRegistrar.setBackground(new java.awt.Color(0, 0, 0));
+        btnRegistrar.setBackground(new java.awt.Color(44, 44, 44));
+        btnRegistrar.setBorderPainted(false);
+        btnRegistrar.setFocusPainted(false);
         btnRegistrar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrar.setOpaque(true);
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,242 +241,354 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel18.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel18.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel18.setText("Solicitud de Renta");
-
         javax.swing.GroupLayout panelSolictudNormalLayout = new javax.swing.GroupLayout(panelSolictudNormal);
         panelSolictudNormal.setLayout(panelSolictudNormalLayout);
         panelSolictudNormalLayout.setHorizontalGroup(
             panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(formtxtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(formtxtFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(88, 88, 88)))
-                        .addGap(256, 256, 256)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jLabel11))
-                                .addGap(86, 86, 86)
-                                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtFieldNombreObra, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                                    .addComponent(txtFieldDireccion))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel14)
-                                    .addComponent(jLabel12)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1088, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel15)
-                                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                                        .addGap(155, 155, 155)
-                                                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                            .addComponent(jLabel16)
-                                                            .addComponent(comboTipoTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                                        .addGap(193, 193, 193)
-                                                        .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel17)
-                                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(0, 6, Short.MAX_VALUE))
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel5)
-                                .addGap(304, 304, 304))
-                            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4)
-                                .addGap(294, 294, 294))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSolictudNormalLayout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(510, 510, 510))))
+                .addGap(40, 40, 40)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                .addGap(276, 276, 276)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 619, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 631, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 749, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 720, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 687, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 730, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(formtxtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 730, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 520, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(250, 250, 250)
+                .addComponent(formtxtFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 520, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 263, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(txtFieldNombreObra, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(txtFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 732, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(743, 743, 743)
+                .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 569, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 165, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 784, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(176, 176, 176)
+                .addComponent(comboTipoTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 324, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(636, 636, 636)
+                .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 747, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(800, 800, 800)
+                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
         );
         panelSolictudNormalLayout.setVerticalGroup(
             panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel18)
-                .addGap(31, 31, 31)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(txtFieldNombreObra, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(txtFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(formtxtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(formtxtFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(26, 26, 26)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(22, 22, 22)
+                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 622, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 582, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(104, 104, 104)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 554, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 528, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 528, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(172, 172, 172)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 486, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(202, 202, 202)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 458, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(226, 226, 226)
+                .addComponent(formtxtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 420, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(202, 202, 202)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 458, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(226, 226, 226)
+                .addComponent(formtxtFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 420, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 582, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(104, 104, 104)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 556, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addComponent(txtFieldNombreObra, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 518, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(168, 168, 168)
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 492, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(192, 192, 192)
+                .addComponent(txtFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 454, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(282, 282, 282)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 376, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(274, 274, 274)
                 .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(17, 17, 17)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel13)
-                .addGap(37, 37, 37)
-                .addComponent(jLabel14)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel16)
-                            .addComponent(jLabel17)))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addComponent(jLabel15)))
-                .addGap(25, 25, 25)
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboTipoTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36)
-                        .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addGap(0, 372, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(316, 316, 316)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 290, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(396, 396, 396)
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 262, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(432, 432, 432)
+                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 226, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(460, 460, 460)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 158, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(432, 432, 432)
+                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 226, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(460, 460, 460)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 158, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(538, 538, 538)
+                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 108, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(538, 538, 538)
+                .addComponent(comboTipoTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 108, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(538, 538, 538)
+                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 108, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(538, 538, 538)
+                .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 108, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
+                .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
+                .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
         );
 
         getContentPane().add(panelSolictudNormal, "card1");
+
+        panelCancelacionSolicitud.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel19.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(0, 0, 0));
         jLabel19.setText("Solicitud de Renta");
 
-        jLabel20.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel20.setText("Datos del Cleinte");
+        jLabel20.setText("DATOS DEL CLIENTE");
 
-        jLabel21.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel21.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(0, 0, 0));
         jLabel21.setText("Folio:");
 
-        jLabel22.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel22.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(0, 0, 0));
         jLabel22.setText("RFC:");
 
-        jLabel23.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel23.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel23.setText("Razón de Cancelación de Proceso de Solicitud");
+        jLabel23.setText("RAZÓN DE CANCELACIÓN DE PROCESO DE SOLICITUD");
 
         jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
+        jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(3);
+        jTextArea1.setWrapStyleWord(true);
         jScrollPane4.setViewportView(jTextArea1);
 
-        btnRegistrarCancelacion.setBackground(new java.awt.Color(0, 0, 0));
+        btnRegistrarCancelacion.setBackground(new java.awt.Color(44, 44, 44));
+        btnRegistrarCancelacion.setBorderPainted(false);
+        btnRegistrarCancelacion.setFocusPainted(false);
         btnRegistrarCancelacion.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrarCancelacion.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrarCancelacion.setOpaque(true);
         btnRegistrarCancelacion.setText("Registrar Cancelación");
+        btnRegistrarCancelacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarCancelacionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelCancelacionSolicitudLayout = new javax.swing.GroupLayout(panelCancelacionSolicitud);
         panelCancelacionSolicitud.setLayout(panelCancelacionSolicitudLayout);
         panelCancelacionSolicitudLayout.setHorizontalGroup(
             panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addGroup(panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel22)
-                            .addComponent(jLabel21))
-                        .addGap(241, 241, 241))
-                    .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
-                        .addGroup(panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel23)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 867, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCancelacionSolicitudLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCancelacionSolicitudLayout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addGap(502, 502, 502))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelCancelacionSolicitudLayout.createSequentialGroup()
-                        .addComponent(btnRegistrarCancelacion)
-                        .addGap(57, 57, 57))))
+                .addGap(40, 40, 40)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 749, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 490, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(720, 720, 720)
+                .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
         );
         panelCancelacionSolicitudLayout.setVerticalGroup(
             panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel19)
-                .addGap(36, 36, 36)
-                .addGroup(panelCancelacionSolicitudLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel21))
-                .addGap(26, 26, 26)
-                .addComponent(jLabel22)
-                .addGap(129, 129, 129)
-                .addComponent(jLabel23)
-                .addGap(36, 36, 36)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+                .addGap(22, 22, 22)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 622, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 582, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(104, 104, 104)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 554, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(130, 130, 130)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 528, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(172, 172, 172)
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 486, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(202, 202, 202)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 358, Short.MAX_VALUE))
+            .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
+                .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
         );
 
         getContentPane().add(panelCancelacionSolicitud, "card2");
@@ -458,6 +600,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formtxtFechaFinalActionPerformed
 
+    private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
+        contratacionRenta.abrirBusquedaEquipo();
+    }//GEN-LAST:event_btnAgregarEquipoActionPerformed
+
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
         card.show(this.getContentPane(), "card2");
@@ -467,10 +613,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
-    private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
-        contratacionRenta.abrirBusquedaEquipo();
-    }//GEN-LAST:event_btnAgregarEquipoActionPerformed
-
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         javax.swing.JOptionPane.showMessageDialog(this,
             "La Solicitud de Renta ha sido Registrada Correctamente.",
@@ -479,6 +621,12 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         contratacionRenta.abrirAnalisisRequerimiento();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
+    private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
+        javax.swing.JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        CardLayout card = (CardLayout) this.getContentPane().getLayout();
+        card.show(this.getContentPane(), "card1");
+        contratacionRenta.abrirMenuPrincipal();
+    }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEquipo;
