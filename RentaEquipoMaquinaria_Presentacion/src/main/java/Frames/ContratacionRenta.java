@@ -22,6 +22,12 @@ public class ContratacionRenta implements IContratacionRenta{
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
+    private DisponibilidadFrame disponibilidadFrame;
+    private VerificacionInventarioFrame verificacionInventarioFrame;
+    private UnidadMantenimientoFrame unidadMantenimientoFrame;
+    private UnidadOcupadaFrame unidadOcupadaFrame;
+    private CalendarioUnidadFrame calendarioUnidadFrame;
+    private CondicionesContratacionFrame condicionesContratacionFrame;
     private CotizacionFrame cotizacionFrame;
     private RequisitosRentaFrame requisitosRentaFrame;
     
@@ -44,6 +50,12 @@ public class ContratacionRenta implements IContratacionRenta{
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
+        this.disponibilidadFrame = new DisponibilidadFrame(this);
+        this.verificacionInventarioFrame = new VerificacionInventarioFrame(this);
+        this.unidadMantenimientoFrame = new UnidadMantenimientoFrame(this);
+        this.unidadOcupadaFrame = new UnidadOcupadaFrame(this);
+        this.calendarioUnidadFrame = new CalendarioUnidadFrame(this);
+        this.condicionesContratacionFrame = new CondicionesContratacionFrame(this);
         
         // Inicialización unificada de todas las pantallas
         this.cotizacionFrame = new CotizacionFrame(this);
@@ -127,6 +139,42 @@ public class ContratacionRenta implements IContratacionRenta{
         ocultarTodo();
         evaluacionTecnicaFrame.setVisible(true);
     }
+
+    @Override
+    public void abrirDisponibilidad() {
+        ocultarTodo();
+        disponibilidadFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirVerificacionInventario() {
+        ocultarTodo();
+        verificacionInventarioFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirUnidadMantenimiento() {
+        ocultarTodo();
+        unidadMantenimientoFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirUnidadOcupada() {
+        ocultarTodo();
+        unidadOcupadaFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirCalendarioUnidad() {
+        ocultarTodo();
+        calendarioUnidadFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirCondicionesContratacion() {
+        ocultarTodo();
+        condicionesContratacionFrame.setVisible(true);
+    }
     
     @Override
     public void abrirPropuestaRenta() {
@@ -181,6 +229,12 @@ public class ContratacionRenta implements IContratacionRenta{
         if(sinEquipoCompatibleFrame != null) sinEquipoCompatibleFrame.setVisible(false);
         if(seleccionAccesoriosFrame != null) seleccionAccesoriosFrame.setVisible(false);
         if(evaluacionTecnicaFrame != null) evaluacionTecnicaFrame.setVisible(false);
+        if(disponibilidadFrame != null) disponibilidadFrame.setVisible(false);
+        if(verificacionInventarioFrame != null) verificacionInventarioFrame.setVisible(false);
+        if(unidadMantenimientoFrame != null) unidadMantenimientoFrame.setVisible(false);
+        if(unidadOcupadaFrame != null) unidadOcupadaFrame.setVisible(false);
+        if(calendarioUnidadFrame != null) calendarioUnidadFrame.setVisible(false);
+        if(condicionesContratacionFrame != null) condicionesContratacionFrame.setVisible(false);
         
         if(cotizacionFrame != null) cotizacionFrame.setVisible(false);
         if(requisitosRentaFrame != null) requisitosRentaFrame.setVisible(false);

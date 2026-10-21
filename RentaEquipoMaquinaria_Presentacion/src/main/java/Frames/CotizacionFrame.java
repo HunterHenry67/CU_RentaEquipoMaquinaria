@@ -359,7 +359,7 @@ public class CotizacionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirEvaluacionTecnica();
+        contratacionRenta.abrirCondicionesContratacion();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed

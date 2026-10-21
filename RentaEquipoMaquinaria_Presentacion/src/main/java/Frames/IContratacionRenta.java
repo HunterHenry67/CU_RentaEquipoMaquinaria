@@ -34,6 +34,18 @@ public interface IContratacionRenta {
     
     public abstract void abrirEvaluacionTecnica();
     
+    public abstract void abrirDisponibilidad();
+    
+    public abstract void abrirVerificacionInventario();
+    
+    public abstract void abrirUnidadMantenimiento();
+    
+    public abstract void abrirUnidadOcupada();
+    
+    public abstract void abrirCalendarioUnidad();
+    
+    public abstract void abrirCondicionesContratacion();
+    
     public abstract void abrirCotizacion();
     
     public abstract void abrirRequisitosRenta();
