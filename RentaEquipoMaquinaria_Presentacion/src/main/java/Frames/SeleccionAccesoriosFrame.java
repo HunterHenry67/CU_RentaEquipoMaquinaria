@@ -4,6 +4,15 @@
  */
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.SolicitudRentaDTO;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author alejandromontijo
@@ -11,11 +20,44 @@ package Frames;
 public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
+    private final List<AccesorioDTO> indispensables = new ArrayList<>();
+    private final List<AccesorioDTO> opcionales = new ArrayList<>();
     
     public SeleccionAccesoriosFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // El coordinador la llama cada vez que se abre la pantalla con los accesorios que hay
+    // para el equipo recomendado. Los indispensables siempre van; de los opcionales se
+    // marcan los que ya estaban propuestos.
+    public void cargarAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> disponibles) {
+        this.solicitud = solicitud;
+        lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
+        EquipoDTO recomendado = recomendado();
+        lblEquipo.setText("Equipo seleccionado: " + (recomendado == null ? "" : recomendado.getModelo()));
+
+        // si quedó una casilla en edición de la vez anterior, se descarta antes de recargar
+        if (tableOpcionales.isEditing()) {
+            tableOpcionales.getCellEditor().cancelCellEditing();
+        }
+        DefaultTableModel tablaIndispensables = (DefaultTableModel) tableIndispensables.getModel();
+        DefaultTableModel tablaOpcionales = (DefaultTableModel) tableOpcionales.getModel();
+        tablaIndispensables.setRowCount(0);
+        tablaOpcionales.setRowCount(0);
+        indispensables.clear();
+        opcionales.clear();
+        for (AccesorioDTO accesorio : disponibles) {
+            if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
+                indispensables.add(accesorio);
+                tablaIndispensables.addRow(new Object[]{descripcion(accesorio)});
+            } else {
+                opcionales.add(accesorio);
+                tablaOpcionales.addRow(new Object[]{descripcion(accesorio), propuesto(recomendado, accesorio)});
+            }
+        }
     }
 
     /**
@@ -267,8 +309,50 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        contratacionRenta.abrirEvaluacionTecnica();
+        if (tableOpcionales.isEditing()) {
+            tableOpcionales.getCellEditor().stopCellEditing();
+        }
+        EquipoDTO recomendado = recomendado();
+        if (recomendado == null) {
+            JOptionPane.showMessageDialog(this, "Primero hay que elegir el equipo recomendado.",
+                    "Selección de Accesorios", JOptionPane.WARNING_MESSAGE);
+            contratacionRenta.abrirEquiposCompatibles();
+            return;
+        }
+        List<AccesorioDTO> propuesta = new ArrayList<>(indispensables);
+        for (int i = 0; i < opcionales.size(); i++) {
+            if (Boolean.TRUE.equals(tableOpcionales.getModel().getValueAt(i, 1))) {
+                propuesta.add(opcionales.get(i));
+            }
+        }
+        recomendado.setAccesorios(propuesta);
+        contratacionRenta.pasarDatosEvaluacionTecnica(solicitud);
     }//GEN-LAST:event_btnContinuarActionPerformed
+
+    private EquipoDTO recomendado() {
+        if (solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()
+                || solicitud.getEquiposSolicitados().get(0).getEvaluacion() == null) {
+            return null;
+        }
+        return solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
+    }
+
+    private boolean propuesto(EquipoDTO recomendado, AccesorioDTO accesorio) {
+        if (recomendado == null || recomendado.getAccesorios() == null) {
+            return false;
+        }
+        for (AccesorioDTO elegido : recomendado.getAccesorios()) {
+            if (Objects.equals(elegido.getIdAccesorio(), accesorio.getIdAccesorio())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String descripcion(AccesorioDTO accesorio) {
+        return accesorio.getNombre() + (accesorio.getCostoRenta() == null ? ""
+                : " · " + String.format("$%,.0f", accesorio.getCostoRenta()));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnContinuar;

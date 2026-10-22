@@ -4,6 +4,9 @@
  */
 package Frames;
 
+import DTOs.EvaluacionTecnicaDTO;
+import DTOs.SolicitudRentaDTO;
+
 /**
  *
  * @author alejandromontijo
@@ -11,11 +14,22 @@ package Frames;
 public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
     
     public SinEquipoCompatibleFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // El coordinador la llama cada vez que se abre la pantalla; el motivo trae por qué no
+    // cumple cada equipo y el asesor lo puede completar
+    public void cargarSolicitud(SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + nombreCliente());
+        EvaluacionTecnicaDTO evaluacion = evaluacion();
+        txtAreaMotivo.setText(evaluacion == null ? "" : texto(evaluacion.getMotivoIncumplimiento()));
     }
 
     /**
@@ -219,8 +233,32 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAjustarRequerimientoActionPerformed
 
     private void btnCerrarEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarEvaluacionActionPerformed
+        String motivo = txtAreaMotivo.getText().trim();
+        if (motivo.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Escribe el motivo antes de cerrar la evaluación.",
+                    "Sin Equipo Compatible", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        EvaluacionTecnicaDTO evaluacion = evaluacion();
+        if (evaluacion != null) {
+            evaluacion.setMotivoIncumplimiento(motivo);
+        }
+        solicitud.setEstadoSolicitud("Sin solución técnica");
         contratacionRenta.abrirMenuPrincipal();
     }//GEN-LAST:event_btnCerrarEvaluacionActionPerformed
+
+    private EvaluacionTecnicaDTO evaluacion() {
+        return solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty() ? null
+                : solicitud.getEquiposSolicitados().get(0).getEvaluacion();
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private String nombreCliente() {
+        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAjustarRequerimiento;

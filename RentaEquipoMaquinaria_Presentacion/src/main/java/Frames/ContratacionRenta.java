@@ -4,16 +4,23 @@
  */
 package Frames;
 
+import DTOs.AccesorioDTO;
 import DTOs.ClienteDTO;
 import DTOs.CotizacionDTO;
 import DTOs.DetalleCotizacionDTO;
+import DTOs.EquipoDTO;
 import DTOs.EquipoSolicitadoDTO;
+import DTOs.EvaluacionTecnicaDTO;
 import DTOs.PeriodoSolicitadoDTO;
+import DTOs.RequerimientoTecnicoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  *
@@ -44,6 +51,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private ClienteDTO clienteActual;
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
+    private List<EquipoDTO> catalogoEquipos;
 
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
@@ -91,6 +99,10 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirMenuPrincipal() {
+        // Al volver al menú termina la solicitud en curso; la siguiente empieza en blanco
+        solicitudActual = null;
+        cotizacionActual = null;
+        clienteActual = null;
         ocultarTodo();
         menuPrincipalFrame.setVisible(true);
     }
@@ -121,37 +133,49 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirAnalisisRequerimiento() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        analisisRequerimientoFrame.cargarSolicitud(solicitudActual);
         analisisRequerimientoFrame.setVisible(true);
     }
 
     @Override
     public void abrirSolicitudDatosFaltantes() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        solicitudDatosFaltantesFrame.cargarSolicitud(solicitudActual);
         solicitudDatosFaltantesFrame.setVisible(true);
     }
 
     @Override
     public void abrirEquiposCompatibles() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        equiposCompatiblesFrame.cargarEquipos(solicitudActual, evaluarEquipos());
         equiposCompatiblesFrame.setVisible(true);
     }
 
     @Override
     public void abrirSinEquipoCompatible() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        sinEquipoCompatibleFrame.cargarSolicitud(solicitudActual);
         sinEquipoCompatibleFrame.setVisible(true);
     }
 
     @Override
     public void abrirSeleccionAccesorios() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        seleccionAccesoriosFrame.cargarAccesorios(solicitudActual, accesoriosDelRecomendado());
         seleccionAccesoriosFrame.setVisible(true);
     }
 
     @Override
     public void abrirEvaluacionTecnica() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        evaluacionTecnicaFrame.cargarEvaluacion(solicitudActual);
         evaluacionTecnicaFrame.setVisible(true);
     }
 
@@ -253,8 +277,43 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO dto) {
         this.solicitudActual = dto;
-        ocultarTodo();
-        analisisRequerimientoFrame.setVisible(true);
+        abrirAnalisisRequerimiento();
+    }
+
+    @Override
+    public void pasarDatosSolicitudDatosFaltantes(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirSolicitudDatosFaltantes();
+    }
+
+    @Override
+    public void pasarDatosEquiposCompatibles(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirEquiposCompatibles();
+    }
+
+    @Override
+    public void pasarDatosSinEquipoCompatible(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirSinEquipoCompatible();
+    }
+
+    @Override
+    public void pasarDatosSeleccionAccesorios(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirSeleccionAccesorios();
+    }
+
+    @Override
+    public void pasarDatosEvaluacionTecnica(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirEvaluacionTecnica();
+    }
+
+    @Override
+    public void pasarDatosVerificacionDeDisponibilidad(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirVerificacionDeDisponibilidad();
     }
 
     @Override
@@ -287,8 +346,8 @@ public class ContratacionRenta implements IContratacionRenta {
             solicitudActual = new SolicitudRentaDTO();
         }
         if (solicitudActual.getCliente() == null) {
-            //  solicitudActual.setCliente(clienteActual != null ? clienteActual
-            //    : new ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian.martinez@correo.com", "Particular"));
+            solicitudActual.setCliente(clienteActual != null ? clienteActual
+                    : clienteDeEscenario());
         }
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio("FOL-89241");
@@ -310,6 +369,156 @@ public class ContratacionRenta implements IContratacionRenta {
             cotizacionActual = new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
                     9500.0, 1520.0, 11020.0, detalles, null);
         }
+    }
+
+    // Completa con los datos del escenario lo que F1 todavía no manda a F2, sin reemplazar
+    // lo que ya se capturó (así lo de F2 se conserva al avanzar o regresar)
+    private void prepararDatosSolicitud() {
+        if (solicitudActual == null) {
+            solicitudActual = new SolicitudRentaDTO();
+        }
+        if (solicitudActual.getCliente() == null) {
+            solicitudActual.setCliente(clienteActual != null ? clienteActual : clienteDeEscenario());
+        }
+        if (solicitudActual.getFolio() == null) {
+            solicitudActual.setFolio("FOL-89241");
+        }
+        if (solicitudActual.getNombreObra() == null) {
+            solicitudActual.setNombreObra("Remodelación Plaza Goya");
+        }
+        if (solicitudActual.getDireccionObra() == null) {
+            solicitudActual.setDireccionObra("Av. Guerrero #1105, Ciudad Obregón, Sonora");
+        }
+        if (solicitudActual.getDescripcionActividad() == null) {
+            solicitudActual.setDescripcionActividad("Excavar cepas para la cimentación y retirar el material, a 3.50 m de profundidad.");
+        }
+        if (solicitudActual.getPeriodo() == null) {
+            PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO();
+            periodo.setFechaInicio(LocalDate.of(2026, 9, 10));
+            periodo.setFechaFin(LocalDate.of(2026, 9, 15));
+            periodo.setDiasRenta(6);
+            solicitudActual.setPeriodo(periodo);
+        }
+        if (solicitudActual.getEquiposSolicitados() == null || solicitudActual.getEquiposSolicitados().isEmpty()) {
+            EquipoSolicitadoDTO pedido = new EquipoSolicitadoDTO();
+            pedido.setDescripcionEquipo("Retroexcavadora JCB");
+            pedido.setCantidad(1);
+            List<EquipoSolicitadoDTO> pedidos = new ArrayList<>();
+            pedidos.add(pedido);
+            solicitudActual.setEquiposSolicitados(pedidos);
+        }
+        if (solicitudActual.getRequerimientos() == null) {
+            solicitudActual.setRequerimientos(new ArrayList<>());
+        }
+    }
+
+    private ClienteDTO clienteDeEscenario() {
+        ClienteDTO cliente = new ClienteDTO();
+        cliente.setIdCliente(1L);
+        cliente.setNombre("Julián Martínez García");
+        cliente.setRfc("MARJ8503158A1");
+        cliente.setTelefono("6449876543");
+        cliente.setCorreo("julianmar12@gmail.com");
+        cliente.setTipoCliente("Particular");
+        return cliente;
+    }
+
+    // Catálogo de equipos mientras no haya persistencia. Solo lleva los datos que da el
+    // escenario (la JCB tiene 109 HP y la CAT 320 cuesta $1,500 por día); lo que no se
+    // sabe se queda vacío y no descarta al equipo cuando se compara con lo requerido.
+    private List<EquipoDTO> catalogoEquipos() {
+        if (catalogoEquipos == null) {
+            catalogoEquipos = new ArrayList<>();
+            EquipoDTO jcb = equipo(1L, "JCB", "Retroexcavadora JCB");
+            jcb.setPotencia(109.0);
+            EquipoDTO cat320 = equipo(2L, "CAT", "Excavadora CAT 320");
+            cat320.setCostoDiario(1500.0);
+            cat320.setAccesorios(accesoriosDeExcavadora());
+            EquipoDTO cat336 = equipo(3L, "CAT", "Excavadora CAT 336");
+            cat336.setAccesorios(accesoriosDeExcavadora());
+            catalogoEquipos.add(jcb);
+            catalogoEquipos.add(cat320);
+            catalogoEquipos.add(cat336);
+        }
+        return catalogoEquipos;
+    }
+
+    // Compara cada equipo del catálogo con los requerimientos de la solicitud. Regresa los
+    // equipos en orden con el motivo por el que no cumplen (null si cumplen). Va aquí
+    // mientras Negocio no tenga compararEquipos, como los datos simulados de la cotización.
+    private Map<EquipoDTO, String> evaluarEquipos() {
+        Map<EquipoDTO, String> evaluados = new LinkedHashMap<>();
+        for (EquipoDTO equipo : catalogoEquipos()) {
+            evaluados.put(equipo, incumplimiento(equipo, solicitudActual.getRequerimientos()));
+        }
+        return evaluados;
+    }
+
+    // Si el equipo no tiene registrado un dato, ese requerimiento no lo descarta (no se
+    // puede decir que no cumple con un dato que no se tiene)
+    private String incumplimiento(EquipoDTO equipo, List<RequerimientoTecnicoDTO> requerimientos) {
+        List<String> motivos = new ArrayList<>();
+        Double potencia = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.POTENCIA);
+        if (potencia != null && equipo.getPotencia() != null && equipo.getPotencia() < potencia) {
+            motivos.add("potencia de " + RequerimientosTecnicos.formatoNumero(equipo.getPotencia()) + " HP; se piden "
+                    + RequerimientosTecnicos.formatoNumero(potencia) + " HP como mínimo");
+        }
+        Double profundidad = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PROFUNDIDAD);
+        if (profundidad != null && equipo.getProfundidadExcavacion() != null && equipo.getProfundidadExcavacion() < profundidad) {
+            motivos.add("excava hasta " + RequerimientosTecnicos.formatoNumero(equipo.getProfundidadExcavacion())
+                    + " m; se piden " + RequerimientosTecnicos.formatoNumero(profundidad) + " m");
+        }
+        Double peso = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PESO);
+        if (peso != null && equipo.getPeso() != null && equipo.getPeso() > peso) {
+            motivos.add("pesa " + RequerimientosTecnicos.formatoNumero(equipo.getPeso()) + " t; el máximo es "
+                    + RequerimientosTecnicos.formatoNumero(peso) + " t");
+        }
+        Double ancho = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.ANCHO);
+        if (ancho != null && equipo.getAnchoOperacion() != null && equipo.getAnchoOperacion() > ancho) {
+            motivos.add("mide " + RequerimientosTecnicos.formatoNumero(equipo.getAnchoOperacion()) + " m de ancho; el acceso es de "
+                    + RequerimientosTecnicos.formatoNumero(ancho) + " m");
+        }
+        return motivos.isEmpty() ? null : String.join(", ", motivos);
+    }
+
+    private EquipoDTO equipo(Long id, String marca, String modelo) {
+        EquipoDTO equipo = new EquipoDTO();
+        equipo.setIdEquipo(id);
+        equipo.setMarca(marca);
+        equipo.setModelo(modelo);
+        equipo.setAccesorios(new ArrayList<>());
+        return equipo;
+    }
+
+    private List<AccesorioDTO> accesoriosDeExcavadora() {
+        List<AccesorioDTO> accesorios = new ArrayList<>();
+        accesorios.add(accesorio(1L, "Kit de señalización", 300.0, true));
+        accesorios.add(accesorio(2L, "Cucharón adicional 1.20 m", 200.0, false));
+        return accesorios;
+    }
+
+    private AccesorioDTO accesorio(Long id, String nombre, Double costo, boolean obligatorio) {
+        AccesorioDTO accesorio = new AccesorioDTO();
+        accesorio.setIdAccesorio(id);
+        accesorio.setNombre(nombre);
+        accesorio.setCostoRenta(costo);
+        accesorio.setEsObligatorio(obligatorio);
+        return accesorio;
+    }
+
+    // Todos los accesorios que hay en el catálogo para el equipo recomendado en F2
+    private List<AccesorioDTO> accesoriosDelRecomendado() {
+        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
+        EvaluacionTecnicaDTO evaluacion = pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
+        if (evaluacion == null || evaluacion.getRecomendado() == null) {
+            return new ArrayList<>();
+        }
+        for (EquipoDTO equipo : catalogoEquipos()) {
+            if (Objects.equals(equipo.getIdEquipo(), evaluacion.getRecomendado().getIdEquipo())) {
+                return equipo.getAccesorios();
+            }
+        }
+        return new ArrayList<>();
     }
 
     @Override

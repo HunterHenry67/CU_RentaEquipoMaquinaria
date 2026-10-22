@@ -77,6 +77,18 @@ public interface IContratacionRenta {
     
     public abstract void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo);
 
+    public abstract void pasarDatosSolicitudDatosFaltantes(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosEquiposCompatibles(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosSinEquipoCompatible(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosSeleccionAccesorios(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosEvaluacionTecnica(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosVerificacionDeDisponibilidad(SolicitudRentaDTO dto);
+
     public abstract void ocultarTodo();
     
 }

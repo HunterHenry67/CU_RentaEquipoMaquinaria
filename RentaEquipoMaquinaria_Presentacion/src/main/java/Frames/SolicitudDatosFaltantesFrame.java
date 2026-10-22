@@ -4,6 +4,10 @@
  */
 package Frames;
 
+import DTOs.SolicitudRentaDTO;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alejandromontijo
@@ -11,11 +15,23 @@ package Frames;
 public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
     
     public SolicitudDatosFaltantesFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // El coordinador la llama cada vez que se abre la pantalla
+    public void cargarSolicitud(SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + nombreCliente());
+        txtFieldAnchoAcceso.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO));
+        txtFieldTipoTerreno.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO));
+        jLabel6.setText("Estado de la solicitud: " + (solicitud.getEstadoSolicitud() != null
+                ? solicitud.getEstadoSolicitud() : "En espera de información"));
     }
 
     /**
@@ -252,8 +268,28 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRespuestaActionPerformed
-        contratacionRenta.abrirAnalisisRequerimiento();
+        String error = RequerimientosTecnicos.revisar(RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
+        if (error != null) {
+            JOptionPane.showMessageDialog(this, error, "Solicitud de Datos Faltantes", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (solicitud.getRequerimientos() == null) {
+            solicitud.setRequerimientos(new ArrayList<>());
+        }
+        RequerimientosTecnicos.guardar(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
+        RequerimientosTecnicos.guardar(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText());
+        solicitud.setEstadoSolicitud("En evaluación técnica");
+        contratacionRenta.pasarDatosAnalisisRequerimientos(solicitud);
     }//GEN-LAST:event_btnRegistrarRespuestaActionPerformed
+
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private String nombreCliente() {
+        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarRespuesta;

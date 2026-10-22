@@ -4,6 +4,10 @@
  */
 package Frames;
 
+import DTOs.SolicitudRentaDTO;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author alejandromontijo
@@ -11,11 +15,31 @@ package Frames;
 public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
     
     public AnalisisRequerimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // El coordinador la llama cada vez que se abre la pantalla: muestra la solicitud y lo
+    // que ya se haya capturado de los requerimientos (así no se pierde al regresar)
+    public void cargarSolicitud(SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+        if (solicitud.getRequerimientos() == null) {
+            solicitud.setRequerimientos(new ArrayList<>());
+        }
+        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + nombreCliente());
+        lblUbicacion.setText("Ubicación: " + ubicacion());
+        txtAreaActividad.setText(texto(solicitud.getDescripcionActividad()));
+        txtFieldProfundidad.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.PROFUNDIDAD));
+        txtFieldPotencia.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.POTENCIA));
+        txtFieldAlimentacion.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ALIMENTACION));
+        txtFieldPesoMaximo.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.PESO));
+        txtFieldTipoTerreno.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO));
+        txtFieldAnchoAcceso.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO));
     }
 
     /**
@@ -370,12 +394,71 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEquiposActionPerformed
-        contratacionRenta.abrirEquiposCompatibles();
+        if (!guardarRequerimientos()) {
+            return;
+        }
+        if (!hayRequerimientosConNumero()) {
+            JOptionPane.showMessageDialog(this, "Captura por lo menos una característica con número para comparar los equipos.",
+                    "Análisis de Requerimiento Técnico", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        contratacionRenta.pasarDatosEquiposCompatibles(solicitud);
     }//GEN-LAST:event_btnBuscarEquiposActionPerformed
 
     private void btnSolicitarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarDatosActionPerformed
-        contratacionRenta.abrirSolicitudDatosFaltantes();
+        if (guardarRequerimientos()) {
+            solicitud.setEstadoSolicitud("En espera de información");
+            contratacionRenta.pasarDatosSolicitudDatosFaltantes(solicitud);
+        }
     }//GEN-LAST:event_btnSolicitarDatosActionPerformed
+
+    // Pasa lo escrito en los campos a los requerimientos de la solicitud. Si un campo que
+    // lleva número no trae uno, avisa y no guarda nada.
+    private boolean guardarRequerimientos() {
+        String[][] campos = {
+            {RequerimientosTecnicos.PROFUNDIDAD, txtFieldProfundidad.getText()},
+            {RequerimientosTecnicos.POTENCIA, txtFieldPotencia.getText()},
+            {RequerimientosTecnicos.ALIMENTACION, txtFieldAlimentacion.getText()},
+            {RequerimientosTecnicos.PESO, txtFieldPesoMaximo.getText()},
+            {RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText()},
+            {RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText()}
+        };
+        for (String[] campo : campos) {
+            String error = RequerimientosTecnicos.revisar(campo[0], campo[1]);
+            if (error != null) {
+                JOptionPane.showMessageDialog(this, error, "Análisis de Requerimiento Técnico", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        }
+        if (solicitud.getRequerimientos() == null) {
+            solicitud.setRequerimientos(new ArrayList<>());
+        }
+        for (String[] campo : campos) {
+            RequerimientosTecnicos.guardar(solicitud.getRequerimientos(), campo[0], campo[1]);
+        }
+        return true;
+    }
+
+    private boolean hayRequerimientosConNumero() {
+        return RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.PROFUNDIDAD) != null
+                || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.POTENCIA) != null
+                || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.PESO) != null
+                || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO) != null;
+    }
+
+    private String ubicacion() {
+        String obra = texto(solicitud.getNombreObra());
+        String direccion = texto(solicitud.getDireccionObra());
+        return obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion;
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private String nombreCliente() {
+        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEquipos;

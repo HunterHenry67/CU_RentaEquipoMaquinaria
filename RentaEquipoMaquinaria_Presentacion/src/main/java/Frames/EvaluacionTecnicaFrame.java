@@ -4,6 +4,14 @@
  */
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.EvaluacionTecnicaDTO;
+import DTOs.PeriodoSolicitadoDTO;
+import DTOs.SolicitudRentaDTO;
+import java.time.format.DateTimeFormatter;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author alejandromontijo
@@ -11,11 +19,39 @@ package Frames;
 public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
     
     public EvaluacionTecnicaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // El coordinador la llama cada vez que se abre la pantalla: muestra lo que se decidió en F2
+    public void cargarEvaluacion(SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + nombreCliente());
+        lblPeriodo.setText("Periodo (registrado en la solicitud): " + periodo());
+        String obra = texto(solicitud.getNombreObra());
+        String direccion = texto(solicitud.getDireccionObra());
+        lblUbicacion.setText("Ubicación: " + (obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion));
+
+        EvaluacionTecnicaDTO evaluacion = solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()
+                ? null : solicitud.getEquiposSolicitados().get(0).getEvaluacion();
+        EquipoDTO recomendado = evaluacion == null ? null : evaluacion.getRecomendado();
+        EquipoDTO alternativa = evaluacion == null ? null : evaluacion.getAlternativo();
+        lblRecomendado.setText("Equipo recomendado: " + (recomendado == null ? "" : recomendado.getModelo()));
+        lblAlternativa.setText("Alternativa: " + (alternativa == null ? "(ninguna)" : alternativa.getModelo()));
+
+        DefaultTableModel modelo = (DefaultTableModel) tableAccesorios.getModel();
+        modelo.setRowCount(0);
+        if (recomendado != null && recomendado.getAccesorios() != null) {
+            for (AccesorioDTO accesorio : recomendado.getAccesorios()) {
+                modelo.addRow(new Object[]{accesorio.getNombre(),
+                    Boolean.TRUE.equals(accesorio.getEsObligatorio()) ? "Indispensable" : "Opcional"});
+            }
+        }
     }
 
     /**
@@ -255,12 +291,31 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEnviarVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarVerificacionActionPerformed
+        solicitud.setEstadoSolicitud("En verificación de disponibilidad");
         javax.swing.JOptionPane.showMessageDialog(this,
             "Evaluación técnica registrada con éxito.\nSolicitud enviada a verificación de disponibilidad.",
             "Evaluación Técnica",
             javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirVerificacionDeDisponibilidad();
+        contratacionRenta.pasarDatosVerificacionDeDisponibilidad(solicitud);
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
+
+    private String periodo() {
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
+            return "";
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
+                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private String nombreCliente() {
+        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarVerificacion;
