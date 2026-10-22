@@ -34,6 +34,10 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableEquipos = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        comboRecomendado = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        comboAlternativa = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnContinuarAccesorios = new javax.swing.JButton();
@@ -69,11 +73,11 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Equipo", "Cumple", "Elegido como"
+                "Equipo", "Cumple"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -81,6 +85,20 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tableEquipos);
+
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Equipo recomendado");
+
+        comboRecomendado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboRecomendado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Alternativa");
+
+        comboAlternativa.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboAlternativa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(70, 70, 70));
@@ -144,6 +162,22 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(comboRecomendado, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 500, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(500, 500, 500)
+                .addComponent(comboAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
@@ -179,16 +213,32 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
                 .addGap(0, 494, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(194, 194, 194)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 316, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 356, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(382, 382, 382)
+                .addGap(340, 340, 340)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 320, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(364, 364, 364)
+                .addComponent(comboRecomendado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 282, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(340, 340, 340)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 320, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(364, 364, 364)
+                .addComponent(comboAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 282, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(420, 420, 420)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 256, Short.MAX_VALUE))
+                .addGap(0, 218, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(432, 432, 432)
+                .addGap(468, 468, 468)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 206, Short.MAX_VALUE))
+                .addGap(0, 170, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnContinuarAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -224,11 +274,15 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnContinuarAccesorios;
     private javax.swing.JButton btnNingunoCumple;
+    private javax.swing.JComboBox<String> comboAlternativa;
+    private javax.swing.JComboBox<String> comboRecomendado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFolio;
     private javax.swing.JPanel panelFondo;

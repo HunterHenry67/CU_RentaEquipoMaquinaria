@@ -34,8 +34,8 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         lblPeriodo = new javax.swing.JLabel();
         lblUbicacion = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableEquipos = new javax.swing.JTable();
+        lblRecomendado = new javax.swing.JLabel();
+        lblAlternativa = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableAccesorios = new javax.swing.JTable();
@@ -73,25 +73,13 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("EQUIPOS A VERIFICAR");
 
-        tableEquipos.setBackground(new java.awt.Color(255, 255, 255));
-        tableEquipos.setForeground(new java.awt.Color(0, 0, 0));
-        tableEquipos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        lblRecomendado.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblRecomendado.setForeground(new java.awt.Color(0, 0, 0));
+        lblRecomendado.setText("Equipo recomendado:");
 
-            },
-            new String [] {
-                "Equipo", "Elegido como"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tableEquipos);
+        lblAlternativa.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAlternativa.setForeground(new java.awt.Color(0, 0, 0));
+        lblAlternativa.setText("Alternativa:");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -169,7 +157,11 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
                 .addGap(0, 740, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblRecomendado, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -220,24 +212,28 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
                 .addGap(0, 466, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(222, 222, 222)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 382, Short.MAX_VALUE))
+                .addComponent(lblRecomendado, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 436, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(318, 318, 318)
+                .addGap(248, 248, 248)
+                .addComponent(lblAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 410, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(290, 290, 290)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 340, Short.MAX_VALUE))
+                .addGap(0, 368, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(348, 348, 348)
+                .addGap(320, 320, 320)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 256, Short.MAX_VALUE))
+                .addGap(0, 284, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(444, 444, 444)
+                .addGap(416, 416, 416)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 214, Short.MAX_VALUE))
+                .addGap(0, 242, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(474, 474, 474)
+                .addGap(446, 446, 446)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 164, Short.MAX_VALUE))
+                .addGap(0, 192, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnEnviarVerificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,14 +269,14 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblAlternativa;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblFolio;
     private javax.swing.JLabel lblPeriodo;
+    private javax.swing.JLabel lblRecomendado;
     private javax.swing.JLabel lblUbicacion;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTable tableAccesorios;
-    private javax.swing.JTable tableEquipos;
     // End of variables declaration//GEN-END:variables
 }
