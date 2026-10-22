@@ -4,6 +4,11 @@
  */
 package Frames;
 
+import DTOs.ClienteDTO;
+import DTOs.RequisitoRentaDTO;
+import DTOs.SolicitudRentaDTO;
+import java.util.List;
+
 /**
  *
  * @author rafaelgb
@@ -11,12 +16,22 @@ package Frames;
 public class RequisitosRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    
+    private List<RequisitoRentaDTO> requisitos;
+
     public RequisitosRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
-        mostrarRequisitos(false);
+    }
+
+    public void cargarRequisitos(SolicitudRentaDTO solicitud) {
+        ClienteDTO cliente = solicitud.getCliente();
+        lblFolio.setText("Folio: " + solicitud.getFolio());
+        lblRfc.setText("RFC: " + cliente.getRfc());
+        lblNombre.setText("Nombre: " + cliente.getNombre());
+        lblTelefono.setText("Teléfono: " + cliente.getTelefono());
+        this.requisitos = solicitud.getRequisitos();
+        mostrarRequisitos();
     }
 
     /**
@@ -305,30 +320,44 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
             "Requisitos validados con éxito.\nLa renta puede continuar a su confirmación.",
             "Requisitos de la renta",
             javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirPropuestaRenta();
+        contratacionRenta.pasarDatosPropuestaRenta(requisitos);
     }//GEN-LAST:event_btnValidarActionPerformed
 
     private void btnMarcarPendienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarPendienteActionPerformed
-        mostrarRequisitos(true);
+        cambiarEstadoIdentificacion("Pendiente");
     }//GEN-LAST:event_btnMarcarPendienteActionPerformed
 
     private void btnReintentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReintentarActionPerformed
-        mostrarRequisitos(false);
+        cambiarEstadoIdentificacion("Cumplida");
     }//GEN-LAST:event_btnReintentarActionPerformed
 
+    private void cambiarEstadoIdentificacion(String estado) {
+        for (RequisitoRentaDTO requisito : requisitos) {
+            if ("Identificación oficial".equals(requisito.getDescripcion())) {
+                requisito.setEstadoRequisito(estado);
+            }
+        }
+        mostrarRequisitos();
+    }
+
     /**
-     * Muestra la pantalla con los requisitos cumplidos o con la
-     * identificación pendiente (misma pantalla, distinto estado).
+     * Muestra en la tabla los requisitos recibidos; si alguno obligatorio
+     * está pendiente, la pantalla cambia a su estado de error.
      */
-    public void mostrarRequisitos(boolean pendiente) {
+    private void mostrarRequisitos() {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableRequisitos.getModel();
         modelo.setRowCount(0);
-        if (pendiente) {
-            modelo.addRow(new Object[]{"Identificación oficial", "Pendiente", "X"});
-        } else {
-            modelo.addRow(new Object[]{"Identificación oficial", "Cumplida", "✔"});
+        boolean pendiente = false;
+        for (RequisitoRentaDTO requisito : requisitos) {
+            boolean requisitoPendiente = "Pendiente".equals(requisito.getEstadoRequisito());
+            String descripcion = requisito.getMonto() != null
+                    ? requisito.getDescripcion() + " · " + String.format("$%,.0f", requisito.getMonto())
+                    : requisito.getDescripcion();
+            modelo.addRow(new Object[]{descripcion, requisito.getEstadoRequisito(), requisitoPendiente ? "X" : "✔"});
+            if (requisitoPendiente && Boolean.TRUE.equals(requisito.getEsObligatorio())) {
+                pendiente = true;
+            }
         }
-        modelo.addRow(new Object[]{"Depósito de garantía · $3,200", "Cubierto", "✔"});
 
         lblEstado.setText(pendiente
             ? "<html>Falta documentación y/o depósito: con la identificación todavía pendiente la contratación no puede confirmarse hasta que el requisito quede cumplido.</html>"

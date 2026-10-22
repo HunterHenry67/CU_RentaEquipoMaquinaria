@@ -4,6 +4,13 @@
  */
 package Frames;
 
+import DTOs.CotizacionDTO;
+import DTOs.DetalleCotizacionDTO;
+import DTOs.PeriodoSolicitadoDTO;
+import DTOs.RequisitoRentaDTO;
+import DTOs.SolicitudRentaDTO;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author rafaelgb
@@ -11,11 +18,57 @@ package Frames;
 public class CotizacionFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    
+    private CotizacionDTO cotizacion;
+
     public CotizacionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    public void cargarCotizacion(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
+        this.cotizacion = cotizacion;
+        lblFolio.setText("Folio: " + solicitud.getFolio());
+        lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
+
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        lblPeriodo.setText("Periodo: " + periodo.getDiasRenta() + " días ("
+                + periodo.getFechaInicio().format(DateTimeFormatter.ofPattern("dd/MM")) + " al "
+                + periodo.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")");
+
+        StringBuilder accesorios = new StringBuilder();
+        double importeAccesorios = 0;
+        for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
+            if ("Equipo".equals(detalle.getTipoConcepto())) {
+                lblEquipo.setText("Equipo: " + detalle.getDescripcion());
+                lblTarifaDiariaValor.setText(formatoMoneda(detalle.getPrecioUnitario()));
+                lblRenta.setText("Renta (" + detalle.getCantidad() + " días × " + formatoMoneda(detalle.getPrecioUnitario()) + "):");
+                lblRentaValor.setText(formatoMoneda(detalle.getImporte()));
+            } else {
+                if (accesorios.length() > 0) {
+                    accesorios.append(" + ");
+                }
+                accesorios.append(detalle.getDescripcion()).append(" ").append(formatoMoneda(detalle.getImporte()));
+                importeAccesorios += detalle.getImporte();
+            }
+        }
+        lblAccesorios.setText("Accesorios (" + (accesorios.length() > 0 ? accesorios : "ninguno") + "):");
+        lblAccesoriosValor.setText(formatoMoneda(importeAccesorios));
+
+        lblSubtotalValor.setText(formatoMoneda(cotizacion.getSubtotal()));
+        lblImpuestosValor.setText(formatoMoneda(cotizacion.getIva()));
+        lblTotalValor.setText(formatoMoneda(cotizacion.getTotal()));
+
+        lblDepositoValor.setText("—");
+        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
+            if (requisito.getMonto() != null) {
+                lblDepositoValor.setText(formatoMoneda(requisito.getMonto()));
+            }
+        }
+    }
+
+    private String formatoMoneda(Double valor) {
+        return String.format("$%,.0f", valor);
     }
 
     /**
@@ -386,7 +439,7 @@ public class CotizacionFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        contratacionRenta.abrirRequisitosRenta();
+        contratacionRenta.pasarDatosRequisitosRenta(cotizacion);
     }//GEN-LAST:event_btnContinuarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
