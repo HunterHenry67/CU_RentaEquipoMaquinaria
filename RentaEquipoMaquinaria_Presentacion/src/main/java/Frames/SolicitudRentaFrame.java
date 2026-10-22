@@ -10,6 +10,9 @@ import DTOs.SolicitudRentaDTO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.time.LocalDate;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
 
 /**
  *
@@ -19,13 +22,62 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
+    private DatePicker datePickerInicio;
+    private DatePicker datePickerFinal;
+
     public SolicitudRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+
+        inicializarSelectoresFecha();
+
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
         card.show(this.getContentPane(), "card1");
         this.pack();
         this.setLocationRelativeTo(null);
+    }
+
+    private void inicializarSelectoresFecha() {
+
+        DatePickerSettings settingsInicio = new DatePickerSettings();
+        settingsInicio.setFormatForDatesCommonEra("yyyy-MM-dd");
+
+        DatePickerSettings settingsFinal = new DatePickerSettings();
+        settingsFinal.setFormatForDatesCommonEra("yyyy-MM-dd");
+    
+        datePickerInicio = new DatePicker(settingsInicio);
+        datePickerFinal = new DatePicker(settingsFinal);
+
+        datePickerInicio.setBounds(formtxtFechaInicio.getBounds());
+        datePickerFinal.setBounds(formtxtFechaFinal.getBounds());
+
+        formtxtFechaInicio.setVisible(false);
+        formtxtFechaFinal.setVisible(false);
+
+        panelSolictudNormal.add(datePickerInicio);
+        panelSolictudNormal.add(datePickerFinal);
+
+        datePickerInicio.addDateChangeListener(event -> {
+            LocalDate nuevaInicio = event.getNewDate();
+            if (nuevaInicio != null) {
+                datePickerFinal.getSettings().setDateRangeLimits(nuevaInicio, null);
+            }
+        });
+
+        panelSolictudNormal.repaint();
+    }
+
+    public LocalDate getFechaInicio() {
+        return datePickerInicio.getDate();
+    }
+
+    public LocalDate getFechaFinal() {
+        return datePickerFinal.getDate();
+    }
+
+    public void setFechas(LocalDate inicio, LocalDate finalFecha) {
+        datePickerInicio.setDate(inicio);
+        datePickerFinal.setDate(finalFecha);
     }
 
     public void cargarDatosCliente(ClienteDTO clienteCargado) {
