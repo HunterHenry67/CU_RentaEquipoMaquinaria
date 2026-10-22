@@ -5,6 +5,7 @@
 package DTOs;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,23 +30,9 @@ public class SolicitudRentaDTO {
     private List<RequisitoRentaDTO> requisitos;
 
     public SolicitudRentaDTO() {
-    }
-
-    public SolicitudRentaDTO(Long idSolicitud, String folio, LocalDate fechaSolicitud, String nombreObra, String direccionObra, String descripcionActividad, String condicionesEspeciales, String estadoSolicitud, String motivoCancelacion, ClienteDTO cliente, PeriodoSolicitadoDTO periodo, List<EquipoSolicitadoDTO> equiposSolicitados, List<RequerimientoTecnicoDTO> requerimientos, List<RequisitoRentaDTO> requisitos) {
-        this.idSolicitud = idSolicitud;
-        this.folio = folio;
-        this.fechaSolicitud = fechaSolicitud;
-        this.nombreObra = nombreObra;
-        this.direccionObra = direccionObra;
-        this.descripcionActividad = descripcionActividad;
-        this.condicionesEspeciales = condicionesEspeciales;
-        this.estadoSolicitud = estadoSolicitud;
-        this.motivoCancelacion = motivoCancelacion;
-        this.cliente = cliente;
-        this.periodo = periodo;
-        this.equiposSolicitados = equiposSolicitados;
-        this.requerimientos = requerimientos;
-        this.requisitos = requisitos;
+        this.equiposSolicitados = new ArrayList<>();
+        this.requerimientos = new ArrayList<>();
+        this.requisitos = new ArrayList<>();
     }
 
     public Long getIdSolicitud() {
@@ -160,4 +147,6 @@ public class SolicitudRentaDTO {
         this.requisitos = requisitos;
     }
 
+    
+    
 }

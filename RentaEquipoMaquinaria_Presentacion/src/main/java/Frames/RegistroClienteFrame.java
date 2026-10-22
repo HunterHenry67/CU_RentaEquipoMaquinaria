@@ -494,13 +494,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             particular.setCorreo(txtFieldCorreoElectro.getText());
             JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.abrirIdentificacionCliente();
-        }
-        
-        javax.swing.JOptionPane.showMessageDialog(this,
-                "El cliente ha sido registrado correctamente.",
-                "Registro Cliente",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirSolicitudRenta();
+        }  
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
