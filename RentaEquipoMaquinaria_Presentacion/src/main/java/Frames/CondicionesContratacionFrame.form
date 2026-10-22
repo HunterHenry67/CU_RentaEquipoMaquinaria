@@ -3,8 +3,8 @@
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="resizable" type="boolean" value="false"/>
     <Property name="title" type="java.lang.String" value="Condiciones de Contrataci&#xf3;n"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -45,148 +45,130 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblFolio" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblCliente" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblUnidad" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblPeriodo" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblAccesorios" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" pref="205" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="715" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblDeposito" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="lblTarifa" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jLabel5" min="-2" pref="880" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="btnRegresar" min="-2" pref="120" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="800" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="741" max="-2" attributes="0"/>
-                  <Component id="btnEnviarValidacion" min="-2" pref="179" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblFolio" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblCliente" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblUnidad" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblPeriodo" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblAccesorios" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" pref="205" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblDeposito" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="lblTarifa" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jLabel5" min="-2" pref="880" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="btnRegresar" min="-2" pref="120" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="741" max="-2" attributes="0"/>
+                          <Component id="btnEnviarValidacion" min="-2" pref="179" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace min="0" pref="40" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                  <Component id="jLabel1" min="-2" pref="36" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="622" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
-                  <Component id="lblFolio" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="582" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
-                  <Component id="lblCliente" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="556" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
-                  <Component id="lblUnidad" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="518" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="166" max="-2" attributes="0"/>
-                  <Component id="lblPeriodo" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="492" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="192" max="-2" attributes="0"/>
-                  <Component id="lblAccesorios" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="466" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="232" max="-2" attributes="0"/>
-                  <Component id="jLabel2" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="426" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="262" max="-2" attributes="0"/>
-                  <Component id="lblDeposito" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="396" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
-                  <Component id="lblTarifa" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="370" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="326" max="-2" attributes="0"/>
-                  <Component id="jLabel3" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="332" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="350" max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="308" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="374" max="-2" attributes="0"/>
-                  <Component id="jLabel5" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="284" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
-                  <Component id="btnRegresar" min="-2" pref="44" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="32" max="32767" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
-                  <Component id="btnEnviarValidacion" min="-2" pref="44" max="-2" attributes="0"/>
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="jLabel1" min="-2" pref="36" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                          <Component id="lblFolio" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+                          <Component id="lblCliente" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
+                          <Component id="lblUnidad" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="166" max="-2" attributes="0"/>
+                          <Component id="lblPeriodo" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="192" max="-2" attributes="0"/>
+                          <Component id="lblAccesorios" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="232" max="-2" attributes="0"/>
+                          <Component id="jLabel2" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="262" max="-2" attributes="0"/>
+                          <Component id="lblDeposito" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
+                          <Component id="lblTarifa" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="326" max="-2" attributes="0"/>
+                          <Component id="jLabel3" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="350" max="-2" attributes="0"/>
+                          <Component id="jLabel4" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="374" max="-2" attributes="0"/>
+                          <Component id="jLabel5" min="-2" pref="22" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
+                          <Component id="btnRegresar" min="-2" pref="44" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
+                          <Component id="btnEnviarValidacion" min="-2" pref="44" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
                   <EmptySpace min="0" pref="32" max="32767" attributes="0"/>
               </Group>
           </Group>

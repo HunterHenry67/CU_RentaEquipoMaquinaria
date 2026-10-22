@@ -17,7 +17,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -262,7 +262,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirCalendarioUnidad();
+        contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEnviarValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarValidacionActionPerformed
