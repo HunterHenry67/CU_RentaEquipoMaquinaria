@@ -9,6 +9,7 @@ import DTOs.EquipoSolicitadoDTO;
 import DTOs.SolicitudRentaDTO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -31,6 +32,16 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         if (clienteCargado != null) {
             lblNombreCliente.setText("Nombre del Cliente: " + clienteCargado.getNombre());
             lblRFC.setText("RFC: " + clienteCargado.getRfc());
+        }
+    }
+
+    public void cargarEquiposSolicitadosEnTabla(java.util.List<DTOs.EquipoSolicitadoDTO> listaEquipos) {
+        DefaultTableModel modelo = (DefaultTableModel) tableEquipoSoli.getModel();
+        modelo.setRowCount(0);
+        for (DTOs.EquipoSolicitadoDTO eq : listaEquipos) {
+            Object[] fila = {eq.getDescripcionEquipo(), eq.getCantidad()
+            };
+            modelo.addRow(fila);
         }
     }
 

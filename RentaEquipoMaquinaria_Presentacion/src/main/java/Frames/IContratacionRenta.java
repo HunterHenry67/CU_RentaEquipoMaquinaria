@@ -6,6 +6,7 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.CotizacionDTO;
+import DTOs.EquipoSolicitadoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
 import java.util.List;
@@ -73,6 +74,8 @@ public interface IContratacionRenta {
     public abstract void pasarDatosRequisitosRenta(CotizacionDTO dto);
 
     public abstract void pasarDatosPropuestaRenta(List<RequisitoRentaDTO> requisitos);
+    
+    public abstract void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo);
 
     public abstract void ocultarTodo();
     

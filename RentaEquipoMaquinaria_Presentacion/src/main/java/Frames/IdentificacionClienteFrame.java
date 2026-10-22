@@ -20,6 +20,22 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+        java.util.List<DTOs.ClienteDTO> listaEjemplo = new java.util.ArrayList<>();
+
+        DTOs.ClienteDTO c1 = new DTOs.ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian@correo.com", "Particular");
+
+        DTOs.ClienteEmpresaDTO c2 = new DTOs.ClienteEmpresaDTO();
+        c2.setIdCliente(2L);
+        c2.setNombre("Constructora del Yaqui S.A. de C.V.");
+        c2.setRfc("CYA050212H84");
+        c2.setTelefono("6441234567");
+        c2.setCorreo("contacto@constructora.com");
+
+        ClienteDTO c3 = new ClienteDTO(3L, "María Fernanda López", "LOMF920410H12", "6447654321", "mafe@correo.com", "Particular");
+        listaEjemplo.add(c1);
+        listaEjemplo.add(c2);
+        listaEjemplo.add(c3);
+        cargarClientesEnTabla(listaEjemplo);
     }
 
     /**
@@ -306,7 +322,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
                 dto.setNombre(nombre);
             }
             this.contratacionRenta.pasarDatoRegistroCliente(dto);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
         }
 

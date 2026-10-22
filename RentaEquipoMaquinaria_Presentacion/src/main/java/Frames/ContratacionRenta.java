@@ -7,6 +7,7 @@ package Frames;
 import DTOs.ClienteDTO;
 import DTOs.CotizacionDTO;
 import DTOs.DetalleCotizacionDTO;
+import DTOs.EquipoSolicitadoDTO;
 import DTOs.PeriodoSolicitadoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
@@ -18,8 +19,8 @@ import java.util.List;
  *
  * @author Home
  */
-public class ContratacionRenta implements IContratacionRenta{
-    
+public class ContratacionRenta implements IContratacionRenta {
+
     private InicioSesionFrame iniciarSesionFrame;
     private MenuPrincipalFrame menuPrincipalFrame;
     private IdentificacionClienteFrame identificacionClienteFrame;
@@ -49,8 +50,8 @@ public class ContratacionRenta implements IContratacionRenta{
     private PropuestaPendienteFrame propuestaPendienteFrame;
     private VerificacionCondicionFrame verificacionCondicionFrame;
     private OrdenEntregaFrame ordenEntregaFrame;
-    
-    public ContratacionRenta(){
+
+    public ContratacionRenta() {
         this.iniciarSesionFrame = new InicioSesionFrame(this);
         this.menuPrincipalFrame = new MenuPrincipalFrame(this);
         this.identificacionClienteFrame = new IdentificacionClienteFrame(this);
@@ -69,7 +70,7 @@ public class ContratacionRenta implements IContratacionRenta{
         this.unidadOcupadaFrame = new UnidadOcupadaFrame(this);
         this.calendarioUnidadFrame = new CalendarioUnidadFrame(this);
         this.condicionesContratacionFrame = new CondicionesContratacionFrame(this);
-        
+
         // Inicialización unificada de todas las pantallas
         this.cotizacionFrame = new CotizacionFrame(this);
         this.requisitosRentaFrame = new RequisitosRentaFrame(this);
@@ -77,7 +78,7 @@ public class ContratacionRenta implements IContratacionRenta{
         this.propuestaPendienteFrame = new PropuestaPendienteFrame(this);
         this.verificacionCondicionFrame = new VerificacionCondicionFrame(this);
         this.ordenEntregaFrame = new OrdenEntregaFrame(this);
-        
+
         this.abrirInciarSesión();
     }
 
@@ -189,7 +190,7 @@ public class ContratacionRenta implements IContratacionRenta{
         ocultarTodo();
         condicionesContratacionFrame.setVisible(true);
     }
-    
+
     @Override
     public void abrirPropuestaRenta() {
         ocultarTodo();
@@ -231,7 +232,7 @@ public class ContratacionRenta implements IContratacionRenta{
         requisitosRentaFrame.cargarRequisitos(solicitudActual);
         requisitosRentaFrame.setVisible(true);
     }
-    
+
     // Estos métodos no servirán para sobreecargar los datos en las pantallas
     @Override
     public void pasarDatosSolcitudRenta(ClienteDTO dto) {
@@ -240,7 +241,7 @@ public class ContratacionRenta implements IContratacionRenta{
         ocultarTodo();
         solicitudRentaForm.setVisible(true);
     }
-    
+
     @Override
     public void pasarDatoRegistroCliente(ClienteDTO dto) {
         this.clienteActual = dto;
@@ -254,6 +255,17 @@ public class ContratacionRenta implements IContratacionRenta{
         this.solicitudActual = dto;
         ocultarTodo();
         analisisRequerimientoFrame.setVisible(true);
+    }
+
+    @Override
+    public void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo) {
+        if (this.solicitudActual == null) {
+            this.solicitudActual = new SolicitudRentaDTO();
+        }
+        this.solicitudActual.getEquiposSolicitados().add(equipo);
+        if (solicitudRentaForm != null) {
+            solicitudRentaForm.cargarEquiposSolicitadosEnTabla(this.solicitudActual.getEquiposSolicitados());
+        }
     }
 
     @Override
@@ -275,8 +287,8 @@ public class ContratacionRenta implements IContratacionRenta{
             solicitudActual = new SolicitudRentaDTO();
         }
         if (solicitudActual.getCliente() == null) {
-          //  solicitudActual.setCliente(clienteActual != null ? clienteActual
-                //    : new ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian.martinez@correo.com", "Particular"));
+            //  solicitudActual.setCliente(clienteActual != null ? clienteActual
+            //    : new ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian.martinez@correo.com", "Particular"));
         }
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio("FOL-89241");
@@ -302,34 +314,79 @@ public class ContratacionRenta implements IContratacionRenta{
 
     @Override
     public void ocultarTodo() {
-        if(iniciarSesionFrame != null) iniciarSesionFrame.setVisible(false);
-        if(menuPrincipalFrame != null) menuPrincipalFrame.setVisible(false);
-        if(identificacionClienteFrame != null) identificacionClienteFrame.setVisible(false);
-        if(busquedaEquipoForm != null) busquedaEquipoForm.setVisible(false);
-        if(registrarClienteFrame != null) registrarClienteFrame.setVisible(false);
-        if(solicitudRentaForm != null) solicitudRentaForm.setVisible(false);
-        if(analisisRequerimientoFrame != null) analisisRequerimientoFrame.setVisible(false);
-        if(solicitudDatosFaltantesFrame != null) solicitudDatosFaltantesFrame.setVisible(false);
-        if(equiposCompatiblesFrame != null) equiposCompatiblesFrame.setVisible(false);
-        if(sinEquipoCompatibleFrame != null) sinEquipoCompatibleFrame.setVisible(false);
-        if(seleccionAccesoriosFrame != null) seleccionAccesoriosFrame.setVisible(false);
-        if(evaluacionTecnicaFrame != null) evaluacionTecnicaFrame.setVisible(false);
-        if(disponibilidadFrame != null) disponibilidadFrame.setVisible(false);
-        if(verificacionInventarioFrame != null) verificacionInventarioFrame.setVisible(false);
-        if(unidadMantenimientoFrame != null) unidadMantenimientoFrame.setVisible(false);
-        if(unidadOcupadaFrame != null) unidadOcupadaFrame.setVisible(false);
-        if(calendarioUnidadFrame != null) calendarioUnidadFrame.setVisible(false);
-        if(condicionesContratacionFrame != null) condicionesContratacionFrame.setVisible(false);
-        
-        if(cotizacionFrame != null) cotizacionFrame.setVisible(false);
-        if(requisitosRentaFrame != null) requisitosRentaFrame.setVisible(false);
-        if(propuestaRentaFrame != null) propuestaRentaFrame.setVisible(false);
-        if(propuestaPendienteFrame != null) propuestaPendienteFrame.setVisible(false);
-        if(verificacionCondicionFrame != null) verificacionCondicionFrame.setVisible(false);
-        if(ordenEntregaFrame != null) ordenEntregaFrame.setVisible(false);
+        if (iniciarSesionFrame != null) {
+            iniciarSesionFrame.setVisible(false);
+        }
+        if (menuPrincipalFrame != null) {
+            menuPrincipalFrame.setVisible(false);
+        }
+        if (identificacionClienteFrame != null) {
+            identificacionClienteFrame.setVisible(false);
+        }
+        if (busquedaEquipoForm != null) {
+            busquedaEquipoForm.setVisible(false);
+        }
+        if (registrarClienteFrame != null) {
+            registrarClienteFrame.setVisible(false);
+        }
+        if (solicitudRentaForm != null) {
+            solicitudRentaForm.setVisible(false);
+        }
+        if (analisisRequerimientoFrame != null) {
+            analisisRequerimientoFrame.setVisible(false);
+        }
+        if (solicitudDatosFaltantesFrame != null) {
+            solicitudDatosFaltantesFrame.setVisible(false);
+        }
+        if (equiposCompatiblesFrame != null) {
+            equiposCompatiblesFrame.setVisible(false);
+        }
+        if (sinEquipoCompatibleFrame != null) {
+            sinEquipoCompatibleFrame.setVisible(false);
+        }
+        if (seleccionAccesoriosFrame != null) {
+            seleccionAccesoriosFrame.setVisible(false);
+        }
+        if (evaluacionTecnicaFrame != null) {
+            evaluacionTecnicaFrame.setVisible(false);
+        }
+        if (disponibilidadFrame != null) {
+            disponibilidadFrame.setVisible(false);
+        }
+        if (verificacionInventarioFrame != null) {
+            verificacionInventarioFrame.setVisible(false);
+        }
+        if (unidadMantenimientoFrame != null) {
+            unidadMantenimientoFrame.setVisible(false);
+        }
+        if (unidadOcupadaFrame != null) {
+            unidadOcupadaFrame.setVisible(false);
+        }
+        if (calendarioUnidadFrame != null) {
+            calendarioUnidadFrame.setVisible(false);
+        }
+        if (condicionesContratacionFrame != null) {
+            condicionesContratacionFrame.setVisible(false);
+        }
+
+        if (cotizacionFrame != null) {
+            cotizacionFrame.setVisible(false);
+        }
+        if (requisitosRentaFrame != null) {
+            requisitosRentaFrame.setVisible(false);
+        }
+        if (propuestaRentaFrame != null) {
+            propuestaRentaFrame.setVisible(false);
+        }
+        if (propuestaPendienteFrame != null) {
+            propuestaPendienteFrame.setVisible(false);
+        }
+        if (verificacionCondicionFrame != null) {
+            verificacionCondicionFrame.setVisible(false);
+        }
+        if (ordenEntregaFrame != null) {
+            ordenEntregaFrame.setVisible(false);
+        }
     }
 
-    
-
-    
 }
