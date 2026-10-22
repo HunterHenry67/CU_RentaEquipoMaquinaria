@@ -259,7 +259,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
             "Evaluación técnica registrada con éxito.\nSolicitud enviada a verificación de disponibilidad.",
             "Evaluación Técnica",
             javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirDisponibilidad();
+        contratacionRenta.abrirVerificacionDeDisponibilidad();
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
