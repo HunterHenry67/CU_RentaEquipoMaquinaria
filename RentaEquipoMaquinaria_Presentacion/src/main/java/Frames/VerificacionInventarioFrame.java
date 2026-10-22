@@ -4,6 +4,9 @@
  */
 package Frames;
 
+import DTOs.UnidadFisicaDTO;
+import java.util.List;
+
 /**
  *
  * @author alejandromontijo
@@ -11,7 +14,7 @@ package Frames;
 public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    
+
     public VerificacionInventarioFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
@@ -222,7 +225,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirDisponibilidad();
+        contratacionRenta.abrirVerificacionDeDisponibilidad();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
@@ -230,7 +233,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
         if (estado == null) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una unidad de la tabla.");
         } else if (estado.startsWith("Disponible")) {
-            contratacionRenta.abrirCalendarioUnidad();
+            contratacionRenta.abrirCondicionesContratacion();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "Solo puede seleccionarse una unidad disponible durante todo el periodo.");
         }
@@ -250,11 +253,31 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerMotivoActionPerformed
 
     // Las unidades del escenario (las mismas del storyboard), para poder seguir los tres caminos.
-    private void cargarUnidades() {
+    public void cargarUnidades(List<UnidadFisicaDTO> listaUnidades) {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableUnidades.getModel();
-        modelo.addRow(new Object[] {"M-001", "CAT 320", "Disponible"});
-        modelo.addRow(new Object[] {"M-002", "CAT 320", "En mantenimiento"});
-        modelo.addRow(new Object[] {"M-003", "CAT 320", "Ocupada del 13 al 15"});
+        modelo.setRowCount(0); // Limpiar tabla
+
+        // Si la lista es nula o viene vacía, cargamos los datos de respaldo del storyboard por defecto
+        if (listaUnidades == null || listaUnidades.isEmpty()) {
+            modelo.addRow(new Object[]{"M-001", "CAT 320", "Disponible"});
+            modelo.addRow(new Object[]{"M-002", "CAT 320", "En mantenimiento"});
+            modelo.addRow(new Object[]{"M-003", "CAT 320", "Ocupada del 13 al 15"});
+            return;
+        }
+
+        // Si sí trae datos reales de tus DTOs, los pintamos en la tabla
+        for (UnidadFisicaDTO unidad : listaUnidades) {
+            modelo.addRow(new Object[]{
+                unidad.getNumeroEconomico(),
+                "CAT 320", // O si tu unidad/equipo tiene un modelo, puedes extraerlo aquí
+                unidad.getEstadoUnidad()
+            });
+        }
+    }
+
+    // Sobrecarga sin parámetros para mantener compatibilidad si se llama sin argumentos
+    private void cargarUnidades() {
+        cargarUnidades(null); // Esto llamará al bloque por defecto automáticamente
     }
 
     private String estadoSeleccionado() {
