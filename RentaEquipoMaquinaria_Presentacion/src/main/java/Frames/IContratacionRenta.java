@@ -5,6 +5,7 @@
 package Frames;
 
 import DTOs.ClienteDTO;
+import DTOs.SolicitudRentaDTO;
 
 /**
  *
@@ -61,6 +62,10 @@ public interface IContratacionRenta {
     public abstract void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
     
     public abstract void pasarDatosSolcitudRenta(ClienteDTO dto);
+    
+    public abstract void pasarDatoRegistroCliente(ClienteDTO dto);
+    
+    public abstract void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO dto);
     
     public abstract void ocultarTodo();
     

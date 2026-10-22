@@ -8,29 +8,13 @@ package DTOs;
  *
  * @author alejandromontijo
  */
-public class ClienteEmpresaDTO {
-
-    private ClienteDTO cliente;
+public class ClienteEmpresaDTO extends ClienteDTO{
+    
     private String nombreEncargadoEmpresa;
     private String telefonoEncargadoEmpresa;
     private String puestoEncargadoEmpresa;
 
     public ClienteEmpresaDTO() {
-    }
-
-    public ClienteEmpresaDTO(ClienteDTO cliente, String nombreEncargadoEmpresa, String telefonoEncargadoEmpresa, String puestoEncargadoEmpresa) {
-        this.cliente = cliente;
-        this.nombreEncargadoEmpresa = nombreEncargadoEmpresa;
-        this.telefonoEncargadoEmpresa = telefonoEncargadoEmpresa;
-        this.puestoEncargadoEmpresa = puestoEncargadoEmpresa;
-    }
-
-    public ClienteDTO getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(ClienteDTO cliente) {
-        this.cliente = cliente;
     }
 
     public String getNombreEncargadoEmpresa() {

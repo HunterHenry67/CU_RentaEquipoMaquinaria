@@ -5,6 +5,7 @@
 package Frames;
 
 import DTOs.ClienteDTO;
+import DTOs.SolicitudRentaDTO;
 
 /**
  *
@@ -33,6 +34,7 @@ public class ContratacionRenta implements IContratacionRenta{
     private CotizacionFrame cotizacionFrame;
     private RequisitosRentaFrame requisitosRentaFrame;
     private ClienteDTO clienteActual;
+    private SolicitudRentaDTO solicitudActual;
     
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
@@ -227,6 +229,21 @@ public class ContratacionRenta implements IContratacionRenta{
         ocultarTodo();
         solicitudRentaForm.setVisible(true);
     }
+    
+    @Override
+    public void pasarDatoRegistroCliente(ClienteDTO dto) {
+        this.clienteActual = dto;
+        registrarClienteFrame.cargarDatosRegistroCliente(this.clienteActual);
+        ocultarTodo();
+        solicitudRentaForm.setVisible(true);
+    }
+
+    @Override
+    public void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        ocultarTodo();
+        analisisRequerimientoFrame.setVisible(true);
+    }
 
     @Override
     public void ocultarTodo() {
@@ -256,6 +273,8 @@ public class ContratacionRenta implements IContratacionRenta{
         if(verificacionCondicionFrame != null) verificacionCondicionFrame.setVisible(false);
         if(ordenEntregaFrame != null) ordenEntregaFrame.setVisible(false);
     }
+
+    
 
     
 }
