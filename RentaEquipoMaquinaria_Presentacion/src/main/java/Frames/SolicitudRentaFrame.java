@@ -5,6 +5,7 @@
 package Frames;
 
 import DTOs.ClienteDTO;
+import DTOs.EquipoSolicitadoDTO;
 import DTOs.SolicitudRentaDTO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -578,13 +579,18 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         solicitudDTO.setDescripcionActividad(txtAreaActividadRealizar.getText());
         solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText());
         solicitudDTO.setEstadoSolicitud("Pendiente");
-
         DTOs.PeriodoSolicitadoDTO periodo = new DTOs.PeriodoSolicitadoDTO();
         periodo.setFechaInicio(java.time.LocalDate.now());
         periodo.setFechaFin(java.time.LocalDate.now().plusDays(1));
         solicitudDTO.setPeriodo(periodo);
-        JOptionPane.showMessageDialog(this,"La Solicitud de Renta ha sido Registrada Correctamente.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirAnalisisRequerimiento();
+        for (int i = 0; i < tableEquipoSoli.getRowCount(); i++) {
+            EquipoSolicitadoDTO equipo = new EquipoSolicitadoDTO();
+            equipo.setDescripcionEquipo(tableEquipoSoli.getValueAt(i, 0).toString());
+            equipo.setCantidad(Integer.parseInt(tableEquipoSoli.getValueAt(i, 1).toString()));
+            solicitudDTO.getEquiposSolicitados().add(equipo);
+        }
+        JOptionPane.showMessageDialog(this, "La Solicitud de Renta ha sido Registrada Correctamente.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
+        this.contratacionRenta.pasarDatosAnalisisRequerimientos(solicitudDTO);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed

@@ -475,6 +475,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        
         if(radioBtnEmpresa.isSelected()){
             ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
             empresa.setNombre(txtFieldNombre.getText());
@@ -485,7 +486,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText());
             empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText());
             JOptionPane.showMessageDialog(this, "La Empresa ha saido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-            this.contratacionRenta.abrirIdentificacionCliente();
+            this.contratacionRenta.pasarDatosSolcitudRenta(empresa);
         }else if(radioBtnClientePart.isSelected()){
             ClienteDTO particular = new ClienteDTO();
             particular.setNombre(txtFieldNombre.getText());
@@ -493,7 +494,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             particular.setTelefono(txtFieldTelefono.getText());
             particular.setCorreo(txtFieldCorreoElectro.getText());
             JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-            this.contratacionRenta.abrirIdentificacionCliente();
+            this.contratacionRenta.pasarDatosSolcitudRenta(particular);
         }  
     }//GEN-LAST:event_btnRegistrarActionPerformed
 

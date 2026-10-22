@@ -275,8 +275,8 @@ public class ContratacionRenta implements IContratacionRenta{
             solicitudActual = new SolicitudRentaDTO();
         }
         if (solicitudActual.getCliente() == null) {
-            solicitudActual.setCliente(clienteActual != null ? clienteActual
-                    : new ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian.martinez@correo.com", "Particular"));
+          //  solicitudActual.setCliente(clienteActual != null ? clienteActual
+                //    : new ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian.martinez@correo.com", "Particular"));
         }
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio("FOL-89241");

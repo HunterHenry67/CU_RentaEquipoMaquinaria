@@ -271,27 +271,6 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
-        int fila = tableCliente.getSelectedRow();
-        if (fila != -1) {
-            String rfc = tableCliente.getValueAt(fila, 0).toString();
-            String nombre = tableCliente.getValueAt(fila, 1).toString();
-            String tipo = tableCliente.getValueAt(fila, 2).toString();
-            ClienteDTO dto;
-            if (tipo.equalsIgnoreCase("Empresa")) {
-                ClienteEmpresaDTO dtoEmpresa = new ClienteEmpresaDTO();
-                dtoEmpresa.setRfc(rfc);
-                dtoEmpresa.setNombre(nombre);
-                dto = dtoEmpresa;
-            } else {
-                dto = new ClienteDTO();
-                dto.setRfc(rfc);
-                dto.setNombre(nombre);
-            }
-            this.contratacionRenta.pasarDatoRegistroCliente(dto);
-        }else{
-            JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para realizar una solicitud.");
-        }
-
         contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
 
