@@ -29,20 +29,6 @@ public class ContratacionRentaDTO {
     public ContratacionRentaDTO() {
     }
 
-    public ContratacionRentaDTO(Long idContratacion, LocalDate fechaFormalizacion, LocalDate fechaInicio, LocalDate fechaFin, Double tarifaAcordada, Double depositoGarantia, String estado, String condicionesAcordadas, ClienteDTO cliente, UnidadFisicaDTO unidad, List<AccesorioDTO> accesorios, OrdenEntregaDTO ordenEntrega) {
-        this.idContratacion = idContratacion;
-        this.fechaFormalizacion = fechaFormalizacion;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.tarifaAcordada = tarifaAcordada;
-        this.depositoGarantia = depositoGarantia;
-        this.estado = estado;
-        this.condicionesAcordadas = condicionesAcordadas;
-        this.cliente = cliente;
-        this.unidad = unidad;
-        this.accesorios = accesorios;
-        this.ordenEntrega = ordenEntrega;
-    }
 
     public Long getIdContratacion() {
         return idContratacion;

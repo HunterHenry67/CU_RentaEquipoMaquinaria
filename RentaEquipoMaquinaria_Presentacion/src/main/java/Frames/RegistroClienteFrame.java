@@ -7,6 +7,7 @@ package Frames;
 import DTOs.ClienteDTO;
 import DTOs.ClienteEmpresaDTO;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -474,6 +475,27 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        if(radioBtnEmpresa.isSelected()){
+            ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
+            empresa.setNombre(txtFieldNombre.getText());
+            empresa.setCorreo(txtFieldCorreoElectro.getText());
+            empresa.setRfc(txtFieldRFC.getText());
+            empresa.setTelefono(txtFieldTelefono.getText());
+            empresa.setNombreEncargadoEmpresa(txtFileldNombreEncargado.getText());
+            empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText());
+            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText());
+            JOptionPane.showMessageDialog(this, "La Empresa ha saido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            this.contratacionRenta.abrirIdentificacionCliente();
+        }else if(radioBtnClientePart.isSelected()){
+            ClienteDTO particular = new ClienteDTO();
+            particular.setNombre(txtFieldNombre.getText());
+            particular.setRfc(txtFieldRFC.getText());
+            particular.setTelefono(txtFieldTelefono.getText());
+            particular.setCorreo(txtFieldCorreoElectro.getText());
+            JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            this.contratacionRenta.abrirIdentificacionCliente();
+        }
+        
         javax.swing.JOptionPane.showMessageDialog(this,
                 "El cliente ha sido registrado correctamente.",
                 "Registro Cliente",
