@@ -4,6 +4,8 @@
  */
 package Frames;
 
+import DTOs.ClienteDTO;
+
 /**
  *
  * @author Home
@@ -30,6 +32,7 @@ public class ContratacionRenta implements IContratacionRenta{
     private CondicionesContratacionFrame condicionesContratacionFrame;
     private CotizacionFrame cotizacionFrame;
     private RequisitosRentaFrame requisitosRentaFrame;
+    private ClienteDTO clienteActual;
     
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
@@ -68,6 +71,7 @@ public class ContratacionRenta implements IContratacionRenta{
         this.abrirInciarSesión();
     }
 
+    // Estos métodos ayudarán a que se carguen las pantallas dentro de la memoria
     @Override
     public void abrirInciarSesión() {
         ocultarTodo();
@@ -214,6 +218,15 @@ public class ContratacionRenta implements IContratacionRenta{
         requisitosRentaFrame.mostrarRequisitos(false);
         requisitosRentaFrame.setVisible(true);
     }
+    
+    // Estos métodos no servirán para sobreecargar los datos en las pantallas
+    @Override
+    public void pasarDatosSolcitudRenta(ClienteDTO dto) {
+        this.clienteActual = dto;
+        solicitudRentaForm.cargarDatosCliente(clienteActual);
+        ocultarTodo();
+        solicitudRentaForm.setVisible(true);
+    }
 
     @Override
     public void ocultarTodo() {
@@ -243,4 +256,6 @@ public class ContratacionRenta implements IContratacionRenta{
         if(verificacionCondicionFrame != null) verificacionCondicionFrame.setVisible(false);
         if(ordenEntregaFrame != null) ordenEntregaFrame.setVisible(false);
     }
+
+    
 }
