@@ -48,6 +48,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblIdentificacionEstado = new javax.swing.JLabel();
         lblDepositoEstadoTit = new javax.swing.JLabel();
         lblDepositoEstado = new javax.swing.JLabel();
+        lblMotivo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Orden de Entrega");
@@ -151,6 +152,11 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDepositoEstado.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblDepositoEstado.setText("Cubierto");
 
+        lblMotivo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lblMotivo.setForeground(new java.awt.Color(170, 20, 20));
+        lblMotivo.setText("");
+        lblMotivo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -251,6 +257,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
                 .addGap(470, 470, 470)
                 .addComponent(lblDepositoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 360, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 360, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,6 +360,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
                 .addGap(502, 502, 502)
                 .addComponent(lblDepositoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 156, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(540, 540, 540)
+                .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 96, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -366,8 +380,13 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // El controlador lo llama cada vez que se abre la pantalla
+    // El controlador lo llama cada vez que se abre la pantalla.
+    // Finalizada: la orden de entrega. Pendiente con cucharón: no se generó la orden porque falta una
+    // condición. Pendiente sin cucharón: el cliente no aceptó el accesorio indispensable y la solicitud queda
+    // pendiente sin accesorios.
     public void configurar(boolean conCucharon, boolean finalizada) {
+        boolean sinAccesorios = !conCucharon && !finalizada;
+
         // Accesorios y total
         if (conCucharon) {
             lblAccesorios.setText("Kit de señalización y cucharón");
@@ -378,19 +397,40 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblPrecioAccesorios.setText("$300");
             lblTotal.setText("Total de la renta: $10,788");
         }
+        lblAccesorios.setVisible(!sinAccesorios);
+        lblPrecioAccesorios.setVisible(!sinAccesorios);
+        lblTotal.setVisible(!sinAccesorios);
 
-        // Estado de la orden
+        // Sin orden de entrega, la pantalla muestra la solicitud pendiente
         if (finalizada) {
+            setTitle("Orden de Entrega");
+            lblTitulo.setText("Orden de Entrega");
             lblEstado.setText("Finalizada");
             lblEstado.setForeground(verde);
+            lblFechaEntregaTit.setText("Fecha de entrega:");
+            lblFechaEntrega.setText("10/09/2026, antes de las 8:00 AM");
             lblIdentificacionEstado.setText("Cumplida");
             lblIdentificacionEstado.setForeground(verde);
+            lblMotivo.setText("");
         } else {
+            setTitle("Solicitud - Pendiente");
+            lblTitulo.setText("Solicitud - Pendiente");
             lblEstado.setText("Pendiente");
             lblEstado.setForeground(naranja);
-            lblIdentificacionEstado.setText("Pendiente");
-            lblIdentificacionEstado.setForeground(naranja);
+            lblFechaEntregaTit.setText("Inicio de la renta:");
+            lblFechaEntrega.setText("10/09/2026");
+            if (sinAccesorios) {
+                lblIdentificacionEstado.setText("Cumplida");
+                lblIdentificacionEstado.setForeground(verde);
+                lblMotivo.setText("Motivo: el cliente no acepta el accesorio indispensable.");
+            } else {
+                lblIdentificacionEstado.setText("Pendiente");
+                lblIdentificacionEstado.setForeground(naranja);
+                lblMotivo.setText("Falta una condición obligatoria: la contratación no se formaliza y la unidad M-001 "
+                        + "no se aparta.");
+            }
         }
+        lblDireccion.setVisible(finalizada);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -410,6 +450,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblFinTit;
     private javax.swing.JLabel lblIdentificacion;
     private javax.swing.JLabel lblIdentificacionEstado;
+    private javax.swing.JLabel lblMotivo;
     private javax.swing.JLabel lblPrecioAccesorios;
     private javax.swing.JLabel lblPrecioEquipo;
     private javax.swing.JLabel lblTitulo;

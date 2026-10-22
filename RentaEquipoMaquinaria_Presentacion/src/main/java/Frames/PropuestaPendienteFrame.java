@@ -127,8 +127,8 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnNoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoContinuarActionPerformed
-        // Con cucharón, orden pendiente
-        contratacionRenta.abrirOrdenEntrega(true, false);
+        // Sin el accesorio indispensable, la solicitud queda pendiente
+        contratacionRenta.abrirOrdenEntrega(false, false);
     }//GEN-LAST:event_btnNoContinuarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
