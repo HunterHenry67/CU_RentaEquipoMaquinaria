@@ -41,7 +41,7 @@ public interface IContratacionRenta {
     
     public abstract void abrirEvaluacionTecnica();
     
-    public abstract void abrirDisponibilidad();
+    public abstract void abrirVerificacionDeDisponibilidad();
     
     public abstract void abrirVerificacionInventario();
     
