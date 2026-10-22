@@ -5,7 +5,10 @@
 package Frames;
 
 import DTOs.ClienteDTO;
+import DTOs.CotizacionDTO;
+import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
+import java.util.List;
 
 /**
  *
@@ -66,7 +69,11 @@ public interface IContratacionRenta {
     public abstract void pasarDatoRegistroCliente(ClienteDTO dto);
     
     public abstract void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO dto);
-    
+
+    public abstract void pasarDatosRequisitosRenta(CotizacionDTO dto);
+
+    public abstract void pasarDatosPropuestaRenta(List<RequisitoRentaDTO> requisitos);
+
     public abstract void ocultarTodo();
     
 }

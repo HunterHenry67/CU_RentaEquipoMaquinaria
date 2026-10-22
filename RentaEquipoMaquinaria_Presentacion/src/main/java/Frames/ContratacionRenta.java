@@ -5,7 +5,14 @@
 package Frames;
 
 import DTOs.ClienteDTO;
+import DTOs.CotizacionDTO;
+import DTOs.DetalleCotizacionDTO;
+import DTOs.PeriodoSolicitadoDTO;
+import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,7 +42,8 @@ public class ContratacionRenta implements IContratacionRenta{
     private RequisitosRentaFrame requisitosRentaFrame;
     private ClienteDTO clienteActual;
     private SolicitudRentaDTO solicitudActual;
-    
+    private CotizacionDTO cotizacionActual;
+
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
     private PropuestaPendienteFrame propuestaPendienteFrame;
@@ -210,14 +218,17 @@ public class ContratacionRenta implements IContratacionRenta{
 
     @Override
     public void abrirCotizacion() {
+        prepararDatosCotizacion();
         ocultarTodo();
+        cotizacionFrame.cargarCotizacion(solicitudActual, cotizacionActual);
         cotizacionFrame.setVisible(true);
     }
 
     @Override
     public void abrirRequisitosRenta() {
+        prepararDatosCotizacion();
         ocultarTodo();
-        requisitosRentaFrame.mostrarRequisitos(false);
+        requisitosRentaFrame.cargarRequisitos(solicitudActual);
         requisitosRentaFrame.setVisible(true);
     }
     
@@ -243,6 +254,50 @@ public class ContratacionRenta implements IContratacionRenta{
         this.solicitudActual = dto;
         ocultarTodo();
         analisisRequerimientoFrame.setVisible(true);
+    }
+
+    @Override
+    public void pasarDatosRequisitosRenta(CotizacionDTO dto) {
+        this.cotizacionActual = dto;
+        abrirRequisitosRenta();
+    }
+
+    @Override
+    public void pasarDatosPropuestaRenta(List<RequisitoRentaDTO> requisitos) {
+        this.solicitudActual.setRequisitos(requisitos);
+        abrirPropuestaRenta();
+    }
+
+    // Completa con datos simulados lo que todavía no viene de otros flujos,
+    // sin reemplazar lo que ya se capturó (así se conserva al avanzar o regresar)
+    private void prepararDatosCotizacion() {
+        if (solicitudActual == null) {
+            solicitudActual = new SolicitudRentaDTO();
+        }
+        if (solicitudActual.getCliente() == null) {
+            solicitudActual.setCliente(clienteActual != null ? clienteActual
+                    : new ClienteDTO(1L, "Julián Martínez García", "MARJ8503158A1", "6449876543", "julian.martinez@correo.com", "Particular"));
+        }
+        if (solicitudActual.getFolio() == null) {
+            solicitudActual.setFolio("FOL-89241");
+        }
+        if (solicitudActual.getPeriodo() == null) {
+            solicitudActual.setPeriodo(new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6));
+        }
+        if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {
+            List<RequisitoRentaDTO> requisitos = new ArrayList<>();
+            requisitos.add(new RequisitoRentaDTO("Identificación oficial", true, "Cumplida", null));
+            requisitos.add(new RequisitoRentaDTO("Depósito de garantía", true, "Cubierto", 3200.0));
+            solicitudActual.setRequisitos(requisitos);
+        }
+        if (cotizacionActual == null) {
+            List<DetalleCotizacionDTO> detalles = new ArrayList<>();
+            detalles.add(new DetalleCotizacionDTO("Equipo", "Excavadora CAT 320 (M-001)", 6, 1500.0, 9000.0, null, null));
+            detalles.add(new DetalleCotizacionDTO("Accesorio", "kit", 1, 300.0, 300.0, null, null));
+            detalles.add(new DetalleCotizacionDTO("Accesorio", "cucharón", 1, 200.0, 200.0, null, null));
+            cotizacionActual = new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
+                    9500.0, 1520.0, 11020.0, detalles, null);
+        }
     }
 
     @Override
