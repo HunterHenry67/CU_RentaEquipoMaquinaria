@@ -140,9 +140,9 @@
                   <EmptySpace min="0" pref="302" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="330" max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" pref="22" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="328" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="324" max="-2" attributes="0"/>
+                  <Component id="jLabel4" min="-2" pref="42" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="314" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="402" max="-2" attributes="0"/>
@@ -269,7 +269,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="46" green="46" red="46" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Se propone; el cliente decide en F5&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Se propone; el cliente decide al revisar la propuesta&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>
@@ -281,7 +281,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="46" green="46" red="46" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;El tipo de equipo y la actividad determinan cu&#xe1;l es el accesorio indispensable: no se puede quitar. El opcional solo se propone; la decisi&#xf3;n del cliente se registra en F5.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;El tipo de equipo y la actividad determinan cu&#xe1;l es el accesorio indispensable: no se puede quitar. El opcional solo se propone; la decisi&#xf3;n del cliente se registra en la propuesta de renta.&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>

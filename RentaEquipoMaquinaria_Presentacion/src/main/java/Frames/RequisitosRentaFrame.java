@@ -302,8 +302,8 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
 
     private void btnValidarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnValidarActionPerformed
         javax.swing.JOptionPane.showMessageDialog(this,
-            "Requisitos validados con éxito.\nLa renta puede continuar a su confirmación (F5).",
-            "F4 — Requisitos de la renta",
+            "Requisitos validados con éxito.\nLa renta puede continuar a su confirmación.",
+            "Requisitos de la renta",
             javax.swing.JOptionPane.INFORMATION_MESSAGE);
         contratacionRenta.abrirPropuestaRenta();
     }//GEN-LAST:event_btnValidarActionPerformed

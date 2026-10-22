@@ -15,6 +15,12 @@ public class Main {
      */
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {     
+            // El mismo aspecto en Windows y en Mac: con el de Mac los botones de color salen en blanco
+            try {
+                javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception ex) {
+                System.err.println("No se pudo cambiar el aspecto: " + ex.getMessage());
+            }
             IContratacionRenta control = new ContratacionRenta();
             control.abrirInciarSesión();
         });

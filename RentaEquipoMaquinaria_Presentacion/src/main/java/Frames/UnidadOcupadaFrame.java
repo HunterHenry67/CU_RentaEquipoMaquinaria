@@ -88,7 +88,7 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>Usar la alternativa técnica que se registró en F2.</html>");
+        jLabel5.setText("<html>Usar la alternativa técnica que se registró en la evaluación técnica.</html>");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnUsarAlternativa.setBackground(new java.awt.Color(44, 44, 44));

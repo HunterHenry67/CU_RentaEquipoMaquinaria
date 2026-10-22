@@ -117,12 +117,12 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel4.setText("<html>Se propone; el cliente decide en F5</html>");
+        jLabel4.setText("<html>Se propone; el cliente decide al revisar la propuesta</html>");
         jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>El tipo de equipo y la actividad determinan cuál es el accesorio indispensable: no se puede quitar. El opcional solo se propone; la decisión del cliente se registra en F5.</html>");
+        jLabel5.setText("<html>El tipo de equipo y la actividad determinan cuál es el accesorio indispensable: no se puede quitar. El opcional solo se propone; la decisión del cliente se registra en la propuesta de renta.</html>");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
@@ -231,9 +231,9 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 302, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(330, 330, 330)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 328, Short.MAX_VALUE))
+                .addGap(324, 324, 324)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 314, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(402, 402, 402)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)

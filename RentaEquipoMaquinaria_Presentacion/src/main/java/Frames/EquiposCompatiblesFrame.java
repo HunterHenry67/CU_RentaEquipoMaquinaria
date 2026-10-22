@@ -89,7 +89,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>Que un equipo cumpla no significa que esté disponible. La disponibilidad de las unidades se verifica en el flujo siguiente (F3).</html>");
+        jLabel5.setText("<html>Que un equipo cumpla no significa que esté disponible. La disponibilidad de las unidades se verifica en el siguiente paso, al consultar el inventario.</html>");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnContinuarAccesorios.setBackground(new java.awt.Color(44, 44, 44));

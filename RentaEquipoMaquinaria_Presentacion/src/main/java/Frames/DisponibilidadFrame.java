@@ -83,7 +83,7 @@ public class DisponibilidadFrame extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>El periodo viene de F1; se cambia solo si el cliente pide otras fechas.</html>");
+        jLabel5.setText("<html>El periodo es el que se registró en la solicitud; se cambia solo si el cliente pide otras fechas.</html>");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lblUbicacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
@@ -96,7 +96,7 @@ public class DisponibilidadFrame extends javax.swing.JFrame {
 
         lblEquipo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblEquipo.setForeground(new java.awt.Color(0, 0, 0));
-        lblEquipo.setText("Tipo de equipo recomendado en F2:");
+        lblEquipo.setText("Tipo de equipo recomendado en la evaluación técnica:");
 
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
         btnRegresar.setBorderPainted(false);

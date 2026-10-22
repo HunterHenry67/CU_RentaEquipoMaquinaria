@@ -214,7 +214,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Periodo (registrado en F1):"/>
+            <Property name="text" type="java.lang.String" value="Periodo (registrado en la solicitud):"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblUbicacion">
@@ -313,7 +313,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="46" green="46" red="46" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;La evaluaci&#xf3;n queda ligada al folio de la solicitud. El flujo F3 la recibe para verificar qu&#xe9; unidades hay disponibles en el periodo.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;La evaluaci&#xf3;n queda ligada al folio de la solicitud. Despu&#xe9;s se verifica qu&#xe9; unidades hay disponibles en el periodo.&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>

@@ -82,7 +82,7 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>El asesor registra que no hay equipo compatible y lo comenta con el cliente. El caso de uso no continúa hacia F3.</html>");
+        jLabel5.setText("<html>El asesor registra que no hay equipo compatible y lo comenta con el cliente. El caso de uso no continúa a la verificación de disponibilidad.</html>");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnAjustarRequerimiento.setBackground(new java.awt.Color(44, 44, 44));

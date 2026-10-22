@@ -293,7 +293,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="46" green="46" red="46" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;El periodo viene de F1; se cambia solo si el cliente pide otras fechas.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;El periodo es el que se registr&#xf3; en la solicitud; se cambia solo si el cliente pide otras fechas.&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>
@@ -327,7 +327,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Tipo de equipo recomendado en F2:"/>
+            <Property name="text" type="java.lang.String" value="Tipo de equipo recomendado en la evaluaci&#xf3;n t&#xe9;cnica:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnRegresar">

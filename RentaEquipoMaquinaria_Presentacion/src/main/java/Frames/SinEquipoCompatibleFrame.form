@@ -254,7 +254,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="46" green="46" red="46" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;El asesor registra que no hay equipo compatible y lo comenta con el cliente. El caso de uso no contin&#xfa;a hacia F3.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;El asesor registra que no hay equipo compatible y lo comenta con el cliente. El caso de uso no contin&#xfa;a a la verificaci&#xf3;n de disponibilidad.&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>

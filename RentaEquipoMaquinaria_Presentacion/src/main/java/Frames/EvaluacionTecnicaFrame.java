@@ -63,7 +63,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
 
         lblPeriodo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblPeriodo.setForeground(new java.awt.Color(0, 0, 0));
-        lblPeriodo.setText("Periodo (registrado en F1):");
+        lblPeriodo.setText("Periodo (registrado en la solicitud):");
 
         lblUbicacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblUbicacion.setForeground(new java.awt.Color(0, 0, 0));
@@ -123,7 +123,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>La evaluación queda ligada al folio de la solicitud. El flujo F3 la recibe para verificar qué unidades hay disponibles en el periodo.</html>");
+        jLabel5.setText("<html>La evaluación queda ligada al folio de la solicitud. Después se verifica qué unidades hay disponibles en el periodo.</html>");
         jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnEnviarVerificacion.setBackground(new java.awt.Color(44, 44, 44));
@@ -260,8 +260,8 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
 
     private void btnEnviarVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarVerificacionActionPerformed
         javax.swing.JOptionPane.showMessageDialog(this,
-            "Evaluación técnica registrada con éxito.\nSolicitud enviada a Verificación de Disponibilidad (F3).",
-            "F2 — Evaluación Técnica",
+            "Evaluación técnica registrada con éxito.\nSolicitud enviada a verificación de disponibilidad.",
+            "Evaluación Técnica",
             javax.swing.JOptionPane.INFORMATION_MESSAGE);
         contratacionRenta.abrirDisponibilidad();
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
