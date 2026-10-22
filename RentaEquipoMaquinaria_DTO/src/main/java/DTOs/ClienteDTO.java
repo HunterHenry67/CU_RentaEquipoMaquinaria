@@ -19,7 +19,15 @@ public class ClienteDTO {
 
     public ClienteDTO() {
     }
-    
+
+    public ClienteDTO(Long idCliente, String nombre, String rfc, String telefono, String correo, String tipoCliente) {
+        this.idCliente = idCliente;
+        this.nombre = nombre;
+        this.rfc = rfc;
+        this.telefono = telefono;
+        this.correo = correo;
+        this.tipoCliente = tipoCliente;
+    }
     
 
     public Long getIdCliente() {

@@ -33,6 +33,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             lblNombreCliente.setText("Nombre del Cliente: " + clienteCargado.getNombre());
             lblRFC.setText("RFC: " + clienteCargado.getRfc());
         }
+        if (lblRFCancelacion != null) {
+            lblRFCancelacion.setText("RFC: " + clienteCargado.getRfc());
+        }
     }
 
     public void cargarEquiposSolicitadosEnTabla(java.util.List<DTOs.EquipoSolicitadoDTO> listaEquipos) {
@@ -86,7 +89,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
+        lblRFCancelacion = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -474,9 +477,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel21.setForeground(new java.awt.Color(0, 0, 0));
         jLabel21.setText("Folio:");
 
-        jLabel22.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        jLabel22.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel22.setText("RFC:");
+        lblRFCancelacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblRFCancelacion.setForeground(new java.awt.Color(0, 0, 0));
+        lblRFCancelacion.setText("RFC:");
 
         jLabel23.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
@@ -520,7 +523,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblRFCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -547,7 +550,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(130, 130, 130)
-                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblRFCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(172, 172, 172)
                         .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -633,7 +636,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -646,6 +648,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblRFC;
+    private javax.swing.JLabel lblRFCancelacion;
     private javax.swing.JLabel lblSolicitudRenta;
     private javax.swing.JPanel panelCancelacionSolicitud;
     private javax.swing.JPanel panelSolictudNormal;
