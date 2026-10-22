@@ -4,6 +4,8 @@
  */
 package Frames;
 
+import DTOs.PeriodoSolicitadoDTO;
+
 /**
  *
  * @author alejandromontijo
@@ -11,7 +13,7 @@ package Frames;
 public class UnidadMantenimientoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    
+
     public UnidadMantenimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
@@ -255,7 +257,7 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOtraUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOtraUnidadActionPerformed
-        contratacionRenta.abrirCalendarioUnidad();
+        contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnOtraUnidadActionPerformed
 
     private void btnUsarAlternativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsarAlternativaActionPerformed
@@ -263,7 +265,7 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUsarAlternativaActionPerformed
 
     private void btnCambiarPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPeriodoActionPerformed
-        contratacionRenta.abrirDisponibilidad();
+        contratacionRenta.abrirVerificacionDeDisponibilidad();
     }//GEN-LAST:event_btnCambiarPeriodoActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
