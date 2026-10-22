@@ -33,7 +33,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
-    private DisponibilidadFrame disponibilidadFrame;
+    private VerificacionDeDisponibilidadFrame verificacionDeDisponibilidadFrame;
     private VerificacionInventarioFrame verificacionInventarioFrame;
     private UnidadMantenimientoFrame unidadMantenimientoFrame;
     private UnidadOcupadaFrame unidadOcupadaFrame;
@@ -64,7 +64,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
-        this.disponibilidadFrame = new DisponibilidadFrame(this);
+        this.verificacionDeDisponibilidadFrame = new VerificacionDeDisponibilidadFrame(this);
         this.verificacionInventarioFrame = new VerificacionInventarioFrame(this);
         this.unidadMantenimientoFrame = new UnidadMantenimientoFrame(this);
         this.unidadOcupadaFrame = new UnidadOcupadaFrame(this);
@@ -156,9 +156,9 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void abrirDisponibilidad() {
+    public void abrirVerificacionDeDisponibilidad() {
         ocultarTodo();
-        disponibilidadFrame.setVisible(true);
+        verificacionDeDisponibilidadFrame.setVisible(true);
     }
 
     @Override
@@ -350,8 +350,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if (evaluacionTecnicaFrame != null) {
             evaluacionTecnicaFrame.setVisible(false);
         }
-        if (disponibilidadFrame != null) {
-            disponibilidadFrame.setVisible(false);
+        if (verificacionDeDisponibilidadFrame != null) {
+            verificacionDeDisponibilidadFrame.setVisible(false);
         }
         if (verificacionInventarioFrame != null) {
             verificacionInventarioFrame.setVisible(false);
