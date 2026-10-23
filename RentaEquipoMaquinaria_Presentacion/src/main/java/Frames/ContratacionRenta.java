@@ -96,12 +96,12 @@ public class ContratacionRenta implements IContratacionRenta {
         this.verificacionCondicionFrame = new VerificacionCondicionFrame(this);
         this.ordenEntregaFrame = new OrdenEntregaFrame(this);
 
-        this.abrirIniciarSesion();
+        this.abrirInciarSesión();
     }
 
     // Estos métodos ayudarán a que se carguen las pantallas dentro de la memoria
     @Override
-    public void abrirIniciarSesion() {
+    public void abrirInciarSesión() {
         iniciarSesionFrame.limpiarCampos();
         ocultarTodo();
         iniciarSesionFrame.setVisible(true);
@@ -302,7 +302,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     // Estos métodos nos servirán para cargar los datos en las pantallas
     @Override
-    public void pasarDatosSolicitudRenta(ClienteDTO dto) {
+    public void pasarDatosSolcitudRenta(ClienteDTO dto) {
         // Con el cliente empieza una solicitud nueva: no se arrastra nada de la anterior
         this.clienteActual = dto;
         this.solicitudActual = null;
@@ -317,7 +317,7 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosRegistroCliente(ClienteDTO dto) {
+    public void pasarDatoRegistroCliente(ClienteDTO dto) {
         this.clienteActual = dto;
         registrarClienteFrame.cargarDatosRegistroCliente(this.clienteActual);
         ocultarTodo();
@@ -401,7 +401,7 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo) {
+    public void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo) {
         if (this.solicitudActual == null) {
             this.solicitudActual = new SolicitudRentaDTO();
         }

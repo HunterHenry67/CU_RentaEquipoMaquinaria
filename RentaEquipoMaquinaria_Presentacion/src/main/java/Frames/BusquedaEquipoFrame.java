@@ -241,7 +241,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
             DTOs.EquipoSolicitadoDTO equipoSolicitado = new DTOs.EquipoSolicitadoDTO();
             equipoSolicitado.setDescripcionEquipo(equipo.getModelo());
             equipoSolicitado.setCantidad(1); 
-            contratacionRenta.pasarDatosEquipoSolicitado(equipoSolicitado);
+            contratacionRenta.pasarDatosEquipooSolicitado(equipoSolicitado);
             contratacionRenta.abrirSolicitudRenta();
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un equipo de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);

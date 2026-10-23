@@ -22,7 +22,7 @@ public class Main {
                 System.err.println("No se pudo cambiar el aspecto: " + ex.getMessage());
             }
             IContratacionRenta control = new ContratacionRenta();
-            control.abrirIniciarSesion();
+            control.abrirInciarSesión();
         });
     }
     
