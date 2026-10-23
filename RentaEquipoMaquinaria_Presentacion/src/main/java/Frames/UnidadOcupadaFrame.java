@@ -4,7 +4,12 @@
  */
 package Frames;
 
+import DTOs.EquipoDTO;
+import DTOs.EvaluacionTecnicaDTO;
 import DTOs.PeriodoSolicitadoDTO;
+import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -13,11 +18,23 @@ import DTOs.PeriodoSolicitadoDTO;
 public class UnidadOcupadaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     public UnidadOcupadaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // El coordinador la llama al abrir la pantalla con la unidad que se consultó y su estado
+    // durante el periodo de la solicitud
+    public void cargarUnidad(UnidadFisicaDTO unidad, String estado, SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        lblPeriodo.setText("Periodo solicitado: " + (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null ? ""
+                : periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)));
+        lblMotivo.setText("Motivo: la unidad " + unidad.getNumeroEconomico() + " está " + estado.toLowerCase() + ".");
     }
 
     /**
@@ -55,7 +72,7 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("<html>La unidad está ocupada en parte del periodo solicitado. Como no lo cubre completo, no puede seleccionarse para esta renta.</html>");
+        jLabel2.setText("<html>La unidad está ocupada en días del periodo solicitado. Como no está libre todo el periodo, no puede seleccionarse para esta renta.</html>");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         lblPeriodo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
@@ -261,7 +278,17 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOtraUnidadActionPerformed
 
     private void btnUsarAlternativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsarAlternativaActionPerformed
-        contratacionRenta.abrirEquiposCompatibles();
+        EvaluacionTecnicaDTO evaluacion = solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()
+                ? null : solicitud.getEquiposSolicitados().get(0).getEvaluacion();
+        if (evaluacion == null || evaluacion.getAlternativo() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "En la evaluación técnica no se registró una alternativa.");
+            return;
+        }
+        // la alternativa pasa a ser el equipo recomendado y el que era recomendado queda de alternativa
+        EquipoDTO recomendado = evaluacion.getRecomendado();
+        evaluacion.setRecomendado(evaluacion.getAlternativo());
+        evaluacion.setAlternativo(recomendado);
+        contratacionRenta.pasarDatosEquiposCompatibles(solicitud);
     }//GEN-LAST:event_btnUsarAlternativaActionPerformed
 
     private void btnCambiarPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPeriodoActionPerformed

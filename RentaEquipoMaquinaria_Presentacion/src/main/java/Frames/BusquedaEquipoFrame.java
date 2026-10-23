@@ -17,24 +17,46 @@ import javax.swing.table.DefaultTableModel;
 public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    // el catálogo completo y, en el mismo orden que la tabla, los equipos que se están mostrando
+    private final List<EquipoDTO> catalogo = new ArrayList<>();
+    private final List<EquipoDTO> equiposEnTabla = new ArrayList<>();
 
     public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
-        List<DTOs.EquipoDTO> listaEquipos = new ArrayList<>();
-        listaEquipos.add(new DTOs.EquipoDTO(1L, "CAT", "320", 140.0, 21500.0, 2.5, 6.5, 1500.0, null));
-        listaEquipos.add(new DTOs.EquipoDTO(2L, "JCB", "3CX", 92.0, 7500.0, 2.3, 4.3, 1200.0, null));
-        cargarEquiposEnTabla(listaEquipos);
     }
 
+    // El coordinador la llama al abrir la pantalla con los equipos del catálogo (los mismos
+    // que se comparan después en el análisis del requerimiento técnico)
     public void cargarEquiposEnTabla(List<EquipoDTO> listaEquipos) {
+        catalogo.clear();
+        catalogo.addAll(listaEquipos);
+        txtFieldBusqueda.setText("");
+        mostrarEquipos(catalogo);
+    }
+
+    private void mostrarEquipos(List<EquipoDTO> equipos) {
         DefaultTableModel modelo = (DefaultTableModel) tableEquipoCatalogo.getModel();
         modelo.setRowCount(0);
-        for (DTOs.EquipoDTO e : listaEquipos) {
-            Object[] fila = {e.getMarca() + " " + e.getModelo(), "Costo diario: $" + e.getCostoDiario()};
+        equiposEnTabla.clear();
+        for (DTOs.EquipoDTO e : equipos) {
+            Object[] fila = {e.getModelo(), detalle(e)};
             modelo.addRow(fila);
+            equiposEnTabla.add(e);
         }
+    }
+
+    // Lo que se sabe del equipo; lo que no está registrado no se muestra
+    private String detalle(EquipoDTO e) {
+        List<String> datos = new ArrayList<>();
+        if (e.getPotencia() != null) {
+            datos.add("Potencia: " + RequerimientosTecnicos.formatoNumero(e.getPotencia()) + " HP");
+        }
+        if (e.getCostoDiario() != null) {
+            datos.add("Costo diario: " + String.format("$%,.0f", e.getCostoDiario()));
+        }
+        return String.join(" · ", datos);
     }
 
     @SuppressWarnings("unchecked")
@@ -195,7 +217,17 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-
+        String texto = txtFieldBusqueda.getText().trim().toLowerCase();
+        List<EquipoDTO> encontrados = new ArrayList<>();
+        for (EquipoDTO e : catalogo) {
+            if (texto.isEmpty() || (e.getModelo() != null && e.getModelo().toLowerCase().contains(texto))) {
+                encontrados.add(e);
+            }
+        }
+        mostrarEquipos(encontrados);
+        if (encontrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontró ningún equipo con ese nombre.", "Búsqueda de Equipo", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -205,9 +237,9 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     private void btnRegistrarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEquipoActionPerformed
         int filaSeleccionada = tableEquipoCatalogo.getSelectedRow();
         if (filaSeleccionada != -1) {
-            String equipoTexto = tableEquipoCatalogo.getValueAt(filaSeleccionada, 0).toString();
+            EquipoDTO equipo = equiposEnTabla.get(tableEquipoCatalogo.convertRowIndexToModel(filaSeleccionada));
             DTOs.EquipoSolicitadoDTO equipoSolicitado = new DTOs.EquipoSolicitadoDTO();
-            equipoSolicitado.setDescripcionEquipo(equipoTexto);
+            equipoSolicitado.setDescripcionEquipo(equipo.getModelo());
             equipoSolicitado.setCantidad(1); 
             contratacionRenta.pasarDatosEquipooSolicitado(equipoSolicitado);
             contratacionRenta.abrirSolicitudRenta();

@@ -306,7 +306,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         }
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
-                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + (periodo.getDiasRenta() == 1 ? " día" : " días"));
     }
 
     private String texto(String valor) {

@@ -9,6 +9,7 @@ import DTOs.CotizacionDTO;
 import DTOs.EquipoSolicitadoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
 import java.util.List;
 
 /**
@@ -88,6 +89,16 @@ public interface IContratacionRenta {
     public abstract void pasarDatosEvaluacionTecnica(SolicitudRentaDTO dto);
 
     public abstract void pasarDatosVerificacionDeDisponibilidad(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosVerificacionInventario(SolicitudRentaDTO dto);
+
+    public abstract void pasarDatosUnidadMantenimiento(UnidadFisicaDTO unidad);
+
+    public abstract void pasarDatosUnidadOcupada(UnidadFisicaDTO unidad);
+
+    public abstract void pasarDatosCondicionesContratacion(UnidadFisicaDTO unidad);
+
+    public abstract ClienteDTO consultarClientePorRfc(String rfc);
 
     public abstract void ocultarTodo();
     

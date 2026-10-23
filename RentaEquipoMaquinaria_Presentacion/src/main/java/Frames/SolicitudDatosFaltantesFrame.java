@@ -268,6 +268,11 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRespuestaActionPerformed
+        if (txtFieldAnchoAcceso.getText().isBlank() && txtFieldTipoTerreno.getText().isBlank()) {
+            JOptionPane.showMessageDialog(this, "Escribe lo que respondió el cliente: el ancho de acceso, el tipo de terreno o los dos.",
+                    "Solicitud de Datos Faltantes", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         String error = RequerimientosTecnicos.revisar(RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
         if (error != null) {
             JOptionPane.showMessageDialog(this, error, "Solicitud de Datos Faltantes", JOptionPane.WARNING_MESSAGE);

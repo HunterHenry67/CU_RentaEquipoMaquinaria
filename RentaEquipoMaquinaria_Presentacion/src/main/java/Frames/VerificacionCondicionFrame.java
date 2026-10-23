@@ -1,10 +1,24 @@
 package Frames;
 
+import DTOs.CotizacionDTO;
+import DTOs.DetalleCotizacionDTO;
+import DTOs.PeriodoSolicitadoDTO;
+import DTOs.RequisitoRentaDTO;
+import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 public class VerificacionCondicionFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
     private boolean conCucharon = true;
+    private SolicitudRentaDTO solicitud;
+    private CotizacionDTO cotizacion;
+    private UnidadFisicaDTO unidad;
     
     public VerificacionCondicionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -338,6 +352,13 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+        // Si el asesor desmarcó alguna condición, falta algo y la orden no se genera
+        String faltan = condicionesSinMarcar();
+        if (!faltan.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Falta confirmar: " + faltan + ".\nSi falta una condición obligatoria, usa «No Generar Orden».",
+                    "Verificación de Condiciones", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         // Orden finalizada
         contratacionRenta.abrirOrdenEntrega(conCucharon, true);
     }//GEN-LAST:event_btnGenerarActionPerformed
@@ -347,9 +368,23 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         contratacionRenta.abrirOrdenEntrega(conCucharon, false);
     }//GEN-LAST:event_btnNoGenerarActionPerformed
 
+    // El controlador lo llama antes de configurar la pantalla, con la cotización que quedó
+    // según la decisión del cliente (con o sin el accesorio opcional)
+    public void cargarDatos(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion, UnidadFisicaDTO unidad) {
+        this.solicitud = solicitud;
+        this.cotizacion = cotizacion;
+        this.unidad = unidad;
+    }
+
     // El controlador lo llama cada vez que se abre la pantalla
     public void configurar(boolean conCucharon) {
         this.conCucharon = conCucharon;
+        // las condiciones se vuelven a confirmar cada vez
+        chkCliente.setSelected(true);
+        chkEquipo.setSelected(true);
+        chkAccesorios.setSelected(true);
+        chkPeriodo.setSelected(true);
+        chkTarifa.setSelected(true);
 
         if (conCucharon) {
             lblAccesorios.setText("Kit de señalización y cucharón");
@@ -358,6 +393,84 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
             lblAccesorios.setText("Kit de señalización");
             lblTotal.setText("Total de la renta: $10,788");
         }
+        if (cotizacion != null) {
+            mostrarDatos();
+        }
+    }
+
+    // Los datos de la renta que se capturaron en las pantallas anteriores
+    private void mostrarDatos() {
+        String equipo = "";
+        String renta = "";
+        List<String> accesorios = new ArrayList<>();
+        for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
+            if ("Equipo".equals(detalle.getTipoConcepto())) {
+                equipo = detalle.getEquipo() == null ? detalle.getDescripcion() : detalle.getEquipo().getModelo();
+                renta = moneda(detalle.getImporte());
+            } else {
+                accesorios.add(detalle.getDescripcion());
+            }
+        }
+        lblCliente.setText(solicitud.getCliente() == null ? "" : solicitud.getCliente().getNombre());
+        lblEquipo.setText(equipo + (unidad == null ? "" : " · unidad " + unidad.getNumeroEconomico()));
+        lblAccesorios.setText(accesorios.isEmpty() ? "Ninguno" : enLista(accesorios));
+        lblTarifa.setText(renta + " MXN");
+        lblTotal.setText("Total de la renta: " + moneda(cotizacion.getTotal()) + " (renta, accesorios e impuestos)");
+        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
+            if (requisito.getMonto() != null) {
+                lblDepositoValor.setText(moneda(requisito.getMonto()) + " MXN");
+            }
+        }
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo != null && periodo.getFechaInicio() != null && periodo.getFechaFin() != null) {
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            lblPeriodo.setText(periodo.getFechaInicio().format(formato) + " - " + periodo.getFechaFin().format(formato));
+            lblEntrega.setText("<html>Entrega confirmada: " + periodo.getFechaInicio().format(formato) + " antes de las 8:00 AM, en "
+                    + solicitud.getDireccionObra() + ".<br>Al generar la orden, la " + (unidad == null ? "unidad" : unidad.getNumeroEconomico())
+                    + " queda ocupada " + rango(periodo.getFechaInicio(), periodo.getFechaFin()) + ".</html>");
+        }
+    }
+
+    private String condicionesSinMarcar() {
+        List<String> faltan = new ArrayList<>();
+        if (!chkCliente.isSelected()) {
+            faltan.add("cliente");
+        }
+        if (!chkEquipo.isSelected()) {
+            faltan.add("equipo y unidad");
+        }
+        if (!chkAccesorios.isSelected()) {
+            faltan.add("accesorios");
+        }
+        if (!chkPeriodo.isSelected()) {
+            faltan.add("periodo");
+        }
+        if (!chkTarifa.isSelected()) {
+            faltan.add("tarifa");
+        }
+        return String.join(", ", faltan);
+    }
+
+    // "Kit de señalización y cucharón adicional 1.20 m"
+    private String enLista(List<String> nombres) {
+        StringBuilder texto = new StringBuilder(nombres.get(0));
+        for (int i = 1; i < nombres.size(); i++) {
+            String nombre = nombres.get(i);
+            texto.append(i == nombres.size() - 1 ? " y " : ", ")
+                    .append(nombre.isEmpty() ? "" : Character.toLowerCase(nombre.charAt(0)) + nombre.substring(1));
+        }
+        return texto.toString();
+    }
+
+    // "del 10 al 15/09" (o "del 28/09 al 02/10" si cambia el mes)
+    private String rango(LocalDate inicio, LocalDate fin) {
+        DateTimeFormatter diaMes = DateTimeFormatter.ofPattern("dd/MM");
+        boolean mismoMes = inicio.getMonth() == fin.getMonth() && inicio.getYear() == fin.getYear();
+        return "del " + (mismoMes ? String.valueOf(inicio.getDayOfMonth()) : inicio.format(diaMes)) + " al " + fin.format(diaMes);
+    }
+
+    private String moneda(Double valor) {
+        return valor == null ? "—" : String.format("$%,.0f", valor);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

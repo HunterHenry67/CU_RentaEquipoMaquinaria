@@ -29,12 +29,14 @@ public class CotizacionFrame extends javax.swing.JFrame {
     public void cargarCotizacion(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
         this.cotizacion = cotizacion;
         lblFolio.setText("Folio: " + solicitud.getFolio());
-        lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
+        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : solicitud.getCliente().getNombre()));
 
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        lblPeriodo.setText("Periodo: " + periodo.getDiasRenta() + " días ("
-                + periodo.getFechaInicio().format(DateTimeFormatter.ofPattern("dd/MM")) + " al "
-                + periodo.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")");
+        if (periodo != null && periodo.getFechaInicio() != null && periodo.getFechaFin() != null) {
+            lblPeriodo.setText("Periodo: " + dias(periodo.getDiasRenta()) + " ("
+                    + periodo.getFechaInicio().format(DateTimeFormatter.ofPattern("dd/MM")) + " al "
+                    + periodo.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")");
+        }
 
         StringBuilder accesorios = new StringBuilder();
         double importeAccesorios = 0;
@@ -42,14 +44,14 @@ public class CotizacionFrame extends javax.swing.JFrame {
             if ("Equipo".equals(detalle.getTipoConcepto())) {
                 lblEquipo.setText("Equipo: " + detalle.getDescripcion());
                 lblTarifaDiariaValor.setText(formatoMoneda(detalle.getPrecioUnitario()));
-                lblRenta.setText("Renta (" + detalle.getCantidad() + " días × " + formatoMoneda(detalle.getPrecioUnitario()) + "):");
+                lblRenta.setText("Renta (" + dias(detalle.getCantidad()) + " × " + formatoMoneda(detalle.getPrecioUnitario()) + "):");
                 lblRentaValor.setText(formatoMoneda(detalle.getImporte()));
             } else {
                 if (accesorios.length() > 0) {
                     accesorios.append(" + ");
                 }
-                accesorios.append(detalle.getDescripcion()).append(" ").append(formatoMoneda(detalle.getImporte()));
-                importeAccesorios += detalle.getImporte();
+                accesorios.append(nombreCorto(detalle.getDescripcion())).append(" ").append(formatoMoneda(detalle.getImporte()));
+                importeAccesorios += detalle.getImporte() == null ? 0 : detalle.getImporte();
             }
         }
         lblAccesorios.setText("Accesorios (" + (accesorios.length() > 0 ? accesorios : "ninguno") + "):");
@@ -67,8 +69,18 @@ public class CotizacionFrame extends javax.swing.JFrame {
         }
     }
 
+    private String dias(Integer dias) {
+        return dias == null ? "" : dias + (dias == 1 ? " día" : " días");
+    }
+
     private String formatoMoneda(Double valor) {
-        return String.format("$%,.0f", valor);
+        return valor == null ? "—" : String.format("$%,.0f", valor);
+    }
+
+    // En el renglón de accesorios solo cabe la primera palabra: "Kit de señalización" -> "kit"
+    private String nombreCorto(String descripcion) {
+        String palabra = descripcion == null ? "" : descripcion.trim().split(" ")[0];
+        return palabra.toLowerCase();
     }
 
     /**
