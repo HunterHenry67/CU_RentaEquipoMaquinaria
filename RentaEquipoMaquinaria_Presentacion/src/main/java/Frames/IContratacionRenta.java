@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface IContratacionRenta {  
     
-    public abstract void abrirInciarSesión();
+    public abstract void abrirIniciarSesion();
     
     public abstract void abrirMenuPrincipal();
     
@@ -66,9 +66,9 @@ public interface IContratacionRenta {
     
     public abstract void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
     
-    public abstract void pasarDatosSolcitudRenta(ClienteDTO dto);
+    public abstract void pasarDatosSolicitudRenta(ClienteDTO dto);
     
-    public abstract void pasarDatoRegistroCliente(ClienteDTO dto);
+    public abstract void pasarDatosRegistroCliente(ClienteDTO dto);
     
     public abstract void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO dto);
 
@@ -76,7 +76,7 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosPropuestaRenta(List<RequisitoRentaDTO> requisitos);
     
-    public abstract void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo);
+    public abstract void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo);
 
     public abstract void pasarDatosSolicitudDatosFaltantes(SolicitudRentaDTO dto);
 

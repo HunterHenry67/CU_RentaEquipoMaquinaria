@@ -382,7 +382,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
-        this.contratacionRenta.pasarDatoRegistroCliente(null);
+        this.contratacionRenta.pasarDatosRegistroCliente(null);
     }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -392,7 +392,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
         ClienteDTO cliente = clienteSeleccionado();
         if (cliente != null) {
-            contratacionRenta.pasarDatosSolcitudRenta(cliente);
+            contratacionRenta.pasarDatosSolicitudRenta(cliente);
         } else {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Registrar la Solicitud.");
         }
@@ -401,7 +401,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
         ClienteDTO cliente = clienteSeleccionado();
         if (cliente != null) {
-            this.contratacionRenta.pasarDatoRegistroCliente(cliente);
+            this.contratacionRenta.pasarDatosRegistroCliente(cliente);
         } else {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
         }

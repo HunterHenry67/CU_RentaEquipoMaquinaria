@@ -572,7 +572,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             mensaje = "Los datos del Cliente han sido actualizados correctamente.";
         }
         JOptionPane.showMessageDialog(this, mensaje, "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-        this.contratacionRenta.pasarDatosSolcitudRenta(cliente);
+        this.contratacionRenta.pasarDatosSolicitudRenta(cliente);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
