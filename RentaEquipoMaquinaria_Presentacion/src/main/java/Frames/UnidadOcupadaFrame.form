@@ -178,7 +178,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;La unidad est&#xe1; ocupada en d&#xed;as del periodo solicitado. Como no est&#xe1; libre todo el periodo, no puede seleccionarse para esta renta.&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;La unidad est&#xe1; ocupada en parte del periodo solicitado. Como no lo cubre completo, no puede seleccionarse para esta renta.&lt;/html&gt;"/>
             <Property name="verticalAlignment" type="int" value="1"/>
           </Properties>
         </Component>

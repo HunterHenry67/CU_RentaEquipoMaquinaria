@@ -6,11 +6,8 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.ClienteEmpresaDTO;
-import java.util.Objects;
 import javax.swing.ButtonGroup;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -19,8 +16,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class RegistroClienteFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    // el cliente que se está modificando (null si es uno nuevo)
-    private ClienteDTO clienteCargado;
 
     public RegistroClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -35,8 +30,6 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }
 
     public void cargarDatosRegistroCliente(ClienteDTO dto) {
-        this.clienteCargado = dto;
-        jLabel12.setText("Ingresar Identificación del Encargado");
         if (dto != null) {
             txtFieldNombre.setText(dto.getNombre());
             txtFieldRFC.setText(dto.getRfc());
@@ -48,13 +41,11 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 txtFileldNombreEncargado.setText(empresa.getNombreEncargadoEmpresa());
                 txtFieldPuestoEncargado.setText(empresa.getPuestoEncargadoEmpresa());
                 txtFieldTelefonoEncragado.setText(empresa.getTelefonoEncargadoEmpresa());
-                panelEncargado.setVisible(true);
             } else {
                 radioBtnClientePart.setSelected(true);
                 txtFileldNombreEncargado.setText("");
                 txtFieldPuestoEncargado.setText("");
                 txtFieldTelefonoEncragado.setText("");
-                panelEncargado.setVisible(false);
             }
         } else {
             txtFieldNombre.setText("");
@@ -67,43 +58,6 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             radioBtnClientePart.setSelected(true);
             panelEncargado.setVisible(false);
         }
-    }
-
-    // Revisa los datos capturados; regresa lo que falta o está mal, o null si todo está bien
-    private String revisarDatos() {
-        boolean empresa = radioBtnEmpresa.isSelected();
-        if (txtFieldNombre.getText().isBlank() || txtFieldRFC.getText().isBlank()
-                || txtFieldTelefono.getText().isBlank() || txtFieldCorreoElectro.getText().isBlank()) {
-            return "Favor de llenar el Nombre, Correo Electrónico, Teléfono y RFC.";
-        }
-        String rfc = txtFieldRFC.getText().trim().toUpperCase();
-        int largo = empresa ? 12 : 13;
-        if (rfc.length() != largo) {
-            return "El RFC de " + (empresa ? "una empresa" : "un cliente particular") + " debe tener " + largo + " caracteres.";
-        }
-        if (!rfc.matches("[A-ZÑ&]{" + (largo - 9) + "}[0-9]{6}[A-Z0-9]{3}")) {
-            return "El RFC no tiene un formato válido.";
-        }
-        ClienteDTO mismoRfc = contratacionRenta.consultarClientePorRfc(rfc);
-        if (mismoRfc != null && (clienteCargado == null || !Objects.equals(mismoRfc.getIdCliente(), clienteCargado.getIdCliente()))) {
-            return "Ya hay un cliente registrado con el RFC " + rfc + " (" + mismoRfc.getNombre() + ").";
-        }
-        if (!txtFieldTelefono.getText().trim().matches("[0-9]{10}")) {
-            return "El Teléfono debe tener 10 dígitos.";
-        }
-        if (!txtFieldCorreoElectro.getText().trim().matches("[^@\\s]+@[^@\\s]+\\.[^@\\s]+")) {
-            return "El Correo Electrónico no es válido.";
-        }
-        if (empresa) {
-            if (txtFileldNombreEncargado.getText().isBlank() || txtFieldPuestoEncargado.getText().isBlank()
-                    || txtFieldTelefonoEncragado.getText().isBlank()) {
-                return "Favor de llenar los datos del encargado de operación.";
-            }
-            if (!txtFieldTelefonoEncragado.getText().trim().matches("[0-9]{10}")) {
-                return "El Teléfono del encargado debe tener 10 dígitos.";
-            }
-        }
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -523,13 +477,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_radioBtnEmpresaActionPerformed
 
     private void btnSeleccionarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarArchivoActionPerformed
-        JFileChooser selector = new JFileChooser();
-        selector.setDialogTitle("Identificación del Encargado");
-        selector.setFileFilter(new FileNameExtensionFilter("Imagen o PDF", "pdf", "jpg", "jpeg", "png"));
-        if (selector.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            String nombre = selector.getSelectedFile().getName();
-            jLabel12.setText("Identificación: " + (nombre.length() > 30 ? nombre.substring(0, 27) + "..." : nombre));
-        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnSeleccionarArchivoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -537,42 +485,27 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        String error = revisarDatos();
-        if (error != null) {
-            JOptionPane.showMessageDialog(this, error, "Registro de Cliente", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        ClienteDTO cliente;
-        String mensaje;
+
         if (radioBtnEmpresa.isSelected()) {
             ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
-            empresa.setNombre(txtFieldNombre.getText().trim());
-            empresa.setCorreo(txtFieldCorreoElectro.getText().trim());
-            empresa.setRfc(txtFieldRFC.getText().trim().toUpperCase());
-            empresa.setTelefono(txtFieldTelefono.getText().trim());
-            empresa.setTipoCliente("Empresa");
-            empresa.setNombreEncargadoEmpresa(txtFileldNombreEncargado.getText().trim());
-            empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText().trim());
-            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText().trim());
-            cliente = empresa;
-            mensaje = "La Empresa ha sido registrada correctamente.";
-        } else {
+            empresa.setNombre(txtFieldNombre.getText());
+            empresa.setCorreo(txtFieldCorreoElectro.getText());
+            empresa.setRfc(txtFieldRFC.getText());
+            empresa.setTelefono(txtFieldTelefono.getText());
+            empresa.setNombreEncargadoEmpresa(txtFileldNombreEncargado.getText());
+            empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText());
+            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText());
+            JOptionPane.showMessageDialog(this, "La Empresa ha saido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            this.contratacionRenta.pasarDatosSolcitudRenta(empresa);
+        } else if (radioBtnClientePart.isSelected()) {
             ClienteDTO particular = new ClienteDTO();
-            particular.setNombre(txtFieldNombre.getText().trim());
-            particular.setRfc(txtFieldRFC.getText().trim().toUpperCase());
-            particular.setTelefono(txtFieldTelefono.getText().trim());
-            particular.setCorreo(txtFieldCorreoElectro.getText().trim());
-            particular.setTipoCliente("Particular");
-            cliente = particular;
-            mensaje = "El Cliente ha sido registrado correctamente.";
+            particular.setNombre(txtFieldNombre.getText());
+            particular.setRfc(txtFieldRFC.getText());
+            particular.setTelefono(txtFieldTelefono.getText());
+            particular.setCorreo(txtFieldCorreoElectro.getText());
+            JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            this.contratacionRenta.pasarDatosSolcitudRenta(particular);
         }
-        // al modificar se conserva el mismo cliente
-        if (clienteCargado != null) {
-            cliente.setIdCliente(clienteCargado.getIdCliente());
-            mensaje = "Los datos del Cliente han sido actualizados correctamente.";
-        }
-        JOptionPane.showMessageDialog(this, mensaje, "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-        this.contratacionRenta.pasarDatosSolcitudRenta(cliente);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

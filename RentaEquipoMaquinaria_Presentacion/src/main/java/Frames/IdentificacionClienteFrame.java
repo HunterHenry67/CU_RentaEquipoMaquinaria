@@ -6,10 +6,8 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.ClienteEmpresaDTO;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,9 +18,6 @@ import javax.swing.table.DefaultTableModel;
 public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    // todos los clientes registrados y, en el mismo orden que la tabla, los que se están mostrando
-    private final List<ClienteDTO> clientes = new ArrayList<>();
-    private final List<ClienteDTO> clientesEnTabla = new ArrayList<>();
 
     public IdentificacionClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -34,7 +29,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         c1.setNombre("Julián Martínez García");
         c1.setRfc("MARJ8503158A1");
         c1.setTelefono("6449876543");
-        c1.setCorreo("julianmar12@gmail.com");
+        c1.setCorreo("julian@correo.com");
         c1.setTipoCliente("Particular");
         DTOs.ClienteEmpresaDTO c2 = new DTOs.ClienteEmpresaDTO();
         c2.setIdCliente(2L);
@@ -53,76 +48,17 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         listaEjemplo.add(c1);
         listaEjemplo.add(c2);
         listaEjemplo.add(c3);
-        clientes.addAll(listaEjemplo);
-        cargarClientesEnTabla(clientes);
+        cargarClientesEnTabla(listaEjemplo);
     }
 
     public void cargarClientesEnTabla(java.util.List<DTOs.ClienteDTO> listaClientes) {
         DefaultTableModel modelo = (DefaultTableModel) tableCliente.getModel();
         modelo.setRowCount(0);
-        List<ClienteDTO> mostrados = new ArrayList<>(listaClientes);
-        clientesEnTabla.clear();
-        for (DTOs.ClienteDTO c : mostrados) {
+        for (DTOs.ClienteDTO c : listaClientes) {
             String tipo = (c instanceof ClienteEmpresaDTO) ? "Empresa" : "Particular";
             Object[] fila = {c.getRfc(), c.getNombre(), tipo, c.getTelefono()};
             modelo.addRow(fila);
-            clientesEnTabla.add(c);
         }
-    }
-
-    // Guarda el cliente que se registró o se modificó: si ya estaba (mismo id) se reemplaza
-    // con sus datos nuevos y si es nuevo se agrega, para que aparezca en la siguiente búsqueda
-    public void guardarCliente(ClienteDTO cliente) {
-        if (cliente == null) {
-            return;
-        }
-        if (cliente.getIdCliente() == null) {
-            long siguiente = 1;
-            for (ClienteDTO c : clientes) {
-                if (c.getIdCliente() != null && c.getIdCliente() >= siguiente) {
-                    siguiente = c.getIdCliente() + 1;
-                }
-            }
-            cliente.setIdCliente(siguiente);
-        }
-        boolean yaEstaba = false;
-        for (int i = 0; i < clientes.size(); i++) {
-            if (Objects.equals(clientes.get(i).getIdCliente(), cliente.getIdCliente())) {
-                clientes.set(i, cliente);
-                yaEstaba = true;
-            }
-        }
-        if (!yaEstaba) {
-            clientes.add(cliente);
-        }
-        txtFieldBusqCliente.setText("");
-        cargarClientesEnTabla(clientes);
-    }
-
-    // Al abrir la pantalla se quita la búsqueda anterior y se ven todos los clientes
-    public void limpiarBusqueda() {
-        txtFieldBusqCliente.setText("");
-        cargarClientesEnTabla(clientes);
-    }
-
-    // El cliente con ese RFC, o null si no hay
-    public ClienteDTO buscarPorRfc(String rfc) {
-        for (ClienteDTO c : clientes) {
-            if (c.getRfc() != null && c.getRfc().equalsIgnoreCase(rfc)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    // Para buscar sin importar mayúsculas ni acentos ("julian" encuentra a "Julián")
-    private String sinAcentos(String texto) {
-        return Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
-    }
-
-    private ClienteDTO clienteSeleccionado() {
-        int fila = tableCliente.getSelectedRow();
-        return fila == -1 ? null : clientesEnTabla.get(tableCliente.convertRowIndexToModel(fila));
     }
 
     @SuppressWarnings("unchecked")
@@ -365,24 +301,12 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String texto = sinAcentos(txtFieldBusqCliente.getText().trim());
-        String filtro = String.valueOf(comboFiltroBusqCliente.getSelectedItem());
-        List<ClienteDTO> encontrados = new ArrayList<>();
-        for (ClienteDTO c : clientes) {
-            String valor = filtro.equals("RFC") ? c.getRfc() : filtro.equals("Teléfono") ? c.getTelefono() : c.getNombre();
-            if (texto.isEmpty() || (valor != null && sinAcentos(valor).contains(texto))) {
-                encontrados.add(c);
-            }
-        }
-        cargarClientesEnTabla(encontrados);
-        if (encontrados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontró ningún cliente con ese " + filtro + ". Si es un cliente nuevo, favor de registrarlo.",
-                    "Identificación de Cliente", JOptionPane.INFORMATION_MESSAGE);
-        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
         this.contratacionRenta.pasarDatoRegistroCliente(null);
+        contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -390,21 +314,38 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
-        ClienteDTO cliente = clienteSeleccionado();
-        if (cliente != null) {
-            contratacionRenta.pasarDatosSolcitudRenta(cliente);
-        } else {
-            JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Registrar la Solicitud.");
-        }
+        int filaSeleccionada = tableCliente.getSelectedRow();
+        String rfcObtenido = tableCliente.getValueAt(filaSeleccionada, 0).toString();
+        String nombreObtenido = tableCliente.getValueAt(filaSeleccionada, 1).toString();
+        ClienteDTO dto = new ClienteDTO();
+        dto.setRfc(rfcObtenido);
+        dto.setNombre(nombreObtenido);
+        contratacionRenta.abrirSolicitudRenta();
     }//GEN-LAST:event_btnRegistrarNuevSoliActionPerformed
 
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
-        ClienteDTO cliente = clienteSeleccionado();
-        if (cliente != null) {
-            this.contratacionRenta.pasarDatoRegistroCliente(cliente);
+        int fila = tableCliente.getSelectedRow();
+        if (fila != -1) {
+            String rfc = tableCliente.getValueAt(fila, 0).toString();
+            String nombre = tableCliente.getValueAt(fila, 1).toString();
+            String tipo = tableCliente.getValueAt(fila, 2).toString();
+            ClienteDTO dto;
+            if (tipo.equalsIgnoreCase("Empresa")) {
+                ClienteEmpresaDTO dtoEmpresa = new ClienteEmpresaDTO();
+                dtoEmpresa.setRfc(rfc);
+                dtoEmpresa.setNombre(nombre);
+                dto = dtoEmpresa;
+            } else {
+                dto = new ClienteDTO();
+                dto.setRfc(rfc);
+                dto.setNombre(nombre);
+            }
+            this.contratacionRenta.pasarDatoRegistroCliente(dto);
         } else {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
         }
+
+        contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnModificarDatosActionPerformed
 
 

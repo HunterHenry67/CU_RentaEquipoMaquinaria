@@ -7,7 +7,6 @@ package Frames;
 import DTOs.ClienteDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ import java.util.List;
 public class RequisitosRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private List<RequisitoRentaDTO> requisitos = new ArrayList<>();
+    private List<RequisitoRentaDTO> requisitos;
 
     public RequisitosRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -26,11 +25,10 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
     }
 
     public void cargarRequisitos(SolicitudRentaDTO solicitud) {
-        ClienteDTO cliente = solicitud.getCliente() == null ? new ClienteDTO() : solicitud.getCliente();
+        ClienteDTO cliente = solicitud.getCliente();
         lblFolio.setText("Folio: " + solicitud.getFolio());
         lblRfc.setText("RFC: " + cliente.getRfc());
         lblNombre.setText("Nombre: " + cliente.getNombre());
-        lblNombre.setToolTipText(cliente.getNombre());
         lblTelefono.setText("Teléfono: " + cliente.getTelefono());
         this.requisitos = solicitud.getRequisitos();
         mostrarRequisitos();
@@ -74,7 +72,7 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("DATOS DEL CLIENTE");
+        jLabel2.setText("DATOS DE CLIENTE");
 
         lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));

@@ -4,16 +4,6 @@
  */
 package Frames;
 
-import DTOs.CotizacionDTO;
-import DTOs.DetalleCotizacionDTO;
-import DTOs.PeriodoSolicitadoDTO;
-import DTOs.RequisitoRentaDTO;
-import DTOs.SolicitudRentaDTO;
-import DTOs.UnidadFisicaDTO;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author alejandromontijo
@@ -26,57 +16,6 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
-    }
-
-    // El coordinador la llama cada vez que se abre la pantalla con la unidad elegida y la
-    // cotización calculada con el equipo, el periodo y los accesorios propuestos
-    public void cargarCondiciones(SolicitudRentaDTO solicitud, UnidadFisicaDTO unidad, CotizacionDTO cotizacion) {
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre())));
-        lblPeriodo.setText("Periodo: " + periodo(solicitud.getPeriodo()));
-        String equipo = "";
-        String tarifa = "";
-        List<String> accesorios = new ArrayList<>();
-        for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
-            if ("Equipo".equals(detalle.getTipoConcepto())) {
-                equipo = detalle.getEquipo() == null ? "" : detalle.getEquipo().getModelo();
-                tarifa = moneda(detalle.getImporte()) + " (" + dias(detalle.getCantidad()) + " × " + moneda(detalle.getPrecioUnitario()) + ")";
-            } else {
-                boolean indispensable = detalle.getAccesorio() != null && Boolean.TRUE.equals(detalle.getAccesorio().getEsObligatorio());
-                accesorios.add(detalle.getDescripcion() + (indispensable ? " (indispensable)" : " (opcional)"));
-            }
-        }
-        lblUnidad.setText("Unidad propuesta: " + (unidad == null ? "" : unidad.getNumeroEconomico() + " · ") + equipo);
-        lblAccesorios.setText("Accesorios: " + (accesorios.isEmpty() ? "ninguno" : String.join(", ", accesorios)));
-        lblTarifa.setText("Tarifa por el periodo: " + tarifa);
-        String deposito = "";
-        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
-            if (requisito.getMonto() != null) {
-                deposito = moneda(requisito.getMonto());
-            }
-        }
-        lblDeposito.setText("Depósito de garantía: " + deposito);
-    }
-
-    private String periodo(PeriodoSolicitadoDTO periodo) {
-        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
-            return "";
-        }
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
-                + (periodo.getDiasRenta() == null ? "" : " · " + dias(periodo.getDiasRenta()));
-    }
-
-    private String dias(Integer dias) {
-        return dias + (dias != null && dias == 1 ? " día" : " días");
-    }
-
-    private String moneda(Double valor) {
-        return valor == null ? "—" : String.format("$%,.0f", valor);
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
     }
     
     /**

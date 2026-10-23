@@ -122,8 +122,8 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // Acepta el accesorio indispensable (sin el cucharón): se verifican las condiciones antes de la orden
-        contratacionRenta.abrirVerificacionCondicion(false);
+        // Sin cucharón, orden finalizada
+        contratacionRenta.abrirOrdenEntrega(false, true);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnNoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoContinuarActionPerformed

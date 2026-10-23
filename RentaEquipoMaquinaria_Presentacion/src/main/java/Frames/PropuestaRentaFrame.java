@@ -1,29 +1,16 @@
 package Frames;
 
-import DTOs.CotizacionDTO;
-import DTOs.DecisionClienteDTO;
-import DTOs.DetalleCotizacionDTO;
-import DTOs.PeriodoSolicitadoDTO;
-import DTOs.RequisitoRentaDTO;
-import DTOs.SolicitudRentaDTO;
-import DTOs.UnidadFisicaDTO;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class PropuestaRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
-    // Datos (al abrir la pantalla el controlador los cambia por los de la cotización)
+    // Datos
     private int dias = 6;
     private double tarifaDia = 1500;
     private double senalizacion = 300;
     private double cucharon = 200;
     private double deposito = 3200;
     private boolean incluye = true;
-    private boolean hayOpcional = true;
-    private SolicitudRentaDTO solicitud;
-    private CotizacionDTO cotizacion;
     private static final double IVA = 0.16;
 
     private final java.text.DecimalFormat moneda = new java.text.DecimalFormat("$#,##0");
@@ -595,113 +582,18 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCambiarPeriodoActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        registrarDecision("Acepta", null);
         contratacionRenta.abrirVerificacionCondicion(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnAceptarParcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarParcialActionPerformed
-        // Lo que quiere quitar el cliente: el opcional (aceptación parcial) o el indispensable (no se puede)
-        boolean quitaIndispensable = !hayOpcional;
-        if (hayOpcional) {
-            String[] opciones = {"El accesorio opcional", "El accesorio indispensable", "Cancelar"};
-            int eleccion = javax.swing.JOptionPane.showOptionDialog(this, "¿Qué accesorio quiere quitar el cliente?", "Aceptar parcial",
-                    javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-            if (eleccion != 0 && eleccion != 1) {
-                return;
-            }
-            quitaIndispensable = eleccion == 1;
-        }
-        if (quitaIndispensable) {
-            registrarDecision("Acepta parcialmente", "Quiere quitar el accesorio indispensable");
-            contratacionRenta.abrirPropuestaPendiente();
-            return;
-        }
         incluye = false;
         recalcular();
-        double subtotalParcial = dias * tarifaDia + senalizacion;
-        double subtotalCompleto = subtotalParcial + cucharon;
-        int confirma = javax.swing.JOptionPane.showConfirmDialog(this, "Solicitud - Aceptada parcialmente\n\n"
-                + "El cliente se queda con el equipo y el accesorio indispensable; el opcional se retira.\n"
-                + "Total: " + moneda.format(subtotalParcial * (1 + IVA)) + " (antes " + moneda.format(subtotalCompleto * (1 + IVA))
-                + "). El depósito no cambia: " + moneda.format(deposito) + ".\n\n¿Confirmar?",
-                "Registrar decisión del cliente", javax.swing.JOptionPane.YES_NO_OPTION);
-        if (confirma != javax.swing.JOptionPane.YES_OPTION) {
-            // regresa a la propuesta completa
-            incluye = true;
-            recalcular();
-            return;
-        }
-        registrarDecision("Acepta parcialmente", "Quita el accesorio opcional");
-        contratacionRenta.abrirVerificacionCondicion(false);
+        contratacionRenta.abrirPropuestaPendiente();
     }//GEN-LAST:event_btnAceptarParcialActionPerformed
 
     private void btnRechazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechazarActionPerformed
-        String motivo = javax.swing.JOptionPane.showInputDialog(this, "Motivo del rechazo:", "Rechazar propuesta",
-                javax.swing.JOptionPane.QUESTION_MESSAGE);
-        if (motivo == null) {
-            return;
-        }
-        if (motivo.isBlank()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Escribe el motivo del rechazo.");
-            return;
-        }
-        // Rechazo: la solicitud queda rechazada y el caso de uso termina
-        registrarDecision("Rechaza", motivo.trim());
-        if (solicitud != null) {
-            solicitud.setEstadoSolicitud("Rechazada");
-        }
-        javax.swing.JOptionPane.showMessageDialog(this, "Solicitud - Rechazada\nMotivo: " + motivo.trim(),
-                "Registrar decisión del cliente", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        contratacionRenta.abrirMenuPrincipal();
+        javax.swing.JOptionPane.showMessageDialog(this, "Propuesta rechazada");
     }//GEN-LAST:event_btnRechazarActionPerformed
-
-    // El controlador lo llama cada vez que se abre la pantalla con la cotización de la renta
-    public void cargarPropuesta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion, UnidadFisicaDTO unidad) {
-        this.solicitud = solicitud;
-        this.cotizacion = cotizacion;
-        senalizacion = 0;
-        cucharon = 0;
-        hayOpcional = false;
-        String equipo = "";
-        for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
-            double importe = detalle.getImporte() == null ? 0 : detalle.getImporte();
-            if ("Equipo".equals(detalle.getTipoConcepto())) {
-                dias = detalle.getCantidad() == null ? 0 : detalle.getCantidad();
-                tarifaDia = detalle.getPrecioUnitario() == null ? 0 : detalle.getPrecioUnitario();
-                equipo = detalle.getEquipo() == null ? detalle.getDescripcion() : detalle.getEquipo().getModelo();
-            } else if (detalle.getAccesorio() != null && Boolean.TRUE.equals(detalle.getAccesorio().getEsObligatorio())) {
-                senalizacion += importe;
-            } else {
-                cucharon += importe;
-                hayOpcional = true;
-            }
-        }
-        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
-            if (requisito.getMonto() != null) {
-                deposito = requisito.getMonto();
-            }
-        }
-        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : solicitud.getCliente().getNombre()));
-        lblEquipo.setText(equipo + (unidad == null ? "" : " · unidad " + unidad.getNumeroEconomico()));
-        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        if (periodo != null && periodo.getFechaInicio() != null && periodo.getFechaFin() != null) {
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            lblPeriodo.setText(periodo.getFechaInicio().format(formato) + " - " + periodo.getFechaFin().format(formato)
-                    + " · " + dias + (dias == 1 ? " día" : " días"));
-        }
-    }
-
-    // La decisión del cliente queda en la cotización
-    private void registrarDecision(String tipo, String observaciones) {
-        if (cotizacion == null) {
-            return;
-        }
-        DecisionClienteDTO decision = new DecisionClienteDTO();
-        decision.setFechaDecision(LocalDate.now());
-        decision.setTipoDecision(tipo);
-        decision.setObservaciones(observaciones);
-        cotizacion.setDecision(decision);
-    }
 
     // El controlador lo llama cada vez que se abre la pantalla
     public void reiniciar() {
@@ -715,7 +607,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         double iva = subtotal * IVA;
         double total = subtotal + iva;
 
-        lblRentatxt.setText("Renta (" + dias + (dias == 1 ? " día" : " días") + " × " + moneda.format(tarifaDia) + ")");
+        lblRentatxt.setText("Renta (" + dias + " días × " + moneda.format(tarifaDia) + ")");
         lblRenta.setText(moneda.format(renta));
         lblSenalizacion.setText(moneda.format(senalizacion));
         lblCucharon.setText(moneda.format(cucharon));
@@ -724,8 +616,8 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         lblTotal.setText(moneda.format(total));
         lblDeposito.setText(moneda.format(deposito));
 
-        filaCucharon.setVisible(incluye && hayOpcional);
-        lblAccesorioOp.setVisible(incluye && hayOpcional);
+        filaCucharon.setVisible(incluye);
+        lblAccesorioOp.setVisible(incluye);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

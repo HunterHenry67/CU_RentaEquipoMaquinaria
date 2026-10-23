@@ -6,15 +6,11 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.EquipoSolicitadoDTO;
-import DTOs.PeriodoSolicitadoDTO;
 import DTOs.SolicitudRentaDTO;
 import java.awt.CardLayout;
-import javax.swing.GroupLayout;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 
@@ -28,9 +24,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private DatePicker datePickerInicio;
     private DatePicker datePickerFinal;
-    private ClienteDTO cliente;
-    private String folio;
-    private static final String SIN_ESPECIFICAR = "Sin especificar";
 
     public SolicitudRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -46,19 +39,23 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private void inicializarSelectoresFecha() {
 
-        DatePickerSettings settingsInicio = new DatePickerSettings(Locale.forLanguageTag("es-MX"));
-        settingsInicio.setFormatForDatesCommonEra("dd/MM/yyyy");
+        DatePickerSettings settingsInicio = new DatePickerSettings();
+        settingsInicio.setFormatForDatesCommonEra("yyyy-MM-dd");
 
-        DatePickerSettings settingsFinal = new DatePickerSettings(Locale.forLanguageTag("es-MX"));
-        settingsFinal.setFormatForDatesCommonEra("dd/MM/yyyy");
+        DatePickerSettings settingsFinal = new DatePickerSettings();
+        settingsFinal.setFormatForDatesCommonEra("yyyy-MM-dd");
     
         datePickerInicio = new DatePicker(settingsInicio);
         datePickerFinal = new DatePicker(settingsFinal);
 
-        // los selectores toman el lugar (posición y tamaño) de los campos de fecha del diseño
-        GroupLayout layout = (GroupLayout) panelSolictudNormal.getLayout();
-        layout.replace(formtxtFechaInicio, datePickerInicio);
-        layout.replace(formtxtFechaFinal, datePickerFinal);
+        datePickerInicio.setBounds(formtxtFechaInicio.getBounds());
+        datePickerFinal.setBounds(formtxtFechaFinal.getBounds());
+
+        formtxtFechaInicio.setVisible(false);
+        formtxtFechaFinal.setVisible(false);
+
+        panelSolictudNormal.add(datePickerInicio);
+        panelSolictudNormal.add(datePickerFinal);
 
         datePickerInicio.addDateChangeListener(event -> {
             LocalDate nuevaInicio = event.getNewDate();
@@ -84,60 +81,13 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }
 
     public void cargarDatosCliente(ClienteDTO clienteCargado) {
-        this.cliente = clienteCargado;
         if (clienteCargado != null) {
             lblNombreCliente.setText("Nombre del Cliente: " + clienteCargado.getNombre());
-            // si el nombre es largo se corta en la pantalla; completo queda al pasar el ratón
-            lblNombreCliente.setToolTipText(clienteCargado.getNombre());
             lblRFC.setText("RFC: " + clienteCargado.getRfc());
+        }
+        if (lblRFCancelacion != null) {
             lblRFCancelacion.setText("RFC: " + clienteCargado.getRfc());
         }
-    }
-
-    // El folio que el sistema le da a la solicitud nueva
-    public void cargarFolio(String folio) {
-        this.folio = folio;
-        lblSolicitudRenta.setText("Folio: " + folio);
-        jLabel21.setText("Folio: " + folio);
-    }
-
-    // Deja la pantalla en blanco para una solicitud nueva (no se arrastra lo de la anterior)
-    public void limpiarSolicitud() {
-        txtFieldNombreObra.setText("");
-        txtFieldDireccion.setText("");
-        txtAreaActividadRealizar.setText("");
-        txtAreaCondicionExtra.setText("");
-        jTextArea1.setText("");
-        comboTipoTrabajo.setSelectedItem(SIN_ESPECIFICAR);
-        comboTipoTerreno.setSelectedItem(SIN_ESPECIFICAR);
-        datePickerInicio.clear();
-        datePickerFinal.clear();
-        datePickerFinal.getSettings().setDateRangeLimits(null, null);
-        ((DefaultTableModel) tableEquipoSoli.getModel()).setRowCount(0);
-        CardLayout card = (CardLayout) this.getContentPane().getLayout();
-        card.show(this.getContentPane(), "card1");
-    }
-
-    // Revisa lo capturado; regresa lo que falta o está mal, o null si todo está bien
-    private String revisarSolicitud() {
-        LocalDate inicio = datePickerInicio.getDate();
-        LocalDate fin = datePickerFinal.getDate();
-        if (inicio == null || fin == null) {
-            return "Favor de seleccionar las fechas de Inicio y Final del periodo.";
-        }
-        if (fin.isBefore(inicio)) {
-            return "La fecha Final no puede ser anterior a la de Inicio.";
-        }
-        if (txtFieldNombreObra.getText().isBlank() || txtFieldDireccion.getText().isBlank()) {
-            return "Favor de capturar el Nombre de la Obra y su Dirección.";
-        }
-        if (tableEquipoSoli.getRowCount() == 0) {
-            return "Favor de agregar por lo menos un equipo a la solicitud.";
-        }
-        if (txtAreaActividadRealizar.getText().isBlank()) {
-            return "Favor de describir la actividad que va a realizar el cliente.";
-        }
-        return null;
     }
 
     public void cargarEquiposSolicitadosEnTabla(java.util.List<DTOs.EquipoSolicitadoDTO> listaEquipos) {
@@ -196,7 +146,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         btnRegistrarCancelacion = new javax.swing.JButton();
-        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -609,18 +558,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
-        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
-        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setText("Regresar");
-        btnRegresar.setBorderPainted(false);
-        btnRegresar.setFocusPainted(false);
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelCancelacionSolicitudLayout = new javax.swing.GroupLayout(panelCancelacionSolicitud);
         panelCancelacionSolicitud.setLayout(panelCancelacionSolicitudLayout);
         panelCancelacionSolicitudLayout.setHorizontalGroup(
@@ -647,10 +584,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(720, 720, 720)
-                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 40, Short.MAX_VALUE))
         );
         panelCancelacionSolicitudLayout.setVerticalGroup(
@@ -677,10 +611,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
-                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
-                        .addGap(604, 604, 604)
-                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 32, Short.MAX_VALUE))
         );
 
@@ -694,14 +625,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formtxtFechaFinalActionPerformed
 
     private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
-        // la solicitud lleva un equipo: si ya hay uno, el que se elija lo reemplaza
-        if (tableEquipoSoli.getRowCount() > 0) {
-            int respuesta = JOptionPane.showConfirmDialog(this, "La solicitud ya tiene el equipo " + tableEquipoSoli.getValueAt(0, 0)
-                    + ".\nEl que elija en la búsqueda lo va a reemplazar. ¿Desea cambiarlo?", "Solicitud Renta", JOptionPane.YES_NO_OPTION);
-            if (respuesta != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
         contratacionRenta.abrirBusquedaEquipo();
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
@@ -715,27 +638,16 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        String error = revisarSolicitud();
-        if (error != null) {
-            JOptionPane.showMessageDialog(this, error, "Solicitud Renta", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
         solicitudDTO.setFechaSolicitud(java.time.LocalDate.now());
-        solicitudDTO.setFolio(folio);
-        solicitudDTO.setCliente(cliente);
-        solicitudDTO.setNombreObra(txtFieldNombreObra.getText().trim());
-        solicitudDTO.setDireccionObra(txtFieldDireccion.getText().trim());
-        // el tipo de trabajo elegido va junto con la descripción de la actividad
-        String actividad = txtAreaActividadRealizar.getText().trim();
-        String tipoTrabajo = String.valueOf(comboTipoTrabajo.getSelectedItem());
-        solicitudDTO.setDescripcionActividad(SIN_ESPECIFICAR.equals(tipoTrabajo) ? actividad : tipoTrabajo + ": " + actividad);
-        solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText().trim());
+        solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
+        solicitudDTO.setDireccionObra(txtFieldDireccion.getText());
+        solicitudDTO.setDescripcionActividad(txtAreaActividadRealizar.getText());
+        solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText());
         solicitudDTO.setEstadoSolicitud("Pendiente");
-        PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO();
-        periodo.setFechaInicio(datePickerInicio.getDate());
-        periodo.setFechaFin(datePickerFinal.getDate());
-        periodo.setDiasRenta((int) ChronoUnit.DAYS.between(periodo.getFechaInicio(), periodo.getFechaFin()) + 1);
+        DTOs.PeriodoSolicitadoDTO periodo = new DTOs.PeriodoSolicitadoDTO();
+        periodo.setFechaInicio(java.time.LocalDate.now());
+        periodo.setFechaFin(java.time.LocalDate.now().plusDays(1));
         solicitudDTO.setPeriodo(periodo);
         for (int i = 0; i < tableEquipoSoli.getRowCount(); i++) {
             EquipoSolicitadoDTO equipo = new EquipoSolicitadoDTO();
@@ -743,39 +655,22 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             equipo.setCantidad(Integer.parseInt(tableEquipoSoli.getValueAt(i, 1).toString()));
             solicitudDTO.getEquiposSolicitados().add(equipo);
         }
-        // si ya se sabe el tipo de terreno, llega como requerimiento al análisis técnico
-        String tipoTerreno = String.valueOf(comboTipoTerreno.getSelectedItem());
-        if (!SIN_ESPECIFICAR.equals(tipoTerreno)) {
-            RequerimientosTecnicos.guardar(solicitudDTO.getRequerimientos(), RequerimientosTecnicos.TERRENO, tipoTerreno);
-        }
         JOptionPane.showMessageDialog(this, "La Solicitud de Renta ha sido Registrada Correctamente.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
         this.contratacionRenta.pasarDatosAnalisisRequerimientos(solicitudDTO);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
-        if (jTextArea1.getText().isBlank()) {
-            JOptionPane.showMessageDialog(this, "Favor de escribir la razón de la cancelación.", "Solicitud Renta", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         javax.swing.JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
         card.show(this.getContentPane(), "card1");
         contratacionRenta.abrirMenuPrincipal();
     }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
 
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // no se cancela: regresa a la solicitud con lo que ya se capturó
-        jTextArea1.setText("");
-        CardLayout card = (CardLayout) this.getContentPane().getLayout();
-        card.show(this.getContentPane(), "card1");
-    }//GEN-LAST:event_btnRegresarActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEquipo;
     private javax.swing.JButton btnCancelarSoli;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegistrarCancelacion;
-    private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> comboTipoTerreno;
     private javax.swing.JComboBox<String> comboTipoTrabajo;
     private javax.swing.JFormattedTextField formtxtFechaFinal;

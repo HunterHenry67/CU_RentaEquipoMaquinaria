@@ -18,12 +18,6 @@ public class InicioSesionFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    // Al cerrar sesión no se quedan escritos el correo ni la contraseña
-    public void limpiarCampos() {
-        txtFieldCorreo.setText("");
-        psswFiledContrasenia.setText("");
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

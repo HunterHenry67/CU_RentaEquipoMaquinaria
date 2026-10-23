@@ -244,8 +244,6 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
             evaluacion.setMotivoIncumplimiento(motivo);
         }
         solicitud.setEstadoSolicitud("Sin solución técnica");
-        javax.swing.JOptionPane.showMessageDialog(this, "La evaluación se cerró: la solicitud queda sin solución técnica.",
-                "Sin Equipo Compatible", javax.swing.JOptionPane.INFORMATION_MESSAGE);
         contratacionRenta.abrirMenuPrincipal();
     }//GEN-LAST:event_btnCerrarEvaluacionActionPerformed
 

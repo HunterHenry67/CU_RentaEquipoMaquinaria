@@ -11,15 +11,11 @@ import DTOs.DetalleCotizacionDTO;
 import DTOs.EquipoDTO;
 import DTOs.EquipoSolicitadoDTO;
 import DTOs.EvaluacionTecnicaDTO;
-import DTOs.OcupacionUnidadDTO;
 import DTOs.PeriodoSolicitadoDTO;
 import DTOs.RequerimientoTecnicoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
-import DTOs.UnidadFisicaDTO;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,12 +51,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private ClienteDTO clienteActual;
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
-    private UnidadFisicaDTO unidadActual;
     private List<EquipoDTO> catalogoEquipos;
-    private List<UnidadFisicaDTO> unidades;
-    private static final double IVA = 0.16;
-    // mientras no haya persistencia, cada solicitud lleva el folio del escenario
-    private static final String FOLIO = "FOL-89241";
 
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
@@ -102,7 +93,6 @@ public class ContratacionRenta implements IContratacionRenta {
     // Estos métodos ayudarán a que se carguen las pantallas dentro de la memoria
     @Override
     public void abrirInciarSesión() {
-        iniciarSesionFrame.limpiarCampos();
         ocultarTodo();
         iniciarSesionFrame.setVisible(true);
     }
@@ -113,14 +103,12 @@ public class ContratacionRenta implements IContratacionRenta {
         solicitudActual = null;
         cotizacionActual = null;
         clienteActual = null;
-        unidadActual = null;
         ocultarTodo();
         menuPrincipalFrame.setVisible(true);
     }
 
     @Override
     public void abrirIdentificacionCliente() {
-        identificacionClienteFrame.limpiarBusqueda();
         ocultarTodo();
         identificacionClienteFrame.setVisible(true);
     }
@@ -128,7 +116,6 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void abrirBusquedaEquipo() {
         ocultarTodo();
-        busquedaEquipoForm.cargarEquiposEnTabla(catalogoEquipos());
         busquedaEquipoForm.setVisible(true);
     }
 
@@ -194,17 +181,13 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirVerificacionDeDisponibilidad() {
-        prepararDatosSolicitud();
         ocultarTodo();
-        verificacionDeDisponibilidadFrame.cargarDatos(solicitudActual);
         verificacionDeDisponibilidadFrame.setVisible(true);
     }
 
     @Override
     public void abrirVerificacionInventario() {
-        prepararDatosSolicitud();
         ocultarTodo();
-        verificacionInventarioFrame.cargarUnidades(solicitudActual, evaluarDisponibilidad());
         verificacionInventarioFrame.setVisible(true);
     }
 
@@ -228,19 +211,13 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirCondicionesContratacion() {
-        prepararDatosCotizacion();
         ocultarTodo();
-        condicionesContratacionFrame.cargarCondiciones(solicitudActual, unidadActual, cotizacionActual);
         condicionesContratacionFrame.setVisible(true);
     }
 
     @Override
     public void abrirPropuestaRenta() {
-        if (cotizacionActual == null) {
-            prepararDatosCotizacion();
-        }
         ocultarTodo();
-        propuestaRentaFrame.cargarPropuesta(solicitudActual, cotizacionActual, unidadActual);
         propuestaRentaFrame.reiniciar();
         propuestaRentaFrame.setVisible(true);
     }
@@ -253,35 +230,15 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirVerificacionCondicion(boolean conCucharon) {
-        if (cotizacionActual == null) {
-            prepararDatosCotizacion();
-        }
         ocultarTodo();
-        verificacionCondicionFrame.cargarDatos(solicitudActual, cotizacionDecidida(conCucharon), unidadActual);
         verificacionCondicionFrame.configurar(conCucharon);
         verificacionCondicionFrame.setVisible(true);
     }
 
     @Override
     public void abrirOrdenEntrega(boolean conCucharon, boolean finalizada) {
-        if (cotizacionActual == null) {
-            prepararDatosCotizacion();
-        }
-        solicitudActual.setEstadoSolicitud(finalizada ? "Formalizada" : "Pendiente");
-        // la orden es la última pantalla: no se deja abierta la de atrás para que no se vuelva a decidir
-        ocultarTodo();
-        ordenEntregaFrame.cargarDatos(solicitudActual, cotizacionDecidida(conCucharon), unidadActual);
         ordenEntregaFrame.configurar(conCucharon, finalizada);
         ordenEntregaFrame.setVisible(true);
-    }
-
-    // La cotización con lo que aceptó el cliente (sin el opcional si lo quitó); se queda como
-    // la actual junto con su decisión
-    private CotizacionDTO cotizacionDecidida(boolean conOpcionales) {
-        CotizacionDTO cotizacion = calcularCotizacion(conOpcionales);
-        cotizacion.setDecision(cotizacionActual.getDecision());
-        cotizacionActual = cotizacion;
-        return cotizacion;
     }
 
     @Override
@@ -300,17 +257,10 @@ public class ContratacionRenta implements IContratacionRenta {
         requisitosRentaFrame.setVisible(true);
     }
 
-    // Estos métodos nos servirán para cargar los datos en las pantallas
+    // Estos métodos no servirán para sobreecargar los datos en las pantallas
     @Override
     public void pasarDatosSolcitudRenta(ClienteDTO dto) {
-        // Con el cliente empieza una solicitud nueva: no se arrastra nada de la anterior
         this.clienteActual = dto;
-        this.solicitudActual = null;
-        this.cotizacionActual = null;
-        this.unidadActual = null;
-        identificacionClienteFrame.guardarCliente(dto);
-        solicitudRentaForm.limpiarSolicitud();
-        solicitudRentaForm.cargarFolio(FOLIO);
         solicitudRentaForm.cargarDatosCliente(clienteActual);
         ocultarTodo();
         solicitudRentaForm.setVisible(true);
@@ -321,7 +271,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.clienteActual = dto;
         registrarClienteFrame.cargarDatosRegistroCliente(this.clienteActual);
         ocultarTodo();
-        registrarClienteFrame.setVisible(true);
+        solicitudRentaForm.setVisible(true);
     }
 
     @Override
@@ -363,41 +313,7 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosVerificacionDeDisponibilidad(SolicitudRentaDTO dto) {
         this.solicitudActual = dto;
-        // la unidad se vuelve a elegir con el equipo y el periodo que queden
-        this.unidadActual = null;
         abrirVerificacionDeDisponibilidad();
-    }
-
-    @Override
-    public void pasarDatosVerificacionInventario(SolicitudRentaDTO dto) {
-        this.solicitudActual = dto;
-        this.unidadActual = null;
-        abrirVerificacionInventario();
-    }
-
-    @Override
-    public void pasarDatosUnidadMantenimiento(UnidadFisicaDTO unidad) {
-        prepararDatosSolicitud();
-        unidadMantenimientoFrame.cargarUnidad(unidad, estadoEnElPeriodo(unidad), solicitudActual);
-        abrirUnidadMantenimiento();
-    }
-
-    @Override
-    public void pasarDatosUnidadOcupada(UnidadFisicaDTO unidad) {
-        prepararDatosSolicitud();
-        unidadOcupadaFrame.cargarUnidad(unidad, estadoEnElPeriodo(unidad), solicitudActual);
-        abrirUnidadOcupada();
-    }
-
-    @Override
-    public void pasarDatosCondicionesContratacion(UnidadFisicaDTO unidad) {
-        this.unidadActual = unidad;
-        abrirCondicionesContratacion();
-    }
-
-    @Override
-    public ClienteDTO consultarClientePorRfc(String rfc) {
-        return identificacionClienteFrame.buscarPorRfc(rfc);
     }
 
     @Override
@@ -405,9 +321,6 @@ public class ContratacionRenta implements IContratacionRenta {
         if (this.solicitudActual == null) {
             this.solicitudActual = new SolicitudRentaDTO();
         }
-        // la solicitud lleva un equipo, que es el que se evalúa en el análisis técnico y se
-        // cotiza; si el asesor elige otro, reemplaza al anterior
-        this.solicitudActual.getEquiposSolicitados().clear();
         this.solicitudActual.getEquiposSolicitados().add(equipo);
         if (solicitudRentaForm != null) {
             solicitudRentaForm.cargarEquiposSolicitadosEnTabla(this.solicitudActual.getEquiposSolicitados());
@@ -426,99 +339,36 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirPropuestaRenta();
     }
 
-    // Completa con datos simulados lo que todavía no viene de otros flujos, sin reemplazar
-    // lo que ya se capturó, y vuelve a calcular la cotización con lo elegido hasta ahora
-    // (si se cambió el equipo, el periodo o la unidad, los importes cambian con ellos)
+    // Completa con datos simulados lo que todavía no viene de otros flujos,
+    // sin reemplazar lo que ya se capturó (así se conserva al avanzar o regresar)
     private void prepararDatosCotizacion() {
-        prepararDatosSolicitud();
+        if (solicitudActual == null) {
+            solicitudActual = new SolicitudRentaDTO();
+        }
+        if (solicitudActual.getCliente() == null) {
+            solicitudActual.setCliente(clienteActual != null ? clienteActual
+                    : clienteDeEscenario());
+        }
+        if (solicitudActual.getFolio() == null) {
+            solicitudActual.setFolio("FOL-89241");
+        }
+        if (solicitudActual.getPeriodo() == null) {
+            solicitudActual.setPeriodo(new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6));
+        }
         if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {
             List<RequisitoRentaDTO> requisitos = new ArrayList<>();
-            requisitos.add(requisito("Identificación oficial", "Cumplida", null));
-            requisitos.add(requisito("Depósito de garantía", "Cubierto", 3200.0));
+            requisitos.add(new RequisitoRentaDTO("Identificación oficial", true, "Cumplida", null));
+            requisitos.add(new RequisitoRentaDTO("Depósito de garantía", true, "Cubierto", 3200.0));
             solicitudActual.setRequisitos(requisitos);
         }
-        cotizacionActual = calcularCotizacion(true);
-    }
-
-    private RequisitoRentaDTO requisito(String descripcion, String estado, Double monto) {
-        RequisitoRentaDTO requisito = new RequisitoRentaDTO();
-        requisito.setDescripcion(descripcion);
-        requisito.setEsObligatorio(true);
-        requisito.setEstadoRequisito(estado);
-        requisito.setMonto(monto);
-        return requisito;
-    }
-
-    // Arma la cotización con lo que se eligió antes: el equipo recomendado en la evaluación
-    // técnica, la unidad, los días del periodo y los accesorios propuestos (los opcionales
-    // solo si el cliente se queda con ellos). Va aquí mientras Negocio no tenga generarCotizacion.
-    private CotizacionDTO calcularCotizacion(boolean conOpcionales) {
-        EquipoDTO equipo = equipoRecomendado();
-        int dias = diasDelPeriodo();
-        List<DetalleCotizacionDTO> detalles = new ArrayList<>();
-        DetalleCotizacionDTO renta = new DetalleCotizacionDTO();
-        renta.setTipoConcepto("Equipo");
-        renta.setDescripcion(equipo.getModelo() + (unidadActual == null ? "" : " (" + unidadActual.getNumeroEconomico() + ")"));
-        renta.setCantidad(dias);
-        renta.setPrecioUnitario(equipo.getCostoDiario());
-        renta.setImporte(equipo.getCostoDiario() == null ? null : dias * equipo.getCostoDiario());
-        renta.setEquipo(equipo);
-        detalles.add(renta);
-        for (AccesorioDTO accesorio : equipo.getAccesorios()) {
-            if (conOpcionales || Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
-                DetalleCotizacionDTO detalle = new DetalleCotizacionDTO();
-                detalle.setTipoConcepto("Accesorio");
-                detalle.setDescripcion(accesorio.getNombre());
-                detalle.setCantidad(1);
-                detalle.setPrecioUnitario(accesorio.getCostoRenta());
-                detalle.setImporte(accesorio.getCostoRenta());
-                detalle.setAccesorio(accesorio);
-                detalles.add(detalle);
-            }
+        if (cotizacionActual == null) {
+            List<DetalleCotizacionDTO> detalles = new ArrayList<>();
+            detalles.add(new DetalleCotizacionDTO("Equipo", "Excavadora CAT 320 (M-001)", 6, 1500.0, 9000.0, null, null));
+            detalles.add(new DetalleCotizacionDTO("Accesorio", "kit", 1, 300.0, 300.0, null, null));
+            detalles.add(new DetalleCotizacionDTO("Accesorio", "cucharón", 1, 200.0, 200.0, null, null));
+            cotizacionActual = new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
+                    9500.0, 1520.0, 11020.0, detalles, null);
         }
-        // si a algún concepto le falta precio no se puede dar un total
-        Double subtotal = 0.0;
-        for (DetalleCotizacionDTO detalle : detalles) {
-            subtotal = subtotal == null || detalle.getImporte() == null ? null : subtotal + detalle.getImporte();
-        }
-        CotizacionDTO cotizacion = new CotizacionDTO();
-        cotizacion.setIdCotizacion(1L);
-        cotizacion.setFechaEmision(LocalDate.now());
-        cotizacion.setDetalles(detalles);
-        cotizacion.setSubtotal(subtotal);
-        if (subtotal != null) {
-            double iva = Math.round(subtotal * IVA * 100) / 100.0;
-            cotizacion.setIva(iva);
-            cotizacion.setTotal(subtotal + iva);
-        }
-        return cotizacion;
-    }
-
-    // El equipo recomendado en la evaluación técnica con los accesorios que se propusieron. Si
-    // la pantalla se abre sin pasar por la evaluación, se usa el del escenario (CAT 320).
-    private EquipoDTO equipoRecomendado() {
-        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
-        EvaluacionTecnicaDTO evaluacion = pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
-        if (evaluacion != null && evaluacion.getRecomendado() != null) {
-            return evaluacion.getRecomendado();
-        }
-        for (EquipoDTO equipo : catalogoEquipos()) {
-            if (Long.valueOf(2L).equals(equipo.getIdEquipo())) {
-                return equipo;
-            }
-        }
-        return catalogoEquipos().get(0);
-    }
-
-    private int diasDelPeriodo() {
-        PeriodoSolicitadoDTO periodo = solicitudActual.getPeriodo();
-        if (periodo.getDiasRenta() != null) {
-            return periodo.getDiasRenta();
-        }
-        if (periodo.getFechaInicio() != null && periodo.getFechaFin() != null) {
-            return (int) ChronoUnit.DAYS.between(periodo.getFechaInicio(), periodo.getFechaFin()) + 1;
-        }
-        return 0;
     }
 
     // Completa con los datos del escenario lo que F1 todavía no manda a F2, sin reemplazar
@@ -531,7 +381,7 @@ public class ContratacionRenta implements IContratacionRenta {
             solicitudActual.setCliente(clienteActual != null ? clienteActual : clienteDeEscenario());
         }
         if (solicitudActual.getFolio() == null) {
-            solicitudActual.setFolio(FOLIO);
+            solicitudActual.setFolio("FOL-89241");
         }
         if (solicitudActual.getNombreObra() == null) {
             solicitudActual.setNombreObra("Remodelación Plaza Goya");
@@ -654,64 +504,6 @@ public class ContratacionRenta implements IContratacionRenta {
         accesorio.setCostoRenta(costo);
         accesorio.setEsObligatorio(obligatorio);
         return accesorio;
-    }
-
-    // Unidades físicas mientras no haya persistencia: solo las del escenario, que son de la
-    // CAT 320 (M-001 disponible, M-002 en mantenimiento y M-003 ocupada del 13 al 15 de
-    // septiembre). De los otros equipos el escenario no da unidades.
-    private List<UnidadFisicaDTO> unidadesDe(EquipoDTO equipo) {
-        if (unidades == null) {
-            unidades = new ArrayList<>();
-            unidades.add(unidad(1L, "M-001", "Disponible"));
-            unidades.add(unidad(2L, "M-002", "En mantenimiento"));
-            UnidadFisicaDTO m003 = unidad(3L, "M-003", "Disponible");
-            OcupacionUnidadDTO ocupacion = new OcupacionUnidadDTO();
-            ocupacion.setFechaInicio(LocalDate.of(2026, 9, 13));
-            ocupacion.setFechaFin(LocalDate.of(2026, 9, 15));
-            m003.getOcupaciones().add(ocupacion);
-            unidades.add(m003);
-        }
-        return equipo != null && Long.valueOf(2L).equals(equipo.getIdEquipo()) ? unidades : new ArrayList<>();
-    }
-
-    private UnidadFisicaDTO unidad(Long id, String numeroEconomico, String estado) {
-        UnidadFisicaDTO unidad = new UnidadFisicaDTO();
-        unidad.setIdUnidad(id);
-        unidad.setNumeroEconomico(numeroEconomico);
-        unidad.setEstadoUnidad(estado);
-        unidad.setOcupaciones(new ArrayList<>());
-        return unidad;
-    }
-
-    // Estado de cada unidad del equipo recomendado durante el periodo de la solicitud. Va
-    // aquí mientras Negocio no tenga evaluarDisponibilidad.
-    private Map<UnidadFisicaDTO, String> evaluarDisponibilidad() {
-        Map<UnidadFisicaDTO, String> estados = new LinkedHashMap<>();
-        for (UnidadFisicaDTO unidad : unidadesDe(equipoRecomendado())) {
-            estados.put(unidad, estadoEnElPeriodo(unidad));
-        }
-        return estados;
-    }
-
-    // "Disponible", "En mantenimiento" u "Ocupada del ... al ..." si alguna de sus
-    // ocupaciones se cruza con el periodo de la solicitud
-    private String estadoEnElPeriodo(UnidadFisicaDTO unidad) {
-        if (!"Disponible".equals(unidad.getEstadoUnidad())) {
-            return unidad.getEstadoUnidad();
-        }
-        PeriodoSolicitadoDTO periodo = solicitudActual.getPeriodo();
-        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
-            return "Disponible";
-        }
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        for (OcupacionUnidadDTO ocupacion : unidad.getOcupaciones()) {
-            if (!ocupacion.getFechaInicio().isAfter(periodo.getFechaFin())
-                    && !ocupacion.getFechaFin().isBefore(periodo.getFechaInicio())) {
-                return "Ocupada del " + ocupacion.getFechaInicio().format(formato) + " al "
-                        + ocupacion.getFechaFin().format(formato);
-            }
-        }
-        return "Disponible";
     }
 
     // Todos los accesorios que hay en el catálogo para el equipo recomendado en F2

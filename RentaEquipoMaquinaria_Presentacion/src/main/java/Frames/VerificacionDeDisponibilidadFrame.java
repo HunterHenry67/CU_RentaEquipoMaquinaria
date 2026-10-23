@@ -4,16 +4,10 @@
  */
 package Frames;
 
-import DTOs.EquipoDTO;
-import DTOs.PeriodoSolicitadoDTO;
 import DTOs.SolicitudRentaDTO;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Locale;
-import javax.swing.GroupLayout;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,7 +19,6 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
 
     private DatePicker selectorFechaInicio;
     private DatePicker selectorFechaFin;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     public VerificacionDeDisponibilidadFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -37,36 +30,40 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
 
     private void inicializarSelectoresFecha() {
 
-        DatePickerSettings settingsInicio = new DatePickerSettings(Locale.forLanguageTag("es-MX"));
-        settingsInicio.setFormatForDatesCommonEra("dd/MM/yyyy");
+        DatePickerSettings settingsInicio = new DatePickerSettings();
+        settingsInicio.setFormatForDatesCommonEra("yyyy-MM-dd");
 
-        DatePickerSettings settingsFin = new DatePickerSettings(Locale.forLanguageTag("es-MX"));
-        settingsFin.setFormatForDatesCommonEra("dd/MM/yyyy");
+        DatePickerSettings settingsFin = new DatePickerSettings();
+        settingsFin.setFormatForDatesCommonEra("yyyy-MM-dd");
 
         selectorFechaInicio = new DatePicker(settingsInicio);
         selectorFechaFin = new DatePicker(settingsFin);
 
-        // los selectores toman el lugar (posición y tamaño) de los campos de fecha del diseño
-        GroupLayout layout = (GroupLayout) panelFondo.getLayout();
-        layout.replace(txtFieldInicio, selectorFechaInicio);
-        layout.replace(txtFieldFin, selectorFechaFin);
+        selectorFechaInicio.setBounds(txtFieldInicio.getBounds());
+        selectorFechaFin.setBounds(txtFieldFin.getBounds());
+
+        txtFieldInicio.setVisible(false);
+        txtFieldFin.setVisible(false);
+
+        panelFondo.add(selectorFechaInicio);
+        panelFondo.add(selectorFechaFin);
 
         selectorFechaInicio.addDateChangeListener(event -> {LocalDate nuevaInicio = event.getNewDate();
-            selectorFechaFin.getSettings().setDateRangeLimits(nuevaInicio, null);
+            if (nuevaInicio != null) {
+                selectorFechaFin.getSettings().setDateRangeLimits(nuevaInicio, null);
+            }
         });
 
         panelFondo.repaint();
     }
     
-    // El coordinador la llama cada vez que se abre la pantalla
     public void cargarDatos(SolicitudRentaDTO solicitud) {
     if (solicitud != null) {
-        this.solicitud = solicitud;
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre())));
-        lblUbicacion.setText("Ubicación: " + texto(solicitud.getDireccionObra()));
-        EquipoDTO recomendado = recomendado();
-        lblEquipo.setText("Tipo de equipo recomendado en la evaluación técnica: " + (recomendado == null ? "" : recomendado.getModelo()));
+        lblFolio.setText("Folio: " + solicitud.getFolio());
+        if (solicitud.getCliente() != null) {
+            lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
+        }
+        lblUbicacion.setText("Ubicación: " + solicitud.getDireccionObra());
 
         // Precargar fechas si ya existen en el periodo solicitado
         if (solicitud.getPeriodo() != null) {
@@ -79,18 +76,6 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
         }
     }
 }
-
-    private EquipoDTO recomendado() {
-        if (solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()
-                || solicitud.getEquiposSolicitados().get(0).getEvaluacion() == null) {
-            return null;
-        }
-        return solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
     
     public LocalDate getFechaInicio() {
         return selectorFechaInicio.getDate();
@@ -324,31 +309,7 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConsultarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInventarioActionPerformed
-        // si lo escrito en el campo no es una fecha válida, getDate() trae la última que sí lo era
-        if (!selectorFechaInicio.isTextFieldValid() || !selectorFechaFin.isTextFieldValid()) {
-            JOptionPane.showMessageDialog(this, "Alguna de las fechas no es válida (o la de fin es anterior a la de inicio). Corrígela o elígela en el calendario.",
-                    "Verificación de disponibilidad", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        LocalDate inicio = selectorFechaInicio.getDate();
-        LocalDate fin = selectorFechaFin.getDate();
-        if (inicio == null || fin == null) {
-            JOptionPane.showMessageDialog(this, "Selecciona la fecha de inicio y la de fin del periodo.",
-                    "Verificación de disponibilidad", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (fin.isBefore(inicio)) {
-            JOptionPane.showMessageDialog(this, "La fecha de fin no puede ser anterior a la de inicio.",
-                    "Verificación de disponibilidad", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        // si el cliente pidió otras fechas, el periodo de la solicitud cambia con ellas
-        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo() == null ? new PeriodoSolicitadoDTO() : solicitud.getPeriodo();
-        periodo.setFechaInicio(inicio);
-        periodo.setFechaFin(fin);
-        periodo.setDiasRenta((int) ChronoUnit.DAYS.between(inicio, fin) + 1);
-        solicitud.setPeriodo(periodo);
-        contratacionRenta.pasarDatosVerificacionInventario(solicitud);
+        contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnConsultarInventarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
