@@ -19,11 +19,12 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
+    List<ClienteDTO> listaEjemplo = new ArrayList<>();
+
     public IdentificacionClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
-        List<DTOs.ClienteDTO> listaEjemplo = new ArrayList<>();
         DTOs.ClienteDTO c1 = new DTOs.ClienteDTO();
         c1.setIdCliente(1L);
         c1.setNombre("Julián Martínez García");
@@ -326,21 +327,9 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
         int fila = tableCliente.getSelectedRow();
         if (fila != -1) {
-            String rfc = tableCliente.getValueAt(fila, 0).toString();
-            String nombre = tableCliente.getValueAt(fila, 1).toString();
-            String tipo = tableCliente.getValueAt(fila, 2).toString();
-            ClienteDTO dto;
-            if (tipo.equalsIgnoreCase("Empresa")) {
-                ClienteEmpresaDTO dtoEmpresa = new ClienteEmpresaDTO();
-                dtoEmpresa.setRfc(rfc);
-                dtoEmpresa.setNombre(nombre);
-                dto = dtoEmpresa;
-            } else {
-                dto = new ClienteDTO();
-                dto.setRfc(rfc);
-                dto.setNombre(nombre);
-            }
-            this.contratacionRenta.pasarDatoRegistroCliente(dto);
+            ClienteDTO clienteSeleccionado = listaEjemplo.get(fila);
+            this.contratacionRenta.pasarDatoRegistroCliente(clienteSeleccionado);
+            contratacionRenta.abrirRegistrarCliente();
         } else {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
         }
