@@ -316,12 +316,17 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
     private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
         int filaSeleccionada = tableCliente.getSelectedRow();
-        String rfcObtenido = tableCliente.getValueAt(filaSeleccionada, 0).toString();
-        String nombreObtenido = tableCliente.getValueAt(filaSeleccionada, 1).toString();
-        ClienteDTO dto = new ClienteDTO();
-        dto.setRfc(rfcObtenido);
-        dto.setNombre(nombreObtenido);
-        contratacionRenta.abrirSolicitudRenta();
+        if (filaSeleccionada != -1) {
+            String rfcObtenido = tableCliente.getValueAt(filaSeleccionada, 0).toString();
+            String nombreObtenido = tableCliente.getValueAt(filaSeleccionada, 1).toString();
+            ClienteDTO dto = new ClienteDTO();
+            dto.setRfc(rfcObtenido);
+            dto.setNombre(nombreObtenido);
+            contratacionRenta.abrirSolicitudRenta();
+        }else{
+            JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solcitud", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnRegistrarNuevSoliActionPerformed
 
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed

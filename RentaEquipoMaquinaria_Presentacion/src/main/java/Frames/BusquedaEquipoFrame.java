@@ -211,6 +211,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
             equipoSolicitado.setCantidad(1); 
             contratacionRenta.pasarDatosEquipooSolicitado(equipoSolicitado);
             contratacionRenta.abrirSolicitudRenta();
+            tableEquipoCatalogo.remove(filaSeleccionada);
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un equipo de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

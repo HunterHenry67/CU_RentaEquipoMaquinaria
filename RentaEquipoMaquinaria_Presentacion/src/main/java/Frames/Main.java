@@ -4,6 +4,8 @@
  */
 package Frames;
 
+import javax.swing.UIManager;
+
 /**
  *
  * @author BALAMRUSH
@@ -17,7 +19,7 @@ public class Main {
         java.awt.EventQueue.invokeLater(() -> {     
             // El mismo aspecto en Windows y en Mac: con el de Mac los botones de color salen en blanco
             try {
-                javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
                 System.err.println("No se pudo cambiar el aspecto: " + ex.getMessage());
             }
