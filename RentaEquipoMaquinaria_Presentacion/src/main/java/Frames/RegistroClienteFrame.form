@@ -365,23 +365,16 @@
                           <Component id="jLabel8" alignment="0" min="-2" pref="292" max="-2" attributes="0"/>
                           <Component id="jLabel9" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                           <Component id="txtFileldNombreEncargado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="460" max="-2" attributes="0"/>
-                              <Component id="jLabel10" min="-2" pref="420" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="460" max="-2" attributes="0"/>
-                              <Component id="txtFieldTelefonoEncragado" min="-2" pref="420" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="jLabel11" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                           <Component id="txtFieldPuestoEncargado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="460" max="-2" attributes="0"/>
-                              <Component id="jLabel12" min="-2" pref="420" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="460" max="-2" attributes="0"/>
-                              <Component id="btnSeleccionarArchivo" min="-2" pref="183" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="460" pref="460" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel10" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                                  <Component id="txtFieldTelefonoEncragado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                                  <Component id="jLabel12" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                                  <Component id="btnSeleccionarArchivo" alignment="0" min="-2" pref="183" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>

@@ -205,13 +205,16 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     private void btnRegistrarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEquipoActionPerformed
         int filaSeleccionada = tableEquipoCatalogo.getSelectedRow();
         if (filaSeleccionada != -1) {
+            DefaultTableModel modelo = (DefaultTableModel) tableEquipoCatalogo.getModel();
             String equipoTexto = tableEquipoCatalogo.getValueAt(filaSeleccionada, 0).toString();
             DTOs.EquipoSolicitadoDTO equipoSolicitado = new DTOs.EquipoSolicitadoDTO();
             equipoSolicitado.setDescripcionEquipo(equipoTexto);
             equipoSolicitado.setCantidad(1); 
             contratacionRenta.pasarDatosEquipooSolicitado(equipoSolicitado);
             contratacionRenta.abrirSolicitudRenta();
-            tableEquipoCatalogo.remove(filaSeleccionada);
+            modelo.removeRow(filaSeleccionada);
+            
+            
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un equipo de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }

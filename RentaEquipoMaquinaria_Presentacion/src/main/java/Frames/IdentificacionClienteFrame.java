@@ -32,13 +32,16 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         c1.setTelefono("6449876543");
         c1.setCorreo("julian@correo.com");
         c1.setTipoCliente("Particular");
-        DTOs.ClienteEmpresaDTO c2 = new DTOs.ClienteEmpresaDTO();
-        c2.setIdCliente(2L);
-        c2.setNombre("Constructora del Yaqui S.A. de C.V.");
-        c2.setRfc("CYA050212H84");
-        c2.setTelefono("6441234567");
-        c2.setCorreo("contacto@constructora.com");
-        c2.setTipoCliente("Empresa");
+        DTOs.ClienteEmpresaDTO empresaPrueba = new DTOs.ClienteEmpresaDTO();
+        empresaPrueba.setIdCliente(4L);
+        empresaPrueba.setNombre("Constructora del Norte S.A. de C.V.");
+        empresaPrueba.setRfc("CNO081015H99");
+        empresaPrueba.setTelefono("6445551234");
+        empresaPrueba.setCorreo("contacto@constructoranorte.com");
+        empresaPrueba.setTipoCliente("Empresa");
+        empresaPrueba.setNombreEncargadoEmpresa("Ing. Carlos Alberto Sánchez");
+        empresaPrueba.setPuestoEncargadoEmpresa("Gerente de Operaciones");
+        empresaPrueba.setTelefonoEncargadoEmpresa("6445559876");
         DTOs.ClienteDTO c3 = new DTOs.ClienteDTO();
         c3.setIdCliente(3L);
         c3.setNombre("María Fernanda López");
@@ -47,7 +50,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         c3.setCorreo("mafe@correo.com");
         c3.setTipoCliente("Particular");
         listaEjemplo.add(c1);
-        listaEjemplo.add(c2);
+        listaEjemplo.add(empresaPrueba);
         listaEjemplo.add(c3);
         cargarClientesEnTabla(listaEjemplo);
     }
@@ -323,7 +326,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
             dto.setRfc(rfcObtenido);
             dto.setNombre(nombreObtenido);
             contratacionRenta.pasarDatosSolcitudRenta(dto);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solcitud", JOptionPane.INFORMATION_MESSAGE);
         }
 

@@ -23,9 +23,8 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         ButtonGroup grupo = new ButtonGroup();
         grupo.add(radioBtnClientePart);
         grupo.add(radioBtnEmpresa);
-        radioBtnClientePart.setSelected(true);
+        radioBtnClientePart.setSelected(false);
         radioBtnEmpresa.setSelected(false);
-        panelEncargado.setVisible(false);
         this.setLocationRelativeTo(null);
     }
 
@@ -36,12 +35,14 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             txtFieldTelefono.setText(dto.getTelefono());
             txtFieldCorreoElectro.setText(dto.getCorreo());
             if (dto instanceof ClienteEmpresaDTO) {
+                panelEncargado.setVisible(true);
                 radioBtnEmpresa.setSelected(true);
                 ClienteEmpresaDTO empresa = (ClienteEmpresaDTO) dto;
                 txtFileldNombreEncargado.setText(empresa.getNombreEncargadoEmpresa());
                 txtFieldPuestoEncargado.setText(empresa.getPuestoEncargadoEmpresa());
                 txtFieldTelefonoEncragado.setText(empresa.getTelefonoEncargadoEmpresa());
             } else {
+                panelEncargado.setVisible(false);
                 radioBtnClientePart.setSelected(true);
                 txtFileldNombreEncargado.setText("");
                 txtFieldPuestoEncargado.setText("");
@@ -487,6 +488,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
 
         if (radioBtnEmpresa.isSelected()) {
+           
             ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
             empresa.setNombre(txtFieldNombre.getText());
             empresa.setCorreo(txtFieldCorreoElectro.getText());
@@ -497,7 +499,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText());
             JOptionPane.showMessageDialog(this, "La Empresa ha saido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.pasarDatosSolcitudRenta(empresa);
-        } else if (radioBtnClientePart.isSelected()) {
+        } else if (radioBtnClientePart.isSelected()) {           
             ClienteDTO particular = new ClienteDTO();
             particular.setNombre(txtFieldNombre.getText());
             particular.setRfc(txtFieldRFC.getText());

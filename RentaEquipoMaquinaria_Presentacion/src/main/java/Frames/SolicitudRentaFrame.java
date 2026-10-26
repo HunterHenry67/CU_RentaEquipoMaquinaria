@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
+import java.util.List;
 
 /**
  *
@@ -90,7 +91,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         }
     }
 
-    public void cargarEquiposSolicitadosEnTabla(java.util.List<DTOs.EquipoSolicitadoDTO> listaEquipos) {
+    public void cargarEquiposSolicitadosEnTabla(List<EquipoSolicitadoDTO> listaEquipos) {
         DefaultTableModel modelo = (DefaultTableModel) tableEquipoSoli.getModel();
         modelo.setRowCount(0);
         for (DTOs.EquipoSolicitadoDTO eq : listaEquipos) {
@@ -660,7 +661,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
-        javax.swing.JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
         card.show(this.getContentPane(), "card1");
         contratacionRenta.abrirMenuPrincipal();
