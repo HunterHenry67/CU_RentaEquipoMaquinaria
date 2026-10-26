@@ -487,8 +487,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
 
-        if (radioBtnEmpresa.isSelected()) {
-           
+        if (radioBtnEmpresa.isSelected()) {      
             ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
             empresa.setNombre(txtFieldNombre.getText());
             empresa.setCorreo(txtFieldCorreoElectro.getText());
