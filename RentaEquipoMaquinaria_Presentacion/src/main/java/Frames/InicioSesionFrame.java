@@ -4,6 +4,9 @@
  */
 package Frames;
 
+import DTOs.UsuarioDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Home
@@ -11,7 +14,7 @@ package Frames;
 public class InicioSesionFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    
+
     public InicioSesionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
@@ -159,7 +162,18 @@ public class InicioSesionFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldCorreoActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        contratacionRenta.abrirMenuPrincipal();
+
+        String correo = txtFieldCorreo.getText().trim();
+        String contrasenia = psswFiledContrasenia.getText();
+        if (!correo.isEmpty() && !contrasenia.isEmpty()) {
+            UsuarioDTO clienteIngresado = new UsuarioDTO();
+            clienteIngresado.setCorreo(txtFieldCorreo.getText());
+            clienteIngresado.setContrasenia(psswFiledContrasenia.getText());
+            contratacionRenta.pasarDatosUsuario(clienteIngresado);
+        }else{
+            JOptionPane.showMessageDialog(this, "Favor de ingresar un correo o contraseña para logearse.", "Error de Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -13,6 +13,10 @@ public class UsuarioDTO {
     private String correo;
     private String contrasenia;
     
+    public UsuarioDTO(){
+        
+    }
+    
     public UsuarioDTO(String correo, String contrasenia){
         this.correo = correo;
         this.contrasenia = contrasenia;

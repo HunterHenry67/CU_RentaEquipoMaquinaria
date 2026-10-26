@@ -15,6 +15,7 @@ import DTOs.PeriodoSolicitadoDTO;
 import DTOs.RequerimientoTecnicoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
+import DTOs.UsuarioDTO;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -49,6 +50,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private CotizacionFrame cotizacionFrame;
     private RequisitosRentaFrame requisitosRentaFrame;
     private ClienteDTO clienteActual;
+    private UsuarioDTO usuarioDTO;
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
     private List<EquipoDTO> catalogoEquipos;
@@ -267,6 +269,13 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     // Estos métodos no servirán para sobreecargar los datos en las pantallas
+    
+    @Override
+    public void pasarDatosUsuario(UsuarioDTO dto) {
+        this.usuarioDTO = dto;
+        abrirIdentificacionCliente();
+    }
+    
     @Override
     public void pasarDatosSolcitudRenta(ClienteDTO dto) {
         this.clienteActual = dto;
@@ -606,5 +615,7 @@ public class ContratacionRenta implements IContratacionRenta {
             ordenEntregaFrame.setVisible(false);
         }
     }
+
+    
 
 }

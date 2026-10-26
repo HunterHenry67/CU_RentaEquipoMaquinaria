@@ -322,7 +322,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
             ClienteDTO dto = new ClienteDTO();
             dto.setRfc(rfcObtenido);
             dto.setNombre(nombreObtenido);
-            contratacionRenta.abrirSolicitudRenta();
+            contratacionRenta.pasarDatosSolcitudRenta(dto);
         }else{
             JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solcitud", JOptionPane.INFORMATION_MESSAGE);
         }

@@ -9,6 +9,7 @@ import DTOs.CotizacionDTO;
 import DTOs.EquipoSolicitadoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
+import DTOs.UsuarioDTO;
 import java.util.List;
 
 /**
@@ -64,6 +65,8 @@ public interface IContratacionRenta {
     public abstract void abrirVerificacionCondicion(boolean conCucharon);
     
     public abstract void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
+    
+    public abstract void pasarDatosUsuario(UsuarioDTO dto);
     
     public abstract void pasarDatosSolcitudRenta(ClienteDTO dto);
     
