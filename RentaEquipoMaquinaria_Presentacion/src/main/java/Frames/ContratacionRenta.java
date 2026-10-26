@@ -217,27 +217,36 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirPropuestaRenta() {
+        prepararDatosSolicitud();
+        prepararDatosCotizacion();
         ocultarTodo();
-        propuestaRentaFrame.reiniciar();
+        propuestaRentaFrame.cargarDatos(solicitudActual);
         propuestaRentaFrame.setVisible(true);
     }
 
     @Override
     public void abrirPropuestaPendiente() {
+        prepararDatosSolicitud();
+        prepararDatosCotizacion();
         ocultarTodo();
+        propuestaPendienteFrame.cargarDatos(solicitudActual);
         propuestaPendienteFrame.setVisible(true);
     }
 
     @Override
     public void abrirVerificacionCondicion(boolean conCucharon) {
+        prepararDatosSolicitud();
+        prepararDatosCotizacion();
         ocultarTodo();
-        verificacionCondicionFrame.configurar(conCucharon);
+        verificacionCondicionFrame.cargarDatos(solicitudActual, conCucharon);
         verificacionCondicionFrame.setVisible(true);
     }
 
     @Override
     public void abrirOrdenEntrega(boolean conCucharon, boolean finalizada) {
-        ordenEntregaFrame.configurar(conCucharon, finalizada);
+        prepararDatosSolicitud();
+        prepararDatosCotizacion();
+        ordenEntregaFrame.cargarDatos(solicitudActual, conCucharon, finalizada);
         ordenEntregaFrame.setVisible(true);
     }
 

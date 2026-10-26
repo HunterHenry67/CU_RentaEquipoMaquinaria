@@ -1,5 +1,9 @@
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.SolicitudRentaDTO;
+
 public class PropuestaPendienteFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
@@ -71,39 +75,37 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(732, 732, 732)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(579, 579, 579)
-                .addComponent(btnNoContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 244, Short.MAX_VALUE))
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(732, 732, 732)
+                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(579, 579, 579)
+                        .addComponent(btnNoContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 28, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 538, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(604, 604, 604)
-                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(604, 604, 604)
-                .addComponent(btnNoContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(lblMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(604, 604, 604)
+                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(604, 604, 604)
+                        .addComponent(btnNoContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 32, Short.MAX_VALUE))
         );
 
@@ -111,7 +113,10 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelFondo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,6 +136,40 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
         contratacionRenta.abrirOrdenEntrega(false, false);
     }//GEN-LAST:event_btnNoContinuarActionPerformed
 
+    
+    public void cargarDatos(SolicitudRentaDTO solicitud) {
+        EquipoDTO equipo = null;
+        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
+                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
+            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
+        }
+
+        String nombreEquipo = "el equipo";
+        String indispensables = "";
+        if (equipo != null) {
+            nombreEquipo = "el equipo " + equipo.getModelo();
+            if (equipo.getAccesorios() != null) {
+                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
+                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
+                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
+                        if (!indispensables.equals("")) {
+                            indispensables = indispensables + ", ";
+                        }
+                        indispensables = indispensables + accesorio.getNombre();
+                    }
+                }
+            }
+        }
+        if (indispensables.equals("")) {
+            indispensables = "accesorio indispensable";
+        }
+
+        lblMensaje.setText("<html>El accesorio indispensable (" + indispensables + ") es necesario para operar "
+                + nombreEquipo + ". Sin él, la contratación no cumple las condiciones necesarias y no se puede generar "
+                + "una orden de entrega.</html>");
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnNoContinuar;

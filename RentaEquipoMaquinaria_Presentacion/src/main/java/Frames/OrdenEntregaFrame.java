@@ -1,11 +1,27 @@
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.RequisitoRentaDTO;
+import DTOs.SolicitudRentaDTO;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 public class OrdenEntregaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
     private final java.awt.Color verde = new java.awt.Color(0, 130, 0);
     private final java.awt.Color naranja = new java.awt.Color(200, 105, 0);
+    
+    private String textoAccesorios = "Kit de señalización y cucharón";
+    private String textoPrecioAccesorios = "$500";
+    private String textoTotal = "Total de la renta: $11,020";
+    private String textoFechaInicio = "10/09/2026";
+    
+    private String unidad = "M-001";
+    
     
     public OrdenEntregaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -387,16 +403,9 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     public void configurar(boolean conCucharon, boolean finalizada) {
         boolean sinAccesorios = !conCucharon && !finalizada;
 
-        // Accesorios y total
-        if (conCucharon) {
-            lblAccesorios.setText("Kit de señalización y cucharón");
-            lblPrecioAccesorios.setText("$500");
-            lblTotal.setText("Total de la renta: $11,020");
-        } else {
-            lblAccesorios.setText("Kit de señalización");
-            lblPrecioAccesorios.setText("$300");
-            lblTotal.setText("Total de la renta: $10,788");
-        }
+        lblAccesorios.setText(textoAccesorios);
+        lblPrecioAccesorios.setText(textoPrecioAccesorios);
+        lblTotal.setText(textoTotal);
         lblAccesorios.setVisible(!sinAccesorios);
         lblPrecioAccesorios.setVisible(!sinAccesorios);
         lblTotal.setVisible(!sinAccesorios);
@@ -408,7 +417,8 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setText("Finalizada");
             lblEstado.setForeground(verde);
             lblFechaEntregaTit.setText("Fecha de entrega:");
-            lblFechaEntrega.setText("10/09/2026, antes de las 8:00 AM");
+            // CAMBIO 4: la fecha ya no es fija ("10/09/2026"), viene del periodo de la solicitud
+            lblFechaEntrega.setText(textoFechaInicio + ", antes de las 8:00 AM");
             lblIdentificacionEstado.setText("Cumplida");
             lblIdentificacionEstado.setForeground(verde);
             lblMotivo.setText("");
@@ -418,7 +428,8 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setText("Pendiente");
             lblEstado.setForeground(naranja);
             lblFechaEntregaTit.setText("Inicio de la renta:");
-            lblFechaEntrega.setText("10/09/2026");
+            // CAMBIO 4: igual que arriba, usa la fecha de inicio de la solicitud
+            lblFechaEntrega.setText(textoFechaInicio);
             if (sinAccesorios) {
                 lblIdentificacionEstado.setText("Cumplida");
                 lblIdentificacionEstado.setForeground(verde);
@@ -426,11 +437,94 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             } else {
                 lblIdentificacionEstado.setText("Pendiente");
                 lblIdentificacionEstado.setForeground(naranja);
-                lblMotivo.setText("Falta una condición obligatoria: la contratación no se formaliza y la unidad M-001 "
-                        + "no se aparta.");
+                // CAMBIO 5: el número de unidad ya no está escrito en el texto, sale del campo unidad
+                lblMotivo.setText("Falta una condición obligatoria: la contratación no se formaliza y la unidad " + unidad
+                        + " no se aparta.");
             }
         }
         lblDireccion.setVisible(finalizada);
+    }
+    
+    public void cargarDatos(SolicitudRentaDTO solicitud, boolean conCucharon, boolean finalizada) {
+        EquipoDTO equipo = null;
+        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
+                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
+            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
+        }
+
+        // Periodo
+        LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
+        LocalDate fin = solicitud.getPeriodo().getFechaFin();
+        int dias = 1;
+        if (inicio != null && fin != null) {
+            dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
+        } else if (solicitud.getPeriodo().getDiasRenta() != null) {
+            dias = solicitud.getPeriodo().getDiasRenta();
+        }
+
+        // Equipo y accesorios
+        String nombreEquipo = "Sin equipo seleccionado";
+        double tarifa = 0;
+        double accesorios = 0;
+        String nombresAccesorios = "";
+        if (equipo != null) {
+            nombreEquipo = equipo.getModelo();
+            if (equipo.getCostoDiario() != null) {
+                tarifa = equipo.getCostoDiario();
+            }
+            if (equipo.getAccesorios() != null) {
+                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
+                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
+                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || conCucharon) {
+                        if (accesorio.getCostoRenta() != null) {
+                            accesorios = accesorios + accesorio.getCostoRenta();
+                        }
+                        if (!nombresAccesorios.equals("")) {
+                            nombresAccesorios = nombresAccesorios + ", ";
+                        }
+                        nombresAccesorios = nombresAccesorios + accesorio.getNombre();
+                    }
+                }
+            }
+        }
+        if (nombresAccesorios.equals("")) {
+            nombresAccesorios = "Ninguno";
+        }
+
+        // Depósito
+        double deposito = 0;
+        String estadoDeposito = "Cubierto";
+        if (solicitud.getRequisitos() != null) {
+            for (int i = 0; i < solicitud.getRequisitos().size(); i++) {
+                RequisitoRentaDTO requisito = solicitud.getRequisitos().get(i);
+                if (requisito.getMonto() != null) {
+                    deposito = requisito.getMonto();
+                    if (requisito.getEstadoRequisito() != null) {
+                        estadoDeposito = requisito.getEstadoRequisito();
+                    }
+                }
+            }
+        }
+
+        double renta = dias * tarifa;
+        double total = (renta + accesorios) * 1.16;
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        textoFechaInicio = inicio.format(formato);
+        textoAccesorios = nombresAccesorios;
+        textoPrecioAccesorios = String.format("$%,.0f", accesorios);
+        textoTotal = "Total de la renta: " + String.format("$%,.0f", total);
+
+        lblCliente.setText(solicitud.getCliente().getNombre());
+        lblEquipo.setText(nombreEquipo);
+        lblPrecioEquipo.setText(String.format("$%,.0f", renta));
+        lblUnidad.setText("Unidad " + unidad);
+        lblDireccion.setText("<html>Entrega en: " + solicitud.getDireccionObra() + "</html>");
+        lblFin.setText(fin.format(formato));
+        lblDepositoValor.setText(String.format("$%,.0f", deposito));
+        lblDepositoEstado.setText(estadoDeposito);
+
+        configurar(conCucharon, finalizada);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

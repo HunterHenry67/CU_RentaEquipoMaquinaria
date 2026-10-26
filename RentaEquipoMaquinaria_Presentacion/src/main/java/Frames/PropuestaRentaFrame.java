@@ -1,5 +1,13 @@
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.RequisitoRentaDTO;
+import DTOs.SolicitudRentaDTO;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 public class PropuestaRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
@@ -11,6 +19,11 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     private double cucharon = 200;
     private double deposito = 3200;
     private boolean incluye = true;
+    private boolean hayObligatorio = true;
+    private boolean hayOpcional = true;
+
+    // Todavía ninguna pantalla guarda la unidad elegida en el inventario
+    private String unidad = "M-001";
     private static final double IVA = 0.16;
 
     private final java.text.DecimalFormat moneda = new java.text.DecimalFormat("$#,##0");
@@ -600,6 +613,93 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         incluye = true;
         recalcular();
     }
+    
+    public void cargarDatos(SolicitudRentaDTO solicitud) {
+        incluye = true;
+
+        EquipoDTO equipo = null;
+        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
+                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
+            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
+        }
+
+        // Equipo y accesorios: los indispensables van en una fila y los opcionales en otra
+        tarifaDia = 0;
+        senalizacion = 0;
+        cucharon = 0;
+        hayObligatorio = false;
+        hayOpcional = false;
+        String nombreObligatorios = "";
+        String nombreOpcionales = "";
+        String nombreEquipo = "Sin equipo seleccionado";
+        if (equipo != null) {
+            nombreEquipo = equipo.getModelo();
+            if (equipo.getCostoDiario() != null) {
+                tarifaDia = equipo.getCostoDiario();
+            }
+            if (equipo.getAccesorios() != null) {
+                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
+                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
+                    double costo = 0;
+                    if (accesorio.getCostoRenta() != null) {
+                        costo = accesorio.getCostoRenta();
+                    }
+                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
+                        senalizacion = senalizacion + costo;
+                        if (hayObligatorio) {
+                            nombreObligatorios = nombreObligatorios + ", ";
+                        }
+                        nombreObligatorios = nombreObligatorios + accesorio.getNombre();
+                        hayObligatorio = true;
+                    } else {
+                        cucharon = cucharon + costo;
+                        if (hayOpcional) {
+                            nombreOpcionales = nombreOpcionales + ", ";
+                        }
+                        nombreOpcionales = nombreOpcionales + accesorio.getNombre();
+                        hayOpcional = true;
+                    }
+                }
+            }
+        }
+
+        // Periodo
+        LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
+        LocalDate fin = solicitud.getPeriodo().getFechaFin();
+        dias = 1;
+        if (inicio != null && fin != null) {
+            dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
+        } else if (solicitud.getPeriodo().getDiasRenta() != null) {
+            dias = solicitud.getPeriodo().getDiasRenta();
+        }
+
+        // Depósito
+        deposito = 0;
+        if (solicitud.getRequisitos() != null) {
+            for (int i = 0; i < solicitud.getRequisitos().size(); i++) {
+                RequisitoRentaDTO requisito = solicitud.getRequisitos().get(i);
+                if (requisito.getMonto() != null) {
+                    deposito = requisito.getMonto();
+                }
+            }
+        }
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
+        lblEquipo.setText(nombreEquipo + " · unidad " + unidad);
+        lblPeriodo.setText(inicio.format(formato) + " - " + fin.format(formato) + " · " + dias + " días");
+
+        lblAccesorioOb.setText(nombreObligatorios + " - indispensable");
+        lblAccesorioOb.setVisible(hayObligatorio);
+        jLabel7.setText(nombreObligatorios);
+        jLabel7.setVisible(hayObligatorio);
+        lblSenalizacion.setVisible(hayObligatorio);
+
+        lblAccesorioOp.setText(nombreOpcionales + " - opcional");
+        jLabel8.setText(nombreOpcionales);
+
+        recalcular();
+    }
 
     private void recalcular() {
         double renta = dias * tarifaDia;
@@ -616,8 +716,8 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         lblTotal.setText(moneda.format(total));
         lblDeposito.setText(moneda.format(deposito));
 
-        filaCucharon.setVisible(incluye);
-        lblAccesorioOp.setVisible(incluye);
+        filaCucharon.setVisible(incluye && hayOpcional);
+        lblAccesorioOp.setVisible(incluye && hayOpcional);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

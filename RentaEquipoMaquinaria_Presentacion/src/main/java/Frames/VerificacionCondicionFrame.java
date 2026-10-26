@@ -1,10 +1,20 @@
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.RequisitoRentaDTO;
+import DTOs.SolicitudRentaDTO;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 public class VerificacionCondicionFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
     private boolean conCucharon = true;
+    
+    private String unidad = "M-001";
     
     public VerificacionCondicionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -347,19 +357,82 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         contratacionRenta.abrirOrdenEntrega(conCucharon, false);
     }//GEN-LAST:event_btnNoGenerarActionPerformed
 
-    // El controlador lo llama cada vez que se abre la pantalla
-    public void configurar(boolean conCucharon) {
+    public void cargarDatos(SolicitudRentaDTO solicitud, boolean conCucharon) {
         this.conCucharon = conCucharon;
 
-        if (conCucharon) {
-            lblAccesorios.setText("Kit de señalización y cucharón");
-            lblTotal.setText("Total de la renta: $11,020 (renta, accesorios e impuestos)");
-        } else {
-            lblAccesorios.setText("Kit de señalización");
-            lblTotal.setText("Total de la renta: $10,788");
+        EquipoDTO equipo = null;
+        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
+                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
+            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
         }
-    }
 
+        // Periodo
+        LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
+        LocalDate fin = solicitud.getPeriodo().getFechaFin();
+        int dias = 1;
+        if (inicio != null && fin != null) {
+            dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
+        } else if (solicitud.getPeriodo().getDiasRenta() != null) {
+            dias = solicitud.getPeriodo().getDiasRenta();
+        }
+
+        // Equipo y accesorios
+        String nombreEquipo = "Sin equipo seleccionado";
+        double tarifa = 0;
+        double accesorios = 0;
+        String nombresAccesorios = "";
+        if (equipo != null) {
+            nombreEquipo = equipo.getModelo();
+            if (equipo.getCostoDiario() != null) {
+                tarifa = equipo.getCostoDiario();
+            }
+            if (equipo.getAccesorios() != null) {
+                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
+                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
+                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || conCucharon) {
+                        if (accesorio.getCostoRenta() != null) {
+                            accesorios = accesorios + accesorio.getCostoRenta();
+                        }
+                        if (!nombresAccesorios.equals("")) {
+                            nombresAccesorios = nombresAccesorios + ", ";
+                        }
+                        nombresAccesorios = nombresAccesorios + accesorio.getNombre();
+                    }
+                }
+            }
+        }
+        if (nombresAccesorios.equals("")) {
+            nombresAccesorios = "Ninguno";
+        }
+
+        // Depósito
+        double deposito = 0;
+        if (solicitud.getRequisitos() != null) {
+            for (int i = 0; i < solicitud.getRequisitos().size(); i++) {
+                RequisitoRentaDTO requisito = solicitud.getRequisitos().get(i);
+                if (requisito.getMonto() != null) {
+                    deposito = requisito.getMonto();
+                }
+            }
+        }
+
+        double renta = dias * tarifa;
+        double total = (renta + accesorios) * 1.16;
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        lblCliente.setText(solicitud.getCliente().getNombre());
+        lblEquipo.setText(nombreEquipo);
+        lblAccesorios.setText(nombresAccesorios);
+        lblPeriodo.setText(inicio.format(formato) + " - " + fin.format(formato));
+        lblTarifa.setText(String.format("$%,.0f", renta) + " MXN");
+        lblDepositoValor.setText(String.format("$%,.0f", deposito) + " MXN");
+        lblTotal.setText("Total de la renta: " + String.format("$%,.0f", total) + " (renta, accesorios e impuestos)");
+        lblEntrega.setText("<html>Entrega confirmada: " + inicio.format(formato) + " antes de las 8:00 AM, en "
+                + solicitud.getDireccionObra() + ".<br>Al generar la orden, la " + unidad
+                + " queda ocupada del " + inicio.format(DateTimeFormatter.ofPattern("dd")) + " al "
+                + fin.format(DateTimeFormatter.ofPattern("dd/MM")) + ".</html>");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnNoGenerar;
