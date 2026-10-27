@@ -66,6 +66,10 @@ public interface IContratacionRenta {
     
     public abstract void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
     
+    public abstract void abrirMotivoRechazo();
+    
+    public abstract void abrirOrdenEntregaRechazada();
+    
     public abstract void pasarDatosUsuario(UsuarioDTO dto);
     
     public abstract void pasarDatosSolcitudRenta(ClienteDTO dto);

@@ -605,7 +605,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarParcialActionPerformed
 
     private void btnRechazarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRechazarActionPerformed
-        javax.swing.JOptionPane.showMessageDialog(this, "Propuesta rechazada");
+        contratacionRenta.abrirMotivoRechazo();
     }//GEN-LAST:event_btnRechazarActionPerformed
 
     // El controlador lo llama cada vez que se abre la pantalla
