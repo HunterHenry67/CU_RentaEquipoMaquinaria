@@ -313,6 +313,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
             contratacionRenta.abrirRegistrarCliente();
         } else {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
+            return;
         }
 
         contratacionRenta.abrirRegistrarCliente();

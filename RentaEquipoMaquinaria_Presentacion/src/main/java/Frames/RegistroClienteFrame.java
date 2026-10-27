@@ -486,8 +486,16 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        if (txtFieldNombre.getText().isEmpty() || txtFieldRFC.getText().isEmpty() || txtFieldTelefono.getText().isEmpty() || txtFieldCorreoElectro.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Favor de llenar campos de cliente.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-        if (radioBtnEmpresa.isSelected()) {      
+        if (radioBtnEmpresa.isSelected()) {
+            if (txtFileldNombreEncargado.getText().isEmpty() || txtFieldPuestoEncargado.getText().isEmpty() || txtFieldTelefono.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Favor de llenar campos de empresa.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
             ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
             empresa.setNombre(txtFieldNombre.getText());
             empresa.setCorreo(txtFieldCorreoElectro.getText());
@@ -498,7 +506,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText());
             JOptionPane.showMessageDialog(this, "La Empresa ha saido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.pasarDatosSolcitudRenta(empresa);
-        } else if (radioBtnClientePart.isSelected()) {           
+        } else if (radioBtnClientePart.isSelected()) {
             ClienteDTO particular = new ClienteDTO();
             particular.setNombre(txtFieldNombre.getText());
             particular.setRfc(txtFieldRFC.getText());

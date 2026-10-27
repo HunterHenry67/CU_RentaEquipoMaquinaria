@@ -45,7 +45,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
         DatePickerSettings settingsFinal = new DatePickerSettings();
         settingsFinal.setFormatForDatesCommonEra("yyyy-MM-dd");
-    
+
         datePickerInicio = new DatePicker(settingsInicio);
         datePickerFinal = new DatePicker(settingsFinal);
 
@@ -630,15 +630,27 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
-        CardLayout card = (CardLayout) this.getContentPane().getLayout();
-        card.show(this.getContentPane(), "card2");
-        this.getContentPane().revalidate();
-        this.getContentPane().repaint();
-        this.pack();
-        this.setLocationRelativeTo(null);
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Confirma que desea cancelar el proceso de solicitud?", "Cancelación Solcitud", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            CardLayout card = (CardLayout) this.getContentPane().getLayout();
+            card.show(this.getContentPane(), "card2");
+            this.getContentPane().revalidate();
+            this.getContentPane().repaint();
+            this.pack();
+            this.setLocationRelativeTo(null);
+        }
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+//        Object valInicio = formtxtFechaInicio.getValue();
+//        Object valFinal = formtxtFechaFinal.getValue();
+//        String fechaInicio = (valInicio != null) ? valInicio.toString().trim() : "";
+//        String fechaFinal = (valFinal != null) ? valFinal.toString().trim() : "";
+
+//        if (txtFieldDireccion.getText().isEmpty() || txtFieldNombreObra.getText().isEmpty() || fechaInicio.isEmpty() || fechaFinal.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Favor de llenar todos los campos obligatorios", "Error de Solictud", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
         solicitudDTO.setFechaSolicitud(java.time.LocalDate.now());
         solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
