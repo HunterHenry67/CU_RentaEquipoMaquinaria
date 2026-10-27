@@ -5,6 +5,7 @@
 package Frames;
 
 import DTOs.EquipoDTO;
+import Temp.IAlmacenTemporal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -17,15 +18,16 @@ import javax.swing.table.DefaultTableModel;
 public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    
+    private IAlmacenTemporal almacenTemporal;
 
-    public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
+    public BusquedaEquipoFrame(IContratacionRenta contratacionRenta, IAlmacenTemporal almacenTemporal) {
         this.contratacionRenta = contratacionRenta;
+        this.almacenTemporal = almacenTemporal;
         initComponents();
         this.setLocationRelativeTo(null);
-        List<EquipoDTO> listaEquipos = new ArrayList<>();
-        listaEquipos.add(new DTOs.EquipoDTO(1L, "CAT", "320", 140.0, 21500.0, 2.5, 6.5, 1500.0, null));
-        listaEquipos.add(new DTOs.EquipoDTO(2L, "JCB", "3CX", 92.0, 7500.0, 2.3, 4.3, 1200.0, null));
-        cargarEquiposEnTabla(listaEquipos);
+        
+        cargarEquiposEnTabla(almacenTemporal.getCatalogoEquipo());
     }
 
     public void cargarEquiposEnTabla(List<EquipoDTO> listaEquipos) {
