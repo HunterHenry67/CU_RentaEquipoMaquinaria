@@ -16,6 +16,8 @@ import DTOs.RequerimientoTecnicoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
 import DTOs.UsuarioDTO;
+import Temp.AlmacenTemporal;
+import Temp.IAlmacenTemporal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -54,6 +56,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
     private List<EquipoDTO> catalogoEquipos;
+    private IAlmacenTemporal almacenTemporal;
 
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
@@ -62,9 +65,10 @@ public class ContratacionRenta implements IContratacionRenta {
     private OrdenEntregaFrame ordenEntregaFrame;
 
     public ContratacionRenta() {
+        this.almacenTemporal = new AlmacenTemporal();
         this.iniciarSesionFrame = new InicioSesionFrame(this);
         this.menuPrincipalFrame = new MenuPrincipalFrame(this);
-        this.identificacionClienteFrame = new IdentificacionClienteFrame(this);
+        this.identificacionClienteFrame = new IdentificacionClienteFrame(this, this.almacenTemporal);
         this.registrarClienteFrame = new RegistroClienteFrame(this);
         this.busquedaEquipoForm = new BusquedaEquipoFrame(this);
         this.solicitudRentaForm = new SolicitudRentaFrame(this);

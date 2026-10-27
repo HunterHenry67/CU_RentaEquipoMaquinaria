@@ -6,6 +6,8 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.ClienteEmpresaDTO;
+import Temp.AlmacenTemporal;
+import Temp.IAlmacenTemporal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -17,42 +19,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
-    private IContratacionRenta contratacionRenta;
+    private IContratacionRenta contratacionRenta;  
+    
+    private IAlmacenTemporal almacenTemporal;
 
-    List<ClienteDTO> listaEjemplo = new ArrayList<>();
-
-    public IdentificacionClienteFrame(IContratacionRenta contratacionRenta) {
+    public IdentificacionClienteFrame(IContratacionRenta contratacionRenta, IAlmacenTemporal almacenTemporal) {
         this.contratacionRenta = contratacionRenta;
+        this.almacenTemporal = almacenTemporal;
         initComponents();
         this.setLocationRelativeTo(null);
-        DTOs.ClienteDTO c1 = new DTOs.ClienteDTO();
-        c1.setIdCliente(1L);
-        c1.setNombre("Julián Martínez García");
-        c1.setRfc("MARJ8503158A1");
-        c1.setTelefono("6449876543");
-        c1.setCorreo("julian@correo.com");
-        c1.setTipoCliente("Particular");
-        DTOs.ClienteEmpresaDTO empresaPrueba = new DTOs.ClienteEmpresaDTO();
-        empresaPrueba.setIdCliente(4L);
-        empresaPrueba.setNombre("Constructora del Norte S.A. de C.V.");
-        empresaPrueba.setRfc("CNO081015H99");
-        empresaPrueba.setTelefono("6445551234");
-        empresaPrueba.setCorreo("contacto@constructoranorte.com");
-        empresaPrueba.setTipoCliente("Empresa");
-        empresaPrueba.setNombreEncargadoEmpresa("Ing. Carlos Alberto Sánchez");
-        empresaPrueba.setPuestoEncargadoEmpresa("Gerente de Operaciones");
-        empresaPrueba.setTelefonoEncargadoEmpresa("6445559876");
-        DTOs.ClienteDTO c3 = new DTOs.ClienteDTO();
-        c3.setIdCliente(3L);
-        c3.setNombre("María Fernanda López");
-        c3.setRfc("LOMF920410H12");
-        c3.setTelefono("6447654321");
-        c3.setCorreo("mafe@correo.com");
-        c3.setTipoCliente("Particular");
-        listaEjemplo.add(c1);
-        listaEjemplo.add(empresaPrueba);
-        listaEjemplo.add(c3);
-        cargarClientesEnTabla(listaEjemplo);
+        cargarClientesEnTabla(almacenTemporal.getListaClientesTemp());
     }
 
     public void cargarClientesEnTabla(java.util.List<DTOs.ClienteDTO> listaClientes) {
@@ -335,7 +311,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
         int fila = tableCliente.getSelectedRow();
         if (fila != -1) {
-            ClienteDTO clienteSeleccionado = listaEjemplo.get(fila);
+            ClienteDTO clienteSeleccionado = almacenTemporal.getListaClientesTemp().get(fila);
             this.contratacionRenta.pasarDatoRegistroCliente(clienteSeleccionado);
             contratacionRenta.abrirRegistrarCliente();
         } else {

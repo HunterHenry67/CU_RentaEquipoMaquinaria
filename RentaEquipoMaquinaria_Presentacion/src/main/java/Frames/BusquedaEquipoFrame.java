@@ -22,7 +22,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
-        List<DTOs.EquipoDTO> listaEquipos = new ArrayList<>();
+        List<EquipoDTO> listaEquipos = new ArrayList<>();
         listaEquipos.add(new DTOs.EquipoDTO(1L, "CAT", "320", 140.0, 21500.0, 2.5, 6.5, 1500.0, null));
         listaEquipos.add(new DTOs.EquipoDTO(2L, "JCB", "3CX", 92.0, 7500.0, 2.3, 4.3, 1200.0, null));
         cargarEquiposEnTabla(listaEquipos);
