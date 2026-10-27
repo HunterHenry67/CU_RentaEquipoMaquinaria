@@ -70,7 +70,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.menuPrincipalFrame = new MenuPrincipalFrame(this);
         this.identificacionClienteFrame = new IdentificacionClienteFrame(this, this.almacenTemporal);
         this.registrarClienteFrame = new RegistroClienteFrame(this);
-        this.busquedaEquipoForm = new BusquedaEquipoFrame(this);
+        this.busquedaEquipoForm = new BusquedaEquipoFrame(this, this.almacenTemporal);
         this.solicitudRentaForm = new SolicitudRentaFrame(this);
         this.analisisRequerimientoFrame = new AnalisisRequerimientoFrame(this);
         this.solicitudDatosFaltantesFrame = new SolicitudDatosFaltantesFrame(this);
@@ -369,7 +369,7 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         if (solicitudActual.getCliente() == null) {
             solicitudActual.setCliente(clienteActual != null ? clienteActual
-                    : clienteDeEscenario());
+                    : almacenTemporal.getClienteEscenario());
         }
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio("FOL-89241");
@@ -377,19 +377,12 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudActual.getPeriodo() == null) {
             solicitudActual.setPeriodo(new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6));
         }
-        if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {
-            List<RequisitoRentaDTO> requisitos = new ArrayList<>();
-            requisitos.add(new RequisitoRentaDTO("Identificación oficial", true, "Cumplida", null));
-            requisitos.add(new RequisitoRentaDTO("Depósito de garantía", true, "Cubierto", 3200.0));
-            solicitudActual.setRequisitos(requisitos);
+        if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {              
+            solicitudActual.setRequisitos(almacenTemporal.getListaRequisitosRentaTemp());
         }
         if (cotizacionActual == null) {
-            List<DetalleCotizacionDTO> detalles = new ArrayList<>();
-            detalles.add(new DetalleCotizacionDTO("Equipo", "Excavadora CAT 320 (M-001)", 6, 1500.0, 9000.0, null, null));
-            detalles.add(new DetalleCotizacionDTO("Accesorio", "kit", 1, 300.0, 300.0, null, null));
-            detalles.add(new DetalleCotizacionDTO("Accesorio", "cucharón", 1, 200.0, 200.0, null, null));
             cotizacionActual = new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
-                    9500.0, 1520.0, 11020.0, detalles, null);
+                    9500.0, 1520.0, 11020.0, almacenTemporal.getListaDetalleCotizacionTemp(), null);
         }
     }
 
@@ -400,7 +393,7 @@ public class ContratacionRenta implements IContratacionRenta {
             solicitudActual = new SolicitudRentaDTO();
         }
         if (solicitudActual.getCliente() == null) {
-            solicitudActual.setCliente(clienteActual != null ? clienteActual : clienteDeEscenario());
+            solicitudActual.setCliente(clienteActual != null ? clienteActual : almacenTemporal.getClienteEscenario());
         }
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio("FOL-89241");
@@ -432,17 +425,6 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudActual.getRequerimientos() == null) {
             solicitudActual.setRequerimientos(new ArrayList<>());
         }
-    }
-
-    private ClienteDTO clienteDeEscenario() {
-        ClienteDTO cliente = new ClienteDTO();
-        cliente.setIdCliente(1L);
-        cliente.setNombre("Julián Martínez García");
-        cliente.setRfc("MARJ8503158A1");
-        cliente.setTelefono("6449876543");
-        cliente.setCorreo("julianmar12@gmail.com");
-        cliente.setTipoCliente("Particular");
-        return cliente;
     }
 
     // Catálogo de equipos mientras no haya persistencia. Solo lleva los datos que da el
@@ -502,7 +484,8 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         return motivos.isEmpty() ? null : String.join(", ", motivos);
     }
-
+    
+    // Esta clase la señalo porque no se si se reemplzará por la que está en almacenamiento.
     private EquipoDTO equipo(Long id, String marca, String modelo) {
         EquipoDTO equipo = new EquipoDTO();
         equipo.setIdEquipo(id);

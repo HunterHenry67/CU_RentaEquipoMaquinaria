@@ -6,10 +6,7 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.ClienteEmpresaDTO;
-import Temp.AlmacenTemporal;
 import Temp.IAlmacenTemporal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -34,7 +31,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     public void cargarClientesEnTabla(java.util.List<DTOs.ClienteDTO> listaClientes) {
         DefaultTableModel modelo = (DefaultTableModel) tableCliente.getModel();
         modelo.setRowCount(0);
-        for (DTOs.ClienteDTO c : listaClientes) {
+        for (ClienteDTO c : listaClientes) {
             String tipo = (c instanceof ClienteEmpresaDTO) ? "Empresa" : "Particular";
             Object[] fila = {c.getRfc(), c.getNombre(), tipo, c.getTelefono()};
             modelo.addRow(fila);
