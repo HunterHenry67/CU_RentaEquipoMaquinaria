@@ -24,6 +24,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     List<DetalleCotizacionDTO> detalles;
     ClienteDTO cliente;
     List<AccesorioDTO> accesorios;
+    List<EquipoDTO> catalogoEquipos;
 
     public AlmacenTemporal() {
         this.listaEjemplo = new ArrayList<>();
