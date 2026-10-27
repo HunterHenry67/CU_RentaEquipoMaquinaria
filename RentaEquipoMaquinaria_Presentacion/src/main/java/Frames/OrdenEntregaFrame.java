@@ -28,6 +28,13 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         configurar(true, true);
+        
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                contratacionRenta.abrirIdentificacionCliente();
+            }
+        });
     }
 
     /**
@@ -526,6 +533,20 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
 
         configurar(conCucharon, finalizada);
     }
+    
+    public void cargarDatosRechazada(SolicitudRentaDTO solicitud) {
+        cargarDatos(solicitud, true, false);
+
+        setTitle("Solicitud - Rechazada");
+        lblTitulo.setText("Solicitud - Rechazada");
+        lblEstado.setText("Rechazada");
+        lblEstado.setForeground(new java.awt.Color(170, 20, 20));
+        lblIdentificacionEstado.setText("Cumplida");
+        lblIdentificacionEstado.setForeground(verde);
+        lblMotivo.setText("");
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblAccesorios;

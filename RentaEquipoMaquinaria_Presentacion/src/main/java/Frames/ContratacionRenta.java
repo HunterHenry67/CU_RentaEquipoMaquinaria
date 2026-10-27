@@ -57,6 +57,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private CotizacionDTO cotizacionActual;
     private List<EquipoDTO> catalogoEquipos;
     private IAlmacenTemporal almacenTemporal;
+    private MotivoRechazoFrame motivoRechazoFrame;
 
     // Registrar decisión del cliente y nuevas pantallas de orden de entrega
     private PropuestaRentaFrame propuestaRentaFrame;
@@ -92,6 +93,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.propuestaPendienteFrame = new PropuestaPendienteFrame(this);
         this.verificacionCondicionFrame = new VerificacionCondicionFrame(this);
         this.ordenEntregaFrame = new OrdenEntregaFrame(this);
+        this.motivoRechazoFrame = new MotivoRechazoFrame(this);
 
         this.abrirInciarSesión();
     }
@@ -270,6 +272,22 @@ public class ContratacionRenta implements IContratacionRenta {
         ocultarTodo();
         requisitosRentaFrame.cargarRequisitos(solicitudActual);
         requisitosRentaFrame.setVisible(true);
+    }
+    
+    @Override
+    public void abrirMotivoRechazo() {
+        ocultarTodo();
+        motivoRechazoFrame.limpiar();
+        motivoRechazoFrame.setVisible(true);
+    }
+    
+    @Override
+    public void abrirOrdenEntregaRechazada() {
+        prepararDatosSolicitud();
+        prepararDatosCotizacion();
+        ocultarTodo();
+        ordenEntregaFrame.cargarDatosRechazada(solicitudActual);
+        ordenEntregaFrame.setVisible(true);
     }
 
     // Estos métodos no servirán para sobreecargar los datos en las pantallas
@@ -617,6 +635,9 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         if (ordenEntregaFrame != null) {
             ordenEntregaFrame.setVisible(false);
+        }
+        if (motivoRechazoFrame != null) {
+        motivoRechazoFrame.setVisible(false);
         }
     }
 
