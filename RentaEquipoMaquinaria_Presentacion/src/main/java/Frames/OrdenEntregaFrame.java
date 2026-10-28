@@ -32,7 +32,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         this.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
-                contratacionRenta.abrirIdentificacionCliente();
+                contratacionRenta.abrirMenuPrincipal();
             }
         });
     }
