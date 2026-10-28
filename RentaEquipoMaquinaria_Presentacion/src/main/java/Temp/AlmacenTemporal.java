@@ -18,31 +18,22 @@ import java.util.List;
  */
 public class AlmacenTemporal implements IAlmacenTemporal {
 
-    List<ClienteDTO> listaEjemplo;
-    List<EquipoDTO> listaEquipos;
-    List<RequisitoRentaDTO> requisitos;
-    List<DetalleCotizacionDTO> detalles;
-    ClienteDTO cliente;
-    List<AccesorioDTO> accesorios;
+    // Cada get arma una lista nueva: si se usara la misma, cada llamada le volvería
+    // a agregar los datos (en la segunda solicitud salían repetidos)
     List<EquipoDTO> catalogoEquipos;
 
     public AlmacenTemporal() {
-        this.listaEjemplo = new ArrayList<>();
-        this.listaEquipos = new ArrayList<>();
-        this.requisitos = new ArrayList<>();
-        this.detalles = new ArrayList<>();
-        this.cliente = new ClienteDTO();
-        this.accesorios = new ArrayList<>();
     }
 
     @Override
     public List<ClienteDTO> getListaClientesTemp() {
+        List<ClienteDTO> listaEjemplo = new ArrayList<>();
         ClienteDTO c1 = new ClienteDTO();
         c1.setIdCliente(1L);
         c1.setNombre("Julián Martínez García");
         c1.setRfc("MARJ8503158A1");
         c1.setTelefono("6449876543");
-        c1.setCorreo("julian@correo.com");
+        c1.setCorreo("julianmar12@gmail.com");
         c1.setTipoCliente("Particular");
         DTOs.ClienteEmpresaDTO empresaPrueba = new DTOs.ClienteEmpresaDTO();
         empresaPrueba.setIdCliente(4L);
@@ -69,6 +60,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public List<EquipoDTO> getListaEquipoTemp() {
+        List<EquipoDTO> listaEquipos = new ArrayList<>();
         listaEquipos.add(new EquipoDTO(1L, "CAT", "320", 140.0, 21500.0, 2.5, 6.5, 1500.0, null));
         listaEquipos.add(new EquipoDTO(2L, "JCB", "3CX", 92.0, 7500.0, 2.3, 4.3, 1200.0, null));
         return listaEquipos;
@@ -76,6 +68,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public List<DetalleCotizacionDTO> getListaDetalleCotizacionTemp() {
+        List<DetalleCotizacionDTO> detalles = new ArrayList<>();
         detalles.add(new DetalleCotizacionDTO("Equipo", "Excavadora CAT 320 (M-001)", 6, 1500.0, 9000.0, null, null));
         detalles.add(new DetalleCotizacionDTO("Accesorio", "kit", 1, 300.0, 300.0, null, null));
         detalles.add(new DetalleCotizacionDTO("Accesorio", "cucharón", 1, 200.0, 200.0, null, null));
@@ -84,6 +77,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public List<RequisitoRentaDTO> getListaRequisitosRentaTemp() {
+        List<RequisitoRentaDTO> requisitos = new ArrayList<>();
         requisitos.add(new RequisitoRentaDTO("Identificación oficial", true, "Cumplida", null));
         requisitos.add(new RequisitoRentaDTO("Depósito de garantía", true, "Cubierto", 3200.0));
         return requisitos;
@@ -91,6 +85,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public ClienteDTO getClienteEscenario() {
+        ClienteDTO cliente = new ClienteDTO();
         cliente.setIdCliente(1L);
         cliente.setNombre("Julián Martínez García");
         cliente.setRfc("MARJ8503158A1");
@@ -120,6 +115,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public List<AccesorioDTO> getAccesoriosExcavadora() {
+        List<AccesorioDTO> accesorios = new ArrayList<>();
         accesorios.add(accesorio(1L, "Kit de señalización", 300.0, true));
         accesorios.add(accesorio(2L, "Cucharón adicional 1.20 m", 200.0, false));
         return accesorios;

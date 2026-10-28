@@ -11,6 +11,7 @@ import java.awt.CardLayout;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.util.List;
@@ -642,15 +643,22 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-//        Object valInicio = formtxtFechaInicio.getValue();
-//        Object valFinal = formtxtFechaFinal.getValue();
-//        String fechaInicio = (valInicio != null) ? valInicio.toString().trim() : "";
-//        String fechaFinal = (valFinal != null) ? valFinal.toString().trim() : "";
+        // las fechas salen de los selectores (los campos de texto del diseño quedan ocultos)
+        LocalDate fechaInicio = datePickerInicio.getDate();
+        LocalDate fechaFinal = datePickerFinal.getDate();
 
-//        if (txtFieldDireccion.getText().isEmpty() || txtFieldNombreObra.getText().isEmpty() || fechaInicio.isEmpty() || fechaFinal.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Favor de llenar todos los campos obligatorios", "Error de Solictud", JOptionPane.WARNING_MESSAGE);
-//            return;
-//        }
+        if (txtFieldDireccion.getText().isBlank() || txtFieldNombreObra.getText().isBlank() || fechaInicio == null || fechaFinal == null) {
+            JOptionPane.showMessageDialog(this, "Favor de llenar todos los campos obligatorios", "Error de Solicitud", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (fechaFinal.isBefore(fechaInicio)) {
+            JOptionPane.showMessageDialog(this, "La fecha final no puede ser anterior a la de inicio.", "Error de Solicitud", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (tableEquipoSoli.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Favor de agregar el equipo que solicita el cliente.", "Error de Solicitud", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
         solicitudDTO.setFechaSolicitud(java.time.LocalDate.now());
         solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
@@ -659,8 +667,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText());
         solicitudDTO.setEstadoSolicitud("Pendiente");
         DTOs.PeriodoSolicitadoDTO periodo = new DTOs.PeriodoSolicitadoDTO();
-        periodo.setFechaInicio(java.time.LocalDate.now());
-        periodo.setFechaFin(java.time.LocalDate.now().plusDays(1));
+        periodo.setFechaInicio(fechaInicio);
+        periodo.setFechaFin(fechaFinal);
+        periodo.setDiasRenta((int) ChronoUnit.DAYS.between(fechaInicio, fechaFinal) + 1);
         solicitudDTO.setPeriodo(periodo);
         for (int i = 0; i < tableEquipoSoli.getRowCount(); i++) {
             EquipoSolicitadoDTO equipo = new EquipoSolicitadoDTO();

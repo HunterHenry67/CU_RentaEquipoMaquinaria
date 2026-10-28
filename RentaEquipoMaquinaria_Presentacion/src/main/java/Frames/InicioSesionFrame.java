@@ -166,16 +166,17 @@ public class InicioSesionFrame extends javax.swing.JFrame {
         String correo = txtFieldCorreo.getText().trim();
         String contrasenia = psswFiledContrasenia.getText();
         String formatoCorreo = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        if (correo.isEmpty() || contrasenia.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Favor de ingresar el correo y la contraseña para iniciar sesión.", "Error de Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         if (!correo.matches(formatoCorreo)) {
             JOptionPane.showMessageDialog(this, "Formato de Correo Inválido.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (correo.isEmpty() && contrasenia.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Favor de ingresar un correo o contraseña para logearse.", "Error de Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
+        if (contrasenia.length() < 8) {
+            JOptionPane.showMessageDialog(this, "La Contraseña ocupa 8 caractéres como mínimo.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
             return;
-        }
-        if(contrasenia.length() < 8){
-            JOptionPane.showMessageDialog(this, "La Contraseña ocupa 8 caractéres como mínimo.","Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
         }
         UsuarioDTO clienteIngresado = new UsuarioDTO();
         clienteIngresado.setCorreo(txtFieldCorreo.getText());

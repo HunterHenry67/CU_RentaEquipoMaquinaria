@@ -68,7 +68,7 @@ public interface IContratacionRenta {
     
     public abstract void abrirMotivoRechazo();
     
-    public abstract void abrirOrdenEntregaRechazada();
+    public abstract void abrirOrdenEntregaRechazada(String motivo);
     
     public abstract void pasarDatosUsuario(UsuarioDTO dto);
     

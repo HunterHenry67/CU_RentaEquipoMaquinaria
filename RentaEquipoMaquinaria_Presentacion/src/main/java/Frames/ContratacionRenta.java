@@ -7,6 +7,7 @@ package Frames;
 import DTOs.AccesorioDTO;
 import DTOs.ClienteDTO;
 import DTOs.CotizacionDTO;
+import DTOs.DecisionClienteDTO;
 import DTOs.DetalleCotizacionDTO;
 import DTOs.EquipoDTO;
 import DTOs.EquipoSolicitadoDTO;
@@ -254,6 +255,7 @@ public class ContratacionRenta implements IContratacionRenta {
     public void abrirOrdenEntrega(boolean conCucharon, boolean finalizada) {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
+        ocultarTodo();
         ordenEntregaFrame.cargarDatos(solicitudActual, conCucharon, finalizada);
         ordenEntregaFrame.setVisible(true);
     }
@@ -282,11 +284,14 @@ public class ContratacionRenta implements IContratacionRenta {
     }
     
     @Override
-    public void abrirOrdenEntregaRechazada() {
+    public void abrirOrdenEntregaRechazada(String motivo) {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
+        // la decisión queda en la cotización con el motivo que dio el cliente
+        cotizacionActual.setDecision(new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo));
+        solicitudActual.setEstadoSolicitud("Rechazada");
         ocultarTodo();
-        ordenEntregaFrame.cargarDatosRechazada(solicitudActual);
+        ordenEntregaFrame.cargarDatosRechazada(solicitudActual, motivo);
         ordenEntregaFrame.setVisible(true);
     }
 
@@ -295,7 +300,7 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosUsuario(UsuarioDTO dto) {
         this.usuarioDTO = dto;
-        abrirIdentificacionCliente();
+        abrirMenuPrincipal();
     }
     
     @Override

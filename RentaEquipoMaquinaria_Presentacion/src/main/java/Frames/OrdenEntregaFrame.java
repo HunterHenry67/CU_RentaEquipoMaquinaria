@@ -534,7 +534,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         configurar(conCucharon, finalizada);
     }
     
-    public void cargarDatosRechazada(SolicitudRentaDTO solicitud) {
+    public void cargarDatosRechazada(SolicitudRentaDTO solicitud, String motivo) {
         cargarDatos(solicitud, true, false);
 
         setTitle("Solicitud - Rechazada");
@@ -543,7 +543,9 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblEstado.setForeground(new java.awt.Color(170, 20, 20));
         lblIdentificacionEstado.setText("Cumplida");
         lblIdentificacionEstado.setForeground(verde);
-        lblMotivo.setText("");
+        // en html para que un motivo largo pase al segundo renglón
+        String texto = motivo.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+        lblMotivo.setText("<html>Motivo: " + texto + "</html>");
     }
     
     

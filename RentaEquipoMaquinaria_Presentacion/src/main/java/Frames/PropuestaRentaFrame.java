@@ -595,7 +595,8 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCambiarPeriodoActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        contratacionRenta.abrirOrdenEntrega(true,true);
+        // antes de la orden se revisan las condiciones de la contratación
+        contratacionRenta.abrirVerificacionCondicion(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnAceptarParcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarParcialActionPerformed

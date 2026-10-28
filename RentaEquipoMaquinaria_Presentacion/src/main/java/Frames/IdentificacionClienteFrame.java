@@ -7,6 +7,9 @@ package Frames;
 import DTOs.ClienteDTO;
 import DTOs.ClienteEmpresaDTO;
 import Temp.IAlmacenTemporal;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,15 +23,21 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     
     private IAlmacenTemporal almacenTemporal;
 
+    // todos los clientes y los que se ven en la tabla (después de buscar pueden ser menos)
+    private List<ClienteDTO> clientes;
+    private List<ClienteDTO> clientesMostrados = new ArrayList<>();
+
     public IdentificacionClienteFrame(IContratacionRenta contratacionRenta, IAlmacenTemporal almacenTemporal) {
         this.contratacionRenta = contratacionRenta;
         this.almacenTemporal = almacenTemporal;
         initComponents();
         this.setLocationRelativeTo(null);
-        cargarClientesEnTabla(almacenTemporal.getListaClientesTemp());
+        clientes = almacenTemporal.getListaClientesTemp();
+        cargarClientesEnTabla(clientes);
     }
 
     public void cargarClientesEnTabla(java.util.List<DTOs.ClienteDTO> listaClientes) {
+        clientesMostrados = new ArrayList<>(listaClientes);
         DefaultTableModel modelo = (DefaultTableModel) tableCliente.getModel();
         modelo.setRowCount(0);
         for (ClienteDTO c : listaClientes) {
@@ -278,8 +287,40 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
+        String buscado = sinAcentos(txtFieldBusqCliente.getText());
+        if (buscado.isEmpty()) {
+            cargarClientesEnTabla(clientes);
+            return;
+        }
+        String filtro = comboFiltroBusqCliente.getSelectedItem().toString();
+        List<ClienteDTO> encontrados = new ArrayList<>();
+        for (ClienteDTO c : clientes) {
+            String dato;
+            if (filtro.equals("Nombre")) {
+                dato = c.getNombre();
+            } else if (filtro.equals("Teléfono")) {
+                dato = c.getTelefono();
+            } else {
+                dato = c.getRfc();
+            }
+            if (sinAcentos(dato).contains(buscado)) {
+                encontrados.add(c);
+            }
+        }
+        cargarClientesEnTabla(encontrados);
+        if (encontrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No se encontró ningún cliente con ese dato. Si es nuevo, regístrelo.", "Búsqueda de Cliente", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    // para buscar sin importar mayúsculas ni acentos
+    private String sinAcentos(String texto) {
+        if (texto == null) {
+            return "";
+        }
+        String sinMarcas = Normalizer.normalize(texto.trim(), Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        return sinMarcas.toLowerCase();
+    }
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
         this.contratacionRenta.pasarDatoRegistroCliente(null);
@@ -293,12 +334,9 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
         int filaSeleccionada = tableCliente.getSelectedRow();
         if (filaSeleccionada != -1) {
-            String rfcObtenido = tableCliente.getValueAt(filaSeleccionada, 0).toString();
-            String nombreObtenido = tableCliente.getValueAt(filaSeleccionada, 1).toString();
-            ClienteDTO dto = new ClienteDTO();
-            dto.setRfc(rfcObtenido);
-            dto.setNombre(nombreObtenido);
-            contratacionRenta.pasarDatosSolcitudRenta(dto);
+            // se manda el cliente completo (con teléfono y correo), no solo lo que se ve en la tabla
+            ClienteDTO clienteSeleccionado = clientesMostrados.get(filaSeleccionada);
+            contratacionRenta.pasarDatosSolcitudRenta(clienteSeleccionado);
         } else {
             JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solcitud", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -307,15 +345,12 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
         int fila = tableCliente.getSelectedRow();
-        if (fila != -1) {
-            ClienteDTO clienteSeleccionado = almacenTemporal.getListaClientesTemp().get(fila);
-            this.contratacionRenta.pasarDatoRegistroCliente(clienteSeleccionado);
-            contratacionRenta.abrirRegistrarCliente();
-        } else {
+        if (fila == -1) {
             JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
             return;
         }
-
+        ClienteDTO clienteSeleccionado = clientesMostrados.get(fila);
+        this.contratacionRenta.pasarDatoRegistroCliente(clienteSeleccionado);
         contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnModificarDatosActionPerformed
 

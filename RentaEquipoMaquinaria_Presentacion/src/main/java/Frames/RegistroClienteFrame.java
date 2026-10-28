@@ -492,7 +492,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         }
 
         if (radioBtnEmpresa.isSelected()) {
-            if (txtFileldNombreEncargado.getText().isEmpty() || txtFieldPuestoEncargado.getText().isEmpty() || txtFieldTelefono.getText().isEmpty()) {
+            if (txtFileldNombreEncargado.getText().isEmpty() || txtFieldPuestoEncargado.getText().isEmpty() || txtFieldTelefonoEncragado.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Favor de llenar campos de empresa.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
                 return;
             }
