@@ -34,6 +34,9 @@ import java.util.Objects;
  */
 public class ContratacionRenta implements IContratacionRenta {
 
+    private static final double TARIFA_DIARIA_SIMULADA = 1500.0;
+    private static final double IVA_SIMULADO = 0.16;
+
     private InicioSesionFrame iniciarSesionFrame;
     private MenuPrincipalFrame menuPrincipalFrame;
     private IdentificacionClienteFrame identificacionClienteFrame;
@@ -272,6 +275,8 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void abrirCotizacion() {
         prepararDatosCotizacion();
+        // se arma de nuevo con lo elegido, por si el usuario regresó y cambió equipo, accesorios o periodo
+        cotizacionActual = armarCotizacion();
         ocultarTodo();
         cotizacionFrame.cargarCotizacion(solicitudActual, cotizacionActual);
         cotizacionFrame.setVisible(true);
@@ -418,9 +423,42 @@ public class ContratacionRenta implements IContratacionRenta {
             solicitudActual.setRequisitos(almacenTemporal.getListaRequisitosRentaTemp());
         }
         if (cotizacionActual == null) {
-            cotizacionActual = new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
+            cotizacionActual = armarCotizacion();
+        }
+    }
+
+    // Arma la cotización con lo que se eligió en la solicitud: equipo recomendado, sus accesorios
+    // y los días del periodo. La tarifa (para equipos sin costo registrado) y el IVA son simulados
+    // mientras no exista el subsistema de negocio que los calcule.
+    private CotizacionDTO armarCotizacion() {
+        EquipoDTO equipo = equipoRecomendado();
+        Integer dias = solicitudActual.getPeriodo().getDiasRenta();
+        if (equipo == null || dias == null) {
+            // sin evaluación técnica todavía, se usa el escenario del almacén
+            return new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
                     9500.0, 1520.0, 11020.0, almacenTemporal.getListaDetalleCotizacionTemp(), null);
         }
+        double tarifa = equipo.getCostoDiario() != null ? equipo.getCostoDiario() : TARIFA_DIARIA_SIMULADA;
+        double subtotal = tarifa * dias;
+        List<DetalleCotizacionDTO> detalles = new ArrayList<>();
+        detalles.add(new DetalleCotizacionDTO("Equipo", equipo.getModelo(), dias, tarifa, subtotal, equipo, null));
+        if (equipo.getAccesorios() != null) {
+            for (AccesorioDTO accesorio : equipo.getAccesorios()) {
+                double costo = accesorio.getCostoRenta() != null ? accesorio.getCostoRenta() : 0;
+                detalles.add(new DetalleCotizacionDTO("Accesorio", accesorio.getNombre(), 1, costo, costo, null, accesorio));
+                subtotal += costo;
+            }
+        }
+        double iva = subtotal * IVA_SIMULADO;
+        return new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
+                subtotal, iva, subtotal + iva, detalles, null);
+    }
+
+    // El equipo que se recomendó en la evaluación técnica (F2), con los accesorios que se eligieron
+    private EquipoDTO equipoRecomendado() {
+        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
+        EvaluacionTecnicaDTO evaluacion = pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
+        return evaluacion == null ? null : evaluacion.getRecomendado();
     }
 
     // Completa con los datos del escenario lo que F1 todavía no manda a F2, sin reemplazar
