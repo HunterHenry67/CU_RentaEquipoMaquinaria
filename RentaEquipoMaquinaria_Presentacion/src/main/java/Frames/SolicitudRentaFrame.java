@@ -6,6 +6,7 @@ package Frames;
 
 import DTOs.ClienteDTO;
 import DTOs.EquipoSolicitadoDTO;
+import DTOs.PeriodoSolicitadoDTO;
 import DTOs.SolicitudRentaDTO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -146,7 +147,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         lblRFCancelacion = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtAreaRazonCancelacion = new javax.swing.JTextArea();
         btnRegistrarCancelacion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -539,14 +540,14 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
         jLabel23.setText("RAZÓN DE CANCELACIÓN DE PROCESO DE SOLICITUD");
 
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jTextArea1.setForeground(new java.awt.Color(0, 0, 0));
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(3);
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane4.setViewportView(jTextArea1);
+        txtAreaRazonCancelacion.setBackground(new java.awt.Color(255, 255, 255));
+        txtAreaRazonCancelacion.setColumns(20);
+        txtAreaRazonCancelacion.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaRazonCancelacion.setForeground(new java.awt.Color(0, 0, 0));
+        txtAreaRazonCancelacion.setLineWrap(true);
+        txtAreaRazonCancelacion.setRows(3);
+        txtAreaRazonCancelacion.setWrapStyleWord(true);
+        jScrollPane4.setViewportView(txtAreaRazonCancelacion);
 
         btnRegistrarCancelacion.setBackground(new java.awt.Color(44, 44, 44));
         btnRegistrarCancelacion.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -643,7 +644,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // las fechas salen de los selectores (los campos de texto del diseño quedan ocultos)
+
         LocalDate fechaInicio = datePickerInicio.getDate();
         LocalDate fechaFinal = datePickerFinal.getDate();
 
@@ -660,13 +661,13 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             return;
         }
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
-        solicitudDTO.setFechaSolicitud(java.time.LocalDate.now());
+        solicitudDTO.setFechaSolicitud(LocalDate.now());
         solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
         solicitudDTO.setDireccionObra(txtFieldDireccion.getText());
         solicitudDTO.setDescripcionActividad(txtAreaActividadRealizar.getText());
         solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText());
         solicitudDTO.setEstadoSolicitud("Pendiente");
-        DTOs.PeriodoSolicitadoDTO periodo = new DTOs.PeriodoSolicitadoDTO();
+        DTOs.PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO();
         periodo.setFechaInicio(fechaInicio);
         periodo.setFechaFin(fechaFinal);
         periodo.setDiasRenta((int) ChronoUnit.DAYS.between(fechaInicio, fechaFinal) + 1);
@@ -682,6 +683,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
+        
+        if(txtAreaRazonCancelacion.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Favor de desrcibir la razón de su cancelación.", "Error Regsitro Cancelación", JOptionPane.WARNING_MESSAGE);
+        }
         JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
         card.show(this.getContentPane(), "card1");
@@ -719,7 +724,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblFolio;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblRFC;
@@ -729,6 +733,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private javax.swing.JTable tableEquipoSoli;
     private javax.swing.JTextArea txtAreaActividadRealizar;
     private javax.swing.JTextArea txtAreaCondicionExtra;
+    private javax.swing.JTextArea txtAreaRazonCancelacion;
     private javax.swing.JTextField txtFieldDireccion;
     private javax.swing.JTextField txtFieldNombreObra;
     // End of variables declaration//GEN-END:variables
