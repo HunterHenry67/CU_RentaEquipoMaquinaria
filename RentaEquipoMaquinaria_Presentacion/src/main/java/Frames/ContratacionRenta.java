@@ -12,10 +12,12 @@ import DTOs.DetalleCotizacionDTO;
 import DTOs.EquipoDTO;
 import DTOs.EquipoSolicitadoDTO;
 import DTOs.EvaluacionTecnicaDTO;
+import DTOs.OcupacionUnidadDTO;
 import DTOs.PeriodoSolicitadoDTO;
 import DTOs.RequerimientoTecnicoDTO;
 import DTOs.RequisitoRentaDTO;
 import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
 import DTOs.UsuarioDTO;
 import Temp.AlmacenTemporal;
 import Temp.IAlmacenTemporal;
@@ -57,6 +59,9 @@ public class ContratacionRenta implements IContratacionRenta {
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
     private List<EquipoDTO> catalogoEquipos;
+    private List<UnidadFisicaDTO> unidadesCat320;
+    private List<UnidadFisicaDTO> unidadesCat336;
+    private List<UnidadFisicaDTO> unidadesJcb;
     private IAlmacenTemporal almacenTemporal;
     private MotivoRechazoFrame motivoRechazoFrame;
 
@@ -196,7 +201,9 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirVerificacionInventario() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        verificacionInventarioFrame.cargarSolicitud(solicitudActual, unidadesSegunModelo());   // ⬅ aquí se usa
         verificacionInventarioFrame.setVisible(true);
     }
 
@@ -220,7 +227,9 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirCondicionesContratacion() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        condicionesContratacionFrame.cargarCondiciones(solicitudActual);
         condicionesContratacionFrame.setVisible(true);
     }
 
@@ -275,14 +284,14 @@ public class ContratacionRenta implements IContratacionRenta {
         requisitosRentaFrame.cargarRequisitos(solicitudActual);
         requisitosRentaFrame.setVisible(true);
     }
-    
+
     @Override
     public void abrirMotivoRechazo() {
         ocultarTodo();
         motivoRechazoFrame.limpiar();
         motivoRechazoFrame.setVisible(true);
     }
-    
+
     @Override
     public void abrirOrdenEntregaRechazada(String motivo) {
         prepararDatosSolicitud();
@@ -296,13 +305,12 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     // Estos métodos no servirán para sobreecargar los datos en las pantallas
-    
     @Override
     public void pasarDatosUsuario(UsuarioDTO dto) {
         this.usuarioDTO = dto;
         abrirMenuPrincipal();
     }
-    
+
     @Override
     public void pasarDatosSolcitudRenta(ClienteDTO dto) {
         this.clienteActual = dto;
@@ -356,9 +364,9 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosVerificacionDeDisponibilidad(SolicitudRentaDTO dto) {
+    public void pasarDatosVerificacionInventario(SolicitudRentaDTO dto) {
         this.solicitudActual = dto;
-        abrirVerificacionDeDisponibilidad();
+        abrirVerificacionInventario();
     }
 
     @Override
@@ -370,6 +378,12 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudRentaForm != null) {
             solicitudRentaForm.cargarEquiposSolicitadosEnTabla(this.solicitudActual.getEquiposSolicitados());
         }
+    }
+
+    @Override
+    public void pasarDatosUnidadSeleccionada(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirCondicionesContratacion();
     }
 
     @Override
@@ -400,7 +414,7 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudActual.getPeriodo() == null) {
             solicitudActual.setPeriodo(new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6));
         }
-        if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {              
+        if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {
             solicitudActual.setRequisitos(almacenTemporal.getListaRequisitosRentaTemp());
         }
         if (cotizacionActual == null) {
@@ -470,6 +484,66 @@ public class ContratacionRenta implements IContratacionRenta {
         return catalogoEquipos;
     }
 
+    private UnidadFisicaDTO unidad(Long id, String numero, String estado, List<OcupacionUnidadDTO> ocupaciones) {
+        UnidadFisicaDTO u = new UnidadFisicaDTO();
+        u.setIdUnidad(id);
+        u.setNumeroEconomico(numero);
+        u.setEstadoUnidad(estado);
+        u.setOcupaciones(ocupaciones);
+        return u;
+    }
+
+    private void crearUnidades() {
+        PeriodoSolicitadoDTO p = solicitudActual.getPeriodo();
+        LocalDate inicio = p.getFechaInicio();
+        LocalDate fin = p.getFechaFin();
+
+        // La ocupación cubre desde el día siguiente al inicio hasta el fin del periodo
+        LocalDate ocupadaDesde = inicio.plusDays(1).isAfter(fin) ? inicio : inicio.plusDays(1);
+
+        unidadesCat320 = new ArrayList<>();
+        unidadesCat320.add(unidad(1L, "M-001", "Disponible", new ArrayList<>()));
+        unidadesCat320.add(unidad(2L, "M-002", "En mantenimiento", new ArrayList<>()));
+        unidadesCat320.add(unidad(3L, "M-003", "Disponible", ocupacion(ocupadaDesde, fin)));
+
+        unidadesCat336 = new ArrayList<>();
+        unidadesCat336.add(unidad(4L, "N-001", "Disponible", new ArrayList<>()));
+        unidadesCat336.add(unidad(5L, "N-002", "En mantenimiento", new ArrayList<>()));
+        unidadesCat336.add(unidad(6L, "N-003", "Disponible", ocupacion(ocupadaDesde, fin)));
+
+        unidadesJcb = new ArrayList<>();
+        unidadesJcb.add(unidad(7L, "J-001", "Disponible", new ArrayList<>()));
+        unidadesJcb.add(unidad(8L, "J-002", "En mantenimiento", new ArrayList<>()));
+        unidadesJcb.add(unidad(9L, "J-003", "Disponible", ocupacion(ocupadaDesde, fin)));
+    }
+
+    private List<OcupacionUnidadDTO> ocupacion(LocalDate desde, LocalDate hasta) {
+        List<OcupacionUnidadDTO> lista = new ArrayList<>();
+        lista.add(new OcupacionUnidadDTO(desde, hasta, "Renta", "Confirmada"));
+        return lista;
+    }
+
+    private List<UnidadFisicaDTO> unidadesSegunModelo() {
+        crearUnidades();
+
+        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
+        EvaluacionTecnicaDTO evaluacion = pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
+        if (evaluacion == null || evaluacion.getRecomendado() == null
+                || evaluacion.getRecomendado().getModelo() == null) {
+            return new ArrayList<>();
+        }
+
+        String modelo = evaluacion.getRecomendado().getModelo();
+        if (modelo.contains("320")) {
+            return unidadesCat320;
+        } else if (modelo.contains("336")) {
+            return unidadesCat336;
+        } else if (modelo.contains("JCB")) {
+            return unidadesJcb;
+        }
+        return new ArrayList<>();
+    }
+
     // Compara cada equipo del catálogo con los requerimientos de la solicitud. Regresa los
     // equipos en orden con el motivo por el que no cumplen (null si cumplen). Va aquí
     // mientras Negocio no tenga compararEquipos, como los datos simulados de la cotización.
@@ -507,7 +581,7 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         return motivos.isEmpty() ? null : String.join(", ", motivos);
     }
-    
+
     // Esta clase la señalo porque no se si se reemplzará por la que está en almacenamiento.
     private EquipoDTO equipo(Long id, String marca, String modelo) {
         EquipoDTO equipo = new EquipoDTO();
@@ -625,10 +699,8 @@ public class ContratacionRenta implements IContratacionRenta {
             ordenEntregaFrame.setVisible(false);
         }
         if (motivoRechazoFrame != null) {
-        motivoRechazoFrame.setVisible(false);
+            motivoRechazoFrame.setVisible(false);
         }
     }
-
-    
 
 }
