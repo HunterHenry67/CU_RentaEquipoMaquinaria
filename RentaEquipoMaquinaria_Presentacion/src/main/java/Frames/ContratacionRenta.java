@@ -217,8 +217,24 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
+    public void abrirUnidadMantenimiento(UnidadFisicaDTO unidad) {
+        prepararDatosSolicitud();
+        ocultarTodo();
+        unidadMantenimientoFrame.cargarMantenimiento(solicitudActual, unidad);
+        unidadMantenimientoFrame.setVisible(true);
+    }
+
+    @Override
     public void abrirUnidadOcupada() {
         ocultarTodo();
+        unidadOcupadaFrame.setVisible(true);
+    }
+
+    @Override
+    public void abrirUnidadOcupada(UnidadFisicaDTO unidad) {
+        prepararDatosSolicitud();
+        ocultarTodo();
+        unidadOcupadaFrame.cargarOcupada(solicitudActual, unidad);
         unidadOcupadaFrame.setVisible(true);
     }
 
@@ -541,23 +557,29 @@ public class ContratacionRenta implements IContratacionRenta {
 
         unidadesCat320 = new ArrayList<>();
         unidadesCat320.add(unidad(1L, "M-001", "Disponible", new ArrayList<>()));
-        unidadesCat320.add(unidad(2L, "M-002", "En mantenimiento", new ArrayList<>()));
+        unidadesCat320.add(unidad(2L, "M-002", "En mantenimiento", mantenimiento(inicio, fin)));
         unidadesCat320.add(unidad(3L, "M-003", "Disponible", ocupacion(ocupadaDesde, fin)));
 
         unidadesCat336 = new ArrayList<>();
         unidadesCat336.add(unidad(4L, "N-001", "Disponible", new ArrayList<>()));
-        unidadesCat336.add(unidad(5L, "N-002", "En mantenimiento", new ArrayList<>()));
+        unidadesCat336.add(unidad(5L, "N-002", "En mantenimiento", mantenimiento(inicio, fin)));
         unidadesCat336.add(unidad(6L, "N-003", "Disponible", ocupacion(ocupadaDesde, fin)));
 
         unidadesJcb = new ArrayList<>();
         unidadesJcb.add(unidad(7L, "J-001", "Disponible", new ArrayList<>()));
-        unidadesJcb.add(unidad(8L, "J-002", "En mantenimiento", new ArrayList<>()));
+        unidadesJcb.add(unidad(8L, "J-002", "En mantenimiento", mantenimiento(inicio, fin)));
         unidadesJcb.add(unidad(9L, "J-003", "Disponible", ocupacion(ocupadaDesde, fin)));
     }
 
     private List<OcupacionUnidadDTO> ocupacion(LocalDate desde, LocalDate hasta) {
         List<OcupacionUnidadDTO> lista = new ArrayList<>();
         lista.add(new OcupacionUnidadDTO(desde, hasta, "Renta", "Confirmada"));
+        return lista;
+    }
+
+    private List<OcupacionUnidadDTO> mantenimiento(LocalDate desde, LocalDate hasta) {
+        List<OcupacionUnidadDTO> lista = new ArrayList<>();
+        lista.add(new OcupacionUnidadDTO(desde, hasta, "Mantenimiento preventivo", "En curso"));
         return lista;
     }
 
