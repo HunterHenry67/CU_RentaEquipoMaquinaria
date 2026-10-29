@@ -62,21 +62,22 @@ import presentacion.vistas.VerificacionInventarioFrame;
 public class ContratacionRenta implements IContratacionRenta {
 
     private static final double TARIFA_DIARIA_SIMULADA = 1500.0;
+    private static final String FOLIO_SIMULADO = "FOL-89241";
     private static final double IVA_SIMULADO = 0.16;
 
-    private InicioSesionFrame iniciarSesionFrame;
+    private InicioSesionFrame inicioSesionFrame;
     private MenuPrincipalFrame menuPrincipalFrame;
     private IdentificacionClienteFrame identificacionClienteFrame;
-    private RegistroClienteFrame registrarClienteFrame;
-    private BusquedaEquipoFrame busquedaEquipoForm;
-    private SolicitudRentaFrame solicitudRentaForm;
+    private RegistroClienteFrame registroClienteFrame;
+    private BusquedaEquipoFrame busquedaEquipoFrame;
+    private SolicitudRentaFrame solicitudRentaFrame;
     private AnalisisRequerimientoFrame analisisRequerimientoFrame;
     private SolicitudDatosFaltantesFrame solicitudDatosFaltantesFrame;
     private EquiposCompatiblesFrame equiposCompatiblesFrame;
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
-    private CambiarPeriodoFrame cambiarPeriodo;
+    private CambiarPeriodoFrame cambiarPeriodoFrame;
     private VerificacionInventarioFrame verificacionInventarioFrame;
     private UnidadMantenimientoFrame unidadMantenimientoFrame;
     private UnidadOcupadaFrame unidadOcupadaFrame;
@@ -89,7 +90,6 @@ public class ContratacionRenta implements IContratacionRenta {
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
     private ContratacionRentaDTO contratacionActual;
-    private List<EquipoDTO> catalogoEquipos;
     private List<UnidadFisicaDTO> unidadesCat320;
     private List<UnidadFisicaDTO> unidadesCat336;
     private List<UnidadFisicaDTO> unidadesJcb;
@@ -103,21 +103,21 @@ public class ContratacionRenta implements IContratacionRenta {
 
     public ContratacionRenta() {
         this.almacenTemporal = new AlmacenTemporal();
-        this.iniciarSesionFrame = new InicioSesionFrame(this);
+        this.inicioSesionFrame = new InicioSesionFrame(this);
         this.menuPrincipalFrame = new MenuPrincipalFrame(this);
         this.identificacionClienteFrame = new IdentificacionClienteFrame(this);
         this.identificacionClienteFrame.cargarClientes(almacenTemporal.getListaClientesTemp());
-        this.registrarClienteFrame = new RegistroClienteFrame(this);
-        this.busquedaEquipoForm = new BusquedaEquipoFrame(this);
-        this.busquedaEquipoForm.cargarEquiposEnTabla(almacenTemporal.getCatalogoEquipo());
-        this.solicitudRentaForm = new SolicitudRentaFrame(this);
+        this.registroClienteFrame = new RegistroClienteFrame(this);
+        this.busquedaEquipoFrame = new BusquedaEquipoFrame(this);
+        this.busquedaEquipoFrame.cargarEquiposEnTabla(almacenTemporal.getCatalogoEquipo());
+        this.solicitudRentaFrame = new SolicitudRentaFrame(this);
         this.analisisRequerimientoFrame = new AnalisisRequerimientoFrame(this);
         this.solicitudDatosFaltantesFrame = new SolicitudDatosFaltantesFrame(this);
         this.equiposCompatiblesFrame = new EquiposCompatiblesFrame(this);
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
-        this.cambiarPeriodo = new CambiarPeriodoFrame(this);
+        this.cambiarPeriodoFrame = new CambiarPeriodoFrame(this);
         this.verificacionInventarioFrame = new VerificacionInventarioFrame(this);
         this.unidadMantenimientoFrame = new UnidadMantenimientoFrame(this);
         this.unidadOcupadaFrame = new UnidadOcupadaFrame(this);
@@ -132,13 +132,12 @@ public class ContratacionRenta implements IContratacionRenta {
         this.ordenEntregaFrame = new OrdenEntregaFrame(this);
         this.motivoRechazoFrame = new MotivoRechazoFrame(this);
 
-        this.abrirIniciarSesion();
     }
 
     @Override
     public void abrirIniciarSesion() {
         ocultarTodo();
-        iniciarSesionFrame.setVisible(true);
+        inicioSesionFrame.setVisible(true);
     }
 
     @Override
@@ -148,6 +147,7 @@ public class ContratacionRenta implements IContratacionRenta {
         cotizacionActual = null;
         contratacionActual = null;
         clienteActual = null;
+        solicitudRentaFrame.limpiar();
         ocultarTodo();
         menuPrincipalFrame.setVisible(true);
     }
@@ -160,20 +160,21 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirBusquedaEquipo() {
+        busquedaEquipoFrame.cargarEquiposEnTabla(almacenTemporal.getCatalogoEquipo());
         ocultarTodo();
-        busquedaEquipoForm.setVisible(true);
+        busquedaEquipoFrame.setVisible(true);
     }
 
     @Override
     public void abrirRegistrarCliente() {
         ocultarTodo();
-        registrarClienteFrame.setVisible(true);
+        registroClienteFrame.setVisible(true);
     }
 
     @Override
     public void abrirSolicitudRenta() {
         ocultarTodo();
-        solicitudRentaForm.setVisible(true);
+        solicitudRentaFrame.setVisible(true);
     }
 
     @Override
@@ -228,22 +229,16 @@ public class ContratacionRenta implements IContratacionRenta {
     public void abrirCambiarPeriodo() {
         prepararDatosSolicitud();
         ocultarTodo();
-        cambiarPeriodo.cargarPeriodo(solicitudActual);
-        cambiarPeriodo.setVisible(true);
+        cambiarPeriodoFrame.cargarPeriodo(solicitudActual);
+        cambiarPeriodoFrame.setVisible(true);
     }
 
     @Override
     public void abrirVerificacionInventario() {
         prepararDatosSolicitud();
         ocultarTodo();
-        verificacionInventarioFrame.cargarSolicitud(solicitudActual, unidadesSegunModelo());   // ⬅ aquí se usa
+        verificacionInventarioFrame.cargarSolicitud(solicitudActual, unidadesSegunModelo());
         verificacionInventarioFrame.setVisible(true);
-    }
-
-    @Override
-    public void abrirUnidadMantenimiento() {
-        ocultarTodo();
-        unidadMantenimientoFrame.setVisible(true);
     }
 
     @Override
@@ -252,12 +247,6 @@ public class ContratacionRenta implements IContratacionRenta {
         ocultarTodo();
         unidadMantenimientoFrame.cargarMantenimiento(solicitudActual, unidad);
         unidadMantenimientoFrame.setVisible(true);
-    }
-
-    @Override
-    public void abrirUnidadOcupada() {
-        ocultarTodo();
-        unidadOcupadaFrame.setVisible(true);
     }
 
     @Override
@@ -290,7 +279,7 @@ public class ContratacionRenta implements IContratacionRenta {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
         ocultarTodo();
-        propuestaRentaFrame.cargarDatos(solicitudActual);
+        propuestaRentaFrame.cargarDatos(solicitudActual, cotizacionActual);
         propuestaRentaFrame.setVisible(true);
     }
 
@@ -310,8 +299,14 @@ public class ContratacionRenta implements IContratacionRenta {
         cotizacionActual.setDecision(decision);
         contratacionActual = armarContratacion(decision);
         ocultarTodo();
-        if ("NO ACEPTA INDISPENSABLE".equals(decision.getTipoDecision())) {
+        if ("RECHAZA".equals(decision.getTipoDecision())) {
+            solicitudActual.setEstadoSolicitud("Rechazada");
+            contratacionActual.setEstado("RECHAZADA");
+            ordenEntregaFrame.cargarDatosRechazada(solicitudActual, contratacionActual, decision.getObservaciones());
+            ordenEntregaFrame.setVisible(true);
+        } else if ("NO ACEPTA INDISPENSABLE".equals(decision.getTipoDecision())) {
             // sin el accesorio indispensable no hay condiciones que revisar: la solicitud queda pendiente
+            contratacionActual.setEstado("PENDIENTE POR ACCESORIO");
             ordenEntregaFrame.cargarDatos(solicitudActual, contratacionActual);
             ordenEntregaFrame.setVisible(true);
         } else {
@@ -332,7 +327,7 @@ public class ContratacionRenta implements IContratacionRenta {
         List<AccesorioDTO> accesorios = new ArrayList<>();
         EquipoDTO equipo = equipoRecomendado();
         if (equipo != null) {
-            contratacion.setTarifaAcordada(equipo.getCostoDiario());
+            contratacion.setTarifaAcordada(tarifaDiaria(equipo));
             if (equipo.getAccesorios() != null && !"NO ACEPTA INDISPENSABLE".equals(tipo)) {
                 for (AccesorioDTO accesorio : equipo.getAccesorios()) {
                     if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || !"ACEPTA PARCIAL".equals(tipo)) {
@@ -352,6 +347,32 @@ public class ContratacionRenta implements IContratacionRenta {
         return contratacion;
     }
 
+
+    @Override
+    public void pasarDatosCancelacion(SolicitudRentaDTO solicitud) {
+        prepararDatosSolicitud();
+        solicitudActual.setEstadoSolicitud(solicitud.getEstadoSolicitud());
+        solicitudActual.setMotivoCancelacion(solicitud.getMotivoCancelacion());
+        abrirMenuPrincipal();
+    }
+
+    // Unidad en mantenimiento u ocupada: se toma el equipo alternativo de la evaluación y se buscan sus unidades
+    @Override
+    public void usarEquipoAlternativo() {
+        prepararDatosSolicitud();
+        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
+        EvaluacionTecnicaDTO evaluacion = pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
+        if (evaluacion == null || evaluacion.getAlternativo() == null) {
+            abrirEquiposCompatibles();
+            return;
+        }
+        EquipoDTO recomendado = evaluacion.getRecomendado();
+        evaluacion.setRecomendado(evaluacion.getAlternativo());
+        evaluacion.setAlternativo(recomendado);
+        solicitudActual.setUnidadSeleccionada(null);
+        cotizacionActual = null;
+        abrirVerificacionInventario();
+    }
 
     @Override
     public void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion) {
@@ -402,22 +423,7 @@ public class ContratacionRenta implements IContratacionRenta {
         motivoRechazoFrame.setVisible(true);
     }
 
-    @Override
-    public void abrirOrdenEntregaRechazada(String motivo) {
-        prepararDatosSolicitud();
-        prepararDatosCotizacion();
-       
-        DecisionClienteDTO decision = new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo);
-        cotizacionActual.setDecision(decision);
-        solicitudActual.setEstadoSolicitud("Rechazada");
-        contratacionActual = armarContratacion(decision);
-        contratacionActual.setEstado("RECHAZADA");
-        ocultarTodo();
-        ordenEntregaFrame.cargarDatosRechazada(solicitudActual, contratacionActual, motivo);
-        ordenEntregaFrame.setVisible(true);
-    }
 
-    // Estos métodos no servirán para sobreecargar los datos en las pantallas
     @Override
     public void pasarDatosUsuario(UsuarioDTO dto) {
         this.usuarioDTO = dto;
@@ -427,9 +433,10 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosSolicitudRenta(ClienteDTO dto) {
         this.clienteActual = dto;
-        solicitudRentaForm.cargarDatosCliente(clienteActual);
+        solicitudRentaFrame.cargarDatosCliente(clienteActual);
+        solicitudRentaFrame.cargarFolio(FOLIO_SIMULADO);
         ocultarTodo();
-        solicitudRentaForm.setVisible(true);
+        solicitudRentaFrame.setVisible(true);
     }
 
     @Override
@@ -441,9 +448,9 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosRegistroCliente(ClienteDTO dto) {
         this.clienteActual = dto;
-        registrarClienteFrame.cargarDatosRegistroCliente(this.clienteActual);
+        registroClienteFrame.cargarDatosRegistroCliente(this.clienteActual);
         ocultarTodo();
-        solicitudRentaForm.setVisible(true);
+        registroClienteFrame.setVisible(true);
     }
 
     @Override
@@ -494,8 +501,8 @@ public class ContratacionRenta implements IContratacionRenta {
             this.solicitudActual = new SolicitudRentaDTO();
         }
         this.solicitudActual.getEquiposSolicitados().add(equipo);
-        if (solicitudRentaForm != null) {
-            solicitudRentaForm.cargarEquiposSolicitadosEnTabla(this.solicitudActual.getEquiposSolicitados());
+        if (solicitudRentaFrame != null) {
+            solicitudRentaFrame.cargarEquiposSolicitadosEnTabla(this.solicitudActual.getEquiposSolicitados());
         }
     }
 
@@ -527,7 +534,7 @@ public class ContratacionRenta implements IContratacionRenta {
                     : almacenTemporal.getClienteEscenario());
         }
         if (solicitudActual.getFolio() == null) {
-            solicitudActual.setFolio("FOL-89241");
+            solicitudActual.setFolio(FOLIO_SIMULADO);
         }
         if (solicitudActual.getPeriodo() == null) {
             solicitudActual.setPeriodo(new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6));
@@ -543,6 +550,11 @@ public class ContratacionRenta implements IContratacionRenta {
     // Arma la cotización con lo que se eligió en la solicitud: equipo recomendado, sus accesorios
     // y los días del periodo. La tarifa (para equipos sin costo registrado) y el IVA son simulados
     // mientras no exista el subsistema de negocio que los calcule.
+    // La misma tarifa en la cotización, la propuesta, la verificación y la orden
+    private double tarifaDiaria(EquipoDTO equipo) {
+        return equipo.getCostoDiario() != null ? equipo.getCostoDiario() : TARIFA_DIARIA_SIMULADA;
+    }
+
     private CotizacionDTO armarCotizacion() {
         EquipoDTO equipo = equipoRecomendado();
         Integer dias = solicitudActual.getPeriodo().getDiasRenta();
@@ -551,7 +563,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return new CotizacionDTO(1L, LocalDate.now(), LocalDate.now().plusDays(15),
                     9500.0, 1520.0, 11020.0, almacenTemporal.getListaDetalleCotizacionTemp(), null);
         }
-        double tarifa = equipo.getCostoDiario() != null ? equipo.getCostoDiario() : TARIFA_DIARIA_SIMULADA;
+        double tarifa = tarifaDiaria(equipo);
         double subtotal = tarifa * dias;
         List<DetalleCotizacionDTO> detalles = new ArrayList<>();
         detalles.add(new DetalleCotizacionDTO("Equipo", equipo.getModelo(), dias, tarifa, subtotal, equipo, null));
@@ -582,7 +594,7 @@ public class ContratacionRenta implements IContratacionRenta {
             solicitudActual.setCliente(clienteActual != null ? clienteActual : almacenTemporal.getClienteEscenario());
         }
         if (solicitudActual.getFolio() == null) {
-            solicitudActual.setFolio("FOL-89241");
+            solicitudActual.setFolio(FOLIO_SIMULADO);
         }
         if (solicitudActual.getNombreObra() == null) {
             solicitudActual.setNombreObra("Remodelación Plaza Goya");
@@ -613,24 +625,9 @@ public class ContratacionRenta implements IContratacionRenta {
         }
     }
 
-    // Catálogo de equipos mientras no haya persistencia. Solo lleva los datos que da el
-    // escenario (la JCB tiene 109 HP y la CAT 320 cuesta $1,500 por día); lo que no se
-    // sabe se queda vacío y no descarta al equipo cuando se compara con lo requerido.
+    // El catálogo es el del almacén temporal (el mismo que ve Búsqueda de equipo)
     private List<EquipoDTO> catalogoEquipos() {
-        if (catalogoEquipos == null) {
-            catalogoEquipos = new ArrayList<>();
-            EquipoDTO jcb = equipo(1L, "JCB", "Retroexcavadora JCB");
-            jcb.setPotencia(109.0);
-            EquipoDTO cat320 = equipo(2L, "CAT", "Excavadora CAT 320");
-            cat320.setCostoDiario(1500.0);
-            cat320.setAccesorios(accesoriosDeExcavadora());
-            EquipoDTO cat336 = equipo(3L, "CAT", "Excavadora CAT 336");
-            cat336.setAccesorios(accesoriosDeExcavadora());
-            catalogoEquipos.add(jcb);
-            catalogoEquipos.add(cat320);
-            catalogoEquipos.add(cat336);
-        }
-        return catalogoEquipos;
+        return almacenTemporal.getCatalogoEquipo();
     }
 
     private UnidadFisicaDTO unidad(Long id, String numero, String estado, List<OcupacionUnidadDTO> ocupaciones) {
@@ -731,32 +728,6 @@ public class ContratacionRenta implements IContratacionRenta {
         return motivos.isEmpty() ? null : String.join(", ", motivos);
     }
 
-    // Esta clase la señalo porque no se si se reemplzará por la que está en almacenamiento.
-    private EquipoDTO equipo(Long id, String marca, String modelo) {
-        EquipoDTO equipo = new EquipoDTO();
-        equipo.setIdEquipo(id);
-        equipo.setMarca(marca);
-        equipo.setModelo(modelo);
-        equipo.setAccesorios(new ArrayList<>());
-        return equipo;
-    }
-
-    private List<AccesorioDTO> accesoriosDeExcavadora() {
-        List<AccesorioDTO> accesorios = new ArrayList<>();
-        accesorios.add(accesorio(1L, "Kit de señalización", 300.0, true));
-        accesorios.add(accesorio(2L, "Cucharón adicional 1.20 m", 200.0, false));
-        return accesorios;
-    }
-
-    private AccesorioDTO accesorio(Long id, String nombre, Double costo, boolean obligatorio) {
-        AccesorioDTO accesorio = new AccesorioDTO();
-        accesorio.setIdAccesorio(id);
-        accesorio.setNombre(nombre);
-        accesorio.setCostoRenta(costo);
-        accesorio.setEsObligatorio(obligatorio);
-        return accesorio;
-    }
-
     // Todos los accesorios que hay en el catálogo para el equipo recomendado en F2
     private List<AccesorioDTO> accesoriosDelRecomendado() {
         List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
@@ -774,8 +745,8 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void ocultarTodo() {
-        if (iniciarSesionFrame != null) {
-            iniciarSesionFrame.setVisible(false);
+        if (inicioSesionFrame != null) {
+            inicioSesionFrame.setVisible(false);
         }
         if (menuPrincipalFrame != null) {
             menuPrincipalFrame.setVisible(false);
@@ -783,14 +754,14 @@ public class ContratacionRenta implements IContratacionRenta {
         if (identificacionClienteFrame != null) {
             identificacionClienteFrame.setVisible(false);
         }
-        if (busquedaEquipoForm != null) {
-            busquedaEquipoForm.setVisible(false);
+        if (busquedaEquipoFrame != null) {
+            busquedaEquipoFrame.setVisible(false);
         }
-        if (registrarClienteFrame != null) {
-            registrarClienteFrame.setVisible(false);
+        if (registroClienteFrame != null) {
+            registroClienteFrame.setVisible(false);
         }
-        if (solicitudRentaForm != null) {
-            solicitudRentaForm.setVisible(false);
+        if (solicitudRentaFrame != null) {
+            solicitudRentaFrame.setVisible(false);
         }
         if (analisisRequerimientoFrame != null) {
             analisisRequerimientoFrame.setVisible(false);
@@ -810,8 +781,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if (evaluacionTecnicaFrame != null) {
             evaluacionTecnicaFrame.setVisible(false);
         }
-        if (cambiarPeriodo != null) {
-            cambiarPeriodo.setVisible(false);
+        if (cambiarPeriodoFrame != null) {
+            cambiarPeriodoFrame.setVisible(false);
         }
         if (verificacionInventarioFrame != null) {
             verificacionInventarioFrame.setVisible(false);

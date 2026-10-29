@@ -4,10 +4,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import objetosdto.AccesorioDTO;
+import objetosdto.CotizacionDTO;
 import objetosdto.DecisionClienteDTO;
+import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
+import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
 
 public class PropuestaRentaFrame extends javax.swing.JFrame {
@@ -24,8 +27,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     private boolean hayObligatorio = true;
     private boolean hayOpcional = true;
 
-    // Todavía ninguna pantalla guarda la unidad elegida en el inventario
-    private String unidad = "M-001";
+    private String unidad = "sin elegir";
     private static final double IVA = 0.16;
 
     private final java.text.DecimalFormat moneda = new java.text.DecimalFormat("$#,##0");
@@ -612,13 +614,11 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRechazarActionPerformed
 
     // El controlador lo llama cada vez que se abre la pantalla
-    public void reiniciar() {
-        incluye = true;
-        recalcular();
-    }
     
-    public void cargarDatos(SolicitudRentaDTO solicitud) {
+    public void cargarDatos(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
         incluye = true;
+        UnidadFisicaDTO elegida = solicitud.getUnidadSeleccionada();
+        unidad = elegida != null && elegida.getNumeroEconomico() != null ? elegida.getNumeroEconomico() : "sin elegir";
 
         EquipoDTO equipo = null;
         if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
@@ -639,6 +639,14 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
             nombreEquipo = equipo.getModelo();
             if (equipo.getCostoDiario() != null) {
                 tarifaDia = equipo.getCostoDiario();
+            }
+            // la tarifa es la misma con la que el control armó la cotización
+            if (cotizacion != null && cotizacion.getDetalles() != null) {
+                for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
+                    if (detalle.getEquipo() != null && detalle.getPrecioUnitario() != null) {
+                        tarifaDia = detalle.getPrecioUnitario();
+                    }
+                }
             }
             if (equipo.getAccesorios() != null) {
                 for (int i = 0; i < equipo.getAccesorios().size(); i++) {

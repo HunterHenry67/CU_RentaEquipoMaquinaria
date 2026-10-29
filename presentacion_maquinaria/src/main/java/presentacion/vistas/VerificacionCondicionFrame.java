@@ -16,7 +16,6 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
 
     private ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
     
-    private String unidad = "M-001";
     
     public VerificacionCondicionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -350,7 +349,14 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        // Orden finalizada
+        // Orden finalizada: todas las condiciones deben estar revisadas
+        for (javax.swing.JCheckBox casilla : casillas()) {
+            if (!casilla.isSelected()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Falta revisar: " + casilla.getText() + ". Marca todas las condiciones para generar la orden.",
+                        "Verificación de condiciones", javax.swing.JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
         contratacion.setEstado("FORMALIZADA");
         contratacionRenta.pasarDatosOrdenEntrega(contratacion);
     }//GEN-LAST:event_btnGenerarActionPerformed
@@ -361,8 +367,18 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         contratacionRenta.pasarDatosOrdenEntrega(contratacion);
     }//GEN-LAST:event_btnNoGenerarActionPerformed
 
+    private javax.swing.JCheckBox[] casillas() {
+        return new javax.swing.JCheckBox[]{chkCliente, chkEquipo, chkAccesorios, chkPeriodo, chkTarifa};
+    }
+
     public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
         this.contratacion = contratacion;
+        String unidad = contratacion.getUnidad() != null && contratacion.getUnidad().getNumeroEconomico() != null
+                ? contratacion.getUnidad().getNumeroEconomico() : "sin elegir";
+        // cada contratación empieza con las condiciones por revisar
+        for (javax.swing.JCheckBox casilla : casillas()) {
+            casilla.setSelected(true);
+        }
 
         EquipoDTO equipo = null;
         if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
@@ -387,7 +403,9 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         String nombresAccesorios = "";
         if (equipo != null) {
             nombreEquipo = equipo.getModelo();
-            if (equipo.getCostoDiario() != null) {
+            if (contratacion.getTarifaAcordada() != null) {
+                tarifa = contratacion.getTarifaAcordada();
+            } else if (equipo.getCostoDiario() != null) {
                 tarifa = equipo.getCostoDiario();
             }
             // los accesorios son los que aceptó el cliente
@@ -431,7 +449,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         lblDepositoValor.setText(String.format("$%,.0f", deposito) + " MXN");
         lblTotal.setText("Total de la renta: " + String.format("$%,.0f", total) + " (renta, accesorios e impuestos)");
         lblEntrega.setText("<html>Entrega confirmada: " + inicio.format(formato) + " antes de las 8:00 AM, en "
-                + solicitud.getDireccionObra() + ".<br>Al generar la orden, la " + unidad
+                + solicitud.getDireccionObra() + ".<br>Al generar la orden, la unidad " + unidad
                 + " queda ocupada del " + inicio.format(DateTimeFormatter.ofPattern("dd")) + " al "
                 + fin.format(DateTimeFormatter.ofPattern("dd/MM")) + ".</html>");
     }

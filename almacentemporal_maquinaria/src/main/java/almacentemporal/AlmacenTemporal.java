@@ -59,14 +59,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     }
 
     @Override
-    public List<EquipoDTO> getListaEquipoTemp() {
-        List<EquipoDTO> listaEquipos = new ArrayList<>();
-        listaEquipos.add(new EquipoDTO(1L, "CAT", "320", 140.0, 21500.0, 2.5, 6.5, 1500.0, null));
-        listaEquipos.add(new EquipoDTO(2L, "JCB", "3CX", 92.0, 7500.0, 2.3, 4.3, 1200.0, null));
-        return listaEquipos;
-    }
-
-    @Override
     public List<DetalleCotizacionDTO> getListaDetalleCotizacionTemp() {
         List<DetalleCotizacionDTO> detalles = new ArrayList<>();
         detalles.add(new DetalleCotizacionDTO("Equipo", "Excavadora CAT 320 (M-001)", 6, 1500.0, 9000.0, null, null));
@@ -122,7 +114,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     }
     
     
-    // No estoy seguro si es temporal 
     private EquipoDTO equipo(Long id, String marca, String modelo) {
         EquipoDTO equipo = new EquipoDTO();
         equipo.setIdEquipo(id);
@@ -131,7 +122,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
         equipo.setAccesorios(new ArrayList<>());
         return equipo;
     }
-    // No estoy seguro si es temporal
     private AccesorioDTO accesorio(Long id, String nombre, Double costo, boolean obligatorio) {
         AccesorioDTO accesorio = new AccesorioDTO();
         accesorio.setIdAccesorio(id);

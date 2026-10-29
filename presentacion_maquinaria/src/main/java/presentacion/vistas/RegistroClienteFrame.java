@@ -43,15 +43,14 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 txtFieldNombreEncargado.setText(empresa.getNombreEncargadoEmpresa());
                 txtFieldPuestoEncargado.setText(empresa.getPuestoEncargadoEmpresa());
                 txtFieldTelefonoEncargado.setText(empresa.getTelefonoEncargadoEmpresa());
+                mostrarArchivo(empresa.getArchivoIdentificacionEncargado());
             } else {
                 panelEncargado.setVisible(false);
                 radioBtnClientePart.setSelected(true);
                 txtFieldNombreEncargado.setText("");
                 txtFieldPuestoEncargado.setText("");
                 txtFieldTelefonoEncargado.setText("");
-                archivoIdentificacion = null;
-                btnSeleccionarArchivo.setText("Seleccionar Archivo");
-                btnSeleccionarArchivo.setToolTipText(null);
+                mostrarArchivo(null);
             }
         } else {
             txtFieldNombre.setText("");
@@ -63,7 +62,14 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             txtFieldTelefonoEncargado.setText("");
             radioBtnClientePart.setSelected(true);
             panelEncargado.setVisible(false);
+            mostrarArchivo(null);
         }
+    }
+
+    private void mostrarArchivo(String ruta) {
+        archivoIdentificacion = ruta;
+        btnSeleccionarArchivo.setText(ruta == null ? "Seleccionar Archivo" : new java.io.File(ruta).getName());
+        btnSeleccionarArchivo.setToolTipText(ruta);
     }
 
     @SuppressWarnings("unchecked")
@@ -486,9 +492,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         javax.swing.JFileChooser selector = new javax.swing.JFileChooser();
         selector.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imagen o PDF", "jpg", "jpeg", "png", "pdf"));
         if (selector.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
-            archivoIdentificacion = selector.getSelectedFile().getAbsolutePath();
-            btnSeleccionarArchivo.setText(selector.getSelectedFile().getName());
-            btnSeleccionarArchivo.setToolTipText(archivoIdentificacion);
+            mostrarArchivo(selector.getSelectedFile().getAbsolutePath());
         }
     }//GEN-LAST:event_btnSeleccionarArchivoActionPerformed
 
@@ -516,6 +520,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText());
             empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncargado.getText());
             empresa.setArchivoIdentificacionEncargado(archivoIdentificacion);
+            empresa.setTipoCliente("Empresa");
             JOptionPane.showMessageDialog(this, "La Empresa ha sido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.pasarDatosSolicitudRenta(empresa);
         } else if (radioBtnClientePart.isSelected()) {
@@ -524,6 +529,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             particular.setRfc(txtFieldRFC.getText());
             particular.setTelefono(txtFieldTelefono.getText());
             particular.setCorreo(txtFieldCorreoElectro.getText());
+            particular.setTipoCliente("Particular");
             JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.pasarDatosSolicitudRenta(particular);
         }
@@ -551,10 +557,10 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioBtnEmpresa;
     private javax.swing.JTextField txtFieldCorreoElectro;
     private javax.swing.JTextField txtFieldNombre;
+    private javax.swing.JTextField txtFieldNombreEncargado;
     private javax.swing.JTextField txtFieldPuestoEncargado;
     private javax.swing.JTextField txtFieldRFC;
     private javax.swing.JTextField txtFieldTelefono;
     private javax.swing.JTextField txtFieldTelefonoEncargado;
-    private javax.swing.JTextField txtFieldNombreEncargado;
     // End of variables declaration//GEN-END:variables
 }

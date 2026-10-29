@@ -247,7 +247,7 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOtraUnidadActionPerformed
 
     private void btnUsarAlternativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsarAlternativaActionPerformed
-        contratacionRenta.abrirEquiposCompatibles();
+        contratacionRenta.usarEquipoAlternativo();
     }//GEN-LAST:event_btnUsarAlternativaActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed

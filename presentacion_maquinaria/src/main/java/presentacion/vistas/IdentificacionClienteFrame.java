@@ -320,7 +320,6 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
         this.contratacionRenta.pasarDatosRegistroCliente(null);
-        contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -346,7 +345,6 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         }
         ClienteDTO clienteSeleccionado = clientesMostrados.get(fila);
         this.contratacionRenta.pasarDatosRegistroCliente(clienteSeleccionado);
-        contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnModificarDatosActionPerformed
 
 

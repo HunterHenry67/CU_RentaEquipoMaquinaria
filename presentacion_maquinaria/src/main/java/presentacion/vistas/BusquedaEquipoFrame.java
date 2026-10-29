@@ -29,6 +29,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     public void cargarEquiposEnTabla(List<EquipoDTO> listaEquipos) {
         catalogo = listaEquipos;
+        txtFieldBusqueda.setText("");
         mostrarEquipos(listaEquipos);
     }
 
@@ -36,7 +37,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
         DefaultTableModel modelo = (DefaultTableModel) tableEquipoCatalogo.getModel();
         modelo.setRowCount(0);
         for (objetosdto.EquipoDTO e : listaEquipos) {
-            Object[] fila = {e.getMarca() + " " + e.getModelo(), "Costo diario: $" + e.getCostoDiario()};
+            Object[] fila = {e.getMarca() + " " + e.getModelo(), (e.getCostoDiario() == null ? "Sin tarifa" : String.format("Costo diario: $%,.0f", e.getCostoDiario()))};
             modelo.addRow(fila);
         }
     }
@@ -227,7 +228,6 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
             equipoSolicitado.setCantidad(1); 
             contratacionRenta.pasarDatosEquipoSolicitado(equipoSolicitado);
             contratacionRenta.abrirSolicitudRenta();
-            modelo.removeRow(filaSeleccionada);
             
             
         } else {

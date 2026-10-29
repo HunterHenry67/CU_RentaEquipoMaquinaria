@@ -429,7 +429,6 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setText("Finalizada");
             lblEstado.setForeground(verde);
             lblFechaEntregaTit.setText("Fecha de entrega:");
-            // CAMBIO 4: la fecha ya no es fija ("10/09/2026"), viene del periodo de la solicitud
             lblFechaEntrega.setText(textoFechaEntrega);
             lblIdentificacionEstado.setText("Cumplida");
             lblIdentificacionEstado.setForeground(verde);
@@ -440,7 +439,6 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setText("Pendiente");
             lblEstado.setForeground(naranja);
             lblFechaEntregaTit.setText("Inicio de la renta:");
-            // CAMBIO 4: igual que arriba, usa la fecha de inicio de la solicitud
             lblFechaEntrega.setText(textoFechaInicio);
             if (sinAccesorios) {
                 lblIdentificacionEstado.setText("Cumplida");
@@ -449,7 +447,6 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             } else {
                 lblIdentificacionEstado.setText("Pendiente");
                 lblIdentificacionEstado.setForeground(naranja);
-                // CAMBIO 5: el número de unidad ya no está escrito en el texto, sale del campo unidad
                 lblMotivo.setText("Falta una condición obligatoria: la contratación no se formaliza y la unidad " + unidad
                         + " no se aparta.");
             }
@@ -481,7 +478,9 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         String nombresAccesorios = "";
         if (equipo != null) {
             nombreEquipo = equipo.getModelo();
-            if (equipo.getCostoDiario() != null) {
+            if (contratacion.getTarifaAcordada() != null) {
+                tarifa = contratacion.getTarifaAcordada();
+            } else if (equipo.getCostoDiario() != null) {
                 tarifa = equipo.getCostoDiario();
             }
             // los accesorios son los que aceptó el cliente
@@ -550,7 +549,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDepositoEstado.setText(estadoDeposito);
 
         boolean finalizada = "FORMALIZADA".equals(contratacion.getEstado());
-        boolean conAccesorios = contratacion.getAccesorios() != null && !contratacion.getAccesorios().isEmpty();
+        boolean conAccesorios = !"PENDIENTE POR ACCESORIO".equals(contratacion.getEstado());
         configurar(conAccesorios, finalizada);
     }
     

@@ -20,8 +20,6 @@ public interface IAlmacenTemporal {
     
     public abstract List<ClienteDTO> getListaClientesTemp();
     
-    public abstract List<EquipoDTO> getListaEquipoTemp();
-    
     public abstract List<DetalleCotizacionDTO> getListaDetalleCotizacionTemp();
     
     public abstract List<RequisitoRentaDTO> getListaRequisitosRentaTemp();

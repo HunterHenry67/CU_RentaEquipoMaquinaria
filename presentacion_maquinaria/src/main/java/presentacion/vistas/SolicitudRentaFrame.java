@@ -4,19 +4,20 @@
  */
 package presentacion.vistas;
 
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import java.awt.CardLayout;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import objetosdto.ClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
-import java.awt.CardLayout;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import com.github.lgooddatepicker.components.DatePicker;
-import com.github.lgooddatepicker.components.DatePickerSettings;
-import java.util.List;
 import presentacion.control.IContratacionRenta;
+import presentacion.control.RequerimientosTecnicos;
 
 /**
  *
@@ -25,6 +26,7 @@ import presentacion.control.IContratacionRenta;
 public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private String folio;
 
     private DatePicker datePickerInicio;
     private DatePicker datePickerFinal;
@@ -79,9 +81,23 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         return datePickerFinal.getDate();
     }
 
-    public void setFechas(LocalDate inicio, LocalDate finalFecha) {
-        datePickerInicio.setDate(inicio);
-        datePickerFinal.setDate(finalFecha);
+    // El control la llama al volver al menú: la siguiente solicitud empieza en blanco
+    public void limpiar() {
+        txtFieldNombreObra.setText("");
+        txtFieldDireccion.setText("");
+        txtAreaActividadRealizar.setText("");
+        txtAreaCondicionExtra.setText("");
+        txtAreaRazonCancelacion.setText("");
+        datePickerInicio.setDate(null);
+        datePickerFinal.setDate(null);
+        comboTipoTrabajo.setSelectedIndex(0);
+        comboTipoTerreno.setSelectedIndex(0);
+        ((DefaultTableModel) tableEquipoSoli.getModel()).setRowCount(0);
+    }
+
+    public void cargarFolio(String folio) {
+        this.folio = folio;
+        lblFolio.setText("Folio: " + folio);
     }
 
     public void cargarDatosCliente(ClienteDTO clienteCargado) {
@@ -663,6 +679,12 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         }
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
         solicitudDTO.setFechaSolicitud(LocalDate.now());
+        solicitudDTO.setFolio(folio);
+        solicitudDTO.setTipoTrabajo(comboTipoTrabajo.getSelectedItem().toString());
+        String terreno = comboTipoTerreno.getSelectedItem().toString();
+        if (!terreno.equals("Sin especificar")) {
+            RequerimientosTecnicos.guardar(solicitudDTO.getRequerimientos(), RequerimientosTecnicos.TERRENO, terreno);
+        }
         solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
         solicitudDTO.setDireccionObra(txtFieldDireccion.getText());
         solicitudDTO.setDescripcionActividad(txtAreaActividadRealizar.getText());
@@ -685,13 +707,19 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
         
-        if(txtAreaRazonCancelacion.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Favor de desrcibir la razón de su cancelación.", "Error en el Registro de Cancelación", JOptionPane.WARNING_MESSAGE);
+        String razon = txtAreaRazonCancelacion.getText().trim();
+        if (razon.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Favor de describir la razón de su cancelación.", "Error en el Registro de Cancelación", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+        SolicitudRentaDTO cancelada = new SolicitudRentaDTO();
+        cancelada.setFolio(folio);
+        cancelada.setEstadoSolicitud("Cancelada");
+        cancelada.setMotivoCancelacion(razon);
         JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
         card.show(this.getContentPane(), "card1");
-        contratacionRenta.abrirMenuPrincipal();
+        contratacionRenta.pasarDatosCancelacion(cancelada);
     }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

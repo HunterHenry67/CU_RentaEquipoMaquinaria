@@ -1,6 +1,8 @@
 package presentacion.vistas;
 
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
+import objetosdto.DecisionClienteDTO;
 import presentacion.control.IContratacionRenta;
 
 public class MotivoRechazoFrame extends javax.swing.JFrame {
@@ -171,7 +173,7 @@ public class MotivoRechazoFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Favor de escribir el motivo del rechazo.", "Motivo del rechazo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        contratacionRenta.abrirOrdenEntregaRechazada(motivo);
+        contratacionRenta.pasarDatosDecisionCliente(new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo));
     }//GEN-LAST:event_btnEnviarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

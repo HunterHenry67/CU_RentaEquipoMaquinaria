@@ -10,7 +10,6 @@ import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
-import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
@@ -50,10 +49,6 @@ public interface IContratacionRenta {
 
     public abstract void abrirVerificacionInventario();
 
-    public abstract void abrirUnidadMantenimiento();
-
-    public abstract void abrirUnidadOcupada();
-
     public abstract void abrirCalendarioUnidad();
 
     public abstract void abrirCondicionesContratacion();
@@ -68,11 +63,14 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosDecisionCliente(DecisionClienteDTO decision);
 
+    public abstract void pasarDatosCancelacion(SolicitudRentaDTO solicitud);
+
+    public abstract void usarEquipoAlternativo();
+
     public abstract void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion);
 
     public abstract void abrirMotivoRechazo();
 
-    public abstract void abrirOrdenEntregaRechazada(String motivo);
 
     public abstract void pasarDatosUsuario(UsuarioDTO dto);
 
