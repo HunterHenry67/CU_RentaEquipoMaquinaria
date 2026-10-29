@@ -2,12 +2,10 @@ package presentacion.vistas;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import objetosdto.AccesorioDTO;
 import objetosdto.ContratacionRentaDTO;
+import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.OrdenEntregaDTO;
-import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 
@@ -454,70 +452,23 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDireccion.setVisible(finalizada);
     }
     
-    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
+    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
         EquipoDTO equipo = null;
         if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
                 && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
             equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
         }
 
-        // Periodo
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();
-        int dias = 1;
-        if (inicio != null && fin != null) {
-            dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
-        } else if (solicitud.getPeriodo().getDiasRenta() != null) {
-            dias = solicitud.getPeriodo().getDiasRenta();
-        }
 
-        // Equipo y accesorios
-        String nombreEquipo = "Sin equipo seleccionado";
-        double tarifa = 0;
-        double accesorios = 0;
-        String nombresAccesorios = "";
-        if (equipo != null) {
-            nombreEquipo = equipo.getModelo();
-            if (contratacion.getTarifaAcordada() != null) {
-                tarifa = contratacion.getTarifaAcordada();
-            } else if (equipo.getCostoDiario() != null) {
-                tarifa = equipo.getCostoDiario();
-            }
-            // los accesorios son los que aceptó el cliente
-            if (contratacion.getAccesorios() != null) {
-                for (int i = 0; i < contratacion.getAccesorios().size(); i++) {
-                    AccesorioDTO accesorio = contratacion.getAccesorios().get(i);
-                    if (accesorio.getCostoRenta() != null) {
-                        accesorios = accesorios + accesorio.getCostoRenta();
-                    }
-                    if (!nombresAccesorios.equals("")) {
-                        nombresAccesorios = nombresAccesorios + ", ";
-                    }
-                    nombresAccesorios = nombresAccesorios + accesorio.getNombre();
-                }
-            }
-        }
-        if (nombresAccesorios.equals("")) {
-            nombresAccesorios = "Ninguno";
-        }
-
-        // Depósito
-        double deposito = 0;
-        String estadoDeposito = "Cubierto";
-        if (solicitud.getRequisitos() != null) {
-            for (int i = 0; i < solicitud.getRequisitos().size(); i++) {
-                RequisitoRentaDTO requisito = solicitud.getRequisitos().get(i);
-                if (requisito.getMonto() != null) {
-                    deposito = requisito.getMonto();
-                    if (requisito.getEstadoRequisito() != null) {
-                        estadoDeposito = requisito.getEstadoRequisito();
-                    }
-                }
-            }
-        }
-
-        double renta = dias * tarifa;
-        double total = (renta + accesorios) * 1.16;
+        // Equipo y accesorios que aceptó el cliente; los importes vienen de la cotización que armó el control
+        String nombreEquipo = equipo != null ? equipo.getModelo() : "Sin equipo seleccionado";
+        String nombresAccesorios = Montos.nombres(contratacion.getAccesorios());
+        double renta = Montos.renta(cotizacion);
+        double accesorios = Montos.accesorios(cotizacion, null);
+        double total = Montos.total(cotizacion);
+        double deposito = contratacion.getDepositoGarantia() == null ? 0 : contratacion.getDepositoGarantia();
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         textoFechaInicio = inicio.format(formato);
@@ -536,8 +487,8 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             unidad = contratacion.getUnidad().getNumeroEconomico();
         }
         textoAccesorios = nombresAccesorios;
-        textoPrecioAccesorios = String.format("$%,.0f", accesorios);
-        textoTotal = "Total de la renta: " + String.format("$%,.0f", total);
+        textoPrecioAccesorios = Montos.moneda(accesorios);
+        textoTotal = "Total de la renta: " + Montos.moneda(total);
 
         lblCliente.setText(solicitud.getCliente().getNombre());
         lblEquipo.setText(nombreEquipo);
@@ -546,15 +497,15 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDireccion.setText("<html>Entrega en: " + direccion + "</html>");
         lblFin.setText(fin.format(formato));
         lblDepositoValor.setText(String.format("$%,.0f", deposito));
-        lblDepositoEstado.setText(estadoDeposito);
+        lblDepositoEstado.setText(Montos.estadoDeposito(solicitud.getRequisitos()));
 
         boolean finalizada = "FORMALIZADA".equals(contratacion.getEstado());
         boolean conAccesorios = !"PENDIENTE POR ACCESORIO".equals(contratacion.getEstado());
         configurar(conAccesorios, finalizada);
     }
     
-    public void cargarDatosRechazada(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, String motivo) {
-        cargarDatos(solicitud, contratacion);
+    public void cargarDatosRechazada(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion, String motivo) {
+        cargarDatos(solicitud, contratacion, cotizacion);
 
         setTitle("Solicitud - Rechazada");
         lblTitulo.setText("Solicitud - Rechazada");

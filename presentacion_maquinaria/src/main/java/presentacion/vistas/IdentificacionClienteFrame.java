@@ -6,7 +6,6 @@ package presentacion.vistas;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.ClienteDTO;
 import objetosdto.ClienteEmpresaDTO;
@@ -21,7 +20,6 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private IContratacionRenta contratacionRenta;  
 
     
-    private List<ClienteDTO> clientes = new ArrayList<>();
     private List<ClienteDTO> clientesMostrados = new ArrayList<>();
 
     public IdentificacionClienteFrame(IContratacionRenta contratacionRenta) {
@@ -32,9 +30,8 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
     // Los clientes registrados se los pasa el control (la pantalla no consulta el almacén)
     public void cargarClientes(List<ClienteDTO> listaClientes) {
-        clientes = listaClientes;
         txtFieldBusqCliente.setText("");
-        cargarClientesEnTabla(clientes);
+        cargarClientesEnTabla(listaClientes);
     }
 
     public void cargarClientesEnTabla(java.util.List<objetosdto.ClienteDTO> listaClientes) {
@@ -288,36 +285,12 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        String buscado = sinAcentos(txtFieldBusqCliente.getText());
-        if (buscado.isEmpty()) {
-            cargarClientesEnTabla(clientes);
-            return;
-        }
-        String filtro = comboFiltroBusqCliente.getSelectedItem().toString();
-        List<ClienteDTO> encontrados = new ArrayList<>();
-        for (ClienteDTO c : clientes) {
-            String dato;
-            if (filtro.equals("Nombre")) {
-                dato = c.getNombre();
-            } else if (filtro.equals("Teléfono")) {
-                dato = c.getTelefono();
-            } else {
-                dato = c.getRfc();
-            }
-            if (sinAcentos(dato).contains(buscado)) {
-                encontrados.add(c);
-            }
-        }
-        cargarClientesEnTabla(encontrados);
-        if (encontrados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No se encontró ningún cliente con ese dato. Si es nuevo, regístrelo.", "Búsqueda de Cliente", JOptionPane.INFORMATION_MESSAGE);
-        }
+        // la búsqueda la hace el control en el almacén temporal; aquí solo se manda lo escrito
+        contratacionRenta.buscarClientes(comboFiltroBusqCliente.getSelectedItem().toString(), txtFieldBusqCliente.getText());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
 
-    private String sinAcentos(String texto) {
-        return Textos.sinAcentos(texto);
-    }
+
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
         this.contratacionRenta.pasarDatosRegistroCliente(null);
@@ -328,24 +301,13 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
-        int filaSeleccionada = tableCliente.getSelectedRow();
-        if (filaSeleccionada != -1) {
-            ClienteDTO clienteSeleccionado = clientesMostrados.get(filaSeleccionada);
-            contratacionRenta.pasarDatosSolicitudRenta(clienteSeleccionado);
-        } else {
-            JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solicitud", JOptionPane.INFORMATION_MESSAGE);
-        }
-
+        int fila = tableCliente.getSelectedRow();
+        contratacionRenta.pasarDatosSolicitudRenta(fila == -1 ? null : clientesMostrados.get(fila));
     }//GEN-LAST:event_btnRegistrarNuevSoliActionPerformed
 
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
         int fila = tableCliente.getSelectedRow();
-        if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Favor de Seleccionar un Cliente para Modificar.");
-            return;
-        }
-        ClienteDTO clienteSeleccionado = clientesMostrados.get(fila);
-        this.contratacionRenta.pasarDatosRegistroCliente(clienteSeleccionado);
+        contratacionRenta.modificarCliente(fila == -1 ? null : clientesMostrados.get(fila));
     }//GEN-LAST:event_btnModificarDatosActionPerformed
 
 

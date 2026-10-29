@@ -8,7 +8,6 @@ import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.awt.CardLayout;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -94,6 +93,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         comboTipoTrabajo.setSelectedIndex(0);
         comboTipoTerreno.setSelectedIndex(0);
         ((DefaultTableModel) tableEquipoSoli.getModel()).setRowCount(0);
+        ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "card1");
     }
 
     public void cargarFolio(String folio) {
@@ -662,31 +662,15 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-
-        LocalDate fechaInicio = datePickerInicio.getDate();
-        LocalDate fechaFinal = datePickerFinal.getDate();
-
-        if (txtFieldDireccion.getText().isBlank() || txtFieldNombreObra.getText().isBlank() || fechaInicio == null || fechaFinal == null) {
-            JOptionPane.showMessageDialog(this, "Favor de llenar todos los campos obligatorios", "Error de Solicitud", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (fechaFinal.isBefore(fechaInicio)) {
-            JOptionPane.showMessageDialog(this, "La fecha final no puede ser anterior a la de inicio.", "Error de Solicitud", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (tableEquipoSoli.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Favor de agregar el equipo que solicita el cliente.", "Error de Solicitud", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        // se manda lo capturado; el control revisa los campos obligatorios, las fechas y el equipo
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
-        solicitudDTO.setFechaSolicitud(LocalDate.now());
         solicitudDTO.setFolio(folio);
+        solicitudDTO.setNombreObra(txtFieldNombreObra.getText().trim());
+        solicitudDTO.setDireccionObra(txtFieldDireccion.getText().trim());
         String terreno = comboTipoTerreno.getSelectedItem().toString();
         if (!terreno.equals("Sin especificar")) {
-            RequerimientosTecnicos.guardar(solicitudDTO.getRequerimientos(), RequerimientosTecnicos.TERRENO, terreno);
+            RequerimientosTecnicos.capturar(solicitudDTO.getRequerimientos(), RequerimientosTecnicos.TERRENO, terreno);
         }
-        solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
-        solicitudDTO.setDireccionObra(txtFieldDireccion.getText());
         String tipoTrabajo = comboTipoTrabajo.getSelectedItem().toString();
         String actividad = txtAreaActividadRealizar.getText().trim();
         if (!tipoTrabajo.equals("Sin especificar")) {
@@ -694,11 +678,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         }
         solicitudDTO.setDescripcionActividad(actividad);
         solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText());
-        solicitudDTO.setEstadoSolicitud("Pendiente");
-        objetosdto.PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO();
-        periodo.setFechaInicio(fechaInicio);
-        periodo.setFechaFin(fechaFinal);
-        periodo.setDiasRenta((int) ChronoUnit.DAYS.between(fechaInicio, fechaFinal) + 1);
+        PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO();
+        periodo.setFechaInicio(datePickerInicio.getDate());
+        periodo.setFechaFin(datePickerFinal.getDate());
         solicitudDTO.setPeriodo(periodo);
         for (int i = 0; i < tableEquipoSoli.getRowCount(); i++) {
             EquipoSolicitadoDTO equipo = new EquipoSolicitadoDTO();
@@ -706,24 +688,13 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             equipo.setCantidad(Integer.parseInt(tableEquipoSoli.getValueAt(i, 1).toString()));
             solicitudDTO.getEquiposSolicitados().add(equipo);
         }
-        JOptionPane.showMessageDialog(this, "La Solicitud de Renta ha sido Registrada Correctamente.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
-        this.contratacionRenta.pasarDatosAnalisisRequerimientos(solicitudDTO);
+        this.contratacionRenta.registrarSolicitud(solicitudDTO);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
-        
-        String razon = txtAreaRazonCancelacion.getText().trim();
-        if (razon.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Favor de describir la razón de su cancelación.", "Error en el Registro de Cancelación", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         SolicitudRentaDTO cancelada = new SolicitudRentaDTO();
         cancelada.setFolio(folio);
-        cancelada.setEstadoSolicitud("Cancelada");
-        cancelada.setMotivoCancelacion(razon);
-        JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
-        CardLayout card = (CardLayout) this.getContentPane().getLayout();
-        card.show(this.getContentPane(), "card1");
+        cancelada.setMotivoCancelacion(txtAreaRazonCancelacion.getText());
         contratacionRenta.pasarDatosCancelacion(cancelada);
     }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
 

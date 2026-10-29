@@ -4,7 +4,6 @@
  */
 package presentacion.vistas;
 
-import javax.swing.JOptionPane;
 import objetosdto.UsuarioDTO;
 import presentacion.control.IContratacionRenta;
 
@@ -163,28 +162,11 @@ public class InicioSesionFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldCorreoActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-
-        String correo = txtFieldCorreo.getText().trim();
-        String contrasenia = psswFiledContrasenia.getText();
-        String formatoCorreo = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        if (correo.isEmpty() || contrasenia.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Favor de ingresar el correo y la contraseña para iniciar sesión.", "Error de Inicio de Sesión", JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-        if (!correo.matches(formatoCorreo)) {
-            JOptionPane.showMessageDialog(this, "Formato de Correo Inválido.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (contrasenia.length() < 8) {
-            JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 8 caracteres.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        // el control revisa lo capturado y avisa si falta algo
         UsuarioDTO usuario = new UsuarioDTO();
-        usuario.setCorreo(txtFieldCorreo.getText());
-        usuario.setContrasenia(psswFiledContrasenia.getText());
-        JOptionPane.showMessageDialog(this, "Inicio de Sesión Exitoso.", "Inicio de Sesión", JOptionPane.PLAIN_MESSAGE);
+        usuario.setCorreo(txtFieldCorreo.getText().trim());
+        usuario.setContrasenia(new String(psswFiledContrasenia.getPassword()));
         contratacionRenta.pasarDatosUsuario(usuario);
-
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

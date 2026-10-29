@@ -36,11 +36,10 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
         if (unidad == null || unidad.getOcupaciones() == null) {
             return "";
         }
-        PeriodoSolicitadoDTO p = solicitud.getPeriodo();
+        // el control manda solo las ocupaciones que caen en el periodo
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
-            boolean seTraslapa = p == null || (!o.getFechaFin().isBefore(p.getFechaInicio()) && !o.getFechaInicio().isAfter(p.getFechaFin()));
-            if (seTraslapa) {
+            if (o.getMotivoOcupacion() != null) {
                 return unidad.getNumeroEconomico() + " · ocupada por " + o.getMotivoOcupacion().toLowerCase() + " del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
             }
         }
@@ -247,11 +246,6 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOtraUnidadActionPerformed
 
     private void btnUsarAlternativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsarAlternativaActionPerformed
-        java.util.List<objetosdto.EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
-        if (pedidos == null || pedidos.isEmpty() || pedidos.get(0).getEvaluacion() == null || pedidos.get(0).getEvaluacion().getAlternativo() == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "No se eligió un equipo alternativo; se abre Equipos compatibles para elegir otro.",
-                    "Usar la alternativa", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        }
         contratacionRenta.usarEquipoAlternativo();
     }//GEN-LAST:event_btnUsarAlternativaActionPerformed
 

@@ -273,11 +273,6 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEnviarVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarVerificacionActionPerformed
-        solicitud.setEstadoSolicitud("En verificación de disponibilidad");
-        javax.swing.JOptionPane.showMessageDialog(this,
-            "Evaluación técnica registrada con éxito.\nSolicitud enviada a verificación de inventario.",
-            "Evaluación Técnica",
-            javax.swing.JOptionPane.INFORMATION_MESSAGE);
         contratacionRenta.pasarDatosVerificacionInventario(solicitud);
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
 

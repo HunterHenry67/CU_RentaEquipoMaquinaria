@@ -38,7 +38,6 @@ public class CotizacionFrame extends javax.swing.JFrame {
                 + periodo.getFechaFin().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ")");
 
         StringBuilder accesorios = new StringBuilder();
-        double importeAccesorios = 0;
         for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
             if ("Equipo".equals(detalle.getTipoConcepto())) {
                 lblEquipo.setText("Equipo: " + detalle.getDescripcion());
@@ -50,11 +49,10 @@ public class CotizacionFrame extends javax.swing.JFrame {
                     accesorios.append(" + ");
                 }
                 accesorios.append(detalle.getDescripcion()).append(" ").append(formatoMoneda(detalle.getImporte()));
-                importeAccesorios += detalle.getImporte();
             }
         }
         lblAccesorios.setText("Accesorios (" + (accesorios.length() > 0 ? accesorios : "ninguno") + "):");
-        lblAccesoriosValor.setText(formatoMoneda(importeAccesorios));
+        lblAccesoriosValor.setText(formatoMoneda(Montos.accesorios(cotizacion, null)));
 
         lblSubtotalValor.setText(formatoMoneda(cotizacion.getSubtotal()));
         lblImpuestosValor.setText(formatoMoneda(cotizacion.getIva()));

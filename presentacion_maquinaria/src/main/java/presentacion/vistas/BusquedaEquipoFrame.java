@@ -4,9 +4,7 @@
  */
 package presentacion.vistas;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.EquipoDTO;
 import presentacion.control.IContratacionRenta;
@@ -18,7 +16,6 @@ import presentacion.control.IContratacionRenta;
 public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private List<EquipoDTO> catalogo = new ArrayList<>();
 
     // El catálogo se lo pasa el control con cargarEquiposEnTabla (la pantalla no consulta el almacén)
     public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
@@ -28,12 +25,12 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     }
 
     public void cargarEquiposEnTabla(List<EquipoDTO> listaEquipos) {
-        catalogo = listaEquipos;
         txtFieldBusqueda.setText("");
         mostrarEquipos(listaEquipos);
     }
 
-    private void mostrarEquipos(List<EquipoDTO> listaEquipos) {
+    // Lo que encontró el control al buscar
+    public void mostrarEquipos(List<EquipoDTO> listaEquipos) {
         DefaultTableModel modelo = (DefaultTableModel) tableEquipoCatalogo.getModel();
         modelo.setRowCount(0);
         for (objetosdto.EquipoDTO e : listaEquipos) {
@@ -200,18 +197,8 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // busca por marca o modelo; con el campo vacío se ve todo el catálogo
-        String buscado = Textos.sinAcentos(txtFieldBusqueda.getText());
-        List<EquipoDTO> encontrados = new ArrayList<>();
-        for (EquipoDTO e : catalogo) {
-            if (Textos.sinAcentos(e.getMarca() + " " + e.getModelo()).contains(buscado)) {
-                encontrados.add(e);
-            }
-        }
-        mostrarEquipos(encontrados);
-        if (encontrados.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay equipos en el catálogo con ese nombre.", "Búsqueda", JOptionPane.INFORMATION_MESSAGE);
-        }
+        // la búsqueda la hace el control en el catálogo del almacén temporal
+        contratacionRenta.buscarEquipos(txtFieldBusqueda.getText());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -220,19 +207,13 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     private void btnRegistrarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEquipoActionPerformed
         int filaSeleccionada = tableEquipoCatalogo.getSelectedRow();
+        objetosdto.EquipoSolicitadoDTO equipoSolicitado = null;
         if (filaSeleccionada != -1) {
-            DefaultTableModel modelo = (DefaultTableModel) tableEquipoCatalogo.getModel();
-            String equipoTexto = tableEquipoCatalogo.getValueAt(filaSeleccionada, 0).toString();
-            objetosdto.EquipoSolicitadoDTO equipoSolicitado = new objetosdto.EquipoSolicitadoDTO();
-            equipoSolicitado.setDescripcionEquipo(equipoTexto);
-            equipoSolicitado.setCantidad(1); 
-            contratacionRenta.pasarDatosEquipoSolicitado(equipoSolicitado);
-            contratacionRenta.abrirSolicitudRenta();
-            
-            
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, seleccione un equipo de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            equipoSolicitado = new objetosdto.EquipoSolicitadoDTO();
+            equipoSolicitado.setDescripcionEquipo(tableEquipoCatalogo.getValueAt(filaSeleccionada, 0).toString());
+            equipoSolicitado.setCantidad(1);
         }
+        contratacionRenta.pasarDatosEquipoSolicitado(equipoSolicitado);
     }//GEN-LAST:event_btnRegistrarEquipoActionPerformed
 
     /**

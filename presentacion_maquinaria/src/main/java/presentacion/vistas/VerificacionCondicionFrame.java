@@ -2,11 +2,9 @@ package presentacion.vistas;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import objetosdto.AccesorioDTO;
 import objetosdto.ContratacionRentaDTO;
+import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
-import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 
@@ -349,14 +347,14 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        // Orden finalizada: todas las condiciones deben estar revisadas
+        // las condiciones que marcó el asesor; el control revisa que estén todas
+        StringBuilder revisadas = new StringBuilder();
         for (javax.swing.JCheckBox casilla : casillas()) {
-            if (!casilla.isSelected()) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Falta revisar: " + casilla.getText() + ". Marca todas las condiciones para generar la orden.",
-                        "Verificación de condiciones", javax.swing.JOptionPane.WARNING_MESSAGE);
-                return;
+            if (casilla.isSelected()) {
+                revisadas.append(revisadas.length() > 0 ? ", " : "").append(casilla.getText());
             }
         }
+        contratacion.setCondicionesAcordadas(revisadas.toString());
         contratacion.setEstado("FORMALIZADA");
         contratacionRenta.pasarDatosOrdenEntrega(contratacion);
     }//GEN-LAST:event_btnGenerarActionPerformed
@@ -371,7 +369,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         return new javax.swing.JCheckBox[]{chkCliente, chkEquipo, chkAccesorios, chkPeriodo, chkTarifa};
     }
 
-    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
+    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
         this.contratacion = contratacion;
         String unidad = contratacion.getUnidad() != null && contratacion.getUnidad().getNumeroEconomico() != null
                 ? contratacion.getUnidad().getNumeroEconomico() : "sin elegir";
@@ -386,59 +384,16 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
             equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
         }
 
-        // Periodo
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();
-        int dias = 1;
-        if (inicio != null && fin != null) {
-            dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
-        } else if (solicitud.getPeriodo().getDiasRenta() != null) {
-            dias = solicitud.getPeriodo().getDiasRenta();
-        }
 
-        // Equipo y accesorios
-        String nombreEquipo = "Sin equipo seleccionado";
-        double tarifa = 0;
-        double accesorios = 0;
-        String nombresAccesorios = "";
-        if (equipo != null) {
-            nombreEquipo = equipo.getModelo();
-            if (contratacion.getTarifaAcordada() != null) {
-                tarifa = contratacion.getTarifaAcordada();
-            } else if (equipo.getCostoDiario() != null) {
-                tarifa = equipo.getCostoDiario();
-            }
-            // los accesorios son los que aceptó el cliente
-            if (contratacion.getAccesorios() != null) {
-                for (int i = 0; i < contratacion.getAccesorios().size(); i++) {
-                    AccesorioDTO accesorio = contratacion.getAccesorios().get(i);
-                    if (accesorio.getCostoRenta() != null) {
-                        accesorios = accesorios + accesorio.getCostoRenta();
-                    }
-                    if (!nombresAccesorios.equals("")) {
-                        nombresAccesorios = nombresAccesorios + ", ";
-                    }
-                    nombresAccesorios = nombresAccesorios + accesorio.getNombre();
-                }
-            }
-        }
-        if (nombresAccesorios.equals("")) {
-            nombresAccesorios = "Ninguno";
-        }
-
-        // Depósito
-        double deposito = 0;
-        if (solicitud.getRequisitos() != null) {
-            for (int i = 0; i < solicitud.getRequisitos().size(); i++) {
-                RequisitoRentaDTO requisito = solicitud.getRequisitos().get(i);
-                if (requisito.getMonto() != null) {
-                    deposito = requisito.getMonto();
-                }
-            }
-        }
-
-        double renta = dias * tarifa;
-        double total = (renta + accesorios) * 1.16;
+        // Equipo y accesorios que aceptó el cliente; los importes vienen de la cotización que armó el control
+        String nombreEquipo = equipo != null ? equipo.getModelo() : "Sin equipo seleccionado";
+        String nombresAccesorios = Montos.nombres(contratacion.getAccesorios());
+        double renta = Montos.renta(cotizacion);
+        double accesorios = Montos.accesorios(cotizacion, null);
+        double total = Montos.total(cotizacion);
+        double deposito = contratacion.getDepositoGarantia() == null ? 0 : contratacion.getDepositoGarantia();
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         lblCliente.setText(solicitud.getCliente().getNombre());

@@ -61,11 +61,9 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
                 dia++;
             }
             if (unidad != null && unidad.getOcupaciones() != null) {
+                // el control manda solo las ocupaciones que caen en el periodo
                 for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
-                    boolean seTraslapa = !o.getFechaFin().isBefore(periodo.getFechaInicio()) && !o.getFechaInicio().isAfter(periodo.getFechaFin());
-                    if (seTraslapa) {
-                        otraRenta = "del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
-                    }
+                    otraRenta = "del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
                 }
             }
         }

@@ -234,18 +234,11 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAjustarRequerimientoActionPerformed
 
     private void btnCerrarEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarEvaluacionActionPerformed
-        String motivo = txtAreaMotivo.getText().trim();
-        if (motivo.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Escribe el motivo antes de cerrar la evaluación.",
-                    "Sin Equipo Compatible", javax.swing.JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         EvaluacionTecnicaDTO evaluacion = evaluacion();
         if (evaluacion != null) {
-            evaluacion.setMotivoIncumplimiento(motivo);
+            evaluacion.setMotivoIncumplimiento(txtAreaMotivo.getText().trim());
         }
-        solicitud.setEstadoSolicitud("Sin solución técnica");
-        contratacionRenta.abrirMenuPrincipal();
+        contratacionRenta.cerrarEvaluacion(solicitud);
     }//GEN-LAST:event_btnCerrarEvaluacionActionPerformed
 
     private EvaluacionTecnicaDTO evaluacion() {

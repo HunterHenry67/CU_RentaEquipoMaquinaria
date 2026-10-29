@@ -2,13 +2,10 @@ package presentacion.vistas;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import objetosdto.AccesorioDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DecisionClienteDTO;
-import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
-import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
@@ -23,12 +20,11 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     private double totalIndispensables = 300;
     private double totalOpcionales = 200;
     private double deposito = 3200;
-    private boolean incluye = true;
+    private CotizacionDTO cotizacion;
     private boolean hayObligatorio = true;
     private boolean hayOpcional = true;
 
     private String unidad = "sin elegir";
-    private static final double IVA = 0.16;
 
     private final java.text.DecimalFormat moneda = new java.text.DecimalFormat("$#,##0");
     
@@ -604,8 +600,6 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnAceptarParcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarParcialActionPerformed
-        incluye = false;
-        recalcular();
         contratacionRenta.abrirPropuestaPendiente();
     }//GEN-LAST:event_btnAceptarParcialActionPerformed
 
@@ -616,7 +610,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     // El controlador lo llama cada vez que se abre la pantalla
     
     public void cargarDatos(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
-        incluye = true;
+        this.cotizacion = cotizacion;
         UnidadFisicaDTO elegida = solicitud.getUnidadSeleccionada();
         unidad = elegida != null && elegida.getNumeroEconomico() != null ? elegida.getNumeroEconomico() : "sin elegir";
 
@@ -637,33 +631,18 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         String nombreEquipo = "Sin equipo seleccionado";
         if (equipo != null) {
             nombreEquipo = equipo.getModelo();
-            if (equipo.getCostoDiario() != null) {
-                tarifaDia = equipo.getCostoDiario();
-            }
-            // la tarifa es la misma con la que el control armó la cotización
-            if (cotizacion != null && cotizacion.getDetalles() != null) {
-                for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
-                    if (detalle.getEquipo() != null && detalle.getPrecioUnitario() != null) {
-                        tarifaDia = detalle.getPrecioUnitario();
-                    }
-                }
-            }
+            // la tarifa y los importes son los de la cotización que armó el control
+            tarifaDia = Montos.tarifaDiaria(cotizacion);
             if (equipo.getAccesorios() != null) {
                 for (int i = 0; i < equipo.getAccesorios().size(); i++) {
                     AccesorioDTO accesorio = equipo.getAccesorios().get(i);
-                    double costo = 0;
-                    if (accesorio.getCostoRenta() != null) {
-                        costo = accesorio.getCostoRenta();
-                    }
                     if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
-                        totalIndispensables = totalIndispensables + costo;
                         if (hayObligatorio) {
                             nombreObligatorios = nombreObligatorios + ", ";
                         }
                         nombreObligatorios = nombreObligatorios + accesorio.getNombre();
                         hayObligatorio = true;
                     } else {
-                        totalOpcionales = totalOpcionales + costo;
                         if (hayOpcional) {
                             nombreOpcionales = nombreOpcionales + ", ";
                         }
@@ -674,26 +653,14 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
             }
         }
 
-        // Periodo
+        totalIndispensables = Montos.accesorios(cotizacion, true);
+        totalOpcionales = Montos.accesorios(cotizacion, false);
+
+        // Periodo y depósito
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();
-        dias = 1;
-        if (inicio != null && fin != null) {
-            dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
-        } else if (solicitud.getPeriodo().getDiasRenta() != null) {
-            dias = solicitud.getPeriodo().getDiasRenta();
-        }
-
-        // Depósito
-        deposito = 0;
-        if (solicitud.getRequisitos() != null) {
-            for (int i = 0; i < solicitud.getRequisitos().size(); i++) {
-                RequisitoRentaDTO requisito = solicitud.getRequisitos().get(i);
-                if (requisito.getMonto() != null) {
-                    deposito = requisito.getMonto();
-                }
-            }
-        }
+        dias = Montos.dias(cotizacion);
+        deposito = Montos.deposito(solicitud.getRequisitos());
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
@@ -713,10 +680,10 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     }
 
     private void recalcular() {
-        double renta = dias * tarifaDia;
-        double subtotal = renta + totalIndispensables + (incluye ? totalOpcionales : 0);
-        double iva = subtotal * IVA;
-        double total = subtotal + iva;
+        double renta = Montos.renta(cotizacion);
+        double subtotal = Montos.subtotal(cotizacion);
+        double iva = Montos.iva(cotizacion);
+        double total = Montos.total(cotizacion);
 
         lblRentatxt.setText("Renta (" + dias + " días × " + moneda.format(tarifaDia) + ")");
         lblRenta.setText(moneda.format(renta));
@@ -727,8 +694,8 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         lblTotal.setText(moneda.format(total));
         lblDeposito.setText(moneda.format(deposito));
 
-        filaCucharon.setVisible(incluye && hayOpcional);
-        lblAccesorioOp.setVisible(incluye && hayOpcional);
+        filaCucharon.setVisible(hayOpcional);
+        lblAccesorioOp.setVisible(hayOpcional);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

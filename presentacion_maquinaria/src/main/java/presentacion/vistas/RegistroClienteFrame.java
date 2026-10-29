@@ -5,7 +5,6 @@
 package presentacion.vistas;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JOptionPane;
 import objetosdto.ClienteDTO;
 import objetosdto.ClienteEmpresaDTO;
 import presentacion.control.IContratacionRenta;
@@ -503,40 +502,26 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        if (txtFieldNombre.getText().isEmpty() || txtFieldRFC.getText().isEmpty() || txtFieldTelefono.getText().isEmpty() || txtFieldCorreoElectro.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Favor de llenar campos de cliente.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
+        // se manda lo capturado; el control revisa que esté completo y con formato correcto
+        ClienteDTO cliente;
         if (radioBtnEmpresa.isSelected()) {
-            if (txtFieldNombreEncargado.getText().isEmpty() || txtFieldPuestoEncargado.getText().isEmpty() || txtFieldTelefonoEncargado.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Favor de llenar campos de empresa.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
             ClienteEmpresaDTO empresa = new ClienteEmpresaDTO();
-            empresa.setNombre(txtFieldNombre.getText());
-            empresa.setCorreo(txtFieldCorreoElectro.getText());
-            empresa.setRfc(txtFieldRFC.getText());
-            empresa.setTelefono(txtFieldTelefono.getText());
-            empresa.setNombreEncargadoEmpresa(txtFieldNombreEncargado.getText());
-            empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText());
-            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncargado.getText());
+            empresa.setNombreEncargadoEmpresa(txtFieldNombreEncargado.getText().trim());
+            empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText().trim());
+            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncargado.getText().trim());
             empresa.setArchivoIdentificacionEncargado(archivoIdentificacion);
             empresa.setTipoCliente("Empresa");
-            empresa.setIdCliente(idCliente);
-            JOptionPane.showMessageDialog(this, idCliente == null ? "La Empresa ha sido registrada correctamente." : "Los datos de la Empresa se actualizaron.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-            this.contratacionRenta.pasarDatosSolicitudRenta(empresa);
-        } else if (radioBtnClientePart.isSelected()) {
-            ClienteDTO particular = new ClienteDTO();
-            particular.setNombre(txtFieldNombre.getText());
-            particular.setRfc(txtFieldRFC.getText());
-            particular.setTelefono(txtFieldTelefono.getText());
-            particular.setCorreo(txtFieldCorreoElectro.getText());
-            particular.setTipoCliente("Particular");
-            particular.setIdCliente(idCliente);
-            JOptionPane.showMessageDialog(this, idCliente == null ? "El Cliente ha sido registrado correctamente." : "Los datos del Cliente se actualizaron.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-            this.contratacionRenta.pasarDatosSolicitudRenta(particular);
+            cliente = empresa;
+        } else {
+            cliente = new ClienteDTO();
+            cliente.setTipoCliente("Particular");
         }
+        cliente.setIdCliente(idCliente);
+        cliente.setNombre(txtFieldNombre.getText().trim());
+        cliente.setRfc(txtFieldRFC.getText().trim());
+        cliente.setTelefono(txtFieldTelefono.getText().trim());
+        cliente.setCorreo(txtFieldCorreoElectro.getText().trim());
+        contratacionRenta.registrarCliente(cliente);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,9 +4,12 @@
  */
 package presentacion;
 
+import almacentemporal.AlmacenTemporal;
 import javax.swing.UIManager;
 import presentacion.control.ContratacionRenta;
+import presentacion.control.CoordinadorAplicacion;
 import presentacion.control.IContratacionRenta;
+import presentacion.simulacion.NegocioSimulado;
 
 /**
  *
@@ -25,9 +28,16 @@ public class Main {
             } catch (Exception ex) {
                 System.err.println("No se pudo cambiar el aspecto: " + ex.getMessage());
             }
-            IContratacionRenta control = new ContratacionRenta();
-            control.abrirIniciarSesion();
+            iniciar().abrirIniciarSesion();
         });
     }
-    
+
+    // Arma la capa de presentación: el control usa el almacén temporal y el negocio simulado,
+    // y el coordinador es el único que abre y cierra pantallas
+    public static IContratacionRenta iniciar() {
+        ContratacionRenta control = new ContratacionRenta(new AlmacenTemporal(), new NegocioSimulado());
+        control.setCoordinador(new CoordinadorAplicacion(control));
+        return control;
+    }
+
 }

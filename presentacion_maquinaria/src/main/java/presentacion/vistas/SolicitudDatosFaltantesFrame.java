@@ -5,7 +5,6 @@
 package presentacion.vistas;
 
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 import presentacion.control.RequerimientosTecnicos;
@@ -270,17 +269,11 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRespuestaActionPerformed
-        String error = RequerimientosTecnicos.revisar(RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
-        if (error != null) {
-            JOptionPane.showMessageDialog(this, error, "Solicitud de Datos Faltantes", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
         if (solicitud.getRequerimientos() == null) {
             solicitud.setRequerimientos(new ArrayList<>());
         }
-        RequerimientosTecnicos.guardar(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
-        RequerimientosTecnicos.guardar(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText());
-        solicitud.setEstadoSolicitud("En evaluación técnica");
+        RequerimientosTecnicos.capturar(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
+        RequerimientosTecnicos.capturar(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText());
         contratacionRenta.pasarDatosAnalisisRequerimientos(solicitud);
     }//GEN-LAST:event_btnRegistrarRespuestaActionPerformed
 

@@ -8,11 +8,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import objetosdto.AccesorioDTO;
 import objetosdto.CotizacionDTO;
-import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.PeriodoSolicitadoDTO;
-import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
@@ -58,23 +56,10 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         }
         lblAccesorios.setText("Accesorios: " + accesorios);
 
-        // la tarifa por día es la misma con la que el control armó la cotización
-        Double tarifaDia = equipo != null ? equipo.getCostoDiario() : null;
-        if (cotizacion != null && cotizacion.getDetalles() != null) {
-            for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
-                if (detalle.getEquipo() != null && detalle.getPrecioUnitario() != null) {
-                    tarifaDia = detalle.getPrecioUnitario();
-                }
-            }
-        }
-        String tarifa = "";
-        PeriodoSolicitadoDTO p = solicitud.getPeriodo();
-        if (tarifaDia != null && p != null && p.getDiasRenta() != null) {
-            tarifa = String.format("$%,.2f", tarifaDia * p.getDiasRenta());
-        }
-        lblTarifa.setText("Tarifa por el periodo: " + tarifa);
+        // la tarifa del periodo es la de la cotización que armó el control
+        lblTarifa.setText("Tarifa por el periodo: " + (cotizacion == null ? "" : String.format("$%,.2f", Montos.renta(cotizacion))));
 
-        lblDeposito.setText("Depósito de garantía: " + deposito());
+        lblDeposito.setText("Depósito de garantía: " + (solicitud.getRequisitos() == null ? "" : Montos.moneda(Montos.deposito(solicitud.getRequisitos()))));
     }
 
     /**
@@ -343,19 +328,6 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
 
     private String texto(String valor) {
         return valor == null ? "" : valor;
-    }
-
-    private String deposito() {
-        if (solicitud.getRequisitos() == null) {
-            return "";
-        }
-        String deposito = "";
-        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
-            if (requisito.getMonto() != null) {
-                deposito = String.format("$%,.0f", requisito.getMonto());
-            }
-        }
-        return deposito;
     }
 
     private String nombreCliente() {

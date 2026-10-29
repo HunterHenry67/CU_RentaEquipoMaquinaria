@@ -5,7 +5,6 @@
 package presentacion.vistas;
 
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 import presentacion.control.RequerimientosTecnicos;
@@ -396,27 +395,19 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEquiposActionPerformed
-        if (!guardarRequerimientos()) {
-            return;
-        }
-        if (!hayRequerimientosConNumero()) {
-            JOptionPane.showMessageDialog(this, "Captura por lo menos una característica con número para comparar los equipos.",
-                    "Análisis de Requerimiento Técnico", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        capturarRequerimientos();
         contratacionRenta.pasarDatosEquiposCompatibles(solicitud);
     }//GEN-LAST:event_btnBuscarEquiposActionPerformed
 
     private void btnSolicitarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarDatosActionPerformed
-        if (guardarRequerimientos()) {
-            solicitud.setEstadoSolicitud("En espera de información");
-            contratacionRenta.pasarDatosSolicitudDatosFaltantes(solicitud);
-        }
+        capturarRequerimientos();
+        contratacionRenta.pasarDatosSolicitudDatosFaltantes(solicitud);
     }//GEN-LAST:event_btnSolicitarDatosActionPerformed
 
     // Pasa lo escrito en los campos a los requerimientos de la solicitud. Si un campo que
     // lleva número no trae uno, avisa y no guarda nada.
-    private boolean guardarRequerimientos() {
+    // Lo escrito en los campos va tal cual a la solicitud; el control lo revisa y lo convierte
+    private void capturarRequerimientos() {
         String[][] campos = {
             {RequerimientosTecnicos.PROFUNDIDAD, txtFieldProfundidad.getText()},
             {RequerimientosTecnicos.POTENCIA, txtFieldPotencia.getText()},
@@ -425,28 +416,15 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
             {RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText()},
             {RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText()}
         };
-        for (String[] campo : campos) {
-            String error = RequerimientosTecnicos.revisar(campo[0], campo[1]);
-            if (error != null) {
-                JOptionPane.showMessageDialog(this, error, "Análisis de Requerimiento Técnico", JOptionPane.WARNING_MESSAGE);
-                return false;
-            }
-        }
         if (solicitud.getRequerimientos() == null) {
             solicitud.setRequerimientos(new ArrayList<>());
         }
         for (String[] campo : campos) {
-            RequerimientosTecnicos.guardar(solicitud.getRequerimientos(), campo[0], campo[1]);
+            RequerimientosTecnicos.capturar(solicitud.getRequerimientos(), campo[0], campo[1]);
         }
-        return true;
     }
 
-    private boolean hayRequerimientosConNumero() {
-        return RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.PROFUNDIDAD) != null
-                || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.POTENCIA) != null
-                || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.PESO) != null
-                || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO) != null;
-    }
+
 
     private String ubicacion() {
         String obra = texto(solicitud.getNombreObra());

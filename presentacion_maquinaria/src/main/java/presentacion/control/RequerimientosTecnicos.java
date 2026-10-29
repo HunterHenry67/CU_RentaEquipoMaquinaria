@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 import objetosdto.RequerimientoTecnicoDTO;
 
 /**
- * Ayuda a las pantallas de F2 a leer y guardar los requerimientos técnicos de la
- * solicitud (una lista de RequerimientoTecnicoDTO).
+ * Los requerimientos técnicos de la solicitud (una lista de RequerimientoTecnicoDTO): las
+ * pantallas los muestran y capturan lo escrito; el Control de Aplicación lo revisa y lo convierte.
  *
  * Las características con número guardan el valor, la unidad y si es un mínimo o un
  * máximo. Las de texto (tipo de alimentación y tipo de terreno) no tienen número, así
@@ -94,22 +94,61 @@ public class RequerimientosTecnicos {
     }
 
     /**
-     * Revisa que lo escrito en un campo con número tenga un número. Regresa el mensaje de
-     * error o null si está bien (un campo vacío está bien: el dato todavía no se tiene).
+     * Lo que escribió el asesor en el campo de esa característica, tal cual ("Potencia mínima: 120").
+     * Lo usan las pantallas; el control lo revisa y lo convierte con normalizar().
      */
-    public static String revisar(String caracteristica, String textoCampo) {
-        if (esDeTexto(caracteristica) || textoCampo == null || textoCampo.isBlank()) {
-            return null;
+    public static void capturar(List<RequerimientoTecnicoDTO> lista, String caracteristica, String textoCampo) {
+        RequerimientoTecnicoDTO requerimiento = buscar(lista, caracteristica);
+        String texto = textoCampo == null ? "" : textoCampo.trim();
+        if (texto.isEmpty()) {
+            if (requerimiento != null) {
+                lista.remove(requerimiento);
+            }
+            return;
         }
-        return NUMERO.matcher(textoCampo).find() ? null
-                : "Escribe un número en «" + caracteristica + "» (en " + unidad(caracteristica) + ").";
+        if (requerimiento == null) {
+            requerimiento = new RequerimientoTecnicoDTO();
+            lista.add(requerimiento);
+        }
+        requerimiento.setCaracteristica(caracteristica + ": " + texto);
+        requerimiento.setValorRequerido(null);
+        requerimiento.setUnidadMedida(null);
+        requerimiento.setTipoLimite(null);
     }
 
     /**
-     * Guarda lo escrito en el campo de esa característica dentro de la lista: lo agrega,
-     * lo cambia o lo quita si el campo quedó vacío. Antes hay que revisarlo con revisar().
+     * Para el Control de Aplicación: revisa que las características con número traigan un número
+     * y las deja con su valor, su unidad y su límite. Regresa el primer error o null si todo está bien.
      */
-    public static void guardar(List<RequerimientoTecnicoDTO> lista, String caracteristica, String textoCampo) {
+    public static String normalizar(List<RequerimientoTecnicoDTO> lista) {
+        String[] conNumero = {PROFUNDIDAD, POTENCIA, PESO, ANCHO};
+        for (String caracteristica : conNumero) {
+            String texto = capturado(lista, caracteristica);
+            if (texto != null && !ValidadorPresentacion.esNumeroValido(texto)) {
+                return "Escribe un número en «" + caracteristica + "» (en " + unidad(caracteristica) + ").";
+            }
+        }
+        for (String caracteristica : conNumero) {
+            String texto = capturado(lista, caracteristica);
+            if (texto != null) {
+                guardar(lista, caracteristica, texto);
+            }
+        }
+        return null;
+    }
+
+    // El texto que se capturó para una característica con número y que todavía no se convierte
+    private static String capturado(List<RequerimientoTecnicoDTO> lista, String caracteristica) {
+        RequerimientoTecnicoDTO requerimiento = buscar(lista, caracteristica);
+        if (requerimiento == null || requerimiento.getValorRequerido() != null) {
+            return null;
+        }
+        String nombre = requerimiento.getCaracteristica();
+        return nombre.length() > caracteristica.length() + 2 ? nombre.substring(caracteristica.length() + 2) : "";
+    }
+
+    // Lo deja ya convertido dentro de la lista: lo agrega, lo cambia o lo quita si el campo quedó vacío
+    private static void guardar(List<RequerimientoTecnicoDTO> lista, String caracteristica, String textoCampo) {
         RequerimientoTecnicoDTO requerimiento = buscar(lista, caracteristica);
         String texto = textoCampo == null ? "" : textoCampo.trim();
         if (texto.isEmpty()) {

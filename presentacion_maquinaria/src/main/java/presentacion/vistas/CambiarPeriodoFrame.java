@@ -6,7 +6,6 @@ package presentacion.vistas;
 
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
-import java.time.temporal.ChronoUnit;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.time.LocalDate;
@@ -293,22 +292,8 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConsultarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInventarioActionPerformed
-        LocalDate inicio = getFechaInicio();
-        LocalDate fin = getFechaFin();
-        if (inicio == null || fin == null) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona la fecha de inicio y la de fin.");
-            return;
-        }
-        if (fin.isBefore(inicio)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "La fecha de fin no puede ser anterior a la de inicio.");
-            return;
-        }
-
-        int dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
-        solicitud.setPeriodo(new PeriodoSolicitadoDTO(inicio, fin, dias));
-        solicitud.setUnidadSeleccionada(null);
-
-        contratacionRenta.pasarDatosCambioPeriodo(solicitud);
+        // las fechas nuevas; el control revisa que estén completas y en orden
+        contratacionRenta.pasarDatosCambioPeriodo(new PeriodoSolicitadoDTO(getFechaInicio(), getFechaFin(), null));
     }//GEN-LAST:event_btnConsultarInventarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

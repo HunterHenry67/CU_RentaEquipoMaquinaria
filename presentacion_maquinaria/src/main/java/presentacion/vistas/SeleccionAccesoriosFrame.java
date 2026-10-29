@@ -7,7 +7,6 @@ package presentacion.vistas;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.AccesorioDTO;
 import objetosdto.EquipoDTO;
@@ -314,19 +313,15 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
             tableOpcionales.getCellEditor().stopCellEditing();
         }
         EquipoDTO recomendado = recomendado();
-        if (recomendado == null) {
-            JOptionPane.showMessageDialog(this, "Primero hay que elegir el equipo recomendado.",
-                    "Selección de Accesorios", JOptionPane.WARNING_MESSAGE);
-            contratacionRenta.abrirEquiposCompatibles();
-            return;
-        }
-        List<AccesorioDTO> propuesta = new ArrayList<>(indispensables);
-        for (int i = 0; i < opcionales.size(); i++) {
-            if (Boolean.TRUE.equals(tableOpcionales.getModel().getValueAt(i, 1))) {
-                propuesta.add(opcionales.get(i));
+        if (recomendado != null) {
+            List<AccesorioDTO> propuesta = new ArrayList<>(indispensables);
+            for (int i = 0; i < opcionales.size(); i++) {
+                if (Boolean.TRUE.equals(tableOpcionales.getModel().getValueAt(i, 1))) {
+                    propuesta.add(opcionales.get(i));
+                }
             }
+            recomendado.setAccesorios(propuesta);
         }
-        recomendado.setAccesorios(propuesta);
         contratacionRenta.pasarDatosEvaluacionTecnica(solicitud);
     }//GEN-LAST:event_btnContinuarActionPerformed
 
