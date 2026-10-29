@@ -18,6 +18,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
     private String archivoIdentificacion;
+    private Long idCliente;
 
     public RegistroClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -31,6 +32,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }
 
     public void cargarDatosRegistroCliente(ClienteDTO dto) {
+        idCliente = dto == null ? null : dto.getIdCliente();
         if (dto != null) {
             txtFieldNombre.setText(dto.getNombre());
             txtFieldRFC.setText(dto.getRfc());
@@ -521,7 +523,8 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncargado.getText());
             empresa.setArchivoIdentificacionEncargado(archivoIdentificacion);
             empresa.setTipoCliente("Empresa");
-            JOptionPane.showMessageDialog(this, "La Empresa ha sido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            empresa.setIdCliente(idCliente);
+            JOptionPane.showMessageDialog(this, idCliente == null ? "La Empresa ha sido registrada correctamente." : "Los datos de la Empresa se actualizaron.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.pasarDatosSolicitudRenta(empresa);
         } else if (radioBtnClientePart.isSelected()) {
             ClienteDTO particular = new ClienteDTO();
@@ -530,7 +533,8 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             particular.setTelefono(txtFieldTelefono.getText());
             particular.setCorreo(txtFieldCorreoElectro.getText());
             particular.setTipoCliente("Particular");
-            JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            particular.setIdCliente(idCliente);
+            JOptionPane.showMessageDialog(this, idCliente == null ? "El Cliente ha sido registrado correctamente." : "Los datos del Cliente se actualizaron.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
             this.contratacionRenta.pasarDatosSolicitudRenta(particular);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed

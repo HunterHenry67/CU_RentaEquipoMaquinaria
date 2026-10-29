@@ -245,6 +245,11 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOtraUnidadActionPerformed
 
     private void btnUsarAlternativaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsarAlternativaActionPerformed
+        java.util.List<objetosdto.EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
+        if (pedidos == null || pedidos.isEmpty() || pedidos.get(0).getEvaluacion() == null || pedidos.get(0).getEvaluacion().getAlternativo() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No se eligió un equipo alternativo; se abre Equipos compatibles para elegir otro.",
+                    "Usar la alternativa", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        }
         contratacionRenta.usarEquipoAlternativo();
     }//GEN-LAST:event_btnUsarAlternativaActionPerformed
 

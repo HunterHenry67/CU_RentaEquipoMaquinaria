@@ -7,13 +7,15 @@ package presentacion.vistas;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import objetosdto.AccesorioDTO;
+import objetosdto.CotizacionDTO;
+import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
-import objetosdto.RequisitoRentaDTO;
 
 /**
  *
@@ -30,7 +32,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public void cargarCondiciones(SolicitudRentaDTO solicitud) {
+    public void cargarCondiciones(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
         this.solicitud = solicitud;
 
         lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
@@ -56,10 +58,19 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         }
         lblAccesorios.setText("Accesorios: " + accesorios);
 
+        // la tarifa por día es la misma con la que el control armó la cotización
+        Double tarifaDia = equipo != null ? equipo.getCostoDiario() : null;
+        if (cotizacion != null && cotizacion.getDetalles() != null) {
+            for (DetalleCotizacionDTO detalle : cotizacion.getDetalles()) {
+                if (detalle.getEquipo() != null && detalle.getPrecioUnitario() != null) {
+                    tarifaDia = detalle.getPrecioUnitario();
+                }
+            }
+        }
         String tarifa = "";
         PeriodoSolicitadoDTO p = solicitud.getPeriodo();
-        if (equipo != null && equipo.getCostoDiario() != null && p != null && p.getDiasRenta() != null) {
-            tarifa = String.format("$%,.2f", equipo.getCostoDiario() * p.getDiasRenta());
+        if (tarifaDia != null && p != null && p.getDiasRenta() != null) {
+            tarifa = String.format("$%,.2f", tarifaDia * p.getDiasRenta());
         }
         lblTarifa.setText("Tarifa por el periodo: " + tarifa);
 

@@ -90,6 +90,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         txtAreaRazonCancelacion.setText("");
         datePickerInicio.setDate(null);
         datePickerFinal.setDate(null);
+        datePickerFinal.getSettings().setDateRangeLimits(null, null);
         comboTipoTrabajo.setSelectedIndex(0);
         comboTipoTerreno.setSelectedIndex(0);
         ((DefaultTableModel) tableEquipoSoli.getModel()).setRowCount(0);
@@ -680,14 +681,18 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
         solicitudDTO.setFechaSolicitud(LocalDate.now());
         solicitudDTO.setFolio(folio);
-        solicitudDTO.setTipoTrabajo(comboTipoTrabajo.getSelectedItem().toString());
         String terreno = comboTipoTerreno.getSelectedItem().toString();
         if (!terreno.equals("Sin especificar")) {
             RequerimientosTecnicos.guardar(solicitudDTO.getRequerimientos(), RequerimientosTecnicos.TERRENO, terreno);
         }
         solicitudDTO.setNombreObra(txtFieldNombreObra.getText());
         solicitudDTO.setDireccionObra(txtFieldDireccion.getText());
-        solicitudDTO.setDescripcionActividad(txtAreaActividadRealizar.getText());
+        String tipoTrabajo = comboTipoTrabajo.getSelectedItem().toString();
+        String actividad = txtAreaActividadRealizar.getText().trim();
+        if (!tipoTrabajo.equals("Sin especificar")) {
+            actividad = actividad.isEmpty() ? tipoTrabajo : tipoTrabajo + ". " + actividad;
+        }
+        solicitudDTO.setDescripcionActividad(actividad);
         solicitudDTO.setCondicionesEspeciales(txtAreaCondicionExtra.getText());
         solicitudDTO.setEstadoSolicitud("Pendiente");
         objetosdto.PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO();

@@ -20,7 +20,6 @@ public class SolicitudRentaDTO {
     private String nombreObra;
     private String direccionObra;
     private String descripcionActividad;
-    private String tipoTrabajo;
     private String condicionesEspeciales;
     private String estadoSolicitud;
     private String motivoCancelacion;
@@ -35,14 +34,6 @@ public class SolicitudRentaDTO {
         this.equiposSolicitados = new ArrayList<>();
         this.requerimientos = new ArrayList<>();
         this.requisitos = new ArrayList<>();
-    }
-
-    public String getTipoTrabajo() {
-        return tipoTrabajo;
-    }
-
-    public void setTipoTrabajo(String tipoTrabajo) {
-        this.tipoTrabajo = tipoTrabajo;
     }
 
     public UnidadFisicaDTO getUnidadSeleccionada() {

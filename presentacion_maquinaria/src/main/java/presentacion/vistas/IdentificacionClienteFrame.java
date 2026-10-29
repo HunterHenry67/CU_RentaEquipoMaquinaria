@@ -33,6 +33,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     // Los clientes registrados se los pasa el control (la pantalla no consulta el almacén)
     public void cargarClientes(List<ClienteDTO> listaClientes) {
         clientes = listaClientes;
+        txtFieldBusqCliente.setText("");
         cargarClientesEnTabla(clientes);
     }
 

@@ -154,6 +154,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirIdentificacionCliente() {
+        identificacionClienteFrame.cargarClientes(almacenTemporal.getListaClientesTemp());
         ocultarTodo();
         identificacionClienteFrame.setVisible(true);
     }
@@ -270,7 +271,7 @@ public class ContratacionRenta implements IContratacionRenta {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
         ocultarTodo();
-        condicionesContratacionFrame.cargarCondiciones(solicitudActual);
+        condicionesContratacionFrame.cargarCondiciones(solicitudActual, cotizacionActual);
         condicionesContratacionFrame.setVisible(true);
     }
 
@@ -367,7 +368,21 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         EquipoDTO recomendado = evaluacion.getRecomendado();
-        evaluacion.setRecomendado(evaluacion.getAlternativo());
+        EquipoDTO alternativo = evaluacion.getAlternativo();
+        // el alternativo lleva los mismos accesorios que se eligieron para el recomendado
+        if (recomendado != null && recomendado.getAccesorios() != null && alternativo.getAccesorios() != null) {
+            List<AccesorioDTO> elegidos = new ArrayList<>();
+            for (AccesorioDTO accesorio : alternativo.getAccesorios()) {
+                for (AccesorioDTO elegido : recomendado.getAccesorios()) {
+                    if (Objects.equals(accesorio.getIdAccesorio(), elegido.getIdAccesorio())) {
+                        elegidos.add(accesorio);
+                        break;
+                    }
+                }
+            }
+            alternativo.setAccesorios(elegidos);
+        }
+        evaluacion.setRecomendado(alternativo);
         evaluacion.setAlternativo(recomendado);
         solicitudActual.setUnidadSeleccionada(null);
         cotizacionActual = null;
@@ -499,6 +514,11 @@ public class ContratacionRenta implements IContratacionRenta {
     public void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo) {
         if (this.solicitudActual == null) {
             this.solicitudActual = new SolicitudRentaDTO();
+        }
+        for (EquipoSolicitadoDTO ya : this.solicitudActual.getEquiposSolicitados()) {
+            if (Objects.equals(ya.getDescripcionEquipo(), equipo.getDescripcionEquipo())) {
+                return;  // ya está en la solicitud
+            }
         }
         this.solicitudActual.getEquiposSolicitados().add(equipo);
         if (solicitudRentaFrame != null) {
