@@ -12,6 +12,7 @@ import DTOs.SolicitudRentaDTO;
 import DTOs.UnidadFisicaDTO;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import DTOs.RequisitoRentaDTO;
 
 /**
  *
@@ -62,10 +63,8 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         }
         lblTarifa.setText("Tarifa por el periodo: " + tarifa);
 
-        // No existe ningún dato de depósito en la solicitud, así que queda vacío
-        lblDeposito.setText("Depósito de garantía:");
+        lblDeposito.setText("Depósito de garantía: " + deposito());
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -314,7 +313,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-        private EquipoDTO equipoRecomendado() {
+    private EquipoDTO equipoRecomendado() {
         List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
         if (pedidos == null || pedidos.isEmpty() || pedidos.get(0).getEvaluacion() == null) {
             return null;
@@ -336,10 +335,23 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         return valor == null ? "" : valor;
     }
 
+    private String deposito() {
+        if (solicitud.getRequisitos() == null) {
+            return "";
+        }
+        String deposito = "";
+        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
+            if (requisito.getMonto() != null) {
+                deposito = String.format("$%,.0f", requisito.getMonto());
+            }
+        }
+        return deposito;
+    }
+
     private String nombreCliente() {
         return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
     }
-    
+
     private void btnEnviarValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarValidacionActionPerformed
         contratacionRenta.abrirCotizacion();
     }//GEN-LAST:event_btnEnviarValidacionActionPerformed

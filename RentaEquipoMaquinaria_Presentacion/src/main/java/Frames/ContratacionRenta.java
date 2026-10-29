@@ -247,6 +247,7 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void abrirCondicionesContratacion() {
         prepararDatosSolicitud();
+        prepararDatosCotizacion();
         ocultarTodo();
         condicionesContratacionFrame.cargarCondiciones(solicitudActual);
         condicionesContratacionFrame.setVisible(true);
