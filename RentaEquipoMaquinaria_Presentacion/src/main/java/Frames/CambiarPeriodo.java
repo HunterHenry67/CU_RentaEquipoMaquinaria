@@ -13,14 +13,14 @@ import java.time.LocalDate;
  *
  * @author alejandromontijo
  */
-public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
+public class CambiarPeriodo extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
     private DatePicker selectorFechaInicio;
     private DatePicker selectorFechaFin;
 
-    public VerificacionDeDisponibilidadFrame(IContratacionRenta contratacionRenta) {
+    public CambiarPeriodo(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -57,26 +57,6 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
         panelFondo.repaint();
     }
     
-    public void cargarDatos(SolicitudRentaDTO solicitud) {
-    if (solicitud != null) {
-        lblFolio.setText("Folio: " + solicitud.getFolio());
-        if (solicitud.getCliente() != null) {
-            lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
-        }
-        lblUbicacion.setText("Ubicación: " + solicitud.getDireccionObra());
-
-        // Precargar fechas si ya existen en el periodo solicitado
-        if (solicitud.getPeriodo() != null) {
-            if (solicitud.getPeriodo().getFechaInicio() != null) {
-                selectorFechaInicio.setDate(solicitud.getPeriodo().getFechaInicio());
-            }
-            if (solicitud.getPeriodo().getFechaFin() != null) {
-                selectorFechaFin.setDate(solicitud.getPeriodo().getFechaFin());
-            }
-        }
-    }
-}
-    
     public LocalDate getFechaInicio() {
         return selectorFechaInicio.getDate();
     }
@@ -105,20 +85,18 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
         txtFieldFin = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         lblUbicacion = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        lblEquipo = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         btnConsultarInventario = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Verificación de disponibilidad");
+        setTitle("Cambiar Periodo");
         setResizable(false);
 
         panelFondo.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Verificación de disponibilidad");
+        jLabel1.setText("Cambiar periodo");
 
         lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));
@@ -130,7 +108,7 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("PERIODO SOLICITADO");
+        jLabel2.setText("INSERTAR PERIODO: ");
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -157,21 +135,13 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
         lblUbicacion.setForeground(new java.awt.Color(0, 0, 0));
         lblUbicacion.setText("Ubicación:");
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("EQUIPO A VERIFICAR");
-
-        lblEquipo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        lblEquipo.setForeground(new java.awt.Color(0, 0, 0));
-        lblEquipo.setText("Tipo de equipo recomendado en la evaluación técnica:");
-
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
-        btnRegresar.setBorderPainted(false);
-        btnRegresar.setFocusPainted(false);
         btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setOpaque(true);
         btnRegresar.setText("Regresar");
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.setOpaque(true);
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegresarActionPerformed(evt);
@@ -179,12 +149,12 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
         });
 
         btnConsultarInventario.setBackground(new java.awt.Color(44, 44, 44));
-        btnConsultarInventario.setBorderPainted(false);
-        btnConsultarInventario.setFocusPainted(false);
         btnConsultarInventario.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnConsultarInventario.setForeground(new java.awt.Color(255, 255, 255));
+        btnConsultarInventario.setText("Cambiar periodo");
+        btnConsultarInventario.setBorderPainted(false);
+        btnConsultarInventario.setFocusPainted(false);
         btnConsultarInventario.setOpaque(true);
-        btnConsultarInventario.setText("Consultar inventario");
         btnConsultarInventario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConsultarInventarioActionPerformed(evt);
@@ -229,12 +199,6 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
                         .addComponent(lblUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(lblEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(728, 728, 728)
@@ -250,44 +214,38 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(76, 76, 76)
-                        .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(142, 142, 142)
+                        .addGap(30, 30, 30)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(172, 172, 172)
+                        .addGap(60, 60, 60)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(196, 196, 196)
+                        .addGap(84, 84, 84)
                         .addComponent(txtFieldInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(172, 172, 172)
+                        .addGap(60, 60, 60)
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(196, 196, 196)
+                        .addGap(84, 84, 84)
                         .addComponent(txtFieldFin, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(240, 240, 240)
+                        .addGap(128, 128, 128)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(278, 278, 278)
+                        .addGap(166, 166, 166)
                         .addComponent(lblUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(320, 320, 320)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(350, 350, 350)
-                        .addComponent(lblEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(604, 604, 604)
+                        .addGap(492, 492, 492)
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
-                        .addGap(604, 604, 604)
+                        .addGap(492, 492, 492)
                         .addComponent(btnConsultarInventario, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addGap(0, 18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -305,7 +263,7 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirEvaluacionTecnica();
+        contratacionRenta.abrirPropuestaRenta();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConsultarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInventarioActionPerformed
@@ -320,9 +278,7 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblCliente;
-    private javax.swing.JLabel lblEquipo;
     private javax.swing.JLabel lblFolio;
     private javax.swing.JLabel lblUbicacion;
     private javax.swing.JPanel panelFondo;

@@ -28,11 +28,20 @@ public class SolicitudRentaDTO {
     private List<EquipoSolicitadoDTO> equiposSolicitados;
     private List<RequerimientoTecnicoDTO> requerimientos;
     private List<RequisitoRentaDTO> requisitos;
+    private UnidadFisicaDTO unidadSeleccionada;
 
     public SolicitudRentaDTO() {
         this.equiposSolicitados = new ArrayList<>();
         this.requerimientos = new ArrayList<>();
         this.requisitos = new ArrayList<>();
+    }
+
+    public UnidadFisicaDTO getUnidadSeleccionada() {
+        return unidadSeleccionada;
+    }
+
+    public void setUnidadSeleccionada(UnidadFisicaDTO unidadSeleccionada) {
+        this.unidadSeleccionada = unidadSeleccionada;
     }
 
     public Long getIdSolicitud() {

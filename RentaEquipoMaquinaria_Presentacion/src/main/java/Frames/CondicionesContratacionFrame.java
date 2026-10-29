@@ -4,6 +4,15 @@
  */
 package Frames;
 
+import DTOs.AccesorioDTO;
+import DTOs.EquipoDTO;
+import DTOs.EquipoSolicitadoDTO;
+import DTOs.PeriodoSolicitadoDTO;
+import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 /**
  *
  * @author alejandromontijo
@@ -11,13 +20,53 @@ package Frames;
 public class CondicionesContratacionFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
+
     public CondicionesContratacionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
     }
-    
+
+    public void cargarCondiciones(SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+
+        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + nombreCliente());
+
+        EquipoDTO equipo = equipoRecomendado();
+
+        UnidadFisicaDTO unidad = solicitud.getUnidadSeleccionada();
+        String numero = unidad == null ? "" : texto(unidad.getNumeroEconomico());
+        String modelo = equipo == null ? "" : texto(equipo.getModelo());
+        lblUnidad.setText("Unidad propuesta: " + numero + (modelo.isEmpty() ? "" : " · " + modelo));
+
+        lblPeriodo.setText("Periodo: " + periodo());
+
+        StringBuilder accesorios = new StringBuilder();
+        if (equipo != null && equipo.getAccesorios() != null) {
+            for (AccesorioDTO a : equipo.getAccesorios()) {
+                if (accesorios.length() > 0) {
+                    accesorios.append(", ");
+                }
+                accesorios.append(a.getNombre())
+                        .append(Boolean.TRUE.equals(a.getEsObligatorio()) ? " (Indispensable)" : " (Opcional)");
+            }
+        }
+        lblAccesorios.setText("Accesorios: " + accesorios);
+
+        String tarifa = "";
+        PeriodoSolicitadoDTO p = solicitud.getPeriodo();
+        if (equipo != null && equipo.getCostoDiario() != null && p != null && p.getDiasRenta() != null) {
+            tarifa = String.format("$%,.2f", equipo.getCostoDiario() * p.getDiasRenta());
+        }
+        lblTarifa.setText("Tarifa por el periodo: " + tarifa);
+
+        // No existe ningún dato de depósito en la solicitud, así que queda vacío
+        lblDeposito.setText("Depósito de garantía:");
+    }
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -265,6 +314,32 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+        private EquipoDTO equipoRecomendado() {
+        List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
+        if (pedidos == null || pedidos.isEmpty() || pedidos.get(0).getEvaluacion() == null) {
+            return null;
+        }
+        return pedidos.get(0).getEvaluacion().getRecomendado();
+    }
+
+    private String periodo() {
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
+            return "";
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
+                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private String nombreCliente() {
+        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
+    }
+    
     private void btnEnviarValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarValidacionActionPerformed
         contratacionRenta.abrirCotizacion();
     }//GEN-LAST:event_btnEnviarValidacionActionPerformed
