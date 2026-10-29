@@ -49,7 +49,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
-    private VerificacionDeDisponibilidadFrame verificacionDeDisponibilidadFrame;
+    private CambiarPeriodo cambiarPeriodo;
     private VerificacionInventarioFrame verificacionInventarioFrame;
     private UnidadMantenimientoFrame unidadMantenimientoFrame;
     private UnidadOcupadaFrame unidadOcupadaFrame;
@@ -88,7 +88,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
-        this.verificacionDeDisponibilidadFrame = new VerificacionDeDisponibilidadFrame(this);
+        this.cambiarPeriodo = new CambiarPeriodo(this);
         this.verificacionInventarioFrame = new VerificacionInventarioFrame(this);
         this.unidadMantenimientoFrame = new UnidadMantenimientoFrame(this);
         this.unidadOcupadaFrame = new UnidadOcupadaFrame(this);
@@ -197,9 +197,9 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void abrirVerificacionDeDisponibilidad() {
+    public void abrirCambiarPeriodo() {
         ocultarTodo();
-        verificacionDeDisponibilidadFrame.setVisible(true);
+        cambiarPeriodo.setVisible(true);
     }
 
     @Override
@@ -566,8 +566,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
         List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
         EvaluacionTecnicaDTO evaluacion = pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
-        if (evaluacion == null || evaluacion.getRecomendado() == null
-                || evaluacion.getRecomendado().getModelo() == null) {
+        if (evaluacion == null || evaluacion.getRecomendado() == null || evaluacion.getRecomendado().getModelo() == null) {
             return new ArrayList<>();
         }
 
@@ -599,23 +598,19 @@ public class ContratacionRenta implements IContratacionRenta {
         List<String> motivos = new ArrayList<>();
         Double potencia = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.POTENCIA);
         if (potencia != null && equipo.getPotencia() != null && equipo.getPotencia() < potencia) {
-            motivos.add("potencia de " + RequerimientosTecnicos.formatoNumero(equipo.getPotencia()) + " HP; se piden "
-                    + RequerimientosTecnicos.formatoNumero(potencia) + " HP como mínimo");
+            motivos.add("potencia de " + RequerimientosTecnicos.formatoNumero(equipo.getPotencia()) + " HP; se piden " + RequerimientosTecnicos.formatoNumero(potencia) + " HP como mínimo");
         }
         Double profundidad = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PROFUNDIDAD);
         if (profundidad != null && equipo.getProfundidadExcavacion() != null && equipo.getProfundidadExcavacion() < profundidad) {
-            motivos.add("excava hasta " + RequerimientosTecnicos.formatoNumero(equipo.getProfundidadExcavacion())
-                    + " m; se piden " + RequerimientosTecnicos.formatoNumero(profundidad) + " m");
+            motivos.add("excava hasta " + RequerimientosTecnicos.formatoNumero(equipo.getProfundidadExcavacion()) + " m; se piden " + RequerimientosTecnicos.formatoNumero(profundidad) + " m");
         }
         Double peso = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PESO);
         if (peso != null && equipo.getPeso() != null && equipo.getPeso() > peso) {
-            motivos.add("pesa " + RequerimientosTecnicos.formatoNumero(equipo.getPeso()) + " t; el máximo es "
-                    + RequerimientosTecnicos.formatoNumero(peso) + " t");
+            motivos.add("pesa " + RequerimientosTecnicos.formatoNumero(equipo.getPeso()) + " t; el máximo es " + RequerimientosTecnicos.formatoNumero(peso) + " t");
         }
         Double ancho = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.ANCHO);
         if (ancho != null && equipo.getAnchoOperacion() != null && equipo.getAnchoOperacion() > ancho) {
-            motivos.add("mide " + RequerimientosTecnicos.formatoNumero(equipo.getAnchoOperacion()) + " m de ancho; el acceso es de "
-                    + RequerimientosTecnicos.formatoNumero(ancho) + " m");
+            motivos.add("mide " + RequerimientosTecnicos.formatoNumero(equipo.getAnchoOperacion()) + " m de ancho; el acceso es de " + RequerimientosTecnicos.formatoNumero(ancho) + " m");
         }
         return motivos.isEmpty() ? null : String.join(", ", motivos);
     }
@@ -699,8 +694,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if (evaluacionTecnicaFrame != null) {
             evaluacionTecnicaFrame.setVisible(false);
         }
-        if (verificacionDeDisponibilidadFrame != null) {
-            verificacionDeDisponibilidadFrame.setVisible(false);
+        if (cambiarPeriodo != null) {
+            cambiarPeriodo.setVisible(false);
         }
         if (verificacionInventarioFrame != null) {
             verificacionInventarioFrame.setVisible(false);

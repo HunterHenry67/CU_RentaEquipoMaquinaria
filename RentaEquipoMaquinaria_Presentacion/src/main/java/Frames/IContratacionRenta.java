@@ -42,7 +42,7 @@ public interface IContratacionRenta {
 
     public abstract void abrirEvaluacionTecnica();
 
-    public abstract void abrirVerificacionDeDisponibilidad();
+    public abstract void abrirCambiarPeriodo();
 
     public abstract void abrirVerificacionInventario();
 

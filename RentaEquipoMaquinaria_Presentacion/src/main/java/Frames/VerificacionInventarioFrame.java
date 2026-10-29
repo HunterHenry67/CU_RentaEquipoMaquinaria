@@ -271,9 +271,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
         String modelo = "";
         List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
-        if (pedidos != null && !pedidos.isEmpty()
-                && pedidos.get(0).getEvaluacion() != null
-                && pedidos.get(0).getEvaluacion().getRecomendado() != null) {
+        if (pedidos != null && !pedidos.isEmpty() && pedidos.get(0).getEvaluacion() != null && pedidos.get(0).getEvaluacion().getRecomendado() != null) {
             modelo = texto(pedidos.get(0).getEvaluacion().getRecomendado().getModelo());
         }
         lblEquipo.setText("Equipo: " + modelo);
@@ -288,47 +286,27 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
     private String estadoParaPeriodo(UnidadFisicaDTO u) {
         if (!"Disponible".equals(u.getEstadoUnidad())) {
-            return u.getEstadoUnidad();   // por ejemplo "En mantenimiento"
+            return u.getEstadoUnidad(); 
         }
         PeriodoSolicitadoDTO p = solicitud.getPeriodo();
         if (u.getOcupaciones() != null && p != null) {
             for (OcupacionUnidadDTO o : u.getOcupaciones()) {
-                boolean seTraslapa = !o.getFechaFin().isBefore(p.getFechaInicio())
-                        && !o.getFechaInicio().isAfter(p.getFechaFin());
+                boolean seTraslapa = !o.getFechaFin().isBefore(p.getFechaInicio()) && !o.getFechaInicio().isAfter(p.getFechaFin());
                 if (seTraslapa) {
-                    return "Ocupada del " + o.getFechaInicio().getDayOfMonth()
-                            + " al " + o.getFechaFin().getDayOfMonth();
+                    return "Ocupada del " + o.getFechaInicio().getDayOfMonth() + " al " + o.getFechaFin().getDayOfMonth();
                 }
             }
         }
         return "Disponible";
     }
-
-//    public void cargarUnidades(List<UnidadFisicaDTO> listaUnidades) {
-//        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableUnidades.getModel();
-//        modelo.setRowCount(0);
-//        if (listaUnidades == null || listaUnidades.isEmpty()) {
-//            modelo.addRow(new Object[]{"M-001", "CAT 320", "Disponible"});
-//            modelo.addRow(new Object[]{"M-002", "CAT 320", "En mantenimiento"});
-//            modelo.addRow(new Object[]{"M-003", "CAT 320", "Ocupada del 13 al 15"});
-//            return;
-//        }
-//        for (UnidadFisicaDTO unidad : listaUnidades) {
-//            modelo.addRow(new Object[]{unidad.getNumeroEconomico(), "CAT 320", unidad.getEstadoUnidad()});
-//        }
-//    }
-//
-//    private void cargarUnidades() {
-//        cargarUnidades(null);
-//    }
+    
     private String periodo() {
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
         if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
             return "";
         }
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
-                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
     }
 
     private String texto(String valor) {
