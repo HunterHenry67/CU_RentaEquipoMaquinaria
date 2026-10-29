@@ -4,27 +4,27 @@
  */
 package presentacion.vistas;
 
+import objetosdto.SolicitudRentaDTO;
+import objetosdto.PeriodoSolicitadoDTO;
+import java.time.temporal.ChronoUnit;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import javax.swing.JOptionPane;
-import objetosdto.PeriodoSolicitadoDTO;
-import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 
 /**
  *
  * @author alejandromontijo
  */
-public class CambiarPeriodo extends javax.swing.JFrame {
+public class CambiarPeriodoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     private DatePicker selectorFechaInicio;
     private DatePicker selectorFechaFin;
 
-    public CambiarPeriodo(IContratacionRenta contratacionRenta) {
+    public CambiarPeriodoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -52,24 +52,14 @@ public class CambiarPeriodo extends javax.swing.JFrame {
         panelFondo.add(selectorFechaInicio);
         panelFondo.add(selectorFechaFin);
 
-        selectorFechaInicio.addDateChangeListener(event -> {LocalDate nuevaInicio = event.getNewDate();
+        selectorFechaInicio.addDateChangeListener(event -> {
+            LocalDate nuevaInicio = event.getNewDate();
             if (nuevaInicio != null) {
                 selectorFechaFin.getSettings().setDateRangeLimits(nuevaInicio, null);
             }
         });
 
         panelFondo.repaint();
-    }
-    
-    // El control le pasa la solicitud: se ven el folio, el cliente, la obra y el periodo que tiene ahora
-    public void cargarDatos(SolicitudRentaDTO solicitud) {
-        lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : solicitud.getCliente().getNombre()));
-        lblUbicacion.setText("Ubicación: " + (solicitud.getDireccionObra() == null ? "" : solicitud.getDireccionObra()));
-        if (solicitud.getPeriodo() != null) {
-            selectorFechaInicio.setDate(solicitud.getPeriodo().getFechaInicio());
-            selectorFechaFin.setDate(solicitud.getPeriodo().getFechaFin());
-        }
     }
 
     public LocalDate getFechaInicio() {
@@ -78,6 +68,27 @@ public class CambiarPeriodo extends javax.swing.JFrame {
 
     public LocalDate getFechaFin() {
         return selectorFechaFin.getDate();
+    }
+
+    public void cargarPeriodo(SolicitudRentaDTO solicitud) {
+        this.solicitud = solicitud;
+        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre())));
+
+        String obra = texto(solicitud.getNombreObra());
+        String direccion = texto(solicitud.getDireccionObra());
+        lblUbicacion.setText("Ubicación: " + (obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion));
+
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo != null) {
+            selectorFechaFin.getSettings().setDateRangeLimits(null, null);
+            selectorFechaInicio.setDate(periodo.getFechaInicio());
+            selectorFechaFin.setDate(periodo.getFechaFin());
+        }
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
     }
 
     /**
@@ -285,15 +296,19 @@ public class CambiarPeriodo extends javax.swing.JFrame {
         LocalDate inicio = getFechaInicio();
         LocalDate fin = getFechaFin();
         if (inicio == null || fin == null) {
-            JOptionPane.showMessageDialog(this, "Selecciona la fecha de inicio y la de fin.", "Periodo", JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona la fecha de inicio y la de fin.");
             return;
         }
         if (fin.isBefore(inicio)) {
-            JOptionPane.showMessageDialog(this, "La fecha de fin no puede ser antes de la de inicio.", "Periodo", JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "La fecha de fin no puede ser anterior a la de inicio.");
             return;
         }
+
         int dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
-        contratacionRenta.pasarDatosCambioPeriodo(new PeriodoSolicitadoDTO(inicio, fin, dias));
+        solicitud.setPeriodo(new PeriodoSolicitadoDTO(inicio, fin, dias));
+        solicitud.setUnidadSeleccionada(null);
+
+        contratacionRenta.pasarDatosCambioPeriodo(solicitud);
     }//GEN-LAST:event_btnConsultarInventarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

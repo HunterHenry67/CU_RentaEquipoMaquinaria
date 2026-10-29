@@ -48,8 +48,6 @@ public interface IContratacionRenta {
 
     public abstract void abrirCambiarPeriodo();
 
-    public abstract void pasarDatosCambioPeriodo(PeriodoSolicitadoDTO periodo);
-
     public abstract void abrirVerificacionInventario();
 
     public abstract void abrirUnidadMantenimiento();
@@ -103,10 +101,12 @@ public interface IContratacionRenta {
     public abstract void pasarDatosVerificacionInventario(SolicitudRentaDTO dto);
 
     void pasarDatosUnidadSeleccionada(SolicitudRentaDTO dto);
-    
+
     void abrirUnidadMantenimiento(UnidadFisicaDTO unidad);
-    
+
     void abrirUnidadOcupada(UnidadFisicaDTO unidad);
+
+    void pasarDatosCambioPeriodo(SolicitudRentaDTO dto);
 
     public abstract void ocultarTodo();
 
