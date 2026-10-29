@@ -317,11 +317,6 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
         return valor == null ? "" : valor;
     }
 
-    private String estadoSeleccionado() {
-        int fila = tableUnidades.getSelectedRow();
-        return fila < 0 ? null : String.valueOf(tableUnidades.getValueAt(fila, 2));
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnSeleccionar;

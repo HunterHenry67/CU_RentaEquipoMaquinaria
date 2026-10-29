@@ -50,8 +50,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
                 if (accesorios.length() > 0) {
                     accesorios.append(", ");
                 }
-                accesorios.append(a.getNombre())
-                        .append(Boolean.TRUE.equals(a.getEsObligatorio()) ? " (Indispensable)" : " (Opcional)");
+                accesorios.append(a.getNombre()).append(Boolean.TRUE.equals(a.getEsObligatorio()) ? " (Indispensable)" : " (Opcional)");
             }
         }
         lblAccesorios.setText("Accesorios: " + accesorios);
@@ -327,8 +326,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
             return "";
         }
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
-                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
     }
 
     private String texto(String valor) {

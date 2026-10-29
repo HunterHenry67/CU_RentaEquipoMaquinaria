@@ -49,7 +49,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private SinEquipoCompatibleFrame sinEquipoCompatibleFrame;
     private SeleccionAccesoriosFrame seleccionAccesoriosFrame;
     private EvaluacionTecnicaFrame evaluacionTecnicaFrame;
-    private CambiarPeriodo cambiarPeriodo;
+    private CambiarPeriodoFrame cambiarPeriodo;
     private VerificacionInventarioFrame verificacionInventarioFrame;
     private UnidadMantenimientoFrame unidadMantenimientoFrame;
     private UnidadOcupadaFrame unidadOcupadaFrame;
@@ -68,7 +68,6 @@ public class ContratacionRenta implements IContratacionRenta {
     private IAlmacenTemporal almacenTemporal;
     private MotivoRechazoFrame motivoRechazoFrame;
 
-    
     private PropuestaRentaFrame propuestaRentaFrame;
     private PropuestaPendienteFrame propuestaPendienteFrame;
     private VerificacionCondicionFrame verificacionCondicionFrame;
@@ -88,14 +87,13 @@ public class ContratacionRenta implements IContratacionRenta {
         this.sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(this);
         this.seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(this);
         this.evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(this);
-        this.cambiarPeriodo = new CambiarPeriodo(this);
+        this.cambiarPeriodo = new CambiarPeriodoFrame(this);
         this.verificacionInventarioFrame = new VerificacionInventarioFrame(this);
         this.unidadMantenimientoFrame = new UnidadMantenimientoFrame(this);
         this.unidadOcupadaFrame = new UnidadOcupadaFrame(this);
         this.calendarioUnidadFrame = new CalendarioUnidadFrame(this);
         this.condicionesContratacionFrame = new CondicionesContratacionFrame(this);
 
-        
         this.cotizacionFrame = new CotizacionFrame(this);
         this.requisitosRentaFrame = new RequisitosRentaFrame(this);
         this.propuestaRentaFrame = new PropuestaRentaFrame(this);
@@ -107,7 +105,6 @@ public class ContratacionRenta implements IContratacionRenta {
         this.abrirInciarSesión();
     }
 
-    
     @Override
     public void abrirInciarSesión() {
         ocultarTodo();
@@ -116,7 +113,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirMenuPrincipal() {
-        
+
         solicitudActual = null;
         cotizacionActual = null;
         clienteActual = null;
@@ -198,7 +195,9 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirCambiarPeriodo() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        cambiarPeriodo.cargarPeriodo(solicitudActual);
         cambiarPeriodo.setVisible(true);
     }
 
@@ -318,7 +317,7 @@ public class ContratacionRenta implements IContratacionRenta {
     public void abrirOrdenEntregaRechazada(String motivo) {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
-       
+
         cotizacionActual.setDecision(new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo));
         solicitudActual.setEstadoSolicitud("Rechazada");
         ocultarTodo();
@@ -339,6 +338,12 @@ public class ContratacionRenta implements IContratacionRenta {
         solicitudRentaForm.cargarDatosCliente(clienteActual);
         ocultarTodo();
         solicitudRentaForm.setVisible(true);
+    }
+
+    @Override
+    public void pasarDatosCambioPeriodo(SolicitudRentaDTO dto) {
+        this.solicitudActual = dto;
+        abrirVerificacionInventario();
     }
 
     @Override
@@ -549,7 +554,6 @@ public class ContratacionRenta implements IContratacionRenta {
         LocalDate inicio = p.getFechaInicio();
         LocalDate fin = p.getFechaFin();
 
-        // La ocupación cubre desde el día siguiente al inicio hasta el fin del periodo
         LocalDate ocupadaDesde = inicio.plusDays(1).isAfter(fin) ? inicio : inicio.plusDays(1);
 
         unidadesCat320 = new ArrayList<>();
