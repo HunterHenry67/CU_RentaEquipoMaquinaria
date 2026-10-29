@@ -179,11 +179,11 @@ public class InicioSesionFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 8 caracteres.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        UsuarioDTO clienteIngresado = new UsuarioDTO();
-        clienteIngresado.setCorreo(txtFieldCorreo.getText());
-        clienteIngresado.setContrasenia(psswFiledContrasenia.getText());
+        UsuarioDTO usuario = new UsuarioDTO();
+        usuario.setCorreo(txtFieldCorreo.getText());
+        usuario.setContrasenia(psswFiledContrasenia.getText());
         JOptionPane.showMessageDialog(this, "Inicio de Sesión Exitoso.", "Inicio de Sesión", JOptionPane.PLAIN_MESSAGE);
-        contratacionRenta.pasarDatosUsuario(clienteIngresado);
+        contratacionRenta.pasarDatosUsuario(usuario);
 
     }//GEN-LAST:event_btnIngresarActionPerformed
 

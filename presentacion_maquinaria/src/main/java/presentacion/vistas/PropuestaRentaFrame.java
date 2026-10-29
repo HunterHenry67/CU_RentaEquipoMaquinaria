@@ -20,8 +20,8 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     // Datos
     private int dias = 6;
     private double tarifaDia = 1500;
-    private double senalizacion = 300;
-    private double cucharon = 200;
+    private double totalIndispensables = 300;
+    private double totalOpcionales = 200;
     private double deposito = 3200;
     private boolean incluye = true;
     private boolean hayObligatorio = true;
@@ -628,8 +628,8 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
 
         // Equipo y accesorios: los indispensables van en una fila y los opcionales en otra
         tarifaDia = 0;
-        senalizacion = 0;
-        cucharon = 0;
+        totalIndispensables = 0;
+        totalOpcionales = 0;
         hayObligatorio = false;
         hayOpcional = false;
         String nombreObligatorios = "";
@@ -656,14 +656,14 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
                         costo = accesorio.getCostoRenta();
                     }
                     if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
-                        senalizacion = senalizacion + costo;
+                        totalIndispensables = totalIndispensables + costo;
                         if (hayObligatorio) {
                             nombreObligatorios = nombreObligatorios + ", ";
                         }
                         nombreObligatorios = nombreObligatorios + accesorio.getNombre();
                         hayObligatorio = true;
                     } else {
-                        cucharon = cucharon + costo;
+                        totalOpcionales = totalOpcionales + costo;
                         if (hayOpcional) {
                             nombreOpcionales = nombreOpcionales + ", ";
                         }
@@ -714,14 +714,14 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
 
     private void recalcular() {
         double renta = dias * tarifaDia;
-        double subtotal = renta + senalizacion + (incluye ? cucharon : 0);
+        double subtotal = renta + totalIndispensables + (incluye ? totalOpcionales : 0);
         double iva = subtotal * IVA;
         double total = subtotal + iva;
 
         lblRentatxt.setText("Renta (" + dias + " días × " + moneda.format(tarifaDia) + ")");
         lblRenta.setText(moneda.format(renta));
-        lblSenalizacion.setText(moneda.format(senalizacion));
-        lblCucharon.setText(moneda.format(cucharon));
+        lblSenalizacion.setText(moneda.format(totalIndispensables));
+        lblCucharon.setText(moneda.format(totalOpcionales));
         lblSubtotal.setText(moneda.format(subtotal));
         lblIva.setText(moneda.format(iva));
         lblTotal.setText(moneda.format(total));
