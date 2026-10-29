@@ -176,7 +176,7 @@ public class InicioSesionFrame extends javax.swing.JFrame {
             return;
         }
         if (contrasenia.length() < 8) {
-            JOptionPane.showMessageDialog(this, "La Contraseña ocupa 8 caractéres como mínimo.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 8 caracteres.", "Error de Inicio de Sesión", JOptionPane.WARNING_MESSAGE);
             return;
         }
         UsuarioDTO clienteIngresado = new UsuarioDTO();

@@ -4,6 +4,13 @@
  */
 package presentacion.vistas;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.table.DefaultTableModel;
+import objetosdto.OcupacionUnidadDTO;
+import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.SolicitudRentaDTO;
+import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
 
 /**
@@ -18,6 +25,66 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    // Los días del periodo para la unidad que se eligió en Verificación de inventario
+    public void cargarDatos(SolicitudRentaDTO solicitud) {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        UnidadFisicaDTO unidad = solicitud.getUnidadSeleccionada();
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        lblUnidad.setText("Unidad: " + (unidad != null && unidad.getNumeroEconomico() != null ? unidad.getNumeroEconomico() : "sin elegir"));
+
+        DefaultTableModel modelo = (DefaultTableModel) tableDias.getModel();
+        modelo.setRowCount(0);
+        boolean libre = true;
+        String otraRenta = "ninguna";
+        String mantenimiento = "ninguno";
+        if (unidad != null && unidad.getEstadoUnidad() != null && unidad.getEstadoUnidad().startsWith("En mantenimiento")) {
+            mantenimiento = unidad.getEstadoUnidad();
+        }
+        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
+            lblPeriodo.setText("Periodo: sin registrar");
+        } else {
+            lblPeriodo.setText("Periodo: " + periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato));
+            int dia = 1;
+            for (LocalDate fecha = periodo.getFechaInicio(); !fecha.isAfter(periodo.getFechaFin()); fecha = fecha.plusDays(1)) {
+                String estado = "Libre";
+                if (!"ninguno".equals(mantenimiento)) {
+                    estado = "En mantenimiento";
+                } else if (ocupadaEl(unidad, fecha)) {
+                    estado = "Ocupada";
+                }
+                if (!estado.equals("Libre")) {
+                    libre = false;
+                }
+                modelo.addRow(new Object[]{dia, fecha.format(formato), estado});
+                dia++;
+            }
+            if (unidad != null && unidad.getOcupaciones() != null) {
+                for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
+                    boolean seTraslapa = !o.getFechaFin().isBefore(periodo.getFechaInicio()) && !o.getFechaInicio().isAfter(periodo.getFechaFin());
+                    if (seTraslapa) {
+                        otraRenta = "del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
+                    }
+                }
+            }
+        }
+        lblEstado.setText(libre ? "Estado: libre todo el periodo" : "Estado: no está libre todo el periodo");
+        lblMantenimiento.setText("Mantenimiento programado: " + mantenimiento);
+        lblOtraRenta.setText("Otra renta en el periodo: " + otraRenta);
+        btnSeleccionarUnidad.setEnabled(libre);
+    }
+
+    private boolean ocupadaEl(UnidadFisicaDTO unidad, LocalDate fecha) {
+        if (unidad == null || unidad.getOcupaciones() == null) {
+            return false;
+        }
+        for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
+            if (!fecha.isBefore(o.getFechaInicio()) && !fecha.isAfter(o.getFechaFin())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
+import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DecisionClienteDTO;
 import objetosdto.DetalleCotizacionDTO;
@@ -21,6 +22,7 @@ import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.OcupacionUnidadDTO;
+import objetosdto.OrdenEntregaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
@@ -86,6 +88,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private UsuarioDTO usuarioDTO;
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
+    private ContratacionRentaDTO contratacionActual;
     private List<EquipoDTO> catalogoEquipos;
     private List<UnidadFisicaDTO> unidadesCat320;
     private List<UnidadFisicaDTO> unidadesCat336;
@@ -131,12 +134,12 @@ public class ContratacionRenta implements IContratacionRenta {
         this.ordenEntregaFrame = new OrdenEntregaFrame(this);
         this.motivoRechazoFrame = new MotivoRechazoFrame(this);
 
-        this.abrirInciarSesión();
+        this.abrirIniciarSesion();
     }
 
     
     @Override
-    public void abrirInciarSesión() {
+    public void abrirIniciarSesion() {
         ocultarTodo();
         iniciarSesionFrame.setVisible(true);
     }
@@ -146,6 +149,7 @@ public class ContratacionRenta implements IContratacionRenta {
         
         solicitudActual = null;
         cotizacionActual = null;
+        contratacionActual = null;
         clienteActual = null;
         ocultarTodo();
         menuPrincipalFrame.setVisible(true);
@@ -225,8 +229,20 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirCambiarPeriodo() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        cambiarPeriodo.cargarDatos(solicitudActual);
         cambiarPeriodo.setVisible(true);
+    }
+
+    @Override
+    public void pasarDatosCambioPeriodo(PeriodoSolicitadoDTO periodo) {
+        prepararDatosSolicitud();
+        solicitudActual.setPeriodo(periodo);
+        // con otras fechas hay que volver a revisar qué unidades están libres y rehacer la cotización
+        solicitudActual.setUnidadSeleccionada(null);
+        cotizacionActual = null;
+        abrirVerificacionInventario();
     }
 
     @Override
@@ -267,7 +283,9 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirCalendarioUnidad() {
+        prepararDatosSolicitud();
         ocultarTodo();
+        calendarioUnidadFrame.cargarDatos(solicitudActual);
         calendarioUnidadFrame.setVisible(true);
     }
 
@@ -298,21 +316,77 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void abrirVerificacionCondicion(boolean conCucharon) {
+    public void pasarDatosDecisionCliente(DecisionClienteDTO decision) {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
+        cotizacionActual.setDecision(decision);
+        contratacionActual = armarContratacion(decision);
         ocultarTodo();
-        verificacionCondicionFrame.cargarDatos(solicitudActual, conCucharon);
-        verificacionCondicionFrame.setVisible(true);
+        if ("NO ACEPTA INDISPENSABLE".equals(decision.getTipoDecision())) {
+            // sin el accesorio indispensable no hay condiciones que revisar: la solicitud queda pendiente
+            ordenEntregaFrame.cargarDatos(solicitudActual, contratacionActual);
+            ordenEntregaFrame.setVisible(true);
+        } else {
+            verificacionCondicionFrame.cargarDatos(solicitudActual, contratacionActual);
+            verificacionCondicionFrame.setVisible(true);
+        }
     }
 
+    // La contratación con lo que decidió el cliente: con todos los accesorios, solo con el indispensable o sin ellos
+    private ContratacionRentaDTO armarContratacion(DecisionClienteDTO decision) {
+        String tipo = decision.getTipoDecision();
+        ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
+        contratacion.setCliente(solicitudActual.getCliente());
+        contratacion.setFechaInicio(solicitudActual.getPeriodo().getFechaInicio());
+        contratacion.setFechaFin(solicitudActual.getPeriodo().getFechaFin());
+        contratacion.setUnidad(solicitudActual.getUnidadSeleccionada());
+        contratacion.setEstado("PENDIENTE");
+        List<AccesorioDTO> accesorios = new ArrayList<>();
+        EquipoDTO equipo = equipoRecomendado();
+        if (equipo != null) {
+            contratacion.setTarifaAcordada(equipo.getCostoDiario());
+            if (equipo.getAccesorios() != null && !"NO ACEPTA INDISPENSABLE".equals(tipo)) {
+                for (AccesorioDTO accesorio : equipo.getAccesorios()) {
+                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || !"ACEPTA PARCIAL".equals(tipo)) {
+                        accesorios.add(accesorio);
+                    }
+                }
+            }
+        }
+        contratacion.setAccesorios(accesorios);
+        if (solicitudActual.getRequisitos() != null) {
+            for (RequisitoRentaDTO requisito : solicitudActual.getRequisitos()) {
+                if (requisito.getMonto() != null) {
+                    contratacion.setDepositoGarantia(requisito.getMonto());
+                }
+            }
+        }
+        return contratacion;
+    }
+
+
     @Override
-    public void abrirOrdenEntrega(boolean conCucharon, boolean finalizada) {
+    public void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion) {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
+        contratacionActual = contratacion;
+        if ("FORMALIZADA".equals(contratacion.getEstado()) && contratacion.getOrdenEntrega() == null) {
+            contratacion.setFechaFormalizacion(LocalDate.now());
+            contratacion.setOrdenEntrega(armarOrdenEntrega());
+        }
         ocultarTodo();
-        ordenEntregaFrame.cargarDatos(solicitudActual, conCucharon, finalizada);
+        ordenEntregaFrame.cargarDatos(solicitudActual, contratacionActual);
         ordenEntregaFrame.setVisible(true);
+    }
+
+    private OrdenEntregaDTO armarOrdenEntrega() {
+        OrdenEntregaDTO orden = new OrdenEntregaDTO();
+        orden.setFechaGeneracion(LocalDate.now());
+        orden.setFechaEntrega(solicitudActual.getPeriodo().getFechaInicio());
+        orden.setDireccionEntrega(solicitudActual.getDireccionObra());
+        orden.setHorario("antes de las 8:00 AM");
+        orden.setEstadoOrden("Finalizada");
+        return orden;
     }
 
     @Override
@@ -345,10 +419,13 @@ public class ContratacionRenta implements IContratacionRenta {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
        
-        cotizacionActual.setDecision(new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo));
+        DecisionClienteDTO decision = new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo);
+        cotizacionActual.setDecision(decision);
         solicitudActual.setEstadoSolicitud("Rechazada");
+        contratacionActual = armarContratacion(decision);
+        contratacionActual.setEstado("RECHAZADA");
         ocultarTodo();
-        ordenEntregaFrame.cargarDatosRechazada(solicitudActual, motivo);
+        ordenEntregaFrame.cargarDatosRechazada(solicitudActual, contratacionActual, motivo);
         ordenEntregaFrame.setVisible(true);
     }
 
@@ -360,7 +437,7 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosSolcitudRenta(ClienteDTO dto) {
+    public void pasarDatosSolicitudRenta(ClienteDTO dto) {
         this.clienteActual = dto;
         solicitudRentaForm.cargarDatosCliente(clienteActual);
         ocultarTodo();
@@ -368,7 +445,7 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatoRegistroCliente(ClienteDTO dto) {
+    public void pasarDatosRegistroCliente(ClienteDTO dto) {
         this.clienteActual = dto;
         registrarClienteFrame.cargarDatosRegistroCliente(this.clienteActual);
         ocultarTodo();
@@ -418,7 +495,7 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo) {
+    public void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo) {
         if (this.solicitudActual == null) {
             this.solicitudActual = new SolicitudRentaDTO();
         }
@@ -431,7 +508,8 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosUnidadSeleccionada(SolicitudRentaDTO dto) {
         this.solicitudActual = dto;
-        abrirCondicionesContratacion();
+        // antes de las condiciones se ven los días del periodo de la unidad elegida
+        abrirCalendarioUnidad();
     }
 
     @Override

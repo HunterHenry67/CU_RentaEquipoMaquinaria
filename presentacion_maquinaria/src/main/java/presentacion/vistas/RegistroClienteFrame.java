@@ -17,6 +17,7 @@ import presentacion.control.IContratacionRenta;
 public class RegistroClienteFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private String archivoIdentificacion;
 
     public RegistroClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -39,24 +40,27 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 panelEncargado.setVisible(true);
                 radioBtnEmpresa.setSelected(true);
                 ClienteEmpresaDTO empresa = (ClienteEmpresaDTO) dto;
-                txtFileldNombreEncargado.setText(empresa.getNombreEncargadoEmpresa());
+                txtFieldNombreEncargado.setText(empresa.getNombreEncargadoEmpresa());
                 txtFieldPuestoEncargado.setText(empresa.getPuestoEncargadoEmpresa());
-                txtFieldTelefonoEncragado.setText(empresa.getTelefonoEncargadoEmpresa());
+                txtFieldTelefonoEncargado.setText(empresa.getTelefonoEncargadoEmpresa());
             } else {
                 panelEncargado.setVisible(false);
                 radioBtnClientePart.setSelected(true);
-                txtFileldNombreEncargado.setText("");
+                txtFieldNombreEncargado.setText("");
                 txtFieldPuestoEncargado.setText("");
-                txtFieldTelefonoEncragado.setText("");
+                txtFieldTelefonoEncargado.setText("");
+                archivoIdentificacion = null;
+                btnSeleccionarArchivo.setText("Seleccionar Archivo");
+                btnSeleccionarArchivo.setToolTipText(null);
             }
         } else {
             txtFieldNombre.setText("");
             txtFieldRFC.setText("");
             txtFieldTelefono.setText("");
             txtFieldCorreoElectro.setText("");
-            txtFileldNombreEncargado.setText("");
+            txtFieldNombreEncargado.setText("");
             txtFieldPuestoEncargado.setText("");
-            txtFieldTelefonoEncragado.setText("");
+            txtFieldTelefonoEncargado.setText("");
             radioBtnClientePart.setSelected(true);
             panelEncargado.setVisible(false);
         }
@@ -83,9 +87,9 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         panelEncargado = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        txtFileldNombreEncargado = new javax.swing.JTextField();
+        txtFieldNombreEncargado = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        txtFieldTelefonoEncragado = new javax.swing.JTextField();
+        txtFieldTelefonoEncargado = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtFieldPuestoEncargado = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
@@ -173,17 +177,17 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Nombre:");
 
-        txtFileldNombreEncargado.setBackground(new java.awt.Color(255, 255, 255));
-        txtFileldNombreEncargado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFileldNombreEncargado.setForeground(new java.awt.Color(0, 0, 0));
+        txtFieldNombreEncargado.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldNombreEncargado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldNombreEncargado.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Teléfono:");
 
-        txtFieldTelefonoEncragado.setBackground(new java.awt.Color(255, 255, 255));
-        txtFieldTelefonoEncragado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFieldTelefonoEncragado.setForeground(new java.awt.Color(0, 0, 0));
+        txtFieldTelefonoEncargado.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldTelefonoEncargado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldTelefonoEncargado.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel11.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
@@ -224,7 +228,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 .addGap(0, 460, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(txtFileldNombreEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldNombreEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 460, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(460, 460, 460)
@@ -232,7 +236,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(460, 460, 460)
-                .addComponent(txtFieldTelefonoEncragado, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldTelefonoEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
@@ -263,7 +267,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 .addGap(0, 110, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addComponent(txtFileldNombreEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldNombreEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 72, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
@@ -271,7 +275,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
                 .addGap(0, 110, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addComponent(txtFieldTelefonoEncragado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldTelefonoEncargado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 72, Short.MAX_VALUE))
             .addGroup(panelEncargadoLayout.createSequentialGroup()
                 .addGap(102, 102, 102)
@@ -479,7 +483,13 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_radioBtnEmpresaActionPerformed
 
     private void btnSeleccionarArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarArchivoActionPerformed
-        // TODO add your handling code here:
+        javax.swing.JFileChooser selector = new javax.swing.JFileChooser();
+        selector.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imagen o PDF", "jpg", "jpeg", "png", "pdf"));
+        if (selector.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+            archivoIdentificacion = selector.getSelectedFile().getAbsolutePath();
+            btnSeleccionarArchivo.setText(selector.getSelectedFile().getName());
+            btnSeleccionarArchivo.setToolTipText(archivoIdentificacion);
+        }
     }//GEN-LAST:event_btnSeleccionarArchivoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -493,7 +503,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         }
 
         if (radioBtnEmpresa.isSelected()) {
-            if (txtFileldNombreEncargado.getText().isEmpty() || txtFieldPuestoEncargado.getText().isEmpty() || txtFieldTelefonoEncragado.getText().isEmpty()) {
+            if (txtFieldNombreEncargado.getText().isEmpty() || txtFieldPuestoEncargado.getText().isEmpty() || txtFieldTelefonoEncargado.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Favor de llenar campos de empresa.", "Error de Registro", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -502,11 +512,12 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             empresa.setCorreo(txtFieldCorreoElectro.getText());
             empresa.setRfc(txtFieldRFC.getText());
             empresa.setTelefono(txtFieldTelefono.getText());
-            empresa.setNombreEncargadoEmpresa(txtFileldNombreEncargado.getText());
+            empresa.setNombreEncargadoEmpresa(txtFieldNombreEncargado.getText());
             empresa.setPuestoEncargadoEmpresa(txtFieldPuestoEncargado.getText());
-            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncragado.getText());
-            JOptionPane.showMessageDialog(this, "La Empresa ha saido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-            this.contratacionRenta.pasarDatosSolcitudRenta(empresa);
+            empresa.setTelefonoEncargadoEmpresa(txtFieldTelefonoEncargado.getText());
+            empresa.setArchivoIdentificacionEncargado(archivoIdentificacion);
+            JOptionPane.showMessageDialog(this, "La Empresa ha sido registrada correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
+            this.contratacionRenta.pasarDatosSolicitudRenta(empresa);
         } else if (radioBtnClientePart.isSelected()) {
             ClienteDTO particular = new ClienteDTO();
             particular.setNombre(txtFieldNombre.getText());
@@ -514,7 +525,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
             particular.setTelefono(txtFieldTelefono.getText());
             particular.setCorreo(txtFieldCorreoElectro.getText());
             JOptionPane.showMessageDialog(this, "El Cliente ha sido registrado correctamente.", "Cliente Registrado", JOptionPane.INFORMATION_MESSAGE);
-            this.contratacionRenta.pasarDatosSolcitudRenta(particular);
+            this.contratacionRenta.pasarDatosSolicitudRenta(particular);
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -543,7 +554,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtFieldPuestoEncargado;
     private javax.swing.JTextField txtFieldRFC;
     private javax.swing.JTextField txtFieldTelefono;
-    private javax.swing.JTextField txtFieldTelefonoEncragado;
-    private javax.swing.JTextField txtFileldNombreEncargado;
+    private javax.swing.JTextField txtFieldTelefonoEncargado;
+    private javax.swing.JTextField txtFieldNombreEncargado;
     // End of variables declaration//GEN-END:variables
 }

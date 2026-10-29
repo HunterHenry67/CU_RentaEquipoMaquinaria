@@ -4,6 +4,7 @@
  */
 package presentacion.vistas;
 
+import java.util.ArrayList;
 import java.util.List;
 import objetosdto.ClienteDTO;
 import objetosdto.RequisitoRentaDTO;
@@ -17,7 +18,7 @@ import presentacion.control.IContratacionRenta;
 public class RequisitosRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private List<RequisitoRentaDTO> requisitos;
+    private List<RequisitoRentaDTO> requisitos = new ArrayList<>();
 
     public RequisitosRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;

@@ -13,6 +13,7 @@ public class ClienteEmpresaDTO extends ClienteDTO{
     private String nombreEncargadoEmpresa;
     private String telefonoEncargadoEmpresa;
     private String puestoEncargadoEmpresa;
+    private String archivoIdentificacionEncargado;
 
     public ClienteEmpresaDTO() {
     }
@@ -39,6 +40,14 @@ public class ClienteEmpresaDTO extends ClienteDTO{
 
     public void setPuestoEncargadoEmpresa(String puestoEncargadoEmpresa) {
         this.puestoEncargadoEmpresa = puestoEncargadoEmpresa;
+    }
+
+    public String getArchivoIdentificacionEncargado() {
+        return archivoIdentificacionEncargado;
+    }
+
+    public void setArchivoIdentificacionEncargado(String archivoIdentificacionEncargado) {
+        this.archivoIdentificacionEncargado = archivoIdentificacionEncargado;
     }
 
 }

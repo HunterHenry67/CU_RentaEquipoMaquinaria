@@ -633,7 +633,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
-        int respuesta = JOptionPane.showConfirmDialog(this, "¿Confirma que desea cancelar el proceso de solicitud?", "Cancelación Solcitud", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        int respuesta = JOptionPane.showConfirmDialog(this, "¿Confirma que desea cancelar el proceso de solicitud?", "Cancelación de Solicitud", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (respuesta == JOptionPane.YES_OPTION) {
             CardLayout card = (CardLayout) this.getContentPane().getLayout();
             card.show(this.getContentPane(), "card2");
@@ -686,7 +686,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
         
         if(txtAreaRazonCancelacion.getText().isEmpty()){
-            JOptionPane.showMessageDialog(this, "Favor de desrcibir la razón de su cancelación.", "Error Regsitro Cancelación", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Favor de desrcibir la razón de su cancelación.", "Error en el Registro de Cancelación", JOptionPane.WARNING_MESSAGE);
         }
         JOptionPane.showMessageDialog(this, "La cancelación de la solicitud ha sido registrada.", "Solicitud Renta", JOptionPane.INFORMATION_MESSAGE);
         CardLayout card = (CardLayout) this.getContentPane().getLayout();

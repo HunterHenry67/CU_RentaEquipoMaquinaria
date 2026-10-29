@@ -4,7 +4,6 @@
  */
 package presentacion.vistas;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -316,15 +315,11 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
 
 
     private String sinAcentos(String texto) {
-        if (texto == null) {
-            return "";
-        }
-        String sinMarcas = Normalizer.normalize(texto.trim(), Normalizer.Form.NFD).replaceAll("\\p{M}", "");
-        return sinMarcas.toLowerCase();
+        return Textos.sinAcentos(texto);
     }
 
     private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
-        this.contratacionRenta.pasarDatoRegistroCliente(null);
+        this.contratacionRenta.pasarDatosRegistroCliente(null);
         contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
 
@@ -336,9 +331,9 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         int filaSeleccionada = tableCliente.getSelectedRow();
         if (filaSeleccionada != -1) {
             ClienteDTO clienteSeleccionado = clientesMostrados.get(filaSeleccionada);
-            contratacionRenta.pasarDatosSolcitudRenta(clienteSeleccionado);
+            contratacionRenta.pasarDatosSolicitudRenta(clienteSeleccionado);
         } else {
-            JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solcitud", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Favor de seleccionar un cliente para realizar el registro de solicitud.", "Falla de Registro de Solicitud", JOptionPane.INFORMATION_MESSAGE);
         }
 
     }//GEN-LAST:event_btnRegistrarNuevSoliActionPerformed
@@ -350,7 +345,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
             return;
         }
         ClienteDTO clienteSeleccionado = clientesMostrados.get(fila);
-        this.contratacionRenta.pasarDatoRegistroCliente(clienteSeleccionado);
+        this.contratacionRenta.pasarDatosRegistroCliente(clienteSeleccionado);
         contratacionRenta.abrirRegistrarCliente();
     }//GEN-LAST:event_btnModificarDatosActionPerformed
 

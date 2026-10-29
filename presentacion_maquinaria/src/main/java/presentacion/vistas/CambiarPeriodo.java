@@ -7,6 +7,9 @@ package presentacion.vistas;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import javax.swing.JOptionPane;
+import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 
@@ -58,6 +61,17 @@ public class CambiarPeriodo extends javax.swing.JFrame {
         panelFondo.repaint();
     }
     
+    // El control le pasa la solicitud: se ven el folio, el cliente, la obra y el periodo que tiene ahora
+    public void cargarDatos(SolicitudRentaDTO solicitud) {
+        lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : solicitud.getCliente().getNombre()));
+        lblUbicacion.setText("Ubicación: " + (solicitud.getDireccionObra() == null ? "" : solicitud.getDireccionObra()));
+        if (solicitud.getPeriodo() != null) {
+            selectorFechaInicio.setDate(solicitud.getPeriodo().getFechaInicio());
+            selectorFechaFin.setDate(solicitud.getPeriodo().getFechaFin());
+        }
+    }
+
     public LocalDate getFechaInicio() {
         return selectorFechaInicio.getDate();
     }
@@ -268,7 +282,18 @@ public class CambiarPeriodo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConsultarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInventarioActionPerformed
-        contratacionRenta.abrirVerificacionInventario();
+        LocalDate inicio = getFechaInicio();
+        LocalDate fin = getFechaFin();
+        if (inicio == null || fin == null) {
+            JOptionPane.showMessageDialog(this, "Selecciona la fecha de inicio y la de fin.", "Periodo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (fin.isBefore(inicio)) {
+            JOptionPane.showMessageDialog(this, "La fecha de fin no puede ser antes de la de inicio.", "Periodo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int dias = (int) ChronoUnit.DAYS.between(inicio, fin) + 1;
+        contratacionRenta.pasarDatosCambioPeriodo(new PeriodoSolicitadoDTO(inicio, fin, dias));
     }//GEN-LAST:event_btnConsultarInventarioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

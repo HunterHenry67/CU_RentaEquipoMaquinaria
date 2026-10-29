@@ -364,14 +364,14 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel8" alignment="0" min="-2" pref="292" max="-2" attributes="0"/>
                           <Component id="jLabel9" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
-                          <Component id="txtFileldNombreEncargado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                          <Component id="txtFieldNombreEncargado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                           <Component id="jLabel11" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                           <Component id="txtFieldPuestoEncargado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <EmptySpace min="460" pref="460" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel10" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
-                                  <Component id="txtFieldTelefonoEncragado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
+                                  <Component id="txtFieldTelefonoEncargado" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                                   <Component id="jLabel12" alignment="0" min="-2" pref="420" max="-2" attributes="0"/>
                                   <Component id="btnSeleccionarArchivo" alignment="0" min="-2" pref="183" max="-2" attributes="0"/>
                               </Group>
@@ -392,7 +392,7 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                              <Component id="txtFileldNombreEncargado" min="-2" pref="34" max="-2" attributes="0"/>
+                              <Component id="txtFieldNombreEncargado" min="-2" pref="34" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
@@ -400,7 +400,7 @@
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-                              <Component id="txtFieldTelefonoEncragado" min="-2" pref="34" max="-2" attributes="0"/>
+                              <Component id="txtFieldTelefonoEncargado" min="-2" pref="34" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
@@ -447,7 +447,7 @@
                 <Property name="text" type="java.lang.String" value="Nombre:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtFileldNombreEncargado">
+            <Component class="javax.swing.JTextField" name="txtFieldNombreEncargado">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -471,7 +471,7 @@
                 <Property name="text" type="java.lang.String" value="Tel&#xe9;fono:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtFieldTelefonoEncragado">
+            <Component class="javax.swing.JTextField" name="txtFieldTelefonoEncargado">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>

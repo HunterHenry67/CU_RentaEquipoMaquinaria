@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import objetosdto.AccesorioDTO;
+import objetosdto.ContratacionRentaDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
@@ -13,7 +14,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
 
-    private boolean conCucharon = true;
+    private ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
     
     private String unidad = "M-001";
     
@@ -350,16 +351,18 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         // Orden finalizada
-        contratacionRenta.abrirOrdenEntrega(conCucharon, true);
+        contratacion.setEstado("FORMALIZADA");
+        contratacionRenta.pasarDatosOrdenEntrega(contratacion);
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void btnNoGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoGenerarActionPerformed
         // Solicitud en estado pendiente
-        contratacionRenta.abrirOrdenEntrega(conCucharon, false);
+        contratacion.setEstado("PENDIENTE");
+        contratacionRenta.pasarDatosOrdenEntrega(contratacion);
     }//GEN-LAST:event_btnNoGenerarActionPerformed
 
-    public void cargarDatos(SolicitudRentaDTO solicitud, boolean conCucharon) {
-        this.conCucharon = conCucharon;
+    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
+        this.contratacion = contratacion;
 
         EquipoDTO equipo = null;
         if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
@@ -387,18 +390,17 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
             if (equipo.getCostoDiario() != null) {
                 tarifa = equipo.getCostoDiario();
             }
-            if (equipo.getAccesorios() != null) {
-                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
-                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
-                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || conCucharon) {
-                        if (accesorio.getCostoRenta() != null) {
-                            accesorios = accesorios + accesorio.getCostoRenta();
-                        }
-                        if (!nombresAccesorios.equals("")) {
-                            nombresAccesorios = nombresAccesorios + ", ";
-                        }
-                        nombresAccesorios = nombresAccesorios + accesorio.getNombre();
+            // los accesorios son los que aceptó el cliente
+            if (contratacion.getAccesorios() != null) {
+                for (int i = 0; i < contratacion.getAccesorios().size(); i++) {
+                    AccesorioDTO accesorio = contratacion.getAccesorios().get(i);
+                    if (accesorio.getCostoRenta() != null) {
+                        accesorios = accesorios + accesorio.getCostoRenta();
                     }
+                    if (!nombresAccesorios.equals("")) {
+                        nombresAccesorios = nombresAccesorios + ", ";
+                    }
+                    nombresAccesorios = nombresAccesorios + accesorio.getNombre();
                 }
             }
         }

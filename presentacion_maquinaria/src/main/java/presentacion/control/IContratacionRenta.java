@@ -6,8 +6,11 @@ package presentacion.control;
 
 import java.util.List;
 import objetosdto.ClienteDTO;
+import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
+import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
@@ -19,7 +22,7 @@ import objetosdto.UsuarioDTO;
  */
 public interface IContratacionRenta {
 
-    public abstract void abrirInciarSesión();
+    public abstract void abrirIniciarSesion();
 
     public abstract void abrirMenuPrincipal();
 
@@ -45,6 +48,8 @@ public interface IContratacionRenta {
 
     public abstract void abrirCambiarPeriodo();
 
+    public abstract void pasarDatosCambioPeriodo(PeriodoSolicitadoDTO periodo);
+
     public abstract void abrirVerificacionInventario();
 
     public abstract void abrirUnidadMantenimiento();
@@ -63,9 +68,9 @@ public interface IContratacionRenta {
 
     public abstract void abrirPropuestaPendiente();
 
-    public abstract void abrirVerificacionCondicion(boolean conCucharon);
+    public abstract void pasarDatosDecisionCliente(DecisionClienteDTO decision);
 
-    public abstract void abrirOrdenEntrega(boolean conCucharon, boolean finalizada);
+    public abstract void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion);
 
     public abstract void abrirMotivoRechazo();
 
@@ -73,9 +78,9 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosUsuario(UsuarioDTO dto);
 
-    public abstract void pasarDatosSolcitudRenta(ClienteDTO dto);
+    public abstract void pasarDatosSolicitudRenta(ClienteDTO dto);
 
-    public abstract void pasarDatoRegistroCliente(ClienteDTO dto);
+    public abstract void pasarDatosRegistroCliente(ClienteDTO dto);
 
     public abstract void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO dto);
 
@@ -83,7 +88,7 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosPropuestaRenta(List<RequisitoRentaDTO> requisitos);
 
-    public abstract void pasarDatosEquipooSolicitado(EquipoSolicitadoDTO equipo);
+    public abstract void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo);
 
     public abstract void pasarDatosSolicitudDatosFaltantes(SolicitudRentaDTO dto);
 

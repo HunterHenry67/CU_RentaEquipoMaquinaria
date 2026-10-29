@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import objetosdto.AccesorioDTO;
+import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
@@ -597,7 +598,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // antes de la orden se revisan las condiciones de la contratación
-        contratacionRenta.abrirVerificacionCondicion(true);
+        contratacionRenta.pasarDatosDecisionCliente(new DecisionClienteDTO(LocalDate.now(), "ACEPTA", "Acepta la propuesta completa"));
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnAceptarParcialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarParcialActionPerformed

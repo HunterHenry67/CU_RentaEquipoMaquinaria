@@ -1,6 +1,8 @@
 package presentacion.vistas;
 
+import java.time.LocalDate;
 import objetosdto.AccesorioDTO;
+import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
@@ -129,12 +131,14 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         // Se queda con el accesorio indispensable y sin el cucharón; antes de la orden se revisan las condiciones
-        contratacionRenta.abrirVerificacionCondicion(false);
+        contratacionRenta.pasarDatosDecisionCliente(new DecisionClienteDTO(LocalDate.now(), "ACEPTA PARCIAL",
+                "Se queda con el accesorio indispensable, sin el opcional"));
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void btnNoContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoContinuarActionPerformed
         // Sin el accesorio indispensable, la solicitud queda pendiente
-        contratacionRenta.abrirOrdenEntrega(false, false);
+        contratacionRenta.pasarDatosDecisionCliente(new DecisionClienteDTO(LocalDate.now(), "NO ACEPTA INDISPENSABLE",
+                "No acepta el accesorio indispensable"));
     }//GEN-LAST:event_btnNoContinuarActionPerformed
 
     

@@ -18,6 +18,7 @@ import presentacion.control.IContratacionRenta;
 public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private List<EquipoDTO> catalogo = new ArrayList<>();
 
     // El catálogo se lo pasa el control con cargarEquiposEnTabla (la pantalla no consulta el almacén)
     public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
@@ -27,6 +28,11 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     }
 
     public void cargarEquiposEnTabla(List<EquipoDTO> listaEquipos) {
+        catalogo = listaEquipos;
+        mostrarEquipos(listaEquipos);
+    }
+
+    private void mostrarEquipos(List<EquipoDTO> listaEquipos) {
         DefaultTableModel modelo = (DefaultTableModel) tableEquipoCatalogo.getModel();
         modelo.setRowCount(0);
         for (objetosdto.EquipoDTO e : listaEquipos) {
@@ -193,7 +199,18 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-
+        // busca por marca o modelo; con el campo vacío se ve todo el catálogo
+        String buscado = Textos.sinAcentos(txtFieldBusqueda.getText());
+        List<EquipoDTO> encontrados = new ArrayList<>();
+        for (EquipoDTO e : catalogo) {
+            if (Textos.sinAcentos(e.getMarca() + " " + e.getModelo()).contains(buscado)) {
+                encontrados.add(e);
+            }
+        }
+        mostrarEquipos(encontrados);
+        if (encontrados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay equipos en el catálogo con ese nombre.", "Búsqueda", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -208,7 +225,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
             objetosdto.EquipoSolicitadoDTO equipoSolicitado = new objetosdto.EquipoSolicitadoDTO();
             equipoSolicitado.setDescripcionEquipo(equipoTexto);
             equipoSolicitado.setCantidad(1); 
-            contratacionRenta.pasarDatosEquipooSolicitado(equipoSolicitado);
+            contratacionRenta.pasarDatosEquipoSolicitado(equipoSolicitado);
             contratacionRenta.abrirSolicitudRenta();
             modelo.removeRow(filaSeleccionada);
             

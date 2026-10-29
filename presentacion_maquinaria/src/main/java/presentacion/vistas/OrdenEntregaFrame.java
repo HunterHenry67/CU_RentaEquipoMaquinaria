@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import objetosdto.AccesorioDTO;
+import objetosdto.ContratacionRentaDTO;
 import objetosdto.EquipoDTO;
+import objetosdto.OrdenEntregaDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
@@ -20,6 +22,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     private String textoPrecioAccesorios = "$500";
     private String textoTotal = "Total de la renta: $11,020";
     private String textoFechaInicio = "10/09/2026";
+    private String textoFechaEntrega = "10/09/2026, antes de las 8:00 AM";
     
     private String unidad = "M-001";
     
@@ -408,8 +411,9 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     // Finalizada: la orden de entrega. Pendiente con cucharón: no se generó la orden porque falta una
     // condición. Pendiente sin cucharón: el cliente no aceptó el accesorio indispensable y la solicitud queda
     // pendiente sin accesorios.
-    public void configurar(boolean conCucharon, boolean finalizada) {
-        boolean sinAccesorios = !conCucharon && !finalizada;
+    // conAccesorios: el cliente aceptó al menos el indispensable; finalizada: ya hay orden de entrega
+    public void configurar(boolean conAccesorios, boolean finalizada) {
+        boolean sinAccesorios = !conAccesorios && !finalizada;
 
         lblAccesorios.setText(textoAccesorios);
         lblPrecioAccesorios.setText(textoPrecioAccesorios);
@@ -426,7 +430,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setForeground(verde);
             lblFechaEntregaTit.setText("Fecha de entrega:");
             // CAMBIO 4: la fecha ya no es fija ("10/09/2026"), viene del periodo de la solicitud
-            lblFechaEntrega.setText(textoFechaInicio + ", antes de las 8:00 AM");
+            lblFechaEntrega.setText(textoFechaEntrega);
             lblIdentificacionEstado.setText("Cumplida");
             lblIdentificacionEstado.setForeground(verde);
             lblMotivo.setText("");
@@ -453,7 +457,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDireccion.setVisible(finalizada);
     }
     
-    public void cargarDatos(SolicitudRentaDTO solicitud, boolean conCucharon, boolean finalizada) {
+    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
         EquipoDTO equipo = null;
         if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
                 && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
@@ -480,18 +484,17 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             if (equipo.getCostoDiario() != null) {
                 tarifa = equipo.getCostoDiario();
             }
-            if (equipo.getAccesorios() != null) {
-                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
-                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
-                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || conCucharon) {
-                        if (accesorio.getCostoRenta() != null) {
-                            accesorios = accesorios + accesorio.getCostoRenta();
-                        }
-                        if (!nombresAccesorios.equals("")) {
-                            nombresAccesorios = nombresAccesorios + ", ";
-                        }
-                        nombresAccesorios = nombresAccesorios + accesorio.getNombre();
+            // los accesorios son los que aceptó el cliente
+            if (contratacion.getAccesorios() != null) {
+                for (int i = 0; i < contratacion.getAccesorios().size(); i++) {
+                    AccesorioDTO accesorio = contratacion.getAccesorios().get(i);
+                    if (accesorio.getCostoRenta() != null) {
+                        accesorios = accesorios + accesorio.getCostoRenta();
                     }
+                    if (!nombresAccesorios.equals("")) {
+                        nombresAccesorios = nombresAccesorios + ", ";
+                    }
+                    nombresAccesorios = nombresAccesorios + accesorio.getNombre();
                 }
             }
         }
@@ -519,6 +522,20 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         textoFechaInicio = inicio.format(formato);
+        textoFechaEntrega = textoFechaInicio + ", antes de las 8:00 AM";
+        String direccion = solicitud.getDireccionObra();
+        OrdenEntregaDTO orden = contratacion.getOrdenEntrega();
+        if (orden != null) {
+            if (orden.getFechaEntrega() != null) {
+                textoFechaEntrega = orden.getFechaEntrega().format(formato) + ", " + orden.getHorario();
+            }
+            if (orden.getDireccionEntrega() != null) {
+                direccion = orden.getDireccionEntrega();
+            }
+        }
+        if (contratacion.getUnidad() != null && contratacion.getUnidad().getNumeroEconomico() != null) {
+            unidad = contratacion.getUnidad().getNumeroEconomico();
+        }
         textoAccesorios = nombresAccesorios;
         textoPrecioAccesorios = String.format("$%,.0f", accesorios);
         textoTotal = "Total de la renta: " + String.format("$%,.0f", total);
@@ -527,16 +544,18 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblEquipo.setText(nombreEquipo);
         lblPrecioEquipo.setText(String.format("$%,.0f", renta));
         lblUnidad.setText("Unidad " + unidad);
-        lblDireccion.setText("<html>Entrega en: " + solicitud.getDireccionObra() + "</html>");
+        lblDireccion.setText("<html>Entrega en: " + direccion + "</html>");
         lblFin.setText(fin.format(formato));
         lblDepositoValor.setText(String.format("$%,.0f", deposito));
         lblDepositoEstado.setText(estadoDeposito);
 
-        configurar(conCucharon, finalizada);
+        boolean finalizada = "FORMALIZADA".equals(contratacion.getEstado());
+        boolean conAccesorios = contratacion.getAccesorios() != null && !contratacion.getAccesorios().isEmpty();
+        configurar(conAccesorios, finalizada);
     }
     
-    public void cargarDatosRechazada(SolicitudRentaDTO solicitud, String motivo) {
-        cargarDatos(solicitud, true, false);
+    public void cargarDatosRechazada(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, String motivo) {
+        cargarDatos(solicitud, contratacion);
 
         setTitle("Solicitud - Rechazada");
         lblTitulo.setText("Solicitud - Rechazada");
