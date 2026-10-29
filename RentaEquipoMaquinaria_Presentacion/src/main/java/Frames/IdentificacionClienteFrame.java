@@ -23,7 +23,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     
     private IAlmacenTemporal almacenTemporal;
 
-    // todos los clientes y los que se ven en la tabla (después de buscar pueden ser menos)
+    
     private List<ClienteDTO> clientes;
     private List<ClienteDTO> clientesMostrados = new ArrayList<>();
 
@@ -313,7 +313,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    // para buscar sin importar mayúsculas ni acentos
+
     private String sinAcentos(String texto) {
         if (texto == null) {
             return "";
@@ -334,7 +334,6 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
         int filaSeleccionada = tableCliente.getSelectedRow();
         if (filaSeleccionada != -1) {
-            // se manda el cliente completo (con teléfono y correo), no solo lo que se ve en la tabla
             ClienteDTO clienteSeleccionado = clientesMostrados.get(filaSeleccionada);
             contratacionRenta.pasarDatosSolcitudRenta(clienteSeleccionado);
         } else {

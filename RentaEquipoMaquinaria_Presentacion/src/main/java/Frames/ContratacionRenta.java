@@ -60,7 +60,7 @@ public class ContratacionRenta implements IContratacionRenta {
     private IAlmacenTemporal almacenTemporal;
     private MotivoRechazoFrame motivoRechazoFrame;
 
-    // Registrar decisión del cliente y nuevas pantallas de orden de entrega
+    
     private PropuestaRentaFrame propuestaRentaFrame;
     private PropuestaPendienteFrame propuestaPendienteFrame;
     private VerificacionCondicionFrame verificacionCondicionFrame;
@@ -87,7 +87,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.calendarioUnidadFrame = new CalendarioUnidadFrame(this);
         this.condicionesContratacionFrame = new CondicionesContratacionFrame(this);
 
-        // Inicialización unificada de todas las pantallas
+        
         this.cotizacionFrame = new CotizacionFrame(this);
         this.requisitosRentaFrame = new RequisitosRentaFrame(this);
         this.propuestaRentaFrame = new PropuestaRentaFrame(this);
@@ -99,7 +99,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.abrirInciarSesión();
     }
 
-    // Estos métodos ayudarán a que se carguen las pantallas dentro de la memoria
+    
     @Override
     public void abrirInciarSesión() {
         ocultarTodo();
@@ -108,7 +108,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirMenuPrincipal() {
-        // Al volver al menú termina la solicitud en curso; la siguiente empieza en blanco
+        
         solicitudActual = null;
         cotizacionActual = null;
         clienteActual = null;
@@ -287,7 +287,7 @@ public class ContratacionRenta implements IContratacionRenta {
     public void abrirOrdenEntregaRechazada(String motivo) {
         prepararDatosSolicitud();
         prepararDatosCotizacion();
-        // la decisión queda en la cotización con el motivo que dio el cliente
+       
         cotizacionActual.setDecision(new DecisionClienteDTO(LocalDate.now(), "RECHAZA", motivo));
         solicitudActual.setEstadoSolicitud("Rechazada");
         ocultarTodo();
@@ -384,8 +384,6 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirPropuestaRenta();
     }
 
-    // Completa con datos simulados lo que todavía no viene de otros flujos,
-    // sin reemplazar lo que ya se capturó (así se conserva al avanzar o regresar)
     private void prepararDatosCotizacion() {
         if (solicitudActual == null) {
             solicitudActual = new SolicitudRentaDTO();
@@ -409,8 +407,6 @@ public class ContratacionRenta implements IContratacionRenta {
         }
     }
 
-    // Completa con los datos del escenario lo que F1 todavía no manda a F2, sin reemplazar
-    // lo que ya se capturó (así lo de F2 se conserva al avanzar o regresar)
     private void prepararDatosSolicitud() {
         if (solicitudActual == null) {
             solicitudActual = new SolicitudRentaDTO();
