@@ -39,8 +39,6 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
         btnOtraUnidad = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         btnUsarAlternativa = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        btnCambiarPeriodo = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -106,24 +104,6 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel6.setText("<html>Cambiar el periodo de renta y volver a consultar la disponibilidad.</html>");
-        jLabel6.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        btnCambiarPeriodo.setBackground(new java.awt.Color(44, 44, 44));
-        btnCambiarPeriodo.setBorderPainted(false);
-        btnCambiarPeriodo.setFocusPainted(false);
-        btnCambiarPeriodo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnCambiarPeriodo.setForeground(new java.awt.Color(255, 255, 255));
-        btnCambiarPeriodo.setOpaque(true);
-        btnCambiarPeriodo.setText("Cambiar periodo");
-        btnCambiarPeriodo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCambiarPeriodoActionPerformed(evt);
-            }
-        });
-
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
         btnRegresar.setBorderPainted(false);
         btnRegresar.setFocusPainted(false);
@@ -142,103 +122,73 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(720, 720, 720)
+                        .addComponent(btnOtraUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(720, 720, 720)
+                        .addComponent(btnUsarAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(lblPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 729, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(720, 720, 720)
-                .addComponent(btnOtraUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(720, 720, 720)
-                .addComponent(btnUsarAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(720, 720, 720)
-                .addComponent(btnCambiarPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 800, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 562, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addComponent(lblPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 528, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(156, 156, 156)
-                .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 502, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(198, 198, 198)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 460, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(236, 236, 236)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 422, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(230, 230, 230)
-                .addComponent(btnOtraUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 416, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(284, 284, 284)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 374, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(278, 278, 278)
-                .addComponent(btnUsarAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 368, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(332, 332, 332)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 326, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(326, 326, 326)
-                .addComponent(btnCambiarPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(604, 604, 604)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addComponent(lblPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(198, 198, 198)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(236, 236, 236)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(230, 230, 230)
+                        .addComponent(btnOtraUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(284, 284, 284)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(278, 278, 278)
+                        .addComponent(btnUsarAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(604, 604, 604)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 32, Short.MAX_VALUE))
         );
 
@@ -264,16 +214,11 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
         contratacionRenta.abrirEquiposCompatibles();
     }//GEN-LAST:event_btnUsarAlternativaActionPerformed
 
-    private void btnCambiarPeriodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarPeriodoActionPerformed
-        contratacionRenta.abrirVerificacionDeDisponibilidad();
-    }//GEN-LAST:event_btnCambiarPeriodoActionPerformed
-
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCambiarPeriodo;
     private javax.swing.JButton btnOtraUnidad;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnUsarAlternativa;
@@ -282,7 +227,6 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblMotivo;
     private javax.swing.JLabel lblPeriodo;
     private javax.swing.JPanel panelFondo;

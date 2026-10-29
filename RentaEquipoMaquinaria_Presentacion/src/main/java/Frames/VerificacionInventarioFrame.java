@@ -4,7 +4,13 @@
  */
 package Frames;
 
+import DTOs.EquipoSolicitadoDTO;
+import DTOs.OcupacionUnidadDTO;
+import DTOs.PeriodoSolicitadoDTO;
+import DTOs.SolicitudRentaDTO;
 import DTOs.UnidadFisicaDTO;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,12 +20,13 @@ import java.util.List;
 public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
+    private List<UnidadFisicaDTO> unidades = new ArrayList<>();
 
     public VerificacionInventarioFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
-        cargarUnidades();
     }
 
     /**
@@ -225,18 +232,24 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirVerificacionDeDisponibilidad();
+        contratacionRenta.abrirEvaluacionTecnica();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
-        String estado = estadoSeleccionado();
-        if (estado == null) {
+        int fila = tableUnidades.getSelectedRow();
+        if (fila < 0) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una unidad de la tabla.");
-        } else if (estado.startsWith("Disponible")) {
-            contratacionRenta.abrirCondicionesContratacion();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Solo puede seleccionarse una unidad disponible durante todo el periodo.");
+            return;
         }
+        UnidadFisicaDTO unidad = unidades.get(fila);
+        if (!"Disponible".equals(estadoParaPeriodo(unidad))) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Solo puede seleccionarse una unidad disponible durante todo el periodo.");
+            return;
+        }
+
+        solicitud.setUnidadSeleccionada(unidad);
+        solicitud.setEstadoSolicitud("Unidad seleccionada");
+        contratacionRenta.pasarDatosUnidadSeleccionada(solicitud);
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     private void btnVerMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerMotivoActionPerformed
@@ -252,32 +265,74 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnVerMotivoActionPerformed
 
-    // Las unidades del escenario (las mismas del storyboard), para poder seguir los tres caminos.
-    public void cargarUnidades(List<UnidadFisicaDTO> listaUnidades) {
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableUnidades.getModel();
-        modelo.setRowCount(0); // Limpiar tabla
+    public void cargarSolicitud(SolicitudRentaDTO solicitud, List<UnidadFisicaDTO> unidades) {
+        this.solicitud = solicitud;
+        this.unidades = unidades == null ? new ArrayList<>() : unidades;
 
-        // Si la lista es nula o viene vacía, cargamos los datos de respaldo del storyboard por defecto
-        if (listaUnidades == null || listaUnidades.isEmpty()) {
-            modelo.addRow(new Object[]{"M-001", "CAT 320", "Disponible"});
-            modelo.addRow(new Object[]{"M-002", "CAT 320", "En mantenimiento"});
-            modelo.addRow(new Object[]{"M-003", "CAT 320", "Ocupada del 13 al 15"});
-            return;
+        String modelo = "";
+        List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
+        if (pedidos != null && !pedidos.isEmpty()
+                && pedidos.get(0).getEvaluacion() != null
+                && pedidos.get(0).getEvaluacion().getRecomendado() != null) {
+            modelo = texto(pedidos.get(0).getEvaluacion().getRecomendado().getModelo());
         }
+        lblEquipo.setText("Equipo: " + modelo);
+        lblPeriodo.setText("Periodo: " + periodo());
 
-        // Si sí trae datos reales de tus DTOs, los pintamos en la tabla
-        for (UnidadFisicaDTO unidad : listaUnidades) {
-            modelo.addRow(new Object[]{
-                unidad.getNumeroEconomico(),
-                "CAT 320", // O si tu unidad/equipo tiene un modelo, puedes extraerlo aquí
-                unidad.getEstadoUnidad()
-            });
+        javax.swing.table.DefaultTableModel tabla = (javax.swing.table.DefaultTableModel) tableUnidades.getModel();
+        tabla.setRowCount(0);
+        for (UnidadFisicaDTO u : this.unidades) {
+            tabla.addRow(new Object[]{u.getNumeroEconomico(), modelo, estadoParaPeriodo(u)});
         }
     }
 
-    // Sobrecarga sin parámetros para mantener compatibilidad si se llama sin argumentos
-    private void cargarUnidades() {
-        cargarUnidades(null); // Esto llamará al bloque por defecto automáticamente
+    private String estadoParaPeriodo(UnidadFisicaDTO u) {
+        if (!"Disponible".equals(u.getEstadoUnidad())) {
+            return u.getEstadoUnidad();   // por ejemplo "En mantenimiento"
+        }
+        PeriodoSolicitadoDTO p = solicitud.getPeriodo();
+        if (u.getOcupaciones() != null && p != null) {
+            for (OcupacionUnidadDTO o : u.getOcupaciones()) {
+                boolean seTraslapa = !o.getFechaFin().isBefore(p.getFechaInicio())
+                        && !o.getFechaInicio().isAfter(p.getFechaFin());
+                if (seTraslapa) {
+                    return "Ocupada del " + o.getFechaInicio().getDayOfMonth()
+                            + " al " + o.getFechaFin().getDayOfMonth();
+                }
+            }
+        }
+        return "Disponible";
+    }
+
+//    public void cargarUnidades(List<UnidadFisicaDTO> listaUnidades) {
+//        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableUnidades.getModel();
+//        modelo.setRowCount(0);
+//        if (listaUnidades == null || listaUnidades.isEmpty()) {
+//            modelo.addRow(new Object[]{"M-001", "CAT 320", "Disponible"});
+//            modelo.addRow(new Object[]{"M-002", "CAT 320", "En mantenimiento"});
+//            modelo.addRow(new Object[]{"M-003", "CAT 320", "Ocupada del 13 al 15"});
+//            return;
+//        }
+//        for (UnidadFisicaDTO unidad : listaUnidades) {
+//            modelo.addRow(new Object[]{unidad.getNumeroEconomico(), "CAT 320", unidad.getEstadoUnidad()});
+//        }
+//    }
+//
+//    private void cargarUnidades() {
+//        cargarUnidades(null);
+//    }
+    private String periodo() {
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
+            return "";
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato)
+                + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+    }
+
+    private String texto(String valor) {
+        return valor == null ? "" : valor;
     }
 
     private String estadoSeleccionado() {

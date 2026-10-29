@@ -305,7 +305,7 @@ public class VerificacionDeDisponibilidadFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirEvaluacionTecnica();
+        contratacionRenta.abrirPropuestaRenta();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnConsultarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarInventarioActionPerformed
