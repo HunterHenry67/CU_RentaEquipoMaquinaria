@@ -253,13 +253,17 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     private void btnVerMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerMotivoActionPerformed
-        String estado = estadoSeleccionado();
-        if (estado == null) {
+        int fila = tableUnidades.getSelectedRow();
+        if (fila < 0) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una unidad de la tabla.");
-        } else if (estado.startsWith("En mantenimiento")) {
-            contratacionRenta.abrirUnidadMantenimiento();
+            return;
+        }
+        UnidadFisicaDTO unidad = unidades.get(fila);
+        String estado = estadoParaPeriodo(unidad);
+        if (estado.startsWith("En mantenimiento")) {
+            contratacionRenta.abrirUnidadMantenimiento(unidad);
         } else if (estado.startsWith("Ocupada")) {
-            contratacionRenta.abrirUnidadOcupada();
+            contratacionRenta.abrirUnidadOcupada(unidad);
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, "La unidad está disponible: se puede seleccionar.");
         }
@@ -286,7 +290,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
     private String estadoParaPeriodo(UnidadFisicaDTO u) {
         if (!"Disponible".equals(u.getEstadoUnidad())) {
-            return u.getEstadoUnidad(); 
+            return u.getEstadoUnidad();
         }
         PeriodoSolicitadoDTO p = solicitud.getPeriodo();
         if (u.getOcupaciones() != null && p != null) {
@@ -299,7 +303,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
         }
         return "Disponible";
     }
-    
+
     private String periodo() {
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
         if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {

@@ -4,7 +4,11 @@
  */
 package Frames;
 
+import DTOs.OcupacionUnidadDTO;
 import DTOs.PeriodoSolicitadoDTO;
+import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -13,6 +17,7 @@ import DTOs.PeriodoSolicitadoDTO;
 public class UnidadMantenimientoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     public UnidadMantenimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -205,6 +210,34 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public void cargarMantenimiento(SolicitudRentaDTO solicitud, UnidadFisicaDTO unidad) {
+        this.solicitud = solicitud;
+        lblPeriodo.setText("Periodo solicitado: " + periodo());
+        lblMotivo.setText("Motivo: " + motivo(unidad));
+    }
+
+    private String motivo(UnidadFisicaDTO unidad) {
+        if (unidad == null || unidad.getOcupaciones() == null) {
+            return "";
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
+            if (o.getMotivoOcupacion() != null) {
+                return unidad.getNumeroEconomico() + " · " + o.getMotivoOcupacion() + " (" + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato) + ")";
+            }
+        }
+        return unidad.getNumeroEconomico() + " · " + unidad.getEstadoUnidad();
+    }
+
+    private String periodo() {
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
+            return "";
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+    }
 
     private void btnOtraUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOtraUnidadActionPerformed
         contratacionRenta.abrirVerificacionInventario();

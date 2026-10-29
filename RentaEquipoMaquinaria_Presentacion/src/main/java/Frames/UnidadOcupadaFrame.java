@@ -4,7 +4,11 @@
  */
 package Frames;
 
+import DTOs.OcupacionUnidadDTO;
 import DTOs.PeriodoSolicitadoDTO;
+import DTOs.SolicitudRentaDTO;
+import DTOs.UnidadFisicaDTO;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -13,11 +17,42 @@ import DTOs.PeriodoSolicitadoDTO;
 public class UnidadOcupadaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
+    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     public UnidadOcupadaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
         this.setLocationRelativeTo(null);
+    }
+
+    public void cargarOcupada(SolicitudRentaDTO solicitud, UnidadFisicaDTO unidad) {
+        this.solicitud = solicitud;
+        lblPeriodo.setText("Periodo solicitado: " + periodo());
+        lblMotivo.setText("Motivo: " + motivo(unidad));
+    }
+
+    private String motivo(UnidadFisicaDTO unidad) {
+        if (unidad == null || unidad.getOcupaciones() == null) {
+            return "";
+        }
+        PeriodoSolicitadoDTO p = solicitud.getPeriodo();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
+            boolean seTraslapa = p == null || (!o.getFechaFin().isBefore(p.getFechaInicio()) && !o.getFechaInicio().isAfter(p.getFechaFin()));
+            if (seTraslapa) {
+                return unidad.getNumeroEconomico() + " · ocupada por " + o.getMotivoOcupacion().toLowerCase() + " del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
+            }
+        }
+        return unidad.getNumeroEconomico();
+    }
+
+    private String periodo() {
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
+            return "";
+        }
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
     }
 
     /**
