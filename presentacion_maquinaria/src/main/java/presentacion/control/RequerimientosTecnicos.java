@@ -124,7 +124,7 @@ public class RequerimientosTecnicos {
         String[] conNumero = {PROFUNDIDAD, POTENCIA, PESO, ANCHO};
         for (String caracteristica : conNumero) {
             String texto = capturado(lista, caracteristica);
-            if (texto != null && !ValidadorPresentacion.esNumeroValido(texto)) {
+            if (texto != null && !ValidadorPresentacion.esNumeroConUnidad(texto, unidad(caracteristica))) {
                 return "Escribe un número en «" + caracteristica + "» (en " + unidad(caracteristica) + ").";
             }
         }

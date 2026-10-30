@@ -25,6 +25,7 @@ public class ContratacionRentaDTO {
     private UnidadFisicaDTO unidad;
     private List<AccesorioDTO> accesorios;
     private OrdenEntregaDTO ordenEntrega;
+    private String folioSolicitud;
 
     public ContratacionRentaDTO() {
     }
@@ -126,4 +127,11 @@ public class ContratacionRentaDTO {
         this.ordenEntrega = ordenEntrega;
     }
 
+    public String getFolioSolicitud() {
+        return folioSolicitud;
+    }
+
+    public void setFolioSolicitud(String folioSolicitud) {
+        this.folioSolicitud = folioSolicitud;
+    }
 }

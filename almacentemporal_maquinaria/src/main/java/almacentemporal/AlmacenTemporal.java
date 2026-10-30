@@ -14,17 +14,23 @@ import objetosdto.ClienteDTO;
 import objetosdto.ClienteEmpresaDTO;
 import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
+import objetosdto.DecisionClienteDTO;
 import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
+import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.OcupacionUnidadDTO;
+import objetosdto.OrdenEntregaDTO;
+import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 
 /**
  * Los datos se cargan una vez con la información de prueba del escenario y se quedan mientras
- * la aplicación está abierta. Lo que se regresa son copias: quien quiera cambiar algo lo tiene
- * que registrar o actualizar aquí.
+ * la aplicación está abierta. Se guardan y se regresan copias: quien quiera cambiar algo lo tiene
+ * que registrar o actualizar aquí. Solo guarda y busca; no decide nada del negocio.
  *
  * @author BALAMRUSH
  */
@@ -224,6 +230,26 @@ public class AlmacenTemporal implements IAlmacenTemporal {
         return lista;
     }
 
+    @Override
+    public UnidadFisicaDTO buscarUnidadPorId(Long idUnidad) {
+        for (UnidadFisicaDTO u : unidades) {
+            if (Objects.equals(u.getIdUnidad(), idUnidad)) {
+                return copia(u);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void actualizarUnidad(UnidadFisicaDTO unidad) {
+        for (int i = 0; i < unidades.size(); i++) {
+            if (Objects.equals(unidades.get(i).getIdUnidad(), unidad.getIdUnidad())) {
+                unidades.set(i, copia(unidad));
+                return;
+            }
+        }
+    }
+
     // ---------------------------------------------------------------- solicitudes
     @Override
     public String siguienteFolio() {
@@ -232,22 +258,23 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public SolicitudRentaDTO registrarSolicitud(SolicitudRentaDTO solicitud) {
-        if (solicitud.getFolio() == null || buscarSolicitudPorFolio(solicitud.getFolio()) != null) {
-            solicitud.setFolio(siguienteFolio());
+        SolicitudRentaDTO nueva = copia(solicitud);
+        if (nueva.getFolio() == null || buscarSolicitudPorFolio(nueva.getFolio()) != null) {
+            nueva.setFolio(siguienteFolio());
         }
-        if (solicitud.getFolio().equals(siguienteFolio())) {
+        if (nueva.getFolio().equals(siguienteFolio())) {
             siguienteNumeroFolio++;
         }
-        solicitud.setIdSolicitud((long) solicitudes.size() + 1);
-        solicitudes.add(solicitud);
-        return solicitud;
+        nueva.setIdSolicitud((long) solicitudes.size() + 1);
+        solicitudes.add(nueva);
+        return copia(nueva);
     }
 
     @Override
     public void actualizarSolicitud(SolicitudRentaDTO solicitud) {
         for (int i = 0; i < solicitudes.size(); i++) {
             if (Objects.equals(solicitudes.get(i).getFolio(), solicitud.getFolio())) {
-                solicitudes.set(i, solicitud);
+                solicitudes.set(i, copia(solicitud));
                 return;
             }
         }
@@ -257,7 +284,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     public SolicitudRentaDTO buscarSolicitudPorFolio(String folio) {
         for (SolicitudRentaDTO s : solicitudes) {
             if (Objects.equals(s.getFolio(), folio)) {
-                return s;
+                return copia(s);
             }
         }
         return null;
@@ -265,38 +292,86 @@ public class AlmacenTemporal implements IAlmacenTemporal {
 
     @Override
     public List<SolicitudRentaDTO> obtenerSolicitudes() {
-        return new ArrayList<>(solicitudes);
+        List<SolicitudRentaDTO> lista = new ArrayList<>();
+        for (SolicitudRentaDTO s : solicitudes) {
+            lista.add(copia(s));
+        }
+        return lista;
     }
 
     // ---------------------------------------------------------------- cotizaciones y contrataciones
     @Override
     public CotizacionDTO registrarCotizacion(CotizacionDTO cotizacion) {
-        cotizacion.setIdCotizacion((long) cotizaciones.size() + 1);
-        cotizaciones.add(cotizacion);
-        return cotizacion;
+        CotizacionDTO nueva = copia(cotizacion);
+        nueva.setIdCotizacion((long) cotizaciones.size() + 1);
+        cotizaciones.add(nueva);
+        return copia(nueva);
+    }
+
+    @Override
+    public void actualizarCotizacion(CotizacionDTO cotizacion) {
+        for (int i = 0; i < cotizaciones.size(); i++) {
+            if (Objects.equals(cotizaciones.get(i).getIdCotizacion(), cotizacion.getIdCotizacion())) {
+                cotizaciones.set(i, copia(cotizacion));
+                return;
+            }
+        }
+    }
+
+    // La cotización de una solicitud (si se rehízo, la última)
+    @Override
+    public CotizacionDTO buscarCotizacionPorFolio(String folio) {
+        CotizacionDTO encontrada = null;
+        for (CotizacionDTO c : cotizaciones) {
+            if (Objects.equals(c.getFolioSolicitud(), folio)) {
+                encontrada = c;
+            }
+        }
+        return encontrada == null ? null : copia(encontrada);
     }
 
     @Override
     public List<CotizacionDTO> obtenerCotizaciones() {
-        return new ArrayList<>(cotizaciones);
+        List<CotizacionDTO> lista = new ArrayList<>();
+        for (CotizacionDTO c : cotizaciones) {
+            lista.add(copia(c));
+        }
+        return lista;
     }
 
     @Override
     public ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion) {
-        contratacion.setIdContratacion((long) contrataciones.size() + 1);
-        if (contratacion.getOrdenEntrega() != null) {
-            contratacion.getOrdenEntrega().setIdOrdenEntrega(contratacion.getIdContratacion());
+        ContratacionRentaDTO nueva = copia(contratacion);
+        nueva.setIdContratacion((long) contrataciones.size() + 1);
+        if (nueva.getOrdenEntrega() != null) {
+            nueva.getOrdenEntrega().setIdOrdenEntrega(nueva.getIdContratacion());
         }
-        contrataciones.add(contratacion);
-        return contratacion;
+        contrataciones.add(nueva);
+        return copia(nueva);
+    }
+
+    // La contratación de una solicitud (si hubo más de una, la última)
+    @Override
+    public ContratacionRentaDTO buscarContratacionPorFolio(String folio) {
+        ContratacionRentaDTO encontrada = null;
+        for (ContratacionRentaDTO c : contrataciones) {
+            if (Objects.equals(c.getFolioSolicitud(), folio)) {
+                encontrada = c;
+            }
+        }
+        return encontrada == null ? null : copia(encontrada);
     }
 
     @Override
     public List<ContratacionRentaDTO> obtenerContrataciones() {
-        return new ArrayList<>(contrataciones);
+        List<ContratacionRentaDTO> lista = new ArrayList<>();
+        for (ContratacionRentaDTO c : contrataciones) {
+            lista.add(copia(c));
+        }
+        return lista;
     }
 
-    // ---------------------------------------------------------------- requisitos y ejemplo
+    // ---------------------------------------------------------------- requisitos
     @Override
     public List<RequisitoRentaDTO> obtenerRequisitosRenta() {
         List<RequisitoRentaDTO> lista = new ArrayList<>();
@@ -304,15 +379,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
             lista.add(new RequisitoRentaDTO(r.getDescripcion(), r.getEsObligatorio(), r.getEstadoRequisito(), r.getMonto()));
         }
         return lista;
-    }
-
-    @Override
-    public List<DetalleCotizacionDTO> obtenerDetallesCotizacionEjemplo() {
-        List<DetalleCotizacionDTO> detalles = new ArrayList<>();
-        detalles.add(new DetalleCotizacionDTO("Equipo", "Excavadora CAT 320 (M-001)", 6, 1500.0, 9000.0, null, null));
-        detalles.add(new DetalleCotizacionDTO("Accesorio", "kit", 1, 300.0, 300.0, null, null));
-        detalles.add(new DetalleCotizacionDTO("Accesorio", "cucharón", 1, 200.0, 200.0, null, null));
-        return detalles;
     }
 
     // ---------------------------------------------------------------- copias
@@ -338,22 +404,109 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     }
 
     private EquipoDTO copia(EquipoDTO e) {
-        List<AccesorioDTO> accesorios = new ArrayList<>();
-        if (e.getAccesorios() != null) {
-            for (AccesorioDTO a : e.getAccesorios()) {
-                accesorios.add(new AccesorioDTO(a.getIdAccesorio(), a.getNombre(), a.getTipo(), a.getCostoRenta(), a.getEsObligatorio()));
-            }
-        }
         return new EquipoDTO(e.getIdEquipo(), e.getMarca(), e.getModelo(), e.getPotencia(), e.getPeso(),
-                e.getAnchoOperacion(), e.getProfundidadExcavacion(), e.getCostoDiario(), accesorios);
+                e.getAnchoOperacion(), e.getProfundidadExcavacion(), e.getCostoDiario(), copiaAccesorios(e.getAccesorios()));
     }
 
     private UnidadFisicaDTO copia(UnidadFisicaDTO u) {
         List<OcupacionUnidadDTO> ocupaciones = new ArrayList<>();
-        for (OcupacionUnidadDTO o : u.getOcupaciones()) {
+        for (OcupacionUnidadDTO o : u.getOcupaciones() == null ? new ArrayList<OcupacionUnidadDTO>() : u.getOcupaciones()) {
             ocupaciones.add(new OcupacionUnidadDTO(o.getFechaInicio(), o.getFechaFin(), o.getMotivoOcupacion(), o.getEstadoOcupacion()));
         }
         return new UnidadFisicaDTO(u.getIdUnidad(), u.getNumeroEconomico(), u.getEstadoUnidad(), u.getUbicacion(), u.getHorasUso(), ocupaciones);
+    }
+
+    private AccesorioDTO copia(AccesorioDTO a) {
+        return a == null ? null : new AccesorioDTO(a.getIdAccesorio(), a.getNombre(), a.getTipo(), a.getCostoRenta(), a.getEsObligatorio());
+    }
+
+    private List<AccesorioDTO> copiaAccesorios(List<AccesorioDTO> accesorios) {
+        List<AccesorioDTO> lista = new ArrayList<>();
+        if (accesorios != null) {
+            for (AccesorioDTO a : accesorios) {
+                lista.add(copia(a));
+            }
+        }
+        return lista;
+    }
+
+    private SolicitudRentaDTO copia(SolicitudRentaDTO s) {
+        SolicitudRentaDTO nueva = new SolicitudRentaDTO();
+        nueva.setIdSolicitud(s.getIdSolicitud());
+        nueva.setFolio(s.getFolio());
+        nueva.setFechaSolicitud(s.getFechaSolicitud());
+        nueva.setNombreObra(s.getNombreObra());
+        nueva.setDireccionObra(s.getDireccionObra());
+        nueva.setDescripcionActividad(s.getDescripcionActividad());
+        nueva.setCondicionesEspeciales(s.getCondicionesEspeciales());
+        nueva.setEstadoSolicitud(s.getEstadoSolicitud());
+        nueva.setMotivoCancelacion(s.getMotivoCancelacion());
+        nueva.setCliente(s.getCliente() == null ? null : copia(s.getCliente()));
+        PeriodoSolicitadoDTO p = s.getPeriodo();
+        nueva.setPeriodo(p == null ? null : new PeriodoSolicitadoDTO(p.getFechaInicio(), p.getFechaFin(), p.getDiasRenta()));
+        List<EquipoSolicitadoDTO> equipos = new ArrayList<>();
+        if (s.getEquiposSolicitados() != null) {
+            for (EquipoSolicitadoDTO e : s.getEquiposSolicitados()) {
+                EvaluacionTecnicaDTO ev = e.getEvaluacion();
+                EvaluacionTecnicaDTO evaluacion = ev == null ? null : new EvaluacionTecnicaDTO(ev.getResultado(), ev.getMotivoIncumplimiento(),
+                        ev.getFechaEvaluacion(), ev.getRecomendado() == null ? null : copia(ev.getRecomendado()),
+                        ev.getAlternativo() == null ? null : copia(ev.getAlternativo()));
+                equipos.add(new EquipoSolicitadoDTO(e.getDescripcionEquipo(), e.getCantidad(), evaluacion));
+            }
+        }
+        nueva.setEquiposSolicitados(equipos);
+        List<RequerimientoTecnicoDTO> requerimientos = new ArrayList<>();
+        if (s.getRequerimientos() != null) {
+            for (RequerimientoTecnicoDTO r : s.getRequerimientos()) {
+                requerimientos.add(new RequerimientoTecnicoDTO(r.getCaracteristica(), r.getValorRequerido(), r.getUnidadMedida(), r.getTipoLimite()));
+            }
+        }
+        nueva.setRequerimientos(requerimientos);
+        List<RequisitoRentaDTO> requisitosSolicitud = new ArrayList<>();
+        if (s.getRequisitos() != null) {
+            for (RequisitoRentaDTO r : s.getRequisitos()) {
+                requisitosSolicitud.add(new RequisitoRentaDTO(r.getDescripcion(), r.getEsObligatorio(), r.getEstadoRequisito(), r.getMonto()));
+            }
+        }
+        nueva.setRequisitos(requisitosSolicitud);
+        nueva.setUnidadSeleccionada(s.getUnidadSeleccionada() == null ? null : copia(s.getUnidadSeleccionada()));
+        return nueva;
+    }
+
+    private CotizacionDTO copia(CotizacionDTO c) {
+        List<DetalleCotizacionDTO> detalles = new ArrayList<>();
+        if (c.getDetalles() != null) {
+            for (DetalleCotizacionDTO d : c.getDetalles()) {
+                detalles.add(new DetalleCotizacionDTO(d.getTipoConcepto(), d.getDescripcion(), d.getCantidad(), d.getPrecioUnitario(),
+                        d.getImporte(), d.getEquipo() == null ? null : copia(d.getEquipo()), copia(d.getAccesorio())));
+            }
+        }
+        DecisionClienteDTO d = c.getDecision();
+        CotizacionDTO nueva = new CotizacionDTO(c.getIdCotizacion(), c.getFechaEmision(), c.getVigencia(), c.getSubtotal(), c.getIva(),
+                c.getTotal(), detalles, d == null ? null : new DecisionClienteDTO(d.getFechaDecision(), d.getTipoDecision(), d.getObservaciones()));
+        nueva.setDepositoGarantia(c.getDepositoGarantia());
+        nueva.setFolioSolicitud(c.getFolioSolicitud());
+        return nueva;
+    }
+
+    private ContratacionRentaDTO copia(ContratacionRentaDTO c) {
+        ContratacionRentaDTO nueva = new ContratacionRentaDTO();
+        nueva.setIdContratacion(c.getIdContratacion());
+        nueva.setFolioSolicitud(c.getFolioSolicitud());
+        nueva.setFechaFormalizacion(c.getFechaFormalizacion());
+        nueva.setFechaInicio(c.getFechaInicio());
+        nueva.setFechaFin(c.getFechaFin());
+        nueva.setTarifaAcordada(c.getTarifaAcordada());
+        nueva.setDepositoGarantia(c.getDepositoGarantia());
+        nueva.setEstado(c.getEstado());
+        nueva.setCondicionesAcordadas(c.getCondicionesAcordadas());
+        nueva.setCliente(c.getCliente() == null ? null : copia(c.getCliente()));
+        nueva.setUnidad(c.getUnidad() == null ? null : copia(c.getUnidad()));
+        nueva.setAccesorios(copiaAccesorios(c.getAccesorios()));
+        OrdenEntregaDTO o = c.getOrdenEntrega();
+        nueva.setOrdenEntrega(o == null ? null : new OrdenEntregaDTO(o.getIdOrdenEntrega(), o.getFechaGeneracion(), o.getFechaEntrega(),
+                o.getDireccionEntrega(), o.getHorario(), o.getEstadoOrden()));
+        return nueva;
     }
 
     private String sinAcentos(String texto) {

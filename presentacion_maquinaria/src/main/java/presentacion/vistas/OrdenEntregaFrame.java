@@ -16,13 +16,14 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     private final java.awt.Color verde = new java.awt.Color(0, 130, 0);
     private final java.awt.Color naranja = new java.awt.Color(200, 105, 0);
     
-    private String textoAccesorios = "Kit de señalización y cucharón";
-    private String textoPrecioAccesorios = "$500";
-    private String textoTotal = "Total de la renta: $11,020";
-    private String textoFechaInicio = "10/09/2026";
-    private String textoFechaEntrega = "10/09/2026, antes de las 8:00 AM";
-    
-    private String unidad = "M-001";
+    private String textoAccesorios = "";
+    private String textoPrecioAccesorios = "";
+    private String textoTotal = "";
+    private String textoFechaInicio = "";
+    private String textoFechaEntrega = "";
+    private String estadoIdentificacion = "";
+
+    private String unidad = "sin unidad";
     
     
     public OrdenEntregaFrame(IContratacionRenta contratacionRenta) {
@@ -428,8 +429,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setForeground(verde);
             lblFechaEntregaTit.setText("Fecha de entrega:");
             lblFechaEntrega.setText(textoFechaEntrega);
-            lblIdentificacionEstado.setText("Cumplida");
-            lblIdentificacionEstado.setForeground(verde);
+            mostrarIdentificacion();
             lblMotivo.setText("");
         } else {
             setTitle("Solicitud - Pendiente");
@@ -438,13 +438,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblEstado.setForeground(naranja);
             lblFechaEntregaTit.setText("Inicio de la renta:");
             lblFechaEntrega.setText(textoFechaInicio);
+            mostrarIdentificacion();
             if (sinAccesorios) {
-                lblIdentificacionEstado.setText("Cumplida");
-                lblIdentificacionEstado.setForeground(verde);
                 lblMotivo.setText("Motivo: el cliente no acepta el accesorio indispensable.");
             } else {
-                lblIdentificacionEstado.setText("Pendiente");
-                lblIdentificacionEstado.setForeground(naranja);
                 lblMotivo.setText("Falta una condición obligatoria: la contratación no se formaliza y la unidad " + unidad
                         + " no se aparta.");
             }
@@ -452,6 +449,12 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDireccion.setVisible(finalizada);
     }
     
+    // El estado del requisito de identificación tal como quedó en la solicitud
+    private void mostrarIdentificacion() {
+        lblIdentificacionEstado.setText(estadoIdentificacion);
+        lblIdentificacionEstado.setForeground("Pendiente".equals(estadoIdentificacion) ? naranja : verde);
+    }
+
     public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
         EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
 
@@ -468,7 +471,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         textoFechaInicio = inicio.format(formato);
-        textoFechaEntrega = textoFechaInicio + ", antes de las 8:00 AM";
+        textoFechaEntrega = textoFechaInicio;
         String direccion = solicitud.getDireccionObra();
         OrdenEntregaDTO orden = contratacion.getOrdenEntrega();
         if (orden != null) {
@@ -494,6 +497,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblFin.setText(fin.format(formato));
         lblDepositoValor.setText(String.format("$%,.0f", deposito));
         lblDepositoEstado.setText(Montos.estadoDeposito(solicitud.getRequisitos()));
+        estadoIdentificacion = Montos.estadoRequisito(solicitud.getRequisitos(), "Identificación oficial");
 
         boolean finalizada = "FORMALIZADA".equals(contratacion.getEstado());
         boolean conAccesorios = !"PENDIENTE POR ACCESORIO".equals(contratacion.getEstado());
@@ -507,8 +511,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblTitulo.setText("Solicitud - Rechazada");
         lblEstado.setText("Rechazada");
         lblEstado.setForeground(new java.awt.Color(170, 20, 20));
-        lblIdentificacionEstado.setText("Cumplida");
-        lblIdentificacionEstado.setForeground(verde);
+        mostrarIdentificacion();
         // en html para que un motivo largo pase al segundo renglón
         String texto = motivo.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
         lblMotivo.setText("<html>Motivo: " + texto + "</html>");

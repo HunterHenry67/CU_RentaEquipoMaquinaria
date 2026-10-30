@@ -3,6 +3,7 @@ package presentacion.simulacion;
 import java.util.List;
 import java.util.Map;
 import objetosdto.AccesorioDTO;
+import objetosdto.ClienteDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.OrdenEntregaDTO;
@@ -36,4 +37,21 @@ public interface INegocioSimulado {
     public abstract boolean requisitosCumplidos(List<RequisitoRentaDTO> requisitos);
 
     public abstract OrdenEntregaDTO generarOrdenEntrega(SolicitudRentaDTO solicitud);
+
+    // La unidad apartada para el periodo de la renta que se formalizó
+    public abstract UnidadFisicaDTO ocuparUnidad(UnidadFisicaDTO unidad, PeriodoSolicitadoDTO periodo);
+
+    // Cuántos días de renta se cobran en un periodo
+    public abstract int diasRenta(PeriodoSolicitadoDTO periodo);
+
+    // Si el RFC ya lo tiene otro cliente (registradoConEseRfc es el que encontró el almacén, o null)
+    public abstract boolean rfcEnUso(ClienteDTO cliente, ClienteDTO registradoConEseRfc);
+
+    // Los accesorios que se proponen con un equipo: los indispensables más los opcionales elegidos
+    public abstract List<AccesorioDTO> accesoriosPropuestos(List<AccesorioDTO> delEquipo, List<AccesorioDTO> elegidos);
+
+    // Con la decisión del cliente: qué accesorios entran a la contratación y en qué estado queda
+    public abstract List<AccesorioDTO> accesoriosAceptados(String tipoDecision, List<AccesorioDTO> propuestos);
+
+    public abstract String estadoContratacion(String tipoDecision);
 }

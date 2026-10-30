@@ -15,11 +15,11 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     private IContratacionRenta contratacionRenta;
 
     // Datos
-    private int dias = 6;
-    private double tarifaDia = 1500;
-    private double totalIndispensables = 300;
-    private double totalOpcionales = 200;
-    private double deposito = 3200;
+    private int dias;
+    private double tarifaDia;
+    private double totalIndispensables;
+    private double totalOpcionales;
+    private double deposito;
     private CotizacionDTO cotizacion;
     private boolean hayObligatorio = true;
     private boolean hayOpcional = true;
@@ -657,7 +657,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();
         dias = Montos.dias(cotizacion);
-        deposito = Montos.deposito(solicitud.getRequisitos());
+        deposito = Montos.deposito(cotizacion);
 
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());

@@ -356,14 +356,11 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
             }
         }
         contratacion.setCondicionesAcordadas(revisadas.toString());
-        contratacion.setEstado("FORMALIZADA");
         contratacionRenta.pasarDatosOrdenEntrega(contratacion);
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void btnNoGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoGenerarActionPerformed
-        // Solicitud en estado pendiente
-        contratacion.setEstado("PENDIENTE");
-        contratacionRenta.pasarDatosOrdenEntrega(contratacion);
+        contratacionRenta.pasarDatosSolicitudPendiente(contratacion);
     }//GEN-LAST:event_btnNoGenerarActionPerformed
 
     private javax.swing.JCheckBox[] casillas() {
@@ -376,7 +373,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
                 ? contratacion.getUnidad().getNumeroEconomico() : "sin elegir";
         // cada contratación empieza con las condiciones por revisar
         for (javax.swing.JCheckBox casilla : casillas()) {
-            casilla.setSelected(true);
+            casilla.setSelected(false);
         }
 
         EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
@@ -400,7 +397,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         lblTarifa.setText(String.format("$%,.0f", renta) + " MXN");
         lblDepositoValor.setText(String.format("$%,.0f", deposito) + " MXN");
         lblTotal.setText("Total de la renta: " + String.format("$%,.0f", total) + " (renta, accesorios e impuestos)");
-        lblEntrega.setText("<html>Entrega confirmada: " + inicio.format(formato) + " antes de las 8:00 AM, en "
+        lblEntrega.setText("<html>Entrega confirmada: " + inicio.format(formato) + ", en "
                 + solicitud.getDireccionObra() + ".<br>Al generar la orden, la unidad " + unidad
                 + " queda ocupada del " + inicio.format(DateTimeFormatter.ofPattern("dd")) + " al "
                 + fin.format(DateTimeFormatter.ofPattern("dd/MM")) + ".</html>");

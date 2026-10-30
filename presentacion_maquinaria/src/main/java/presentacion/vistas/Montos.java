@@ -82,27 +82,25 @@ public class Montos {
         return nombres.length() == 0 ? "Ninguno" : nombres.toString();
     }
 
-    // El requisito con monto es el depósito de garantía
-    public static double deposito(List<RequisitoRentaDTO> requisitos) {
-        RequisitoRentaDTO requisito = requisitoDeposito(requisitos);
-        return requisito == null ? 0 : requisito.getMonto();
+    // El depósito que el control puso en la cotización (respuesta del negocio simulado)
+    public static double deposito(CotizacionDTO cotizacion) {
+        return cotizacion == null || cotizacion.getDepositoGarantia() == null ? 0 : cotizacion.getDepositoGarantia();
     }
 
-    public static String estadoDeposito(List<RequisitoRentaDTO> requisitos) {
-        RequisitoRentaDTO requisito = requisitoDeposito(requisitos);
-        return requisito == null || requisito.getEstadoRequisito() == null ? "Cubierto" : requisito.getEstadoRequisito();
-    }
-
-    private static RequisitoRentaDTO requisitoDeposito(List<RequisitoRentaDTO> requisitos) {
-        RequisitoRentaDTO deposito = null;
+    // El estado con que quedó un requisito de la solicitud ("" si no está)
+    public static String estadoRequisito(List<RequisitoRentaDTO> requisitos, String descripcion) {
         if (requisitos != null) {
             for (RequisitoRentaDTO requisito : requisitos) {
-                if (requisito.getMonto() != null) {
-                    deposito = requisito;
+                if (descripcion.equals(requisito.getDescripcion())) {
+                    return requisito.getEstadoRequisito() == null ? "" : requisito.getEstadoRequisito();
                 }
             }
         }
-        return deposito;
+        return "";
+    }
+
+    public static String estadoDeposito(List<RequisitoRentaDTO> requisitos) {
+        return estadoRequisito(requisitos, "Depósito de garantía");
     }
 
     public static String moneda(double valor) {

@@ -5,11 +5,13 @@
 package presentacion.control;
 
 import java.util.List;
+import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
 import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
@@ -37,13 +39,7 @@ public interface IContratacionRenta {
 
     public abstract void abrirAnalisisRequerimiento();
 
-    public abstract void abrirSolicitudDatosFaltantes();
-
     public abstract void abrirEquiposCompatibles();
-
-    public abstract void abrirSinEquipoCompatible();
-
-    public abstract void abrirSeleccionAccesorios();
 
     public abstract void abrirEvaluacionTecnica();
 
@@ -51,19 +47,20 @@ public interface IContratacionRenta {
 
     public abstract void abrirVerificacionInventario();
 
-    public abstract void abrirCalendarioUnidad();
-
     public abstract void abrirCondicionesContratacion();
 
     public abstract void abrirCotizacion();
-
-    public abstract void abrirRequisitosRenta();
 
     public abstract void abrirPropuestaRenta();
 
     public abstract void abrirPropuestaPendiente();
 
     public abstract void abrirMotivoRechazo();
+
+    // Confirmaciones: la pantalla pide la acción y el control pregunta antes de seguir
+    public abstract void abrirCancelacionSolicitud();
+
+    public abstract void dejarOperacion();
 
     // Inicio de sesión y clientes
     public abstract void pasarDatosUsuario(UsuarioDTO usuario);
@@ -94,13 +91,13 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosEquiposCompatibles(SolicitudRentaDTO solicitud);
 
-    public abstract void pasarDatosSinEquipoCompatible(SolicitudRentaDTO solicitud);
+    public abstract void ningunEquipoCumple();
 
     public abstract void cerrarEvaluacion(SolicitudRentaDTO solicitud);
 
-    public abstract void pasarDatosSeleccionAccesorios(SolicitudRentaDTO solicitud);
+    public abstract void pasarDatosSeleccionAccesorios(EvaluacionTecnicaDTO seleccion);
 
-    public abstract void pasarDatosEvaluacionTecnica(SolicitudRentaDTO solicitud);
+    public abstract void pasarDatosEvaluacionTecnica(List<AccesorioDTO> opcionalesElegidos);
 
     // Disponibilidad
     public abstract void pasarDatosVerificacionInventario(SolicitudRentaDTO solicitud);
@@ -121,4 +118,6 @@ public interface IContratacionRenta {
     public abstract void pasarDatosDecisionCliente(DecisionClienteDTO decision);
 
     public abstract void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion);
+
+    public abstract void pasarDatosSolicitudPendiente(ContratacionRentaDTO contratacion);
 }

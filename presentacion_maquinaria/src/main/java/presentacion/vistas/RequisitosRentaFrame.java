@@ -35,6 +35,21 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
         lblTelefono.setText("Teléfono: " + cliente.getTelefono());
         this.requisitos = solicitud.getRequisitos();
         mostrarRequisitos();
+        mostrarPendientes(false);
+    }
+
+    /**
+     * El coordinador la llama cuando el control encontró un requisito obligatorio pendiente:
+     * la pantalla pasa a su estado de error (Regresar o Reintentar).
+     */
+    public void mostrarPendientes(boolean pendientes) {
+        lblEstado.setText(pendientes
+            ? "<html>Falta documentación y/o depósito: con la identificación todavía pendiente la contratación no puede confirmarse hasta que el requisito quede cumplido.</html>"
+            : "");
+        btnMarcarPendiente.setVisible(!pendientes);
+        btnValidar.setVisible(!pendientes);
+        btnRegresar.setVisible(pendientes);
+        btnReintentar.setVisible(pendientes);
     }
 
     /**
@@ -327,7 +342,9 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMarcarPendienteActionPerformed
 
     private void btnReintentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReintentarActionPerformed
+        // el cliente ya entregó la identificación: se marca cumplida y se valida otra vez
         cambiarEstadoIdentificacion("Cumplida");
+        contratacionRenta.pasarDatosPropuestaRenta(requisitos);
     }//GEN-LAST:event_btnReintentarActionPerformed
 
     private void cambiarEstadoIdentificacion(String estado) {
@@ -339,33 +356,17 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
         mostrarRequisitos();
     }
 
-    /**
-     * Muestra en la tabla los requisitos recibidos; si alguno obligatorio
-     * está pendiente, la pantalla cambia a su estado de error.
-     */
+    // Muestra en la tabla los requisitos con el estado que capturó el asesor
     private void mostrarRequisitos() {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableRequisitos.getModel();
         modelo.setRowCount(0);
-        boolean pendiente = false;
         for (RequisitoRentaDTO requisito : requisitos) {
             boolean requisitoPendiente = "Pendiente".equals(requisito.getEstadoRequisito());
             String descripcion = requisito.getMonto() != null
                     ? requisito.getDescripcion() + " · " + String.format("$%,.0f", requisito.getMonto())
                     : requisito.getDescripcion();
             modelo.addRow(new Object[]{descripcion, requisito.getEstadoRequisito(), requisitoPendiente ? "X" : "✔"});
-            if (requisitoPendiente && Boolean.TRUE.equals(requisito.getEsObligatorio())) {
-                pendiente = true;
-            }
         }
-
-        lblEstado.setText(pendiente
-            ? "<html>Falta documentación y/o depósito: con la identificación todavía pendiente la contratación no puede confirmarse hasta que el requisito quede cumplido.</html>"
-            : "");
-
-        btnMarcarPendiente.setVisible(!pendiente);
-        btnValidar.setVisible(!pendiente);
-        btnRegresar.setVisible(pendiente);
-        btnReintentar.setVisible(pendiente);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

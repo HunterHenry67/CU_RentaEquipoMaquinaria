@@ -6,10 +6,11 @@ package presentacion.control;
 
 import almacentemporal.IAlmacenTemporal;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
@@ -50,6 +51,8 @@ public class ContratacionRenta implements IContratacionRenta {
     private CotizacionDTO cotizacionActual;
     private ContratacionRentaDTO contratacionActual;
     private CotizacionDTO cotizacionContratacion;
+    // Lo que respondió el negocio simulado al comparar el catálogo con los requerimientos
+    private Map<EquipoDTO, String> equiposEvaluados = new LinkedHashMap<>();
 
     public ContratacionRenta(IAlmacenTemporal almacen, INegocioSimulado negocio) {
         this.almacen = almacen;
@@ -73,6 +76,7 @@ public class ContratacionRenta implements IContratacionRenta {
         contratacionActual = null;
         cotizacionContratacion = null;
         clienteActual = null;
+        equiposEvaluados = new LinkedHashMap<>();
         coordinador.mostrarMenuPrincipal();
     }
 
@@ -93,97 +97,136 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirAnalisisRequerimiento() {
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarAnalisisRequerimiento(solicitudActual);
     }
 
-    @Override
-    public void abrirSolicitudDatosFaltantes() {
-        prepararDatosSolicitud();
+    private void abrirSolicitudDatosFaltantes() {
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarSolicitudDatosFaltantes(solicitudActual);
     }
 
     @Override
     public void abrirEquiposCompatibles() {
-        prepararDatosSolicitud();
-        coordinador.mostrarEquiposCompatibles(solicitudActual,
-                negocio.compararEquipos(almacen.obtenerCatalogoEquipo(), solicitudActual.getRequerimientos()));
+        if (!haySolicitud()) {
+            return;
+        }
+        equiposEvaluados = negocio.compararEquipos(almacen.obtenerCatalogoEquipo(), solicitudActual.getRequerimientos());
+        coordinador.mostrarEquiposCompatibles(solicitudActual, equiposEvaluados, equipoPedido());
     }
 
-    @Override
-    public void abrirSinEquipoCompatible() {
-        prepararDatosSolicitud();
+    private void abrirSinEquipoCompatible() {
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarSinEquipoCompatible(solicitudActual);
     }
 
-    @Override
-    public void abrirSeleccionAccesorios() {
-        prepararDatosSolicitud();
+    private void abrirSeleccionAccesorios() {
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarSeleccionAccesorios(solicitudActual, accesoriosDelRecomendado());
     }
 
     @Override
     public void abrirEvaluacionTecnica() {
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarEvaluacionTecnica(solicitudActual);
     }
 
     @Override
     public void abrirCambiarPeriodo() {
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarCambiarPeriodo(solicitudActual);
     }
 
     @Override
     public void abrirVerificacionInventario() {
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarVerificacionInventario(solicitudActual, unidadesDelRecomendado());
     }
 
-    @Override
-    public void abrirCalendarioUnidad() {
-        prepararDatosSolicitud();
+    private void abrirCalendarioUnidad() {
+        if (!haySolicitud()) {
+            return;
+        }
         coordinador.mostrarCalendarioUnidad(solicitudActual);
     }
 
     @Override
     public void abrirCondicionesContratacion() {
-        prepararDatosSolicitud();
-        prepararDatosCotizacion();
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
+        }
         coordinador.mostrarCondicionesContratacion(solicitudActual, cotizacionActual);
     }
 
     @Override
     public void abrirCotizacion() {
-        prepararDatosCotizacion();
+        if (!haySolicitud()) {
+            return;
+        }
         // se arma de nuevo con lo elegido, por si el asesor regresó y cambió equipo, accesorios o periodo
-        cotizacionActual = armarCotizacion();
+        cotizacionActual = null;
+        if (!hayCotizacion()) {
+            return;
+        }
         coordinador.mostrarCotizacion(solicitudActual, cotizacionActual);
     }
 
-    @Override
-    public void abrirRequisitosRenta() {
-        prepararDatosCotizacion();
+    private void abrirRequisitosRenta() {
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
+        }
         coordinador.mostrarRequisitosRenta(solicitudActual);
     }
 
     @Override
     public void abrirPropuestaRenta() {
-        prepararDatosSolicitud();
-        prepararDatosCotizacion();
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
+        }
         coordinador.mostrarPropuestaRenta(solicitudActual, cotizacionActual);
     }
 
     @Override
     public void abrirPropuestaPendiente() {
-        prepararDatosSolicitud();
-        prepararDatosCotizacion();
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
+        }
         coordinador.mostrarPropuestaPendiente(solicitudActual);
     }
 
     @Override
     public void abrirMotivoRechazo() {
         coordinador.mostrarMotivoRechazo();
+    }
+
+    // La pantalla de solicitud pide pasar a la cancelación; se confirma antes
+    @Override
+    public void abrirCancelacionSolicitud() {
+        if (coordinador.confirmar("Cancelación de Solicitud", "¿Confirma que desea cancelar el proceso de solicitud?")) {
+            coordinador.mostrarCancelacionSolicitud();
+        }
+    }
+
+    // La X de una pantalla sin botón para regresar: se confirma antes de dejar la operación
+    @Override
+    public void dejarOperacion() {
+        if (coordinador.confirmar("Contratación de equipo", "¿Dejar la operación y volver al menú principal?")) {
+            abrirMenuPrincipal();
+        }
     }
 
     // ================================================================ inicio de sesión y clientes
@@ -212,6 +255,10 @@ public class ContratacionRenta implements IContratacionRenta {
     public void buscarClientes(String filtro, String texto) {
         if (ValidadorPresentacion.esTextoVacio(texto)) {
             coordinador.mostrarClientesEncontrados(almacen.obtenerClientes());
+            return;
+        }
+        if ("Teléfono".equals(filtro) && !ValidadorPresentacion.esNumeroEntero(texto.trim())) {
+            coordinador.mostrarAviso("Búsqueda de Cliente", "Para buscar por teléfono escribe solo números.");
             return;
         }
         List<ClienteDTO> encontrados = almacen.buscarClientes(filtro, texto);
@@ -262,6 +309,10 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(titulo, "Favor de llenar campos de empresa.");
             return;
         }
+        if (empresa != null && ValidadorPresentacion.esTextoVacio(empresa.getArchivoIdentificacionEncargado())) {
+            coordinador.mostrarAviso(titulo, "Selecciona el archivo con la identificación del encargado.");
+            return;
+        }
         if (!ValidadorPresentacion.esRfcValido(cliente.getRfc())) {
             coordinador.mostrarAviso(titulo, "El RFC no tiene un formato válido (por ejemplo MARJ8503158A1).");
             return;
@@ -278,8 +329,7 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(titulo, "El teléfono del encargado debe tener 10 dígitos.");
             return;
         }
-        ClienteDTO mismoRfc = almacen.buscarClientePorRfc(cliente.getRfc());
-        if (mismoRfc != null && !Objects.equals(mismoRfc.getIdCliente(), cliente.getIdCliente())) {
+        if (negocio.rfcEnUso(cliente, almacen.buscarClientePorRfc(cliente.getRfc()))) {
             coordinador.mostrarAviso(titulo, "Ya hay un cliente registrado con ese RFC.");
             return;
         }
@@ -331,6 +381,7 @@ public class ContratacionRenta implements IContratacionRenta {
         String titulo = "Error de Solicitud";
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
         if (ValidadorPresentacion.esTextoVacio(solicitud.getDireccionObra()) || ValidadorPresentacion.esTextoVacio(solicitud.getNombreObra())
+                || ValidadorPresentacion.esTextoVacio(solicitud.getDescripcionActividad())
                 || periodo == null || !ValidadorPresentacion.esFechaValida(periodo.getFechaInicio()) || !ValidadorPresentacion.esFechaValida(periodo.getFechaFin())) {
             coordinador.mostrarAviso(titulo, "Favor de llenar todos los campos obligatorios");
             return;
@@ -343,7 +394,7 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(titulo, "Favor de agregar el equipo que solicita el cliente.");
             return;
         }
-        periodo.setDiasRenta(diasDe(periodo));
+        periodo.setDiasRenta(negocio.diasRenta(periodo));
         RequerimientosTecnicos.normalizar(solicitud.getRequerimientos());
         if (solicitud.getCliente() == null) {
             solicitud.setCliente(clienteActual);
@@ -364,7 +415,12 @@ public class ContratacionRenta implements IContratacionRenta {
         // se cancela la solicitud que se estaba capturando, con el folio y el cliente de la pantalla
         if (solicitudActual == null) {
             solicitudActual = solicitud;
+        }
+        if (solicitudActual.getCliente() == null) {
             solicitudActual.setCliente(clienteActual);
+        }
+        if (solicitudActual.getFolio() == null) {
+            solicitudActual.setFolio(solicitud.getFolio());
         }
         solicitudActual.setEstadoSolicitud("Cancelada");
         solicitudActual.setMotivoCancelacion(solicitud.getMotivoCancelacion().trim());
@@ -378,6 +434,11 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO solicitud) {
         if (!requerimientosValidos(solicitud, "Solicitud de Datos Faltantes")) {
+            return;
+        }
+        if (ValidadorPresentacion.esTextoVacio(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO))
+                && ValidadorPresentacion.esTextoVacio(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO))) {
+            coordinador.mostrarAviso("Solicitud de Datos Faltantes", "Captura por lo menos un dato de la respuesta del cliente.");
             return;
         }
         solicitud.setEstadoSolicitud("En evaluación técnica");
@@ -412,8 +473,20 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosSinEquipoCompatible(SolicitudRentaDTO solicitud) {
-        this.solicitudActual = solicitud;
+    public void ningunEquipoCumple() {
+        if (!haySolicitud()) {
+            return;
+        }
+        if (equiposEvaluados.containsValue(null) && !coordinador.confirmar("Equipos Compatibles",
+                "Con lo capturado, el sistema marcó equipos que sí cumplen.\n¿Registrar de todos modos que ninguno cumple?")) {
+            return;
+        }
+        EvaluacionTecnicaDTO evaluacion = evaluacionParaGuardar();
+        evaluacion.setResultado("Sin equipo compatible");
+        evaluacion.setRecomendado(null);
+        evaluacion.setAlternativo(null);
+        evaluacion.setFechaEvaluacion(LocalDate.now());
+        evaluacion.setMotivoIncumplimiento(resumenIncumplimientos());
         abrirSinEquipoCompatible();
     }
 
@@ -431,31 +504,41 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
-    public void pasarDatosSeleccionAccesorios(SolicitudRentaDTO solicitud) {
-        EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitud);
-        if (evaluacion == null || !ValidadorPresentacion.esSeleccionValida(evaluacion.getRecomendado())) {
+    public void pasarDatosSeleccionAccesorios(EvaluacionTecnicaDTO seleccion) {
+        if (!haySolicitud()) {
+            return;
+        }
+        if (!ValidadorPresentacion.esSeleccionValida(seleccion.getRecomendado())) {
             coordinador.mostrarAviso("Equipos Compatibles", "Ningún equipo cumple con lo requerido. Usa «Ninguno cumple».");
             return;
         }
-        if (evaluacion.getAlternativo() != null
-                && Objects.equals(evaluacion.getAlternativo().getIdEquipo(), evaluacion.getRecomendado().getIdEquipo())) {
+        if (seleccion.getAlternativo() != null
+                && Objects.equals(seleccion.getAlternativo().getIdEquipo(), seleccion.getRecomendado().getIdEquipo())) {
             coordinador.mostrarAviso("Equipos Compatibles", "El equipo recomendado y la alternativa tienen que ser distintos.");
             return;
         }
-        this.solicitudActual = solicitud;
+        EvaluacionTecnicaDTO evaluacion = evaluacionParaGuardar();
+        evaluacion.setResultado("Cumple");
+        evaluacion.setMotivoIncumplimiento(motivoDelPedido());
+        evaluacion.setFechaEvaluacion(LocalDate.now());
+        evaluacion.setRecomendado(conservar(evaluacion.getRecomendado(), seleccion.getRecomendado()));
+        evaluacion.setAlternativo(seleccion.getAlternativo() == null ? null : conservar(evaluacion.getAlternativo(), seleccion.getAlternativo()));
         guardarSolicitud();
         abrirSeleccionAccesorios();
     }
 
     @Override
-    public void pasarDatosEvaluacionTecnica(SolicitudRentaDTO solicitud) {
-        EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitud);
+    public void pasarDatosEvaluacionTecnica(List<AccesorioDTO> opcionalesElegidos) {
+        if (!haySolicitud()) {
+            return;
+        }
+        EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitudActual);
         if (evaluacion == null || !ValidadorPresentacion.esSeleccionValida(evaluacion.getRecomendado())) {
             coordinador.mostrarAviso("Selección de Accesorios", "Primero hay que elegir el equipo recomendado.");
             abrirEquiposCompatibles();
             return;
         }
-        this.solicitudActual = solicitud;
+        evaluacion.getRecomendado().setAccesorios(negocio.accesoriosPropuestos(accesoriosDelRecomendado(), opcionalesElegidos));
         guardarSolicitud();
         abrirEvaluacionTecnica();
     }
@@ -495,7 +578,9 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso("Verificación de Inventario", "Selecciona una unidad de la tabla.");
             return;
         }
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         String estado = unidad.getEstadoUnidad() == null ? "" : unidad.getEstadoUnidad();
         if (estado.startsWith("En mantenimiento")) {
             coordinador.mostrarUnidadMantenimiento(solicitudActual, unidad);
@@ -509,7 +594,9 @@ public class ContratacionRenta implements IContratacionRenta {
     // Unidad en mantenimiento u ocupada: se toma el equipo alternativo de la evaluación y se buscan sus unidades
     @Override
     public void usarEquipoAlternativo() {
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitudActual);
         if (evaluacion == null || evaluacion.getAlternativo() == null) {
             coordinador.mostrarMensaje("Usar la alternativa", "No se eligió un equipo alternativo; se abre Equipos compatibles para elegir otro.");
@@ -518,19 +605,10 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         EquipoDTO recomendado = evaluacion.getRecomendado();
         EquipoDTO alternativo = evaluacion.getAlternativo();
-        // el alternativo lleva los mismos accesorios que se eligieron para el recomendado
-        if (recomendado != null && recomendado.getAccesorios() != null && alternativo.getAccesorios() != null) {
-            List<AccesorioDTO> elegidos = new ArrayList<>();
-            for (AccesorioDTO accesorio : alternativo.getAccesorios()) {
-                for (AccesorioDTO elegido : recomendado.getAccesorios()) {
-                    if (Objects.equals(accesorio.getIdAccesorio(), elegido.getIdAccesorio())) {
-                        elegidos.add(accesorio);
-                        break;
-                    }
-                }
-            }
-            alternativo.setAccesorios(elegidos);
-        }
+        // al alternativo se le proponen los mismos accesorios que se eligieron para el recomendado
+        EquipoDTO delCatalogo = almacen.buscarEquipoPorId(alternativo.getIdEquipo());
+        alternativo.setAccesorios(negocio.accesoriosPropuestos(delCatalogo == null ? null : delCatalogo.getAccesorios(),
+                recomendado == null ? null : recomendado.getAccesorios()));
         evaluacion.setRecomendado(alternativo);
         evaluacion.setAlternativo(recomendado);
         solicitudActual.setUnidadSeleccionada(null);
@@ -549,8 +627,10 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso("Cambiar periodo", "La fecha de fin no puede ser anterior a la de inicio.");
             return;
         }
-        prepararDatosSolicitud();
-        periodo.setDiasRenta(diasDe(periodo));
+        if (!haySolicitud()) {
+            return;
+        }
+        periodo.setDiasRenta(negocio.diasRenta(periodo));
         // con otras fechas hay que volver a revisar qué unidades están libres y rehacer la cotización
         solicitudActual.setPeriodo(periodo);
         solicitudActual.setUnidadSeleccionada(null);
@@ -563,18 +643,18 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosRequisitosRenta(CotizacionDTO cotizacion) {
         this.cotizacionActual = cotizacion;
-        if (cotizacion.getIdCotizacion() == null) {
-            almacen.registrarCotizacion(cotizacion);
-        }
         abrirRequisitosRenta();
     }
 
     @Override
     public void pasarDatosPropuestaRenta(List<RequisitoRentaDTO> requisitos) {
-        prepararDatosSolicitud();
+        if (!haySolicitud()) {
+            return;
+        }
         solicitudActual.setRequisitos(requisitos);
         if (!negocio.requisitosCumplidos(requisitos)) {
             coordinador.mostrarAviso("Requisitos de la renta", "Hay requisitos obligatorios pendientes: la renta no puede continuar.");
+            coordinador.mostrarRequisitosPendientes();
             return;
         }
         guardarSolicitud();
@@ -588,143 +668,221 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso("Motivo del rechazo", "Favor de escribir el motivo del rechazo.");
             return;
         }
-        prepararDatosSolicitud();
-        prepararDatosCotizacion();
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
+        }
+        decision.setFechaDecision(LocalDate.now());
         cotizacionActual.setDecision(decision);
+        almacen.actualizarCotizacion(cotizacionActual);
         contratacionActual = armarContratacion(decision);
         cotizacionContratacion = cotizacionDe(contratacionActual);
-        if ("RECHAZA".equals(decision.getTipoDecision())) {
+        String estado = contratacionActual.getEstado();
+        if ("RECHAZADA".equals(estado)) {
             solicitudActual.setEstadoSolicitud("Rechazada");
-            contratacionActual.setEstado("RECHAZADA");
             guardarSolicitud();
             coordinador.mostrarOrdenRechazada(solicitudActual, contratacionActual, cotizacionContratacion, decision.getObservaciones().trim());
-        } else if ("NO ACEPTA INDISPENSABLE".equals(decision.getTipoDecision())) {
+        } else if ("PENDIENTE POR ACCESORIO".equals(estado)) {
             // sin el accesorio indispensable no hay condiciones que revisar: la solicitud queda pendiente
-            contratacionActual.setEstado("PENDIENTE POR ACCESORIO");
+            solicitudActual.setEstadoSolicitud("Pendiente por accesorio");
+            guardarSolicitud();
+            contratacionActual = almacen.registrarContratacion(contratacionActual);
             coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionContratacion);
+        } else if (!unidadSigueLibre()) {
+            coordinador.mostrarAviso("Verificación de condiciones", "La unidad elegida ya no está libre en el periodo: elige otra.");
+            abrirVerificacionInventario();
         } else {
             coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion);
         }
     }
 
+    // Generar orden: el asesor marcó las condiciones que revisó con el cliente
     @Override
     public void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion) {
-        if ("FORMALIZADA".equals(contratacion.getEstado())) {
-            List<String> revisadas = contratacion.getCondicionesAcordadas() == null ? new ArrayList<>()
-                    : Arrays.asList(contratacion.getCondicionesAcordadas().split(", "));
-            for (String condicion : CONDICIONES) {
-                if (!revisadas.contains(condicion)) {
-                    contratacion.setEstado("PENDIENTE");
-                    coordinador.mostrarAviso("Verificación de condiciones", "Falta revisar: " + condicion + ". Marca todas las condiciones para generar la orden.");
-                    return;
-                }
+        List<String> revisadas = contratacion.getCondicionesAcordadas() == null ? new ArrayList<>()
+                : Arrays.asList(contratacion.getCondicionesAcordadas().split(", "));
+        for (String condicion : CONDICIONES) {
+            if (!revisadas.contains(condicion)) {
+                coordinador.mostrarAviso("Verificación de condiciones", "Falta revisar: " + condicion + ". Marca todas las condiciones para generar la orden.");
+                return;
             }
         }
-        prepararDatosSolicitud();
-        prepararDatosCotizacion();
-        contratacionActual = contratacion;
-        if ("FORMALIZADA".equals(contratacion.getEstado()) && contratacion.getOrdenEntrega() == null) {
-            contratacion.setFechaFormalizacion(LocalDate.now());
-            contratacion.setOrdenEntrega(negocio.generarOrdenEntrega(solicitudActual));
-            almacen.registrarContratacion(contratacion);
-            solicitudActual.setEstadoSolicitud("Formalizada");
-            guardarSolicitud();
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
         }
-        cotizacionContratacion = cotizacionDe(contratacion);
+        if (!unidadSigueLibre()) {
+            coordinador.mostrarAviso("Verificación de condiciones", "La unidad elegida ya no está libre en el periodo: elige otra.");
+            abrirVerificacionInventario();
+            return;
+        }
+        contratacion.setEstado("FORMALIZADA");
+        contratacion.setFechaFormalizacion(LocalDate.now());
+        contratacion.setOrdenEntrega(negocio.generarOrdenEntrega(solicitudActual));
+        almacen.registrarContratacion(contratacion);
+        // la unidad queda apartada para el periodo de la renta
+        UnidadFisicaDTO unidad = almacen.buscarUnidadPorId(solicitudActual.getUnidadSeleccionada().getIdUnidad());
+        if (unidad != null) {
+            almacen.actualizarUnidad(negocio.ocuparUnidad(unidad, solicitudActual.getPeriodo()));
+        }
+        solicitudActual.setEstadoSolicitud("Formalizada");
+        guardarSolicitud();
+        // la orden que se muestra es la que quedó registrada
+        contratacionActual = almacen.buscarContratacionPorFolio(solicitudActual.getFolio());
+        cotizacionContratacion = cotizacionDe(contratacionActual);
+        coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionContratacion);
+    }
+
+    // No generar orden: la solicitud queda pendiente y la unidad no se aparta
+    @Override
+    public void pasarDatosSolicitudPendiente(ContratacionRentaDTO contratacion) {
+        if (!haySolicitud() || !hayCotizacion()) {
+            return;
+        }
+        contratacion.setEstado("PENDIENTE");
+        contratacionActual = almacen.registrarContratacion(contratacion);
+        solicitudActual.setEstadoSolicitud("Pendiente por condiciones");
+        guardarSolicitud();
+        cotizacionContratacion = cotizacionDe(contratacionActual);
         coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionContratacion);
     }
 
     // ================================================================ DTO que arma el control
-    // La contratación con lo que decidió el cliente: con todos los accesorios, solo con el indispensable o sin ellos
+    // La contratación con lo que decidió el cliente; qué accesorios entran y el estado los responde el negocio simulado
     private ContratacionRentaDTO armarContratacion(DecisionClienteDTO decision) {
-        String tipo = decision.getTipoDecision();
         ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
+        contratacion.setFolioSolicitud(solicitudActual.getFolio());
         contratacion.setCliente(solicitudActual.getCliente());
         contratacion.setFechaInicio(solicitudActual.getPeriodo().getFechaInicio());
         contratacion.setFechaFin(solicitudActual.getPeriodo().getFechaFin());
         contratacion.setUnidad(solicitudActual.getUnidadSeleccionada());
-        contratacion.setEstado("PENDIENTE");
-        List<AccesorioDTO> accesorios = new ArrayList<>();
+        contratacion.setEstado(negocio.estadoContratacion(decision.getTipoDecision()));
         EquipoDTO equipo = equipoRecomendado();
-        if (equipo != null) {
-            contratacion.setTarifaAcordada(negocio.tarifaDiaria(equipo));
-            if (equipo.getAccesorios() != null && !"NO ACEPTA INDISPENSABLE".equals(tipo)) {
-                for (AccesorioDTO accesorio : equipo.getAccesorios()) {
-                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || !"ACEPTA PARCIAL".equals(tipo)) {
-                        accesorios.add(accesorio);
-                    }
-                }
-            }
-        }
-        contratacion.setAccesorios(accesorios);
+        contratacion.setTarifaAcordada(negocio.tarifaDiaria(equipo));
+        contratacion.setAccesorios(negocio.accesoriosAceptados(decision.getTipoDecision(), equipo.getAccesorios()));
         contratacion.setDepositoGarantia(negocio.depositoGarantia(solicitudActual.getRequisitos()));
         return contratacion;
     }
 
     // Los importes de la contratación (solo con los accesorios que aceptó el cliente)
     private CotizacionDTO cotizacionDe(ContratacionRentaDTO contratacion) {
-        EquipoDTO equipo = equipoRecomendado();
-        if (equipo == null || solicitudActual.getPeriodo().getDiasRenta() == null) {
-            return cotizacionActual;
-        }
-        return negocio.cotizar(equipo, solicitudActual.getPeriodo().getDiasRenta(), contratacion.getAccesorios());
+        CotizacionDTO cotizacion = negocio.cotizar(equipoRecomendado(), solicitudActual.getPeriodo().getDiasRenta(), contratacion.getAccesorios());
+        cotizacion.setFolioSolicitud(solicitudActual.getFolio());
+        cotizacion.setDepositoGarantia(contratacion.getDepositoGarantia());
+        return cotizacion;
     }
 
-    private CotizacionDTO armarCotizacion() {
-        EquipoDTO equipo = equipoRecomendado();
-        Integer dias = solicitudActual.getPeriodo().getDiasRenta();
-        if (equipo == null || dias == null) {
-            // sin evaluación técnica todavía, se usa la cotización del escenario
-            return new CotizacionDTO(null, LocalDate.now(), LocalDate.now().plusDays(15),
-                    9500.0, 1520.0, 11020.0, almacen.obtenerDetallesCotizacionEjemplo(), null);
-        }
-        return negocio.cotizar(equipo, dias, equipo.getAccesorios());
-    }
-
-    private void prepararDatosCotizacion() {
-        prepararDatosSolicitud();
+    // La cotización con el equipo y los accesorios propuestos; queda registrada con el folio de la solicitud
+    // (si se rehace porque el asesor regresó, se actualiza la que ya estaba)
+    private boolean hayCotizacion() {
         if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {
             solicitudActual.setRequisitos(almacen.obtenerRequisitosRenta());
         }
-        if (cotizacionActual == null) {
-            cotizacionActual = armarCotizacion();
+        if (cotizacionActual != null) {
+            return true;
         }
+        EquipoDTO equipo = equipoRecomendado();
+        if (equipo == null || solicitudActual.getPeriodo() == null || solicitudActual.getPeriodo().getDiasRenta() == null) {
+            coordinador.mostrarAviso("Cotización", "Primero hay que elegir el equipo recomendado y el periodo.");
+            abrirEquiposCompatibles();
+            return false;
+        }
+        CotizacionDTO cotizacion = negocio.cotizar(equipo, solicitudActual.getPeriodo().getDiasRenta(), equipo.getAccesorios());
+        cotizacion.setFolioSolicitud(solicitudActual.getFolio());
+        cotizacion.setDepositoGarantia(negocio.depositoGarantia(solicitudActual.getRequisitos()));
+        CotizacionDTO anterior = almacen.buscarCotizacionPorFolio(solicitudActual.getFolio());
+        if (anterior == null) {
+            cotizacionActual = almacen.registrarCotizacion(cotizacion);
+        } else {
+            cotizacion.setIdCotizacion(anterior.getIdCotizacion());
+            almacen.actualizarCotizacion(cotizacion);
+            cotizacionActual = cotizacion;
+        }
+        return true;
     }
 
-    // Lo que falta cuando una pantalla se abre sin venir de las anteriores se completa con el escenario
-    private void prepararDatosSolicitud() {
+    // Las pantallas del flujo necesitan la solicitud que se registró en Solicitud de renta
+    private boolean haySolicitud() {
         if (solicitudActual == null) {
-            solicitudActual = new SolicitudRentaDTO();
-        }
-        if (solicitudActual.getCliente() == null) {
-            solicitudActual.setCliente(clienteActual != null ? clienteActual : almacen.buscarClientePorId(1L));
-        }
-        if (solicitudActual.getFolio() == null) {
-            solicitudActual.setFolio(almacen.siguienteFolio());
-        }
-        if (solicitudActual.getNombreObra() == null) {
-            solicitudActual.setNombreObra("Remodelación Plaza Goya");
-        }
-        if (solicitudActual.getDireccionObra() == null) {
-            solicitudActual.setDireccionObra("Av. Guerrero #1105, Ciudad Obregón, Sonora");
-        }
-        if (solicitudActual.getDescripcionActividad() == null) {
-            solicitudActual.setDescripcionActividad("Excavar cepas para la cimentación y retirar el material, a 3.50 m de profundidad.");
-        }
-        if (solicitudActual.getPeriodo() == null) {
-            solicitudActual.setPeriodo(new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6));
-        }
-        if (solicitudActual.getEquiposSolicitados() == null || solicitudActual.getEquiposSolicitados().isEmpty()) {
-            EquipoSolicitadoDTO pedido = new EquipoSolicitadoDTO();
-            pedido.setDescripcionEquipo("Retroexcavadora JCB");
-            pedido.setCantidad(1);
-            List<EquipoSolicitadoDTO> pedidos = new ArrayList<>();
-            pedidos.add(pedido);
-            solicitudActual.setEquiposSolicitados(pedidos);
+            coordinador.mostrarAviso("Contratación de equipo", "Primero hay que registrar la solicitud de renta.");
+            abrirMenuPrincipal();
+            return false;
         }
         if (solicitudActual.getRequerimientos() == null) {
             solicitudActual.setRequerimientos(new ArrayList<>());
         }
+        return true;
+    }
+
+    // Antes de formalizar se vuelve a preguntar si la unidad elegida sigue libre
+    private boolean unidadSigueLibre() {
+        UnidadFisicaDTO elegida = solicitudActual.getUnidadSeleccionada();
+        if (elegida == null) {
+            return false;
+        }
+        List<UnidadFisicaDTO> registrada = new ArrayList<>();
+        UnidadFisicaDTO enAlmacen = almacen.buscarUnidadPorId(elegida.getIdUnidad());
+        registrada.add(enAlmacen == null ? elegida : enAlmacen);
+        return negocio.estaDisponible(negocio.disponibilidad(registrada, solicitudActual.getPeriodo()).get(0));
+    }
+
+    // ---------------------------------------------------------------- evaluación técnica
+    // El equipo del catálogo que pidió el cliente (el primero de la solicitud)
+    private EquipoDTO equipoPedido() {
+        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
+        if (pedidos == null || pedidos.isEmpty() || ValidadorPresentacion.esTextoVacio(pedidos.get(0).getDescripcionEquipo())) {
+            return null;
+        }
+        List<EquipoDTO> encontrados = almacen.buscarEquipos(pedidos.get(0).getDescripcionEquipo());
+        return encontrados.isEmpty() ? null : encontrados.get(0);
+    }
+
+    // La evaluación técnica va con el equipo que pidió el cliente; si todavía no hay, se crea
+    private EvaluacionTecnicaDTO evaluacionParaGuardar() {
+        if (solicitudActual.getEquiposSolicitados().isEmpty()) {
+            EquipoSolicitadoDTO pedido = new EquipoSolicitadoDTO();
+            pedido.setCantidad(1);
+            solicitudActual.getEquiposSolicitados().add(pedido);
+        }
+        EquipoSolicitadoDTO pedido = solicitudActual.getEquiposSolicitados().get(0);
+        if (pedido.getEvaluacion() == null) {
+            pedido.setEvaluacion(new EvaluacionTecnicaDTO());
+        }
+        return pedido.getEvaluacion();
+    }
+
+    // Si se vuelve a elegir el mismo equipo se queda el que ya estaba, con los accesorios que ya
+    // se habían propuesto; si es otro, se toma del catálogo del almacén
+    private EquipoDTO conservar(EquipoDTO anterior, EquipoDTO elegido) {
+        if (anterior != null && Objects.equals(anterior.getIdEquipo(), elegido.getIdEquipo())) {
+            return anterior;
+        }
+        EquipoDTO delCatalogo = almacen.buscarEquipoPorId(elegido.getIdEquipo());
+        return delCatalogo == null ? elegido : delCatalogo;
+    }
+
+    // Por qué no se queda el equipo que pidió el cliente (null si sí cumple)
+    private String motivoDelPedido() {
+        EquipoDTO pedido = equipoPedido();
+        String motivo = pedido == null ? null : motivoDe(pedido);
+        return motivo == null ? null : pedido.getModelo() + ": " + motivo + ".";
+    }
+
+    private String motivoDe(EquipoDTO equipo) {
+        for (Map.Entry<EquipoDTO, String> evaluado : equiposEvaluados.entrySet()) {
+            if (Objects.equals(evaluado.getKey().getIdEquipo(), equipo.getIdEquipo())) {
+                return evaluado.getValue();
+            }
+        }
+        return null;
+    }
+
+    private String resumenIncumplimientos() {
+        StringBuilder resumen = new StringBuilder();
+        for (Map.Entry<EquipoDTO, String> evaluado : equiposEvaluados.entrySet()) {
+            if (evaluado.getValue() != null) {
+                resumen.append(resumen.length() > 0 ? "\n" : "").append(evaluado.getKey().getModelo()).append(": ").append(evaluado.getValue()).append(".");
+            }
+        }
+        return resumen.toString();
     }
 
     // ================================================================ apoyo
@@ -747,11 +905,6 @@ public class ContratacionRenta implements IContratacionRenta {
                 || RequerimientosTecnicos.valor(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO) != null;
     }
 
-    private int diasDe(PeriodoSolicitadoDTO periodo) {
-        return (int) ChronoUnit.DAYS.between(periodo.getFechaInicio(), periodo.getFechaFin()) + 1;
-    }
-
-    // Si la solicitud ya se registró, el almacén se queda con sus cambios
     // La solicitud queda en el almacén temporal: se registra la primera vez y después se actualiza
     private void guardarSolicitud() {
         if (solicitudActual == null) {

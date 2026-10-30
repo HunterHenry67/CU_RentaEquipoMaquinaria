@@ -12,7 +12,8 @@ public class ValidadorPresentacion {
     private static final String CORREO = "^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,}$";
     // RFC: 3 letras (empresa) o 4 (persona), la fecha en 6 dígitos y la homoclave de 3
     private static final String RFC = "^[A-ZÑ&]{3,4}\\d{6}[A-Z0-9]{3}$";
-    private static final String NUMERO = "^\\d+([.,]\\d+)?$";
+    // punto decimal, o coma con uno o dos decimales (así "1,200" no pasa por 1.2)
+    private static final String NUMERO = "^\\d+(\\.\\d+|,\\d{1,2})?$";
 
     private ValidadorPresentacion() {
     }
@@ -33,13 +34,20 @@ public class ValidadorPresentacion {
         return texto != null && texto.trim().matches("^\\d+$");
     }
 
-    // Un número con punto o coma decimal; si trae la unidad ("3.50 m") se toma el número
     public static boolean esNumeroValido(String texto) {
+        return texto != null && texto.trim().matches(NUMERO);
+    }
+
+    // Un número que puede traer al final su unidad ("3.50 m", "120 HP"), pero no otra
+    public static boolean esNumeroConUnidad(String texto, String unidad) {
         if (texto == null) {
             return false;
         }
-        String limpio = texto.trim().replaceAll("\\s*[a-zA-Z]+$", "");
-        return limpio.matches(NUMERO);
+        String limpio = texto.trim();
+        if (unidad != null && limpio.toLowerCase().endsWith(unidad.toLowerCase())) {
+            limpio = limpio.substring(0, limpio.length() - unidad.length()).trim();
+        }
+        return esNumeroValido(limpio);
     }
 
     public static boolean esTelefonoValido(String telefono) {

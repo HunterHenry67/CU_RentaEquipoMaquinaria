@@ -21,6 +21,8 @@ public class CotizacionDTO {
     private Double total;
     private List<DetalleCotizacionDTO> detalles;
     private DecisionClienteDTO decision;
+    private Double depositoGarantia;
+    private String folioSolicitud;
 
     public CotizacionDTO() {
     }
@@ -100,4 +102,19 @@ public class CotizacionDTO {
         this.decision = decision;
     }
 
+    public Double getDepositoGarantia() {
+        return depositoGarantia;
+    }
+
+    public void setDepositoGarantia(Double depositoGarantia) {
+        this.depositoGarantia = depositoGarantia;
+    }
+
+    public String getFolioSolicitud() {
+        return folioSolicitud;
+    }
+
+    public void setFolioSolicitud(String folioSolicitud) {
+        this.folioSolicitud = folioSolicitud;
+    }
 }

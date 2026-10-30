@@ -8,7 +8,6 @@ import java.util.List;
 import objetosdto.ClienteDTO;
 import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
-import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
@@ -44,6 +43,10 @@ public interface IAlmacenTemporal {
 
     public abstract List<UnidadFisicaDTO> obtenerUnidadesDeEquipo(Long idEquipo);
 
+    public abstract UnidadFisicaDTO buscarUnidadPorId(Long idUnidad);
+
+    public abstract void actualizarUnidad(UnidadFisicaDTO unidad);
+
     // Solicitudes
     public abstract String siguienteFolio();
 
@@ -58,14 +61,19 @@ public interface IAlmacenTemporal {
     // Cotizaciones y contrataciones
     public abstract CotizacionDTO registrarCotizacion(CotizacionDTO cotizacion);
 
+    public abstract void actualizarCotizacion(CotizacionDTO cotizacion);
+
+    public abstract CotizacionDTO buscarCotizacionPorFolio(String folio);
+
     public abstract List<CotizacionDTO> obtenerCotizaciones();
 
     public abstract ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion);
 
+    public abstract ContratacionRentaDTO buscarContratacionPorFolio(String folio);
+
     public abstract List<ContratacionRentaDTO> obtenerContrataciones();
 
-    // Requisitos y datos de ejemplo
+    // Requisitos de la renta
     public abstract List<RequisitoRentaDTO> obtenerRequisitosRenta();
 
-    public abstract List<DetalleCotizacionDTO> obtenerDetallesCotizacionEjemplo();
 }

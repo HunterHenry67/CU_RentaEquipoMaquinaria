@@ -313,17 +313,14 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         if (tableOpcionales.isEditing()) {
             tableOpcionales.getCellEditor().stopCellEditing();
         }
-        EquipoDTO recomendado = Formato.equipoRecomendado(solicitud);
-        if (recomendado != null) {
-            List<AccesorioDTO> propuesta = new ArrayList<>(indispensables);
-            for (int i = 0; i < opcionales.size(); i++) {
-                if (Boolean.TRUE.equals(tableOpcionales.getModel().getValueAt(i, 1))) {
-                    propuesta.add(opcionales.get(i));
-                }
+        // los indispensables los agrega el control con la respuesta del negocio simulado
+        List<AccesorioDTO> elegidos = new ArrayList<>();
+        for (int i = 0; i < opcionales.size(); i++) {
+            if (Boolean.TRUE.equals(tableOpcionales.getModel().getValueAt(i, 1))) {
+                elegidos.add(opcionales.get(i));
             }
-            recomendado.setAccesorios(propuesta);
         }
-        contratacionRenta.pasarDatosEvaluacionTecnica(solicitud);
+        contratacionRenta.pasarDatosEvaluacionTecnica(elegidos);
     }//GEN-LAST:event_btnContinuarActionPerformed
 
     private boolean propuesto(EquipoDTO recomendado, AccesorioDTO accesorio) {

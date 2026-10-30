@@ -645,8 +645,12 @@
               <Font name="Dialog" size="14" style="0"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="1">
+              <StringArray count="5">
                 <StringItem index="0" value="Sin especificar"/>
+                <StringItem index="1" value="Firme"/>
+                <StringItem index="2" value="Arcilloso"/>
+                <StringItem index="3" value="Arenoso"/>
+                <StringItem index="4" value="Rocoso"/>
               </StringArray>
             </Property>
           </Properties>

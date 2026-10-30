@@ -177,6 +177,12 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
+    public void mostrarCancelacionSolicitud() {
+        solicitudRentaFrame.mostrarCancelacion();
+        mostrar(solicitudRentaFrame);
+    }
+
+    @Override
     public void mostrarEquiposSolicitados(List<EquipoSolicitadoDTO> equipos) {
         solicitudRentaFrame.cargarEquiposSolicitadosEnTabla(equipos);
     }
@@ -194,8 +200,8 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
-    public void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados) {
-        equiposCompatiblesFrame.cargarEquipos(solicitud, evaluados);
+    public void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, EquipoDTO pedido) {
+        equiposCompatiblesFrame.cargarEquipos(solicitud, evaluados, pedido);
         mostrar(equiposCompatiblesFrame);
     }
 
@@ -266,6 +272,12 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
+    public void mostrarRequisitosPendientes() {
+        requisitosRentaFrame.mostrarPendientes(true);
+        mostrar(requisitosRentaFrame);
+    }
+
+    @Override
     public void mostrarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
         propuestaRentaFrame.cargarDatos(solicitud, cotizacion);
         mostrar(propuestaRentaFrame);
@@ -309,6 +321,12 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     @Override
     public void mostrarMensaje(String titulo, String mensaje) {
         JOptionPane.showMessageDialog(ventanaVisible(), mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public boolean confirmar(String titulo, String mensaje) {
+        return JOptionPane.showConfirmDialog(ventanaVisible(), mensaje, titulo, JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
     }
 
     private Window ventanaVisible() {

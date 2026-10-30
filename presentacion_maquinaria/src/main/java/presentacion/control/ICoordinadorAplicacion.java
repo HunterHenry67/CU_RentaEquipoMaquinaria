@@ -37,13 +37,16 @@ public interface ICoordinadorAplicacion {
 
     public abstract void mostrarSolicitudRenta();
 
+    // La parte de la pantalla de solicitud donde se escribe la razón de la cancelación
+    public abstract void mostrarCancelacionSolicitud();
+
     public abstract void mostrarEquiposSolicitados(List<EquipoSolicitadoDTO> equipos);
 
     public abstract void mostrarAnalisisRequerimiento(SolicitudRentaDTO solicitud);
 
     public abstract void mostrarSolicitudDatosFaltantes(SolicitudRentaDTO solicitud);
 
-    public abstract void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados);
+    public abstract void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, EquipoDTO pedido);
 
     public abstract void mostrarSinEquipoCompatible(SolicitudRentaDTO solicitud);
 
@@ -67,6 +70,9 @@ public interface ICoordinadorAplicacion {
 
     public abstract void mostrarRequisitosRenta(SolicitudRentaDTO solicitud);
 
+    // Requisitos con algo obligatorio pendiente: la pantalla pasa a su estado de error
+    public abstract void mostrarRequisitosPendientes();
+
     public abstract void mostrarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion);
 
     public abstract void mostrarPropuestaPendiente(SolicitudRentaDTO solicitud);
@@ -83,4 +89,7 @@ public interface ICoordinadorAplicacion {
     public abstract void mostrarAviso(String titulo, String mensaje);
 
     public abstract void mostrarMensaje(String titulo, String mensaje);
+
+    // Pregunta sí o no sobre la ventana visible; regresa true si el usuario dijo que sí
+    public abstract boolean confirmar(String titulo, String mensaje);
 }

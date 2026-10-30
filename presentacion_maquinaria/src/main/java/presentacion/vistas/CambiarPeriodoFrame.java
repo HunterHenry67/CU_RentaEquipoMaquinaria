@@ -42,6 +42,9 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
 
         selectorFechaInicio = new DatePicker(settingsInicio);
         selectorFechaFin = new DatePicker(settingsFin);
+        // las fechas se eligen en el calendario, así siempre llegan con un formato válido
+        settingsInicio.setAllowKeyboardEditing(false);
+        settingsFin.setAllowKeyboardEditing(false);
 
         selectorFechaInicio.setBounds(txtFieldInicio.getBounds());
         selectorFechaFin.setBounds(txtFieldFin.getBounds());

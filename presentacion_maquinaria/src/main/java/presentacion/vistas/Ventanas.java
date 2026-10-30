@@ -4,7 +4,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.AbstractButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import presentacion.control.IContratacionRenta;
 
 /**
@@ -27,16 +26,12 @@ public class Ventanas {
         });
     }
 
-    // La pantalla no tiene botón para regresar: la X pregunta si se deja la operación y vuelve al menú
+    // La pantalla no tiene botón para regresar: el control pregunta si se deja la operación
     public static void cerrarAlMenu(JFrame ventana, IContratacionRenta contratacionRenta) {
         ventana.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent evt) {
-                int respuesta = JOptionPane.showConfirmDialog(ventana, "¿Dejar la operación y volver al menú principal?",
-                        ventana.getTitle(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (respuesta == JOptionPane.YES_OPTION) {
-                    contratacionRenta.abrirMenuPrincipal();
-                }
+                contratacionRenta.dejarOperacion();
             }
         });
     }

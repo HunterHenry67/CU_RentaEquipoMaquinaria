@@ -56,7 +56,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         // la tarifa del periodo es la de la cotización que armó el control
         lblTarifa.setText("Tarifa por el periodo: " + (cotizacion == null ? "" : String.format("$%,.2f", Montos.renta(cotizacion))));
 
-        lblDeposito.setText("Depósito de garantía: " + (solicitud.getRequisitos() == null ? "" : Montos.moneda(Montos.deposito(solicitud.getRequisitos()))));
+        lblDeposito.setText("Depósito de garantía: " + (cotizacion == null ? "" : Montos.moneda(Montos.deposito(cotizacion))));
     }
 
     /**

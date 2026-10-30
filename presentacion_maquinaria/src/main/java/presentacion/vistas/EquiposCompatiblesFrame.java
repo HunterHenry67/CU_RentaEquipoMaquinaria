@@ -4,16 +4,13 @@
  */
 package presentacion.vistas;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.EquipoDTO;
-import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
@@ -42,18 +39,18 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     // ya comparados con los requerimientos (para cada uno, por qué no cumple o null si
     // cumple). Deja elegir el recomendado y la alternativa entre los que cumplen; si ya se
     // habían elegido, los vuelve a marcar.
-    public void cargarEquipos(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados) {
+    public void cargarEquipos(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, EquipoDTO pedido) {
         this.solicitud = solicitud;
         this.evaluados = evaluados;
         lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
 
-        EquipoDTO pedido = equipoPedido();
         DefaultTableModel modelo = (DefaultTableModel) tableEquipos.getModel();
         modelo.setRowCount(0);
         compatibles.clear();
         for (EquipoDTO equipo : evaluados.keySet()) {
             String motivo = evaluados.get(equipo);
-            String nombre = equipo.getModelo() + (equipo == pedido ? " (lo pidió el cliente)" : "");
+            boolean esElPedido = pedido != null && Objects.equals(pedido.getIdEquipo(), equipo.getIdEquipo());
+            String nombre = equipo.getModelo() + (esElPedido ? " (lo pidió el cliente)" : "");
             modelo.addRow(new Object[]{nombre, motivo == null ? "Sí" : "No: " + motivo});
             if (motivo == null) {
                 compatibles.add(equipo);
@@ -67,7 +64,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
             comboRecomendado.addItem(equipo.getModelo());
             comboAlternativa.addItem(equipo.getModelo());
         }
-        EvaluacionTecnicaDTO evaluacion = evaluacionActual();
+        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
         boolean yaElegidos = evaluacion != null && evaluacion.getRecomendado() != null;
         if (!compatibles.isEmpty()) {
             comboRecomendado.setSelectedIndex(yaElegidos ? indice(evaluacion.getRecomendado(), 0) : 0);
@@ -322,74 +319,17 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnContinuarAccesoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarAccesoriosActionPerformed
-        // lo que eligió el asesor; el control revisa que haya recomendado y que la alternativa sea otra
-        EquipoDTO recomendado = compatibles.isEmpty() ? null : compatibles.get(comboRecomendado.getSelectedIndex());
+        // lo que eligió el asesor; el control revisa la selección y arma la evaluación técnica
+        EvaluacionTecnicaDTO seleccion = new EvaluacionTecnicaDTO();
+        seleccion.setRecomendado(compatibles.isEmpty() ? null : compatibles.get(comboRecomendado.getSelectedIndex()));
         int indiceAlternativa = comboAlternativa.getSelectedIndex() - 1;
-        EquipoDTO alternativa = indiceAlternativa >= 0 ? compatibles.get(indiceAlternativa) : null;
-        EvaluacionTecnicaDTO evaluacion = evaluacionParaGuardar();
-        evaluacion.setResultado("Cumple");
-        evaluacion.setMotivoIncumplimiento(motivoDelPedido());
-        evaluacion.setFechaEvaluacion(LocalDate.now());
-        evaluacion.setRecomendado(recomendado == null ? null : conservar(evaluacion.getRecomendado(), recomendado));
-        evaluacion.setAlternativo(alternativa == null ? null : conservar(evaluacion.getAlternativo(), alternativa));
-        contratacionRenta.pasarDatosSeleccionAccesorios(solicitud);
+        seleccion.setAlternativo(indiceAlternativa >= 0 ? compatibles.get(indiceAlternativa) : null);
+        contratacionRenta.pasarDatosSeleccionAccesorios(seleccion);
     }//GEN-LAST:event_btnContinuarAccesoriosActionPerformed
 
     private void btnNingunoCumpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNingunoCumpleActionPerformed
-        if (!compatibles.isEmpty()) {
-            int respuesta = JOptionPane.showConfirmDialog(this,
-                    "Con lo capturado, el sistema marcó equipos que sí cumplen.\n¿Registrar de todos modos que ninguno cumple?",
-                    "Equipos Compatibles", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (respuesta != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
-        EvaluacionTecnicaDTO evaluacion = evaluacionParaGuardar();
-        evaluacion.setResultado("Sin equipo compatible");
-        evaluacion.setRecomendado(null);
-        evaluacion.setAlternativo(null);
-        evaluacion.setFechaEvaluacion(LocalDate.now());
-        evaluacion.setMotivoIncumplimiento(resumenIncumplimientos());
-        contratacionRenta.pasarDatosSinEquipoCompatible(solicitud);
+        contratacionRenta.ningunEquipoCumple();
     }//GEN-LAST:event_btnNingunoCumpleActionPerformed
-
-    // El equipo del catálogo que pidió el cliente en la solicitud (el primero que pidió)
-    private EquipoDTO equipoPedido() {
-        List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
-        if (pedidos == null || pedidos.isEmpty() || pedidos.get(0).getDescripcionEquipo() == null) {
-            return null;
-        }
-        String descripcion = pedidos.get(0).getDescripcionEquipo().trim().toLowerCase();
-        for (EquipoDTO equipo : evaluados.keySet()) {
-            String modelo = equipo.getModelo() == null ? "" : equipo.getModelo().toLowerCase();
-            if (!modelo.isEmpty() && (modelo.equals(descripcion) || descripcion.contains(modelo) || modelo.contains(descripcion))) {
-                return equipo;
-            }
-        }
-        return null;
-    }
-
-    private EvaluacionTecnicaDTO evaluacionActual() {
-        List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
-        return pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
-    }
-
-    // La evaluación técnica va con el equipo que pidió el cliente; si todavía no hay, se crea
-    private EvaluacionTecnicaDTO evaluacionParaGuardar() {
-        if (solicitud.getEquiposSolicitados() == null) {
-            solicitud.setEquiposSolicitados(new ArrayList<>());
-        }
-        if (solicitud.getEquiposSolicitados().isEmpty()) {
-            EquipoSolicitadoDTO pedido = new EquipoSolicitadoDTO();
-            pedido.setCantidad(1);
-            solicitud.getEquiposSolicitados().add(pedido);
-        }
-        EquipoSolicitadoDTO pedido = solicitud.getEquiposSolicitados().get(0);
-        if (pedido.getEvaluacion() == null) {
-            pedido.setEvaluacion(new EvaluacionTecnicaDTO());
-        }
-        return pedido.getEvaluacion();
-    }
 
     private int indice(EquipoDTO equipo, int siNoEsta) {
         if (equipo != null) {
@@ -400,46 +340,6 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
             }
         }
         return siNoEsta;
-    }
-
-    // Si se vuelve a elegir el mismo equipo se queda el que ya estaba, con los accesorios
-    // que ya se habían propuesto; si es otro, se guarda una copia del equipo del catálogo
-    private EquipoDTO conservar(EquipoDTO anterior, EquipoDTO elegido) {
-        if (anterior != null && Objects.equals(anterior.getIdEquipo(), elegido.getIdEquipo())) {
-            return anterior;
-        }
-        EquipoDTO copia = new EquipoDTO();
-        copia.setIdEquipo(elegido.getIdEquipo());
-        copia.setMarca(elegido.getMarca());
-        copia.setModelo(elegido.getModelo());
-        copia.setPotencia(elegido.getPotencia());
-        copia.setPeso(elegido.getPeso());
-        copia.setAnchoOperacion(elegido.getAnchoOperacion());
-        copia.setProfundidadExcavacion(elegido.getProfundidadExcavacion());
-        copia.setCostoDiario(elegido.getCostoDiario());
-        copia.setAccesorios(elegido.getAccesorios() == null ? new ArrayList<>() : new ArrayList<>(elegido.getAccesorios()));
-        return copia;
-    }
-
-    // Por qué no se queda el equipo que pidió el cliente (null si sí cumple)
-    private String motivoDelPedido() {
-        EquipoDTO pedido = equipoPedido();
-        String motivo = pedido == null ? null : evaluados.get(pedido);
-        return motivo == null ? null : pedido.getModelo() + ": " + motivo + ".";
-    }
-
-    private String resumenIncumplimientos() {
-        StringBuilder resumen = new StringBuilder();
-        for (EquipoDTO equipo : evaluados.keySet()) {
-            String motivo = evaluados.get(equipo);
-            if (motivo != null) {
-                if (resumen.length() > 0) {
-                    resumen.append("\n");
-                }
-                resumen.append(equipo.getModelo()).append(": ").append(motivo).append(".");
-            }
-        }
-        return resumen.toString();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -9,7 +9,6 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.awt.CardLayout;
 import java.time.LocalDate;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.ClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
@@ -53,6 +52,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
         datePickerInicio = new DatePicker(settingsInicio);
         datePickerFinal = new DatePicker(settingsFinal);
+        // las fechas se eligen en el calendario, así siempre llegan con un formato válido
+        settingsInicio.setAllowKeyboardEditing(false);
+        settingsFinal.setAllowKeyboardEditing(false);
 
         datePickerInicio.setBounds(formtxtFechaInicio.getBounds());
         datePickerFinal.setBounds(formtxtFechaFinal.getBounds());
@@ -95,6 +97,14 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         comboTipoTerreno.setSelectedIndex(0);
         ((DefaultTableModel) tableEquipoSoli.getModel()).setRowCount(0);
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "card1");
+    }
+
+    // El control ya confirmó la cancelación: se muestra la parte para escribir la razón
+    public void mostrarCancelacion() {
+        CardLayout card = (CardLayout) this.getContentPane().getLayout();
+        card.show(this.getContentPane(), "card2");
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
     }
 
     public void cargarFolio(String folio) {
@@ -315,7 +325,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel17.setText("Tipo de Terreno:");
 
         comboTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar" }));
+        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar", "Firme", "Arcilloso", "Arenoso", "Rocoso" }));
 
         btnCancelarSoli.setBackground(new java.awt.Color(236, 34, 31));
         btnCancelarSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -642,15 +652,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
-        int respuesta = JOptionPane.showConfirmDialog(this, "¿Confirma que desea cancelar el proceso de solicitud?", "Cancelación de Solicitud", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        if (respuesta == JOptionPane.YES_OPTION) {
-            CardLayout card = (CardLayout) this.getContentPane().getLayout();
-            card.show(this.getContentPane(), "card2");
-            this.getContentPane().revalidate();
-            this.getContentPane().repaint();
-            this.pack();
-            this.setLocationRelativeTo(null);
-        }
+        contratacionRenta.abrirCancelacionSolicitud();
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed

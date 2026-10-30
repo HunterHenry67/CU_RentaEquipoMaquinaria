@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import objetosdto.CotizacionDTO;
 import objetosdto.DetalleCotizacionDTO;
 import objetosdto.PeriodoSolicitadoDTO;
-import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 
@@ -59,12 +58,7 @@ public class CotizacionFrame extends javax.swing.JFrame {
         lblImpuestosValor.setText(formatoMoneda(cotizacion.getIva()));
         lblTotalValor.setText(formatoMoneda(cotizacion.getTotal()));
 
-        lblDepositoValor.setText("—");
-        for (RequisitoRentaDTO requisito : solicitud.getRequisitos()) {
-            if (requisito.getMonto() != null) {
-                lblDepositoValor.setText(formatoMoneda(requisito.getMonto()));
-            }
-        }
+        lblDepositoValor.setText(cotizacion.getDepositoGarantia() == null ? "—" : formatoMoneda(cotizacion.getDepositoGarantia()));
     }
 
     private String formatoMoneda(Double valor) {

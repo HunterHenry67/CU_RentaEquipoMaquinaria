@@ -1,14 +1,18 @@
 package presentacion.simulacion;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import objetosdto.AccesorioDTO;
+import objetosdto.ClienteDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
+import objetosdto.OcupacionUnidadDTO;
 import objetosdto.OrdenEntregaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
@@ -108,5 +112,71 @@ public class NegocioSimulado implements INegocioSimulado {
         orden.setHorario("antes de las 8:00 AM");
         orden.setEstadoOrden("Finalizada");
         return orden;
+    }
+
+    @Override
+    public UnidadFisicaDTO ocuparUnidad(UnidadFisicaDTO unidad, PeriodoSolicitadoDTO periodo) {
+        unidad.getOcupaciones().add(new OcupacionUnidadDTO(periodo.getFechaInicio(), periodo.getFechaFin(), "Renta", "Confirmada"));
+        unidad.setEstadoUnidad("Ocupada");
+        return unidad;
+    }
+
+    // Se cobra también el día en que termina la renta: del 10 al 15 son 6 días
+    @Override
+    public int diasRenta(PeriodoSolicitadoDTO periodo) {
+        return (int) ChronoUnit.DAYS.between(periodo.getFechaInicio(), periodo.getFechaFin()) + 1;
+    }
+
+    @Override
+    public boolean rfcEnUso(ClienteDTO cliente, ClienteDTO registradoConEseRfc) {
+        return registradoConEseRfc != null && !Objects.equals(registradoConEseRfc.getIdCliente(), cliente.getIdCliente());
+    }
+
+    @Override
+    public List<AccesorioDTO> accesoriosPropuestos(List<AccesorioDTO> delEquipo, List<AccesorioDTO> elegidos) {
+        List<AccesorioDTO> propuestos = new ArrayList<>();
+        if (delEquipo != null) {
+            for (AccesorioDTO accesorio : delEquipo) {
+                if (Boolean.TRUE.equals(accesorio.getEsObligatorio()) || estaEn(accesorio, elegidos)) {
+                    propuestos.add(accesorio);
+                }
+            }
+        }
+        return propuestos;
+    }
+
+    // Respuesta simulada del escenario: con ACEPTA entran todos, con ACEPTA PARCIAL solo el indispensable
+    // y si el cliente no acepta el indispensable (o rechaza) no entra ninguno
+    @Override
+    public List<AccesorioDTO> accesoriosAceptados(String tipoDecision, List<AccesorioDTO> propuestos) {
+        List<AccesorioDTO> aceptados = new ArrayList<>();
+        if (propuestos != null && ("ACEPTA".equals(tipoDecision) || "ACEPTA PARCIAL".equals(tipoDecision))) {
+            for (AccesorioDTO accesorio : propuestos) {
+                if ("ACEPTA".equals(tipoDecision) || Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
+                    aceptados.add(accesorio);
+                }
+            }
+        }
+        return aceptados;
+    }
+
+    // Sin el accesorio indispensable la renta queda pendiente; si acepta, faltan por verificar las condiciones
+    @Override
+    public String estadoContratacion(String tipoDecision) {
+        if ("RECHAZA".equals(tipoDecision)) {
+            return "RECHAZADA";
+        }
+        return "NO ACEPTA INDISPENSABLE".equals(tipoDecision) ? "PENDIENTE POR ACCESORIO" : "POR VERIFICAR";
+    }
+
+    private boolean estaEn(AccesorioDTO accesorio, List<AccesorioDTO> lista) {
+        if (lista != null) {
+            for (AccesorioDTO otro : lista) {
+                if (Objects.equals(otro.getIdAccesorio(), accesorio.getIdAccesorio())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
