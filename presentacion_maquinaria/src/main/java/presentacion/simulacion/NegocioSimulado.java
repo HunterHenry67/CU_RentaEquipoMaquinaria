@@ -9,14 +9,12 @@ import objetosdto.AccesorioDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DetalleCotizacionDTO;
 import objetosdto.EquipoDTO;
-import objetosdto.OcupacionUnidadDTO;
 import objetosdto.OrdenEntregaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
-import presentacion.control.RequerimientosTecnicos;
 
 /**
  * Simula lo que después hará el subsistema de negocio. Usa los datos del escenario: la tarifa
@@ -27,58 +25,25 @@ public class NegocioSimulado implements INegocioSimulado {
     private static final double TARIFA_DIARIA_SIMULADA = 1500.0;
     private static final double IVA_SIMULADO = 0.16;
 
-    // Si el equipo no tiene registrado un dato, ese requerimiento no lo descarta (no se
-    // puede decir que no cumple con un dato que no se tiene)
+    // Respuesta simulada del escenario: la retroexcavadora JCB (id 1) no cumple porque tiene 109 HP y se
+    // piden 120 HP como mínimo; las excavadoras CAT 320 y CAT 336 sí cumplen. Comparar de verdad las
+    // características del equipo con los requerimientos es una regla del subsistema de negocio y aquí no se hace.
+    private static final Map<Long, String> INCUMPLIMIENTO_SIMULADO = Map.of(1L, "potencia de 109 HP; se piden 120 HP como mínimo");
+
     @Override
     public Map<EquipoDTO, String> compararEquipos(List<EquipoDTO> catalogo, List<RequerimientoTecnicoDTO> requerimientos) {
         Map<EquipoDTO, String> evaluados = new LinkedHashMap<>();
         for (EquipoDTO equipo : catalogo) {
-            evaluados.put(equipo, incumplimiento(equipo, requerimientos));
+            evaluados.put(equipo, INCUMPLIMIENTO_SIMULADO.get(equipo.getIdEquipo()));
         }
         return evaluados;
     }
 
-    private String incumplimiento(EquipoDTO equipo, List<RequerimientoTecnicoDTO> requerimientos) {
-        List<String> motivos = new ArrayList<>();
-        Double potencia = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.POTENCIA);
-        if (potencia != null && equipo.getPotencia() != null && equipo.getPotencia() < potencia) {
-            motivos.add("potencia de " + RequerimientosTecnicos.formatoNumero(equipo.getPotencia()) + " HP; se piden " + RequerimientosTecnicos.formatoNumero(potencia) + " HP como mínimo");
-        }
-        Double profundidad = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PROFUNDIDAD);
-        if (profundidad != null && equipo.getProfundidadExcavacion() != null && equipo.getProfundidadExcavacion() < profundidad) {
-            motivos.add("excava hasta " + RequerimientosTecnicos.formatoNumero(equipo.getProfundidadExcavacion()) + " m; se piden " + RequerimientosTecnicos.formatoNumero(profundidad) + " m");
-        }
-        Double peso = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PESO);
-        if (peso != null && equipo.getPeso() != null && equipo.getPeso() > peso) {
-            motivos.add("pesa " + RequerimientosTecnicos.formatoNumero(equipo.getPeso()) + " t; el máximo es " + RequerimientosTecnicos.formatoNumero(peso) + " t");
-        }
-        Double ancho = RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.ANCHO);
-        if (ancho != null && equipo.getAnchoOperacion() != null && equipo.getAnchoOperacion() > ancho) {
-            motivos.add("mide " + RequerimientosTecnicos.formatoNumero(equipo.getAnchoOperacion()) + " m de ancho; el acceso es de " + RequerimientosTecnicos.formatoNumero(ancho) + " m");
-        }
-        return motivos.isEmpty() ? null : String.join(", ", motivos);
-    }
-
+    // Respuesta simulada: cada unidad se queda con el estado que tiene registrado en el almacén (en el
+    // escenario la -001 disponible, la -002 en mantenimiento y la -003 ocupada del 13 al 15). Revisar de
+    // verdad si la unidad está libre en el periodo es una regla del subsistema de negocio y aquí no se hace.
     @Override
     public List<UnidadFisicaDTO> disponibilidad(List<UnidadFisicaDTO> unidades, PeriodoSolicitadoDTO periodo) {
-        for (UnidadFisicaDTO u : unidades) {
-            if (periodo == null || u.getOcupaciones() == null) {
-                continue;
-            }
-            // a cada unidad solo le quedan las ocupaciones que caen en el periodo; las pantallas las muestran tal cual
-            List<OcupacionUnidadDTO> enElPeriodo = new ArrayList<>();
-            for (OcupacionUnidadDTO o : u.getOcupaciones()) {
-                boolean seTraslapa = !o.getFechaFin().isBefore(periodo.getFechaInicio()) && !o.getFechaInicio().isAfter(periodo.getFechaFin());
-                if (seTraslapa) {
-                    enElPeriodo.add(o);
-                }
-            }
-            u.setOcupaciones(enElPeriodo);
-            if ("Disponible".equals(u.getEstadoUnidad()) && !enElPeriodo.isEmpty()) {
-                OcupacionUnidadDTO o = enElPeriodo.get(0);
-                u.setEstadoUnidad("Ocupada del " + o.getFechaInicio().getDayOfMonth() + " al " + o.getFechaFin().getDayOfMonth());
-            }
-        }
         return unidades;
     }
 
@@ -106,7 +71,7 @@ public class NegocioSimulado implements INegocioSimulado {
             }
         }
         double iva = subtotal * IVA_SIMULADO;
-        return new CotizacionDTO(null, LocalDate.now(), LocalDate.now().plusDays(15), subtotal, iva, subtotal + iva, detalles, null);
+        return new CotizacionDTO(null, LocalDate.now(), null, subtotal, iva, subtotal + iva, detalles, null);
     }
 
     @Override

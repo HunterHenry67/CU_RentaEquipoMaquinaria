@@ -24,6 +24,7 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
     public CalendarioUnidadFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -46,24 +47,19 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
             lblPeriodo.setText("Periodo: sin registrar");
         } else {
             lblPeriodo.setText("Periodo: " + periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato));
+            // cada día del periodo con el estado que el control recibió para la unidad (Disponible = libre)
+            String estado = unidad == null || "Disponible".equals(unidad.getEstadoUnidad()) ? "Libre" : Formato.texto(unidad.getEstadoUnidad());
+            libre = estado.equals("Libre");
             int dia = 1;
             for (LocalDate fecha = periodo.getFechaInicio(); !fecha.isAfter(periodo.getFechaFin()); fecha = fecha.plusDays(1)) {
-                String estado = "Libre";
-                if (!"ninguno".equals(mantenimiento)) {
-                    estado = "En mantenimiento";
-                } else if (ocupadaEl(unidad, fecha)) {
-                    estado = "Ocupada";
-                }
-                if (!estado.equals("Libre")) {
-                    libre = false;
-                }
                 modelo.addRow(new Object[]{dia, fecha.format(formato), estado});
                 dia++;
             }
             if (unidad != null && unidad.getOcupaciones() != null) {
-                // el control manda solo las ocupaciones que caen en el periodo
                 for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
-                    otraRenta = "del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
+                    if ("Renta".equals(o.getMotivoOcupacion())) {
+                        otraRenta = "del " + o.getFechaInicio().format(formato) + " al " + o.getFechaFin().format(formato);
+                    }
                 }
             }
         }
@@ -71,18 +67,6 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
         lblMantenimiento.setText("Mantenimiento programado: " + mantenimiento);
         lblOtraRenta.setText("Otra renta en el periodo: " + otraRenta);
         btnSeleccionarUnidad.setEnabled(libre);
-    }
-
-    private boolean ocupadaEl(UnidadFisicaDTO unidad, LocalDate fecha) {
-        if (unidad == null || unidad.getOcupaciones() == null) {
-            return false;
-        }
-        for (OcupacionUnidadDTO o : unidad.getOcupaciones()) {
-            if (!fecha.isBefore(o.getFechaInicio()) && !fecha.isAfter(o.getFechaFin())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -108,7 +92,7 @@ public class CalendarioUnidadFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnSeleccionarUnidad = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Calendario de unidad");
         setResizable(false);
 

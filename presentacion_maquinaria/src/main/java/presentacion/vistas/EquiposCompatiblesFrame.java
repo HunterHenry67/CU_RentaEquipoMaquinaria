@@ -34,6 +34,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     public EquiposCompatiblesFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
@@ -100,7 +101,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         btnContinuarAccesorios = new javax.swing.JButton();
         btnNingunoCumple = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Equipos Compatibles");
         setResizable(false);
 

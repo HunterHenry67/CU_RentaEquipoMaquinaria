@@ -21,6 +21,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
     public BusquedaEquipoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -52,7 +53,7 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnRegistrarEquipo = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Búsqueda Equipo");
         setResizable(false);
 

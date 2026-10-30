@@ -4,11 +4,10 @@
  */
 package presentacion.vistas;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import objetosdto.EquipoSolicitadoDTO;
-import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.EquipoDTO;
+import objetosdto.OcupacionUnidadDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
@@ -26,6 +25,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
     public VerificacionInventarioFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -50,7 +50,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
         btnSeleccionar = new javax.swing.JButton();
         btnVerMotivo = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Verificación de inventario");
         setResizable(false);
 
@@ -250,35 +250,29 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
         this.solicitud = solicitud;
         this.unidades = unidades == null ? new ArrayList<>() : unidades;
 
-        String modelo = "";
-        List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
-        if (pedidos != null && !pedidos.isEmpty() && pedidos.get(0).getEvaluacion() != null && pedidos.get(0).getEvaluacion().getRecomendado() != null) {
-            modelo = texto(pedidos.get(0).getEvaluacion().getRecomendado().getModelo());
-        }
+        EquipoDTO recomendado = Formato.equipoRecomendado(solicitud);
+        String modelo = recomendado == null ? "" : Formato.texto(recomendado.getModelo());
         lblEquipo.setText("Equipo: " + modelo);
-        lblPeriodo.setText("Periodo: " + periodo());
+        lblPeriodo.setText("Periodo: " + Formato.periodo(solicitud));
 
         javax.swing.table.DefaultTableModel tabla = (javax.swing.table.DefaultTableModel) tableUnidades.getModel();
         tabla.setRowCount(0);
         for (UnidadFisicaDTO u : this.unidades) {
-            tabla.addRow(new Object[]{u.getNumeroEconomico(), modelo, u.getEstadoUnidad()});
+            tabla.addRow(new Object[]{u.getNumeroEconomico(), modelo, estado(u)});
         }
     }
 
-
-
-    private String periodo() {
-        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
-            return "";
+    // "Ocupada del 13 al 15": el estado con las fechas de su ocupación
+    private String estado(UnidadFisicaDTO unidad) {
+        String estado = Formato.texto(unidad.getEstadoUnidad());
+        if (estado.equals("Ocupada") && unidad.getOcupaciones() != null && !unidad.getOcupaciones().isEmpty()) {
+            OcupacionUnidadDTO ocupacion = unidad.getOcupaciones().get(0);
+            estado += " del " + ocupacion.getFechaInicio().getDayOfMonth() + " al " + ocupacion.getFechaFin().getDayOfMonth();
         }
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
+        return estado;
     }
 
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegresar;

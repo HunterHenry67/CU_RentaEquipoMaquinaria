@@ -25,6 +25,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
     public IdentificacionClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnCancelar);
         this.setLocationRelativeTo(null);
     }
 
@@ -63,7 +64,7 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         btnRegistrarNuevSoli = new javax.swing.JButton();
         btnModificarDatos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Identificación Cliente");
         setResizable(false);
 

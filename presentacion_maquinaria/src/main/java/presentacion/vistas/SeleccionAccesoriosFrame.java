@@ -27,6 +27,7 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
     public SeleccionAccesoriosFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -36,7 +37,7 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
     public void cargarAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> disponibles) {
         this.solicitud = solicitud;
         lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
-        EquipoDTO recomendado = recomendado();
+        EquipoDTO recomendado = Formato.equipoRecomendado(solicitud);
         lblEquipo.setText("Equipo seleccionado: " + (recomendado == null ? "" : recomendado.getModelo()));
 
         // si quedó una casilla en edición de la vez anterior, se descarta antes de recargar
@@ -84,7 +85,7 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnContinuar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Selección de Accesorios");
         setResizable(false);
 
@@ -312,7 +313,7 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         if (tableOpcionales.isEditing()) {
             tableOpcionales.getCellEditor().stopCellEditing();
         }
-        EquipoDTO recomendado = recomendado();
+        EquipoDTO recomendado = Formato.equipoRecomendado(solicitud);
         if (recomendado != null) {
             List<AccesorioDTO> propuesta = new ArrayList<>(indispensables);
             for (int i = 0; i < opcionales.size(); i++) {
@@ -324,14 +325,6 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         }
         contratacionRenta.pasarDatosEvaluacionTecnica(solicitud);
     }//GEN-LAST:event_btnContinuarActionPerformed
-
-    private EquipoDTO recomendado() {
-        if (solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()
-                || solicitud.getEquiposSolicitados().get(0).getEvaluacion() == null) {
-            return null;
-        }
-        return solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
-    }
 
     private boolean propuesto(EquipoDTO recomendado, AccesorioDTO accesorio) {
         if (recomendado == null || recomendado.getAccesorios() == null) {

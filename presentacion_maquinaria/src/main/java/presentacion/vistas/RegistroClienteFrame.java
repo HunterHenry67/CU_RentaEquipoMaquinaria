@@ -22,6 +22,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
     public RegistroClienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnCancelar);
         ButtonGroup grupo = new ButtonGroup();
         grupo.add(radioBtnClientePart);
         grupo.add(radioBtnEmpresa);
@@ -104,7 +105,7 @@ public class RegistroClienteFrame extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Registro de Cliente");
         setResizable(false);
 

@@ -18,6 +18,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
     public VerificacionCondicionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
@@ -52,7 +53,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         btnGenerar = new javax.swing.JButton();
         btnNoGenerar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Verificación de Condiciones");
         setResizable(false);
 
@@ -378,11 +379,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
             casilla.setSelected(true);
         }
 
-        EquipoDTO equipo = null;
-        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
-                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
-            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
-        }
+        EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
 
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();

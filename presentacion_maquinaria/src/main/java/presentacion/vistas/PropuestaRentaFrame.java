@@ -31,6 +31,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     public PropuestaRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
         recalcular();
     }
@@ -81,7 +82,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         btnAceptarParcial = new javax.swing.JButton();
         btnRechazar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Propuesta de la Renta");
         setResizable(false);
 
@@ -614,11 +615,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         UnidadFisicaDTO elegida = solicitud.getUnidadSeleccionada();
         unidad = elegida != null && elegida.getNumeroEconomico() != null ? elegida.getNumeroEconomico() : "sin elegir";
 
-        EquipoDTO equipo = null;
-        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
-                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
-            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
-        }
+        EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
 
         // Equipo y accesorios: los indispensables van en una fila y los opcionales en otra
         tarifaDia = 0;

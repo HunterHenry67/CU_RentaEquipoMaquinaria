@@ -21,6 +21,7 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     public AnalisisRequerimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
@@ -31,10 +32,14 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         if (solicitud.getRequerimientos() == null) {
             solicitud.setRequerimientos(new ArrayList<>());
         }
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + nombreCliente());
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
         lblUbicacion.setText("Ubicación: " + ubicacion());
-        txtAreaActividad.setText(texto(solicitud.getDescripcionActividad()));
+        // la actividad y, si el asesor las escribió en la solicitud, las condiciones a tomar en cuenta
+        String condiciones = Formato.texto(solicitud.getCondicionesEspeciales()).trim();
+        txtAreaActividad.setText(Formato.texto(solicitud.getDescripcionActividad())
+                + (condiciones.isEmpty() ? "" : "\nCondiciones a tomar en cuenta: " + condiciones));
+        txtAreaActividad.setCaretPosition(0);
         txtFieldProfundidad.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.PROFUNDIDAD));
         txtFieldPotencia.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.POTENCIA));
         txtFieldAlimentacion.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ALIMENTACION));
@@ -77,7 +82,7 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         btnBuscarEquipos = new javax.swing.JButton();
         btnSolicitarDatos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Análisis de Requerimiento Técnico");
         setResizable(false);
 
@@ -427,17 +432,9 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
 
 
     private String ubicacion() {
-        String obra = texto(solicitud.getNombreObra());
-        String direccion = texto(solicitud.getDireccionObra());
+        String obra = Formato.texto(solicitud.getNombreObra());
+        String direccion = Formato.texto(solicitud.getDireccionObra());
         return obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion;
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
-
-    private String nombreCliente() {
-        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -33,6 +33,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     public SolicitudRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
 
         inicializarSelectoresFecha();
 
@@ -168,7 +169,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         txtAreaRazonCancelacion = new javax.swing.JTextArea();
         btnRegistrarCancelacion = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         setTitle("Solicitud de Renta");
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -214,11 +215,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         formtxtFechaFinal.setBackground(new java.awt.Color(255, 255, 255));
         formtxtFechaFinal.setForeground(new java.awt.Color(0, 0, 0));
         formtxtFechaFinal.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        formtxtFechaFinal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                formtxtFechaFinalActionPerformed(evt);
-            }
-        });
 
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
@@ -640,10 +636,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formtxtFechaFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formtxtFechaFinalActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_formtxtFechaFinalActionPerformed
 
     private void btnAgregarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEquipoActionPerformed
         contratacionRenta.abrirBusquedaEquipo();

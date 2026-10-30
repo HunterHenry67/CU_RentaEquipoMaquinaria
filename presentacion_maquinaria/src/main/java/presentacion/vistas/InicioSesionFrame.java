@@ -158,7 +158,8 @@ public class InicioSesionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtFieldCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCorreoActionPerformed
-        // TODO add your handling code here:
+        // con Enter en el correo se pasa a la contraseña
+        psswFiledContrasenia.requestFocusInWindow();
     }//GEN-LAST:event_txtFieldCorreoActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed

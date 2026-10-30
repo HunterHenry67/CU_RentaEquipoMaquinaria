@@ -228,7 +228,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         this.clienteActual = cliente;
-        coordinador.mostrarSolicitudRenta(cliente, almacen.siguienteFolio());
+        coordinador.mostrarSolicitudNueva(cliente, almacen.siguienteFolio());
     }
 
     // Registrar cliente nuevo (null) o modificar uno que ya existe

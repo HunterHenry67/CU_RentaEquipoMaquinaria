@@ -14,6 +14,7 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
     public PropuestaPendienteFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
@@ -32,7 +33,7 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         btnNoContinuar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Accesorio indispensable");
         setResizable(false);
 
@@ -143,11 +144,7 @@ public class PropuestaPendienteFrame extends javax.swing.JFrame {
 
     
     public void cargarDatos(SolicitudRentaDTO solicitud) {
-        EquipoDTO equipo = null;
-        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
-                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
-            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
-        }
+        EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
 
         String nombreEquipo = "el equipo";
         String indispensables = "";

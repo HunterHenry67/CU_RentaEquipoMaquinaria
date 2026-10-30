@@ -26,6 +26,7 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
     public CambiarPeriodoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
 
         inicializarSelectoresFecha();
@@ -71,11 +72,11 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
 
     public void cargarPeriodo(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre())));
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : Formato.texto(solicitud.getCliente().getNombre())));
 
-        String obra = texto(solicitud.getNombreObra());
-        String direccion = texto(solicitud.getDireccionObra());
+        String obra = Formato.texto(solicitud.getNombreObra());
+        String direccion = Formato.texto(solicitud.getDireccionObra());
         lblUbicacion.setText("Ubicación: " + (obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion));
 
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
@@ -84,10 +85,6 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
             selectorFechaInicio.setDate(periodo.getFechaInicio());
             selectorFechaFin.setDate(periodo.getFechaFin());
         }
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
     }
 
     /**
@@ -113,7 +110,7 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnConsultarInventario = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Cambiar Periodo");
         setResizable(false);
 

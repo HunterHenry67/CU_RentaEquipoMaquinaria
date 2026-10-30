@@ -32,7 +32,8 @@ public interface ICoordinadorAplicacion {
 
     public abstract void mostrarEquiposEncontrados(List<EquipoDTO> equipos);
 
-    public abstract void mostrarSolicitudRenta(ClienteDTO cliente, String folio);
+    // Una solicitud en blanco para el cliente, con su folio
+    public abstract void mostrarSolicitudNueva(ClienteDTO cliente, String folio);
 
     public abstract void mostrarSolicitudRenta();
 

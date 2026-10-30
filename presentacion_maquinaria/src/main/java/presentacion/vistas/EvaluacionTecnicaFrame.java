@@ -4,12 +4,10 @@
  */
 package presentacion.vistas;
 
-import java.time.format.DateTimeFormatter;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.AccesorioDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
-import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 
@@ -25,21 +23,21 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
     public EvaluacionTecnicaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
     // El coordinador la llama cada vez que se abre la pantalla: muestra lo que se decidió en F2
     public void cargarEvaluacion(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + nombreCliente());
-        lblPeriodo.setText("Periodo (registrado en la solicitud): " + periodo());
-        String obra = texto(solicitud.getNombreObra());
-        String direccion = texto(solicitud.getDireccionObra());
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
+        lblPeriodo.setText("Periodo (registrado en la solicitud): " + Formato.periodo(solicitud));
+        String obra = Formato.texto(solicitud.getNombreObra());
+        String direccion = Formato.texto(solicitud.getDireccionObra());
         lblUbicacion.setText("Ubicación: " + (obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion));
 
-        EvaluacionTecnicaDTO evaluacion = solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()
-                ? null : solicitud.getEquiposSolicitados().get(0).getEvaluacion();
+        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
         EquipoDTO recomendado = evaluacion == null ? null : evaluacion.getRecomendado();
         EquipoDTO alternativa = evaluacion == null ? null : evaluacion.getAlternativo();
         lblRecomendado.setText("Equipo recomendado: " + (recomendado == null ? "" : recomendado.getModelo()));
@@ -80,7 +78,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btnEnviarVerificacion = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Evaluación Técnica");
         setResizable(false);
 
@@ -275,23 +273,6 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
     private void btnEnviarVerificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarVerificacionActionPerformed
         contratacionRenta.pasarDatosVerificacionInventario(solicitud);
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
-
-    private String periodo() {
-        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
-            return "";
-        }
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
-
-    private String nombreCliente() {
-        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarVerificacion;

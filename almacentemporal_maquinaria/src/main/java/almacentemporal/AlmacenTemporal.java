@@ -90,7 +90,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
             agregarUnidad(id++, idEquipo, numeros[e][1], "En mantenimiento", mantenimiento);
             List<OcupacionUnidadDTO> renta = new ArrayList<>();
             renta.add(new OcupacionUnidadDTO(LocalDate.of(2026, 9, 13), LocalDate.of(2026, 9, 15), "Renta", "Confirmada"));
-            agregarUnidad(id++, idEquipo, numeros[e][2], "Disponible", renta);
+            agregarUnidad(id++, idEquipo, numeros[e][2], "Ocupada", renta);
         }
     }
 

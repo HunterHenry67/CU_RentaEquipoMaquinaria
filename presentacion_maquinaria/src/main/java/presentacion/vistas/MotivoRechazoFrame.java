@@ -11,6 +11,7 @@ public class MotivoRechazoFrame extends javax.swing.JFrame {
     public MotivoRechazoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -37,7 +38,7 @@ public class MotivoRechazoFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnEnviar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         setTitle("Motivo del rechazo");
 

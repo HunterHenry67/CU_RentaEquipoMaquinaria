@@ -20,6 +20,7 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     public SinEquipoCompatibleFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
@@ -27,10 +28,10 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     // cumple cada equipo y el asesor lo puede completar
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + nombreCliente());
-        EvaluacionTecnicaDTO evaluacion = evaluacion();
-        txtAreaMotivo.setText(evaluacion == null ? "" : texto(evaluacion.getMotivoIncumplimiento()));
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
+        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
+        txtAreaMotivo.setText(evaluacion == null ? "" : Formato.texto(evaluacion.getMotivoIncumplimiento()));
     }
 
     /**
@@ -55,7 +56,7 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
         btnAjustarRequerimiento = new javax.swing.JButton();
         btnCerrarEvaluacion = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sin Equipo Compatible");
         setResizable(false);
 
@@ -234,25 +235,12 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAjustarRequerimientoActionPerformed
 
     private void btnCerrarEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarEvaluacionActionPerformed
-        EvaluacionTecnicaDTO evaluacion = evaluacion();
+        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
         if (evaluacion != null) {
             evaluacion.setMotivoIncumplimiento(txtAreaMotivo.getText().trim());
         }
         contratacionRenta.cerrarEvaluacion(solicitud);
     }//GEN-LAST:event_btnCerrarEvaluacionActionPerformed
-
-    private EvaluacionTecnicaDTO evaluacion() {
-        return solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty() ? null
-                : solicitud.getEquiposSolicitados().get(0).getEvaluacion();
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
-
-    private String nombreCliente() {
-        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAjustarRequerimiento;

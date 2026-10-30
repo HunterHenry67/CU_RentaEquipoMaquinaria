@@ -40,9 +40,9 @@ import presentacion.vistas.VerificacionCondicionFrame;
 import presentacion.vistas.VerificacionInventarioFrame;
 
 /**
- * Coordinador de Aplicación. Crea las ventanas una sola vez (así cada una conserva lo que se
- * capturó cuando se regresa a ella) y deja visible solo la que toca. A cada ventana le pasa el
- * Control de Aplicación, que es a quien le piden todo; el coordinador nunca lo llama.
+ * Coordinador de Aplicación. Guarda las ventanas (se crean una sola vez, así cada una conserva lo
+ * que se capturó cuando se regresa a ella), les pasa los DTO que deben mostrar y deja visible solo
+ * la que toca. No valida, no usa el almacén temporal y no conoce al Control de Aplicación.
  */
 public class CoordinadorAplicacion implements ICoordinadorAplicacion {
 
@@ -73,38 +73,46 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     private final OrdenEntregaFrame ordenEntregaFrame;
     private final JFrame[] ventanas;
 
-    public CoordinadorAplicacion(IContratacionRenta control) {
-        inicioSesionFrame = new InicioSesionFrame(control);
-        menuPrincipalFrame = new MenuPrincipalFrame(control);
-        identificacionClienteFrame = new IdentificacionClienteFrame(control);
-        registroClienteFrame = new RegistroClienteFrame(control);
-        busquedaEquipoFrame = new BusquedaEquipoFrame(control);
-        solicitudRentaFrame = new SolicitudRentaFrame(control);
-        analisisRequerimientoFrame = new AnalisisRequerimientoFrame(control);
-        solicitudDatosFaltantesFrame = new SolicitudDatosFaltantesFrame(control);
-        equiposCompatiblesFrame = new EquiposCompatiblesFrame(control);
-        sinEquipoCompatibleFrame = new SinEquipoCompatibleFrame(control);
-        seleccionAccesoriosFrame = new SeleccionAccesoriosFrame(control);
-        evaluacionTecnicaFrame = new EvaluacionTecnicaFrame(control);
-        cambiarPeriodoFrame = new CambiarPeriodoFrame(control);
-        verificacionInventarioFrame = new VerificacionInventarioFrame(control);
-        unidadMantenimientoFrame = new UnidadMantenimientoFrame(control);
-        unidadOcupadaFrame = new UnidadOcupadaFrame(control);
-        calendarioUnidadFrame = new CalendarioUnidadFrame(control);
-        condicionesContratacionFrame = new CondicionesContratacionFrame(control);
-        cotizacionFrame = new CotizacionFrame(control);
-        requisitosRentaFrame = new RequisitosRentaFrame(control);
-        propuestaRentaFrame = new PropuestaRentaFrame(control);
-        propuestaPendienteFrame = new PropuestaPendienteFrame(control);
-        motivoRechazoFrame = new MotivoRechazoFrame(control);
-        verificacionCondicionFrame = new VerificacionCondicionFrame(control);
-        ordenEntregaFrame = new OrdenEntregaFrame(control);
-        ventanas = new JFrame[]{inicioSesionFrame, menuPrincipalFrame, identificacionClienteFrame, registroClienteFrame,
-            busquedaEquipoFrame, solicitudRentaFrame, analisisRequerimientoFrame, solicitudDatosFaltantesFrame,
-            equiposCompatiblesFrame, sinEquipoCompatibleFrame, seleccionAccesoriosFrame, evaluacionTecnicaFrame,
-            cambiarPeriodoFrame, verificacionInventarioFrame, unidadMantenimientoFrame, unidadOcupadaFrame,
-            calendarioUnidadFrame, condicionesContratacionFrame, cotizacionFrame, requisitosRentaFrame,
-            propuestaRentaFrame, propuestaPendienteFrame, motivoRechazoFrame, verificacionCondicionFrame, ordenEntregaFrame};
+    /**
+     * Recibe las ventanas ya creadas (las crea Main, cada una con el Control de Aplicación) y solo
+     * guarda sus referencias: el coordinador no conoce al control ni al almacén temporal.
+     */
+    public CoordinadorAplicacion(JFrame... ventanas) {
+        this.ventanas = ventanas;
+        inicioSesionFrame = ventana(InicioSesionFrame.class);
+        menuPrincipalFrame = ventana(MenuPrincipalFrame.class);
+        identificacionClienteFrame = ventana(IdentificacionClienteFrame.class);
+        registroClienteFrame = ventana(RegistroClienteFrame.class);
+        busquedaEquipoFrame = ventana(BusquedaEquipoFrame.class);
+        solicitudRentaFrame = ventana(SolicitudRentaFrame.class);
+        analisisRequerimientoFrame = ventana(AnalisisRequerimientoFrame.class);
+        solicitudDatosFaltantesFrame = ventana(SolicitudDatosFaltantesFrame.class);
+        equiposCompatiblesFrame = ventana(EquiposCompatiblesFrame.class);
+        sinEquipoCompatibleFrame = ventana(SinEquipoCompatibleFrame.class);
+        seleccionAccesoriosFrame = ventana(SeleccionAccesoriosFrame.class);
+        evaluacionTecnicaFrame = ventana(EvaluacionTecnicaFrame.class);
+        cambiarPeriodoFrame = ventana(CambiarPeriodoFrame.class);
+        verificacionInventarioFrame = ventana(VerificacionInventarioFrame.class);
+        unidadMantenimientoFrame = ventana(UnidadMantenimientoFrame.class);
+        unidadOcupadaFrame = ventana(UnidadOcupadaFrame.class);
+        calendarioUnidadFrame = ventana(CalendarioUnidadFrame.class);
+        condicionesContratacionFrame = ventana(CondicionesContratacionFrame.class);
+        cotizacionFrame = ventana(CotizacionFrame.class);
+        requisitosRentaFrame = ventana(RequisitosRentaFrame.class);
+        propuestaRentaFrame = ventana(PropuestaRentaFrame.class);
+        propuestaPendienteFrame = ventana(PropuestaPendienteFrame.class);
+        motivoRechazoFrame = ventana(MotivoRechazoFrame.class);
+        verificacionCondicionFrame = ventana(VerificacionCondicionFrame.class);
+        ordenEntregaFrame = ventana(OrdenEntregaFrame.class);
+    }
+
+    private <T extends JFrame> T ventana(Class<T> tipo) {
+        for (JFrame v : ventanas) {
+            if (tipo.isInstance(v)) {
+                return tipo.cast(v);
+            }
+        }
+        throw new IllegalArgumentException("Falta la ventana " + tipo.getSimpleName());
     }
 
     // Deja a la vista solo la ventana que sigue
@@ -124,8 +132,6 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
 
     @Override
     public void mostrarMenuPrincipal() {
-        // la siguiente solicitud empieza en blanco
-        solicitudRentaFrame.limpiar();
         mostrar(menuPrincipalFrame);
     }
 
@@ -158,7 +164,8 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
-    public void mostrarSolicitudRenta(ClienteDTO cliente, String folio) {
+    public void mostrarSolicitudNueva(ClienteDTO cliente, String folio) {
+        solicitudRentaFrame.limpiar();
         solicitudRentaFrame.cargarDatosCliente(cliente);
         solicitudRentaFrame.cargarFolio(folio);
         mostrar(solicitudRentaFrame);

@@ -6,7 +6,6 @@ package presentacion.vistas;
 
 import java.time.format.DateTimeFormatter;
 import objetosdto.OcupacionUnidadDTO;
-import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
@@ -23,6 +22,7 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
     public UnidadMantenimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -47,7 +47,7 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
         btnUsarAlternativa = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Unidad en mantenimiento");
         setResizable(false);
 
@@ -214,7 +214,7 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
 
     public void cargarMantenimiento(SolicitudRentaDTO solicitud, UnidadFisicaDTO unidad) {
         this.solicitud = solicitud;
-        lblPeriodo.setText("Periodo solicitado: " + periodo());
+        lblPeriodo.setText("Periodo solicitado: " + Formato.periodo(solicitud));
         lblMotivo.setText("Motivo: " + motivo(unidad));
     }
 
@@ -229,15 +229,6 @@ public class UnidadMantenimientoFrame extends javax.swing.JFrame {
             }
         }
         return unidad.getNumeroEconomico() + " · " + unidad.getEstadoUnidad();
-    }
-
-    private String periodo() {
-        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
-            return "";
-        }
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
     }
 
     private void btnOtraUnidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOtraUnidadActionPerformed

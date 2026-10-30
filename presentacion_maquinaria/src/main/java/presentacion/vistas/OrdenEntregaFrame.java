@@ -453,11 +453,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     }
     
     public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
-        EquipoDTO equipo = null;
-        if (solicitud.getEquiposSolicitados() != null && !solicitud.getEquiposSolicitados().isEmpty()
-                && solicitud.getEquiposSolicitados().get(0).getEvaluacion() != null) {
-            equipo = solicitud.getEquiposSolicitados().get(0).getEvaluacion().getRecomendado();
-        }
+        EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
 
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();

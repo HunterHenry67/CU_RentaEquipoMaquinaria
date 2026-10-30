@@ -21,14 +21,15 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     public SolicitudDatosFaltantesFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
     // El coordinador la llama cada vez que se abre la pantalla
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + nombreCliente());
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
         txtFieldAnchoAcceso.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO));
         txtFieldTipoTerreno.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO));
         jLabel6.setText("Estado de la solicitud: " + (solicitud.getEstadoSolicitud() != null
@@ -59,7 +60,7 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnRegistrarRespuesta = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Solicitud de Datos Faltantes");
         setResizable(false);
 
@@ -277,14 +278,6 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         contratacionRenta.pasarDatosAnalisisRequerimientos(solicitud);
     }//GEN-LAST:event_btnRegistrarRespuestaActionPerformed
 
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
-
-    private String nombreCliente() {
-        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarRespuesta;

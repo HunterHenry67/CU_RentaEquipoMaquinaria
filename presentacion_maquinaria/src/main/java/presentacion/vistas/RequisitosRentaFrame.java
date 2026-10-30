@@ -23,6 +23,7 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
     public RequisitosRentaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
@@ -62,7 +63,7 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
         btnMarcarPendiente = new javax.swing.JButton();
         btnReintentar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Requisitos de la renta");
         setResizable(false);
 

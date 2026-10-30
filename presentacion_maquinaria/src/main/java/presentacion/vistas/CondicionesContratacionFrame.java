@@ -4,13 +4,9 @@
  */
 package presentacion.vistas;
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import objetosdto.AccesorioDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
-import objetosdto.EquipoSolicitadoDTO;
-import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.control.IContratacionRenta;
@@ -27,23 +23,24 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
     public CondicionesContratacionFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
     public void cargarCondiciones(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
         this.solicitud = solicitud;
 
-        lblFolio.setText("Folio: " + texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + nombreCliente());
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
 
-        EquipoDTO equipo = equipoRecomendado();
+        EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
 
         UnidadFisicaDTO unidad = solicitud.getUnidadSeleccionada();
-        String numero = unidad == null ? "" : texto(unidad.getNumeroEconomico());
-        String modelo = equipo == null ? "" : texto(equipo.getModelo());
+        String numero = unidad == null ? "" : Formato.texto(unidad.getNumeroEconomico());
+        String modelo = equipo == null ? "" : Formato.texto(equipo.getModelo());
         lblUnidad.setText("Unidad propuesta: " + numero + (modelo.isEmpty() ? "" : " · " + modelo));
 
-        lblPeriodo.setText("Periodo: " + periodo());
+        lblPeriodo.setText("Periodo: " + Formato.periodo(solicitud));
 
         StringBuilder accesorios = new StringBuilder();
         if (equipo != null && equipo.getAccesorios() != null) {
@@ -87,7 +84,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
         btnRegresar = new javax.swing.JButton();
         btnEnviarValidacion = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Condiciones de Contratación");
         setResizable(false);
 
@@ -308,31 +305,6 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         contratacionRenta.abrirVerificacionInventario();
     }//GEN-LAST:event_btnRegresarActionPerformed
-
-    private EquipoDTO equipoRecomendado() {
-        List<EquipoSolicitadoDTO> pedidos = solicitud.getEquiposSolicitados();
-        if (pedidos == null || pedidos.isEmpty() || pedidos.get(0).getEvaluacion() == null) {
-            return null;
-        }
-        return pedidos.get(0).getEvaluacion().getRecomendado();
-    }
-
-    private String periodo() {
-        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        if (periodo == null || periodo.getFechaInicio() == null || periodo.getFechaFin() == null) {
-            return "";
-        }
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
-    }
-
-    private String texto(String valor) {
-        return valor == null ? "" : valor;
-    }
-
-    private String nombreCliente() {
-        return solicitud.getCliente() == null ? "" : texto(solicitud.getCliente().getNombre());
-    }
 
     private void btnEnviarValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarValidacionActionPerformed
         contratacionRenta.abrirCotizacion();
