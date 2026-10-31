@@ -691,7 +691,8 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso("Verificación de condiciones", "La unidad elegida ya no está libre en el periodo: elige otra.");
             abrirVerificacionInventario();
         } else {
-            coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion);
+            contratacionActual.setCondicionesAcordadas(String.join(", ", CONDICIONES));
+            pasarDatosOrdenEntrega(contratacionActual);
         }
     }
 

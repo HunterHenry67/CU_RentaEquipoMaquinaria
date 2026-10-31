@@ -612,67 +612,65 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
     
     public void cargarDatos(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
         this.cotizacion = cotizacion;
-        UnidadFisicaDTO elegida = solicitud.getUnidadSeleccionada();
-        unidad = elegida != null && elegida.getNumeroEconomico() != null ? elegida.getNumeroEconomico() : "sin elegir";
-
+        
+        String nombreCliente = "Sin cliente";
+        if (solicitud.getCliente() != null) {
+            nombreCliente = solicitud.getCliente().getNombre();
+        }
+        lblCliente.setText("Cliente: " + nombreCliente);
+        
         EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
-
-        // Equipo y accesorios: los indispensables van en una fila y los opcionales en otra
-        tarifaDia = 0;
-        totalIndispensables = 0;
-        totalOpcionales = 0;
-        hayObligatorio = false;
-        hayOpcional = false;
-        String nombreObligatorios = "";
-        String nombreOpcionales = "";
         String nombreEquipo = "Sin equipo seleccionado";
         if (equipo != null) {
             nombreEquipo = equipo.getModelo();
-            // la tarifa y los importes son los de la cotización que armó el control
-            tarifaDia = Montos.tarifaDiaria(cotizacion);
-            if (equipo.getAccesorios() != null) {
-                for (int i = 0; i < equipo.getAccesorios().size(); i++) {
-                    AccesorioDTO accesorio = equipo.getAccesorios().get(i);
-                    if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
-                        if (hayObligatorio) {
-                            nombreObligatorios = nombreObligatorios + ", ";
-                        }
-                        nombreObligatorios = nombreObligatorios + accesorio.getNombre();
-                        hayObligatorio = true;
-                    } else {
-                        if (hayOpcional) {
-                            nombreOpcionales = nombreOpcionales + ", ";
-                        }
-                        nombreOpcionales = nombreOpcionales + accesorio.getNombre();
-                        hayOpcional = true;
-                    }
-                }
-            }
         }
-
-        totalIndispensables = Montos.accesorios(cotizacion, true);
-        totalOpcionales = Montos.accesorios(cotizacion, false);
-
-        // Periodo y depósito
-        LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
-        LocalDate fin = solicitud.getPeriodo().getFechaFin();
-        dias = Montos.dias(cotizacion);
-        deposito = Montos.deposito(cotizacion);
-
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        lblCliente.setText("Cliente: " + solicitud.getCliente().getNombre());
-        lblEquipo.setText(nombreEquipo + " · unidad " + unidad);
-        lblPeriodo.setText(inicio.format(formato) + " - " + fin.format(formato) + " · " + dias + " días");
-
-        lblAccesorioOb.setText(nombreObligatorios + " - indispensable");
+        lblEquipo.setText(nombreEquipo);
+        
+        String nombreIndispensables = "";
+        String nombreOpcional = "";
+        hayObligatorio = false;
+        hayOpcional = false;
+        
+        if (equipo != null && equipo.getAccesorios() != null) {
+            for (int i = 0; i < equipo.getAccesorios().size(); i++) {
+                AccesorioDTO accesorio = equipo.getAccesorios().get(i);
+                if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
+                    if (hayObligatorio) {
+                        nombreIndispensables = nombreIndispensables;
+                    }
+                    nombreIndispensables = nombreIndispensables + accesorio.getNombre();
+                    hayObligatorio = true;
+                }else{
+                    if (hayOpcional) {
+                        nombreOpcional = nombreOpcional;
+                    }
+                    nombreOpcional = nombreOpcional + accesorio.getNombre();
+                    hayOpcional = true;
+                }
+            }        
+        }
+        lblAccesorioOb.setText(nombreIndispensables + "- indispensable");
+        jLabel7.setText(nombreIndispensables);
         lblAccesorioOb.setVisible(hayObligatorio);
-        jLabel7.setText(nombreObligatorios);
         jLabel7.setVisible(hayObligatorio);
         lblSenalizacion.setVisible(hayObligatorio);
-
-        lblAccesorioOp.setText(nombreOpcionales + " - opcional");
-        jLabel8.setText(nombreOpcionales);
-
+        
+        lblAccesorioOb.setText(nombreOpcional + "- opcional");
+        jLabel7.setText(nombreOpcional);
+        lblAccesorioOb.setVisible(hayOpcional);
+        jLabel7.setVisible(hayOpcional);
+        lblSenalizacion.setVisible(hayOpcional);
+        
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
+        LocalDate fin = solicitud.getPeriodo().getFechaFin();
+        dias = solicitud.getPeriodo().getDiasRenta();
+        lblPeriodo.setText(inicio.format(formato) + " - " + fin.format(formato) + " · " + dias + " días");
+        
+        tarifaDia = Montos.tarifaDiaria(cotizacion);
+        totalIndispensables = Montos.accesorios(cotizacion, true);
+        totalOpcionales = Montos.accesorios(cotizacion, false);
+        deposito = Montos.deposito(cotizacion); 
         recalcular();
     }
 

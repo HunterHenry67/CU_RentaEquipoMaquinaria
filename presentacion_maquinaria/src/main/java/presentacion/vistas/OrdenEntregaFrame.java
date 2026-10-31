@@ -456,52 +456,56 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     }
 
     public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        
+        lblCliente.setText(solicitud.getCliente().getNombre());
         EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
-
+        String nombreEquipo = "Sin equipo seleccionado";
+        if (equipo != null) {
+            nombreEquipo = equipo.getModelo();
+        }
+        lblEquipo.setText(nombreEquipo);
+        
+        if (contratacion.getUnidad() != null && contratacion.getUnidad().getNumeroEconomico() != null) {
+            unidad = contratacion.getUnidad().getNumeroEconomico();
+        }
+        lblUnidad.setText("Unidad " + unidad);
+        
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();
-
-        // Equipo y accesorios que aceptó el cliente; los importes vienen de la cotización que armó el control
-        String nombreEquipo = equipo != null ? equipo.getModelo() : "Sin equipo seleccionado";
-        String nombresAccesorios = Montos.nombres(contratacion.getAccesorios());
-        double renta = Montos.renta(cotizacion);
-        double accesorios = Montos.accesorios(cotizacion, null);
-        double total = Montos.total(cotizacion);
-        double deposito = contratacion.getDepositoGarantia() == null ? 0 : contratacion.getDepositoGarantia();
-
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         textoFechaInicio = inicio.format(formato);
-        textoFechaEntrega = textoFechaInicio;
+        textoFechaEntrega = textoFechaEntrega;
+        lblFin.setText(fin.format(formato));
+        
         String direccion = solicitud.getDireccionObra();
-        OrdenEntregaDTO orden = contratacion.getOrdenEntrega();
+        OrdenEntregaDTO orden  = contratacion.getOrdenEntrega();
         if (orden != null) {
             if (orden.getFechaEntrega() != null) {
-                textoFechaEntrega = orden.getFechaEntrega().format(formato) + ", " + orden.getHorario();
+                textoFechaEntrega = orden.getFechaEntrega().format(formato) + ", " + orden.getHorario();   
             }
             if (orden.getDireccionEntrega() != null) {
                 direccion = orden.getDireccionEntrega();
             }
         }
-        if (contratacion.getUnidad() != null && contratacion.getUnidad().getNumeroEconomico() != null) {
-            unidad = contratacion.getUnidad().getNumeroEconomico();
+        lblDireccion.setText("<html>Entrega en: \" + direccion + \"</html>");
+        
+        textoAccesorios = Montos.nombres(contratacion.getAccesorios());
+        textoPrecioAccesorios = Montos.moneda(Montos.accesorios(cotizacion, null));
+        textoTotal = "Total de la renta: " + Montos.moneda(Montos.total(cotizacion));
+        lblPrecioEquipo.setText(Montos.moneda(Montos.renta(cotizacion)));
+        
+        double deposito = 0;
+        if (contratacion.getDepositoGarantia() != null) {
+            deposito = contratacion.getDepositoGarantia();
         }
-        textoAccesorios = nombresAccesorios;
-        textoPrecioAccesorios = Montos.moneda(accesorios);
-        textoTotal = "Total de la renta: " + Montos.moneda(total);
-
-        lblCliente.setText(solicitud.getCliente().getNombre());
-        lblEquipo.setText(nombreEquipo);
-        lblPrecioEquipo.setText(String.format("$%,.0f", renta));
-        lblUnidad.setText("Unidad " + unidad);
-        lblDireccion.setText("<html>Entrega en: " + direccion + "</html>");
-        lblFin.setText(fin.format(formato));
-        lblDepositoValor.setText(String.format("$%,.0f", deposito));
+        lblDepositoValor.setText(Montos.moneda(deposito));
         lblDepositoEstado.setText(Montos.estadoDeposito(solicitud.getRequisitos()));
+        
         estadoIdentificacion = Montos.estadoRequisito(solicitud.getRequisitos(), "Identificación oficial");
-
         boolean finalizada = "FORMALIZADA".equals(contratacion.getEstado());
         boolean conAccesorios = !"PENDIENTE POR ACCESORIO".equals(contratacion.getEstado());
         configurar(conAccesorios, finalizada);
+        
     }
     
     public void cargarDatosRechazada(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion, String motivo) {
