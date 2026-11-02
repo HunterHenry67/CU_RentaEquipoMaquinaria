@@ -73,7 +73,7 @@ public class RequerimientosTecnicos {
         return null;
     }
 
-    /** Lo que se muestra en el campo de esa característica ("3.50 m", "Arcilloso" o vacío). */
+   
     public static String texto(List<RequerimientoTecnicoDTO> lista, String caracteristica) {
         RequerimientoTecnicoDTO requerimiento = buscar(lista, caracteristica);
         if (requerimiento == null) {
@@ -116,10 +116,6 @@ public class RequerimientosTecnicos {
         requerimiento.setTipoLimite(null);
     }
 
-    /**
-     * Para el Control de Aplicación: revisa que las características con número traigan un número
-     * y las deja con su valor, su unidad y su límite. Regresa el primer error o null si todo está bien.
-     */
     public static String normalizar(List<RequerimientoTecnicoDTO> lista) {
         String[] conNumero = {PROFUNDIDAD, POTENCIA, PESO, ANCHO};
         for (String caracteristica : conNumero) {
@@ -137,7 +133,6 @@ public class RequerimientosTecnicos {
         return null;
     }
 
-    // El texto que se capturó para una característica con número y que todavía no se convierte
     private static String capturado(List<RequerimientoTecnicoDTO> lista, String caracteristica) {
         RequerimientoTecnicoDTO requerimiento = buscar(lista, caracteristica);
         if (requerimiento == null || requerimiento.getValorRequerido() != null) {
@@ -176,8 +171,6 @@ public class RequerimientosTecnicos {
         }
     }
 
-    // 120 se queda como "120", 3.5 sale como "3.50" y 3.125 como "3.125" (no se redondea
-    // lo capturado, porque el campo se vuelve a leer al salir de la pantalla)
     public static String formatoNumero(Double valor) {
         if (valor == Math.rint(valor)) {
             return String.valueOf(valor.longValue());

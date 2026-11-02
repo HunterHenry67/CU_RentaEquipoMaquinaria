@@ -18,11 +18,11 @@ public class ValidadorPresentacion {
     private ValidadorPresentacion() {
     }
 
-    public static boolean esTextoVacio(String texto) {
+    public static boolean textoVacio(String texto) {
         return texto == null || texto.isBlank();
     }
 
-    public static boolean esCorreoValido(String correo) {
+    public static boolean correoValido(String correo) {
         return correo != null && correo.trim().matches(CORREO);
     }
 
@@ -30,15 +30,14 @@ public class ValidadorPresentacion {
         return texto != null && texto.length() >= minimo;
     }
 
-    public static boolean esNumeroEntero(String texto) {
+    public static boolean numeroEntero(String texto) {
         return texto != null && texto.trim().matches("^\\d+$");
     }
 
-    public static boolean esNumeroValido(String texto) {
+    public static boolean numeroValido(String texto) {
         return texto != null && texto.trim().matches(NUMERO);
     }
 
-    // Un número que puede traer al final su unidad ("3.50 m", "120 HP"), pero no otra
     public static boolean esNumeroConUnidad(String texto, String unidad) {
         if (texto == null) {
             return false;
@@ -47,27 +46,27 @@ public class ValidadorPresentacion {
         if (unidad != null && limpio.toLowerCase().endsWith(unidad.toLowerCase())) {
             limpio = limpio.substring(0, limpio.length() - unidad.length()).trim();
         }
-        return esNumeroValido(limpio);
+        return numeroValido(limpio);
     }
 
-    public static boolean esTelefonoValido(String telefono) {
+    public static boolean telefonoValido(String telefono) {
         return telefono != null && telefono.trim().matches("^\\d{10}$");
     }
 
-    public static boolean esRfcValido(String rfc) {
+    public static boolean rfcValido(String rfc) {
         return rfc != null && rfc.trim().toUpperCase().matches(RFC);
     }
 
-    public static boolean esFechaValida(LocalDate fecha) {
+    public static boolean fechaValida(LocalDate fecha) {
         return fecha != null;
     }
 
     // Las dos fechas capturadas y la final no antes de la inicial
     public static boolean esPeriodoValido(LocalDate inicio, LocalDate fin) {
-        return esFechaValida(inicio) && esFechaValida(fin) && !fin.isBefore(inicio);
+        return fechaValida(inicio) && fechaValida(fin) && !fin.isBefore(inicio);
     }
 
-    public static boolean esSeleccionValida(Object seleccion) {
+    public static boolean seleccionValida(Object seleccion) {
         return seleccion != null;
     }
 }
