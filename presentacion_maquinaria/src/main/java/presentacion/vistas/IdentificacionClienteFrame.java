@@ -29,13 +29,13 @@ public class IdentificacionClienteFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    // Los clientes registrados se los pasa el control (la pantalla no consulta el almacén)
+    
     public void cargarClientes(List<ClienteDTO> listaClientes) {
         txtFieldBusqCliente.setText("");
         cargarClientesEnTabla(listaClientes);
     }
 
-    public void cargarClientesEnTabla(java.util.List<objetosdto.ClienteDTO> listaClientes) {
+    public void cargarClientesEnTabla(List<ClienteDTO> listaClientes) {
         clientesMostrados = new ArrayList<>(listaClientes);
         DefaultTableModel modelo = (DefaultTableModel) tableCliente.getModel();
         modelo.setRowCount(0);

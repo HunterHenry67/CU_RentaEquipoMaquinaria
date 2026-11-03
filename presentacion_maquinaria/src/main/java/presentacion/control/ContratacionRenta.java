@@ -29,11 +29,6 @@ import objetosdto.UsuarioDTO;
 import presentacion.simulacion.INegocioSimulado;
 
 /**
- * Control de Aplicación del caso de uso. Atiende lo que piden las pantallas: revisa lo capturado
- * con ValidadorPresentacion, arma y guarda los DTO, registra y consulta en el Almacén Temporal,
- * pide al negocio simulado lo que depende de reglas de negocio y le dice al Coordinador de
- * Aplicación qué pantalla mostrar. No tiene ventanas ni componentes gráficos.
- *
  * @author Home
  */
 public class ContratacionRenta implements IContratacionRenta {
@@ -44,14 +39,12 @@ public class ContratacionRenta implements IContratacionRenta {
     private final IAlmacenTemporal almacen;
     private final INegocioSimulado negocio;
     private ICoordinadorAplicacion coordinador;
-
     private UsuarioDTO usuario;
     private ClienteDTO clienteActual;
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
     private ContratacionRentaDTO contratacionActual;
     private CotizacionDTO cotizacionContratacion;
-    // Lo que respondió el negocio simulado al comparar el catálogo con los requerimientos
     private Map<EquipoDTO, String> equiposEvaluados = new LinkedHashMap<>();
 
     public ContratacionRenta(IAlmacenTemporal almacen, INegocioSimulado negocio) {
@@ -63,7 +56,6 @@ public class ContratacionRenta implements IContratacionRenta {
         this.coordinador = coordinador;
     }
 
-    // ================================================================ cambios de pantalla
     @Override
     public void abrirIniciarSesion() {
         coordinador.mostrarInicioSesion();

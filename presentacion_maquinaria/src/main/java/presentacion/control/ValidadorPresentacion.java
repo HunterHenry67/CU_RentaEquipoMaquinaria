@@ -10,9 +10,7 @@ import java.time.LocalDate;
 public class ValidadorPresentacion {
 
     private static final String CORREO = "^[\\w.-]+@([\\w-]+\\.)+[\\w-]{2,}$";
-    // RFC: 3 letras (empresa) o 4 (persona), la fecha en 6 dígitos y la homoclave de 3
     private static final String RFC = "^[A-ZÑ&]{3,4}\\d{6}[A-Z0-9]{3}$";
-    // punto decimal, o coma con uno o dos decimales (así "1,200" no pasa por 1.2)
     private static final String NUMERO = "^\\d+(\\.\\d+|,\\d{1,2})?$";
 
     private ValidadorPresentacion() {

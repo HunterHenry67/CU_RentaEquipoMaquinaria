@@ -52,7 +52,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
         datePickerInicio = new DatePicker(settingsInicio);
         datePickerFinal = new DatePicker(settingsFinal);
-        // las fechas se eligen en el calendario, así siempre llegan con un formato válido
         settingsInicio.setAllowKeyboardEditing(false);
         settingsFinal.setAllowKeyboardEditing(false);
 
