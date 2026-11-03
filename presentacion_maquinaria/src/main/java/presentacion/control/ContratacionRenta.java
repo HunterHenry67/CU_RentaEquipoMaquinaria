@@ -177,7 +177,6 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!haySolicitud()) {
             return;
         }
-        // se arma de nuevo con lo elegido, por si el asesor regresó y cambió equipo, accesorios o periodo
         cotizacionActual = null;
         if (!hayCotizacion()) {
             return;
@@ -233,11 +232,11 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosUsuario(UsuarioDTO usuario) {
         String titulo = "Error de Inicio de Sesión";
-        if (ValidadorPresentacion.esTextoVacio(usuario.getCorreo()) || ValidadorPresentacion.esTextoVacio(usuario.getContrasenia())) {
+        if (ValidadorPresentacion.textoVacio(usuario.getCorreo()) || ValidadorPresentacion.textoVacio(usuario.getContrasenia())) {
             coordinador.mostrarAviso(titulo, "Favor de ingresar el correo y la contraseña para iniciar sesión.");
             return;
         }
-        if (!ValidadorPresentacion.esCorreoValido(usuario.getCorreo())) {
+        if (!ValidadorPresentacion.correoValido(usuario.getCorreo())) {
             coordinador.mostrarAviso(titulo, "Formato de Correo Inválido.");
             return;
         }
@@ -253,11 +252,11 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void buscarClientes(String filtro, String texto) {
-        if (ValidadorPresentacion.esTextoVacio(texto)) {
+        if (ValidadorPresentacion.textoVacio(texto)) {
             coordinador.mostrarClientesEncontrados(almacen.obtenerClientes());
             return;
         }
-        if ("Teléfono".equals(filtro) && !ValidadorPresentacion.esNumeroEntero(texto.trim())) {
+        if ("Teléfono".equals(filtro) && !ValidadorPresentacion.numeroEntero(texto.trim())) {
             coordinador.mostrarAviso("Búsqueda de Cliente", "Para buscar por teléfono escribe solo números.");
             return;
         }
@@ -270,7 +269,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void pasarDatosSolicitudRenta(ClienteDTO cliente) {
-        if (!ValidadorPresentacion.esSeleccionValida(cliente)) {
+        if (!ValidadorPresentacion.seleccionValida(cliente)) {
             coordinador.mostrarAviso("Falla de Registro de Solicitud", "Favor de seleccionar un cliente para realizar el registro de solicitud.");
             return;
         }
@@ -287,7 +286,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void modificarCliente(ClienteDTO cliente) {
-        if (!ValidadorPresentacion.esSeleccionValida(cliente)) {
+        if (!ValidadorPresentacion.seleccionValida(cliente)) {
             coordinador.mostrarAviso("Modificar Datos", "Favor de seleccionar un cliente para modificar.");
             return;
         }
@@ -297,35 +296,35 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void registrarCliente(ClienteDTO cliente) {
         String titulo = "Error de Registro";
-        if (ValidadorPresentacion.esTextoVacio(cliente.getNombre()) || ValidadorPresentacion.esTextoVacio(cliente.getRfc())
-                || ValidadorPresentacion.esTextoVacio(cliente.getTelefono()) || ValidadorPresentacion.esTextoVacio(cliente.getCorreo())) {
+        if (ValidadorPresentacion.textoVacio(cliente.getNombre()) || ValidadorPresentacion.textoVacio(cliente.getRfc())
+                || ValidadorPresentacion.textoVacio(cliente.getTelefono()) || ValidadorPresentacion.textoVacio(cliente.getCorreo())) {
             coordinador.mostrarAviso(titulo, "Favor de llenar campos de cliente.");
             return;
         }
         ClienteEmpresaDTO empresa = cliente instanceof ClienteEmpresaDTO e ? e : null;
-        if (empresa != null && (ValidadorPresentacion.esTextoVacio(empresa.getNombreEncargadoEmpresa())
-                || ValidadorPresentacion.esTextoVacio(empresa.getPuestoEncargadoEmpresa())
-                || ValidadorPresentacion.esTextoVacio(empresa.getTelefonoEncargadoEmpresa()))) {
+        if (empresa != null && (ValidadorPresentacion.textoVacio(empresa.getNombreEncargadoEmpresa())
+                || ValidadorPresentacion.textoVacio(empresa.getPuestoEncargadoEmpresa())
+                || ValidadorPresentacion.textoVacio(empresa.getTelefonoEncargadoEmpresa()))) {
             coordinador.mostrarAviso(titulo, "Favor de llenar campos de empresa.");
             return;
         }
-        if (empresa != null && ValidadorPresentacion.esTextoVacio(empresa.getArchivoIdentificacionEncargado())) {
+        if (empresa != null && ValidadorPresentacion.textoVacio(empresa.getArchivoIdentificacionEncargado())) {
             coordinador.mostrarAviso(titulo, "Selecciona el archivo con la identificación del encargado.");
             return;
         }
-        if (!ValidadorPresentacion.esRfcValido(cliente.getRfc())) {
+        if (!ValidadorPresentacion.rfcValido(cliente.getRfc())) {
             coordinador.mostrarAviso(titulo, "El RFC no tiene un formato válido (por ejemplo MARJ8503158A1).");
             return;
         }
-        if (!ValidadorPresentacion.esTelefonoValido(cliente.getTelefono())) {
+        if (!ValidadorPresentacion.telefonoValido(cliente.getTelefono())) {
             coordinador.mostrarAviso(titulo, "El teléfono debe tener 10 dígitos.");
             return;
         }
-        if (!ValidadorPresentacion.esCorreoValido(cliente.getCorreo())) {
+        if (!ValidadorPresentacion.correoValido(cliente.getCorreo())) {
             coordinador.mostrarAviso(titulo, "El correo electrónico no tiene un formato válido.");
             return;
         }
-        if (empresa != null && !ValidadorPresentacion.esTelefonoValido(empresa.getTelefonoEncargadoEmpresa())) {
+        if (empresa != null && !ValidadorPresentacion.telefonoValido(empresa.getTelefonoEncargadoEmpresa())) {
             coordinador.mostrarAviso(titulo, "El teléfono del encargado debe tener 10 dígitos.");
             return;
         }
@@ -346,10 +345,9 @@ public class ContratacionRenta implements IContratacionRenta {
         pasarDatosSolicitudRenta(cliente);
     }
 
-    // ================================================================ solicitud
     @Override
     public void buscarEquipos(String texto) {
-        List<EquipoDTO> encontrados = ValidadorPresentacion.esTextoVacio(texto) ? almacen.obtenerCatalogoEquipo() : almacen.buscarEquipos(texto);
+        List<EquipoDTO> encontrados = ValidadorPresentacion.textoVacio(texto) ? almacen.obtenerCatalogoEquipo() : almacen.buscarEquipos(texto);
         coordinador.mostrarEquiposEncontrados(encontrados);
         if (encontrados.isEmpty()) {
             coordinador.mostrarMensaje("Búsqueda", "No hay equipos en el catálogo con ese nombre.");
@@ -358,7 +356,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo) {
-        if (!ValidadorPresentacion.esSeleccionValida(equipo)) {
+        if (!ValidadorPresentacion.seleccionValida(equipo)) {
             coordinador.mostrarAviso("Advertencia", "Por favor, seleccione un equipo de la tabla.");
             return;
         }
@@ -380,9 +378,9 @@ public class ContratacionRenta implements IContratacionRenta {
     public void registrarSolicitud(SolicitudRentaDTO solicitud) {
         String titulo = "Error de Solicitud";
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
-        if (ValidadorPresentacion.esTextoVacio(solicitud.getDireccionObra()) || ValidadorPresentacion.esTextoVacio(solicitud.getNombreObra())
-                || ValidadorPresentacion.esTextoVacio(solicitud.getDescripcionActividad())
-                || periodo == null || !ValidadorPresentacion.esFechaValida(periodo.getFechaInicio()) || !ValidadorPresentacion.esFechaValida(periodo.getFechaFin())) {
+        if (ValidadorPresentacion.textoVacio(solicitud.getDireccionObra()) || ValidadorPresentacion.textoVacio(solicitud.getNombreObra())
+                || ValidadorPresentacion.textoVacio(solicitud.getDescripcionActividad())
+                || periodo == null || !ValidadorPresentacion.fechaValida(periodo.getFechaInicio()) || !ValidadorPresentacion.fechaValida(periodo.getFechaFin())) {
             coordinador.mostrarAviso(titulo, "Favor de llenar todos los campos obligatorios");
             return;
         }
@@ -408,7 +406,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void pasarDatosCancelacion(SolicitudRentaDTO solicitud) {
-        if (ValidadorPresentacion.esTextoVacio(solicitud.getMotivoCancelacion())) {
+        if (ValidadorPresentacion.textoVacio(solicitud.getMotivoCancelacion())) {
             coordinador.mostrarAviso("Error en el Registro de Cancelación", "Favor de describir la razón de su cancelación.");
             return;
         }
@@ -429,15 +427,14 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirMenuPrincipal();
     }
 
-    // ================================================================ equipo adecuado
-    // Desde Datos faltantes: con la respuesta del cliente se regresa al análisis
+    
     @Override
     public void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO solicitud) {
         if (!requerimientosValidos(solicitud, "Solicitud de Datos Faltantes")) {
             return;
         }
-        if (ValidadorPresentacion.esTextoVacio(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO))
-                && ValidadorPresentacion.esTextoVacio(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO))) {
+        if (ValidadorPresentacion.textoVacio(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO))
+                && ValidadorPresentacion.textoVacio(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO))) {
             coordinador.mostrarAviso("Solicitud de Datos Faltantes", "Captura por lo menos un dato de la respuesta del cliente.");
             return;
         }
@@ -493,7 +490,7 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void cerrarEvaluacion(SolicitudRentaDTO solicitud) {
         EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitud);
-        if (evaluacion == null || ValidadorPresentacion.esTextoVacio(evaluacion.getMotivoIncumplimiento())) {
+        if (evaluacion == null || ValidadorPresentacion.textoVacio(evaluacion.getMotivoIncumplimiento())) {
             coordinador.mostrarAviso("Sin Equipo Compatible", "Escribe el motivo antes de cerrar la evaluación.");
             return;
         }
@@ -508,7 +505,7 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!haySolicitud()) {
             return;
         }
-        if (!ValidadorPresentacion.esSeleccionValida(seleccion.getRecomendado())) {
+        if (!ValidadorPresentacion.seleccionValida(seleccion.getRecomendado())) {
             coordinador.mostrarAviso("Equipos Compatibles", "Ningún equipo cumple con lo requerido. Usa «Ninguno cumple».");
             return;
         }
@@ -533,7 +530,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitudActual);
-        if (evaluacion == null || !ValidadorPresentacion.esSeleccionValida(evaluacion.getRecomendado())) {
+        if (evaluacion == null || !ValidadorPresentacion.seleccionValida(evaluacion.getRecomendado())) {
             coordinador.mostrarAviso("Selección de Accesorios", "Primero hay que elegir el equipo recomendado.");
             abrirEquiposCompatibles();
             return;
@@ -543,7 +540,7 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirEvaluacionTecnica();
     }
 
-    // ================================================================ disponibilidad
+    
     @Override
     public void pasarDatosVerificacionInventario(SolicitudRentaDTO solicitud) {
         solicitud.setEstadoSolicitud("En verificación de disponibilidad");
@@ -556,7 +553,7 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosUnidadSeleccionada(SolicitudRentaDTO solicitud) {
         UnidadFisicaDTO unidad = solicitud.getUnidadSeleccionada();
-        if (!ValidadorPresentacion.esSeleccionValida(unidad)) {
+        if (!ValidadorPresentacion.seleccionValida(unidad)) {
             coordinador.mostrarAviso("Verificación de Inventario", "Selecciona una unidad de la tabla.");
             return;
         }
@@ -574,7 +571,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void verMotivoUnidad(UnidadFisicaDTO unidad) {
-        if (!ValidadorPresentacion.esSeleccionValida(unidad)) {
+        if (!ValidadorPresentacion.seleccionValida(unidad)) {
             coordinador.mostrarAviso("Verificación de Inventario", "Selecciona una unidad de la tabla.");
             return;
         }
@@ -619,7 +616,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void pasarDatosCambioPeriodo(PeriodoSolicitadoDTO periodo) {
-        if (periodo == null || !ValidadorPresentacion.esFechaValida(periodo.getFechaInicio()) || !ValidadorPresentacion.esFechaValida(periodo.getFechaFin())) {
+        if (periodo == null || !ValidadorPresentacion.fechaValida(periodo.getFechaInicio()) || !ValidadorPresentacion.fechaValida(periodo.getFechaFin())) {
             coordinador.mostrarAviso("Cambiar periodo", "Selecciona la fecha de inicio y la de fin.");
             return;
         }
@@ -631,7 +628,6 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         periodo.setDiasRenta(negocio.diasRenta(periodo));
-        // con otras fechas hay que volver a revisar qué unidades están libres y rehacer la cotización
         solicitudActual.setPeriodo(periodo);
         solicitudActual.setUnidadSeleccionada(null);
         cotizacionActual = null;
@@ -639,7 +635,7 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirVerificacionInventario();
     }
 
-    // ================================================================ cotización, requisitos y decisión
+    
     @Override
     public void pasarDatosRequisitosRenta(CotizacionDTO cotizacion) {
         this.cotizacionActual = cotizacion;
@@ -664,7 +660,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void pasarDatosDecisionCliente(DecisionClienteDTO decision) {
-        if ("RECHAZA".equals(decision.getTipoDecision()) && ValidadorPresentacion.esTextoVacio(decision.getObservaciones())) {
+        if ("RECHAZA".equals(decision.getTipoDecision()) && ValidadorPresentacion.textoVacio(decision.getObservaciones())) {
             coordinador.mostrarAviso("Motivo del rechazo", "Favor de escribir el motivo del rechazo.");
             return;
         }
@@ -829,7 +825,7 @@ public class ContratacionRenta implements IContratacionRenta {
     // El equipo del catálogo que pidió el cliente (el primero de la solicitud)
     private EquipoDTO equipoPedido() {
         List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
-        if (pedidos == null || pedidos.isEmpty() || ValidadorPresentacion.esTextoVacio(pedidos.get(0).getDescripcionEquipo())) {
+        if (pedidos == null || pedidos.isEmpty() || ValidadorPresentacion.textoVacio(pedidos.get(0).getDescripcionEquipo())) {
             return null;
         }
         List<EquipoDTO> encontrados = almacen.buscarEquipos(pedidos.get(0).getDescripcionEquipo());
@@ -923,20 +919,19 @@ public class ContratacionRenta implements IContratacionRenta {
         return pedidos == null || pedidos.isEmpty() ? null : pedidos.get(0).getEvaluacion();
     }
 
-    // El equipo que se recomendó en la evaluación técnica, con los accesorios que se eligieron
     private EquipoDTO equipoRecomendado() {
         EvaluacionTecnicaDTO evaluacion = evaluacionDe(solicitudActual);
         return evaluacion == null ? null : evaluacion.getRecomendado();
     }
 
-    // Todos los accesorios que tiene en el catálogo el equipo recomendado
+   
     private List<AccesorioDTO> accesoriosDelRecomendado() {
         EquipoDTO recomendado = equipoRecomendado();
         EquipoDTO delCatalogo = recomendado == null ? null : almacen.buscarEquipoPorId(recomendado.getIdEquipo());
         return delCatalogo == null ? new ArrayList<>() : delCatalogo.getAccesorios();
     }
 
-    // Las unidades del equipo recomendado con su estado para el periodo (respuesta simulada)
+  
     private List<UnidadFisicaDTO> unidadesDelRecomendado() {
         EquipoDTO recomendado = equipoRecomendado();
         if (recomendado == null) {
