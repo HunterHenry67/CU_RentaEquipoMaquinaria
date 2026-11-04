@@ -38,7 +38,7 @@ public class RequerimientosTecnicos {
     }
 
     // Unidad de cada característica con número
-    private static String unidad(String caracteristica) {
+    public static String unidad(String caracteristica) {
         switch (caracteristica) {
             case PROFUNDIDAD:
             case ANCHO:
@@ -116,12 +116,24 @@ public class RequerimientosTecnicos {
         requerimiento.setTipoLimite(null);
     }
 
+    // Otra lista con los mismos datos: la pantalla captura en ella sin tocar la que tiene el control
+    public static List<RequerimientoTecnicoDTO> copia(List<RequerimientoTecnicoDTO> lista) {
+        List<RequerimientoTecnicoDTO> copia = new java.util.ArrayList<>();
+        if (lista != null) {
+            for (RequerimientoTecnicoDTO r : lista) {
+                copia.add(new RequerimientoTecnicoDTO(r.getCaracteristica(), r.getValorRequerido(), r.getUnidadMedida(), r.getTipoLimite()));
+            }
+        }
+        return copia;
+    }
+
+    // Deja cada característica con su valor y regresa la primera que no trae un número (null si todas están bien)
     public static String normalizar(List<RequerimientoTecnicoDTO> lista) {
         String[] conNumero = {PROFUNDIDAD, POTENCIA, PESO, ANCHO};
         for (String caracteristica : conNumero) {
             String texto = capturado(lista, caracteristica);
             if (texto != null && !ValidadorPresentacion.esNumeroConUnidad(texto, unidad(caracteristica))) {
-                return "Escribe un número en «" + caracteristica + "» (en " + unidad(caracteristica) + ").";
+                return caracteristica;
             }
         }
         for (String caracteristica : conNumero) {

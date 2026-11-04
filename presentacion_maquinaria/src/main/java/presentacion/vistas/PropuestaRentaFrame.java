@@ -79,6 +79,7 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         btnAceptar = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         btnAceptarParcial = new javax.swing.JButton();
         btnRechazar = new javax.swing.JButton();
 
@@ -274,6 +275,19 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setOpaque(true);
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         btnAceptarParcial.setBackground(new java.awt.Color(44, 44, 44));
         btnAceptarParcial.setBorderPainted(false);
         btnAceptarParcial.setFocusPainted(false);
@@ -425,6 +439,10 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
                 .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 780, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(800, 800, 800)
                 .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
@@ -561,6 +579,10 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
                 .addGap(0, 218, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
                 .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
@@ -624,7 +646,13 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         if (equipo != null) {
             nombreEquipo = equipo.getModelo();
         }
-        lblEquipo.setText(nombreEquipo);
+        UnidadFisicaDTO elegida = solicitud.getUnidadSeleccionada();
+        if (elegida != null && elegida.getNumeroEconomico() != null) {
+            unidad = elegida.getNumeroEconomico();
+        } else {
+            unidad = "sin elegir";
+        }
+        lblEquipo.setText(nombreEquipo + " · unidad " + unidad);
         
         String nombreIndispensables = "";
         String nombreOpcional = "";
@@ -636,30 +664,27 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
                 AccesorioDTO accesorio = equipo.getAccesorios().get(i);
                 if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
                     if (hayObligatorio) {
-                        nombreIndispensables = nombreIndispensables;
+                        nombreIndispensables = nombreIndispensables + ", ";
                     }
                     nombreIndispensables = nombreIndispensables + accesorio.getNombre();
                     hayObligatorio = true;
                 }else{
                     if (hayOpcional) {
-                        nombreOpcional = nombreOpcional;
+                        nombreOpcional = nombreOpcional + ", ";
                     }
                     nombreOpcional = nombreOpcional + accesorio.getNombre();
                     hayOpcional = true;
                 }
             }        
         }
-        lblAccesorioOb.setText(nombreIndispensables + "- indispensable");
+        lblAccesorioOb.setText(nombreIndispensables + " - indispensable");
         jLabel7.setText(nombreIndispensables);
         lblAccesorioOb.setVisible(hayObligatorio);
         jLabel7.setVisible(hayObligatorio);
         lblSenalizacion.setVisible(hayObligatorio);
         
-        lblAccesorioOb.setText(nombreOpcional + "- opcional");
-        jLabel7.setText(nombreOpcional);
-        lblAccesorioOb.setVisible(hayOpcional);
-        jLabel7.setVisible(hayOpcional);
-        lblSenalizacion.setVisible(hayOpcional);
+        lblAccesorioOp.setText(nombreOpcional + " - opcional");
+        jLabel8.setText(nombreOpcional);
         
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
@@ -693,12 +718,17 @@ public class PropuestaRentaFrame extends javax.swing.JFrame {
         lblAccesorioOp.setVisible(hayOpcional);
     }
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.abrirRequisitosRenta();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnAceptarParcial;
     private javax.swing.JButton btnCambiarEquipo;
     private javax.swing.JButton btnCambiarPeriodo;
     private javax.swing.JButton btnRechazar;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel filaCucharon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

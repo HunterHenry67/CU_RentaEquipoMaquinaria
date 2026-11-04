@@ -13,6 +13,7 @@ import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
@@ -27,9 +28,6 @@ import objetosdto.UsuarioDTO;
 public interface IContratacionRenta {
 
     // Cambios de pantalla sin datos nuevos (regresar, cancelar, continuar)
-    
-    public ICoordinadorAplicacion getCoordinador();
-    
     public abstract void abrirIniciarSesion();
 
     public abstract void abrirMenuPrincipal();
@@ -44,6 +42,8 @@ public interface IContratacionRenta {
 
     public abstract void abrirEquiposCompatibles();
 
+    public abstract void abrirSeleccionAccesorios();
+
     public abstract void abrirEvaluacionTecnica();
 
     public abstract void abrirCambiarPeriodo();
@@ -53,6 +53,8 @@ public interface IContratacionRenta {
     public abstract void abrirCondicionesContratacion();
 
     public abstract void abrirCotizacion();
+
+    public abstract void abrirRequisitosRenta();
 
     public abstract void abrirPropuestaRenta();
 
@@ -90,15 +92,15 @@ public interface IContratacionRenta {
     public abstract void pasarDatosCancelacion(SolicitudRentaDTO solicitud);
 
     // Equipo adecuado
-    public abstract void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO solicitud);
+    public abstract void pasarDatosAnalisisRequerimientos(List<RequerimientoTecnicoDTO> requerimientos);
 
-    public abstract void pasarDatosSolicitudDatosFaltantes(SolicitudRentaDTO solicitud);
+    public abstract void pasarDatosSolicitudDatosFaltantes(List<RequerimientoTecnicoDTO> requerimientos);
 
-    public abstract void pasarDatosEquiposCompatibles(SolicitudRentaDTO solicitud);
+    public abstract void pasarDatosEquiposCompatibles(List<RequerimientoTecnicoDTO> requerimientos);
 
     public abstract void ningunEquipoCumple();
 
-    public abstract void cerrarEvaluacion(SolicitudRentaDTO solicitud);
+    public abstract void cerrarEvaluacion(EvaluacionTecnicaDTO capturada);
 
     public abstract void pasarDatosSeleccionAccesorios(EvaluacionTecnicaDTO seleccion);
 
@@ -107,7 +109,7 @@ public interface IContratacionRenta {
     // Disponibilidad
     public abstract void pasarDatosVerificacionInventario(SolicitudRentaDTO solicitud);
 
-    public abstract void pasarDatosUnidadSeleccionada(SolicitudRentaDTO solicitud);
+    public abstract void pasarDatosUnidadSeleccionada(UnidadFisicaDTO unidad);
 
     public abstract void verMotivoUnidad(UnidadFisicaDTO unidad);
 
@@ -122,7 +124,9 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosDecisionCliente(DecisionClienteDTO decision);
 
-    public abstract void pasarDatosOrdenEntrega(ContratacionRentaDTO contratacion);
+    public abstract void pasarDatosOrdenEntrega(ContratacionRentaDTO revisada);
 
     public abstract void pasarDatosSolicitudPendiente(ContratacionRentaDTO contratacion);
+
+    public abstract void consultarOrdenPorFolio(String folio);
 }

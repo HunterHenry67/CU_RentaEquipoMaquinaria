@@ -4,7 +4,8 @@
  */
 package presentacion.vistas;
 
-import java.util.ArrayList;
+import java.util.List;
+import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 import presentacion.control.RequerimientosTecnicos;
@@ -270,12 +271,10 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRespuestaActionPerformed
-        if (solicitud.getRequerimientos() == null) {
-            solicitud.setRequerimientos(new ArrayList<>());
-        }
-        RequerimientosTecnicos.capturar(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
-        RequerimientosTecnicos.capturar(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText());
-        contratacionRenta.pasarDatosAnalisisRequerimientos(solicitud);
+        List<RequerimientoTecnicoDTO> capturados = RequerimientosTecnicos.copia(solicitud.getRequerimientos());
+        RequerimientosTecnicos.capturar(capturados, RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
+        RequerimientosTecnicos.capturar(capturados, RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText());
+        contratacionRenta.pasarDatosAnalisisRequerimientos(capturados);
     }//GEN-LAST:event_btnRegistrarRespuestaActionPerformed
 
 

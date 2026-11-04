@@ -235,11 +235,9 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAjustarRequerimientoActionPerformed
 
     private void btnCerrarEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarEvaluacionActionPerformed
-        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
-        if (evaluacion != null) {
-            evaluacion.setMotivoIncumplimiento(txtAreaMotivo.getText().trim());
-        }
-        contratacionRenta.cerrarEvaluacion(solicitud);
+        EvaluacionTecnicaDTO capturada = new EvaluacionTecnicaDTO();
+        capturada.setMotivoIncumplimiento(txtAreaMotivo.getText().trim());
+        contratacionRenta.cerrarEvaluacion(capturada);
     }//GEN-LAST:event_btnCerrarEvaluacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

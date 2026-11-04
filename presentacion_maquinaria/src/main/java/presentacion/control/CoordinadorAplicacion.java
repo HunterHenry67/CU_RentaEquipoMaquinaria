@@ -1,10 +1,9 @@
 package presentacion.control;
 
-import java.awt.Window;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
 import objetosdto.ContratacionRentaDTO;
@@ -13,6 +12,7 @@ import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
+import presentacion.mensajes.Mensaje;
 import presentacion.vistas.AnalisisRequerimientoFrame;
 import presentacion.vistas.BusquedaEquipoFrame;
 import presentacion.vistas.CalendarioUnidadFrame;
@@ -38,6 +38,7 @@ import presentacion.vistas.UnidadMantenimientoFrame;
 import presentacion.vistas.UnidadOcupadaFrame;
 import presentacion.vistas.VerificacionCondicionFrame;
 import presentacion.vistas.VerificacionInventarioFrame;
+import presentacion.vistas.Ventanas;
 
 /**
  * Coordinador de Aplicación. Guarda las ventanas (se crean una sola vez, así cada una conserva lo
@@ -79,6 +80,11 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
      */
     public CoordinadorAplicacion(JFrame... ventanas) {
         this.ventanas = ventanas;
+        // Los avisos en español aunque la computadora esté en otro idioma
+        UIManager.put("OptionPane.yesButtonText", "Sí");
+        UIManager.put("OptionPane.noButtonText", "No");
+        UIManager.put("OptionPane.okButtonText", "Aceptar");
+        UIManager.put("OptionPane.cancelButtonText", "Cancelar");
         inicioSesionFrame = ventana(InicioSesionFrame.class);
         menuPrincipalFrame = ventana(MenuPrincipalFrame.class);
         identificacionClienteFrame = ventana(IdentificacionClienteFrame.class);
@@ -127,11 +133,13 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
 
     @Override
     public void mostrarInicioSesion() {
+        inicioSesionFrame.limpiar();
         mostrar(inicioSesionFrame);
     }
 
     @Override
     public void mostrarMenuPrincipal() {
+        menuPrincipalFrame.limpiar();
         mostrar(menuPrincipalFrame);
     }
 
@@ -173,6 +181,7 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
 
     @Override
     public void mostrarSolicitudRenta() {
+        solicitudRentaFrame.mostrarCaptura();
         mostrar(solicitudRentaFrame);
     }
 
@@ -314,22 +323,21 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
-    public void mostrarAviso(String titulo, String mensaje) {
-        JOptionPane.showMessageDialog(ventanaVisible(), mensaje, titulo, JOptionPane.WARNING_MESSAGE);
+    public void mostrarAviso(Mensaje mensaje, Object... datos) {
+        Ventanas.mostrarAviso(ventanaVisible(), mensaje.getTitulo(), mensaje.getTexto(datos));
     }
 
     @Override
-    public void mostrarMensaje(String titulo, String mensaje) {
-        JOptionPane.showMessageDialog(ventanaVisible(), mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
+    public void mostrarMensaje(Mensaje mensaje, Object... datos) {
+        Ventanas.mostrarMensaje(ventanaVisible(), mensaje.getTitulo(), mensaje.getTexto(datos));
     }
 
     @Override
-    public boolean confirmar(String titulo, String mensaje) {
-        return JOptionPane.showConfirmDialog(ventanaVisible(), mensaje, titulo, JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
+    public boolean confirmar(Mensaje mensaje) {
+        return Ventanas.confirmar(ventanaVisible(), mensaje.getTitulo(), mensaje.getTexto());
     }
 
-    private Window ventanaVisible() {
+    private JFrame ventanaVisible() {
         for (JFrame v : ventanas) {
             if (v.isShowing()) {
                 return v;

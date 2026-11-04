@@ -9,14 +9,12 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.awt.CardLayout;
 import java.time.LocalDate;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.ClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
-import presentacion.control.ICoordinadorAplicacion;
 import presentacion.control.RequerimientosTecnicos;
 
 /**
@@ -99,6 +97,12 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "card1");
     }
 
+    // Vuelve a la captura con lo que ya se había escrito
+    public void mostrarCaptura() {
+        CardLayout card = (CardLayout) this.getContentPane().getLayout();
+        card.show(this.getContentPane(), "card1");
+    }
+
     // El control ya confirmó la cancelación: se muestra la parte para escribir la razón
     public void mostrarCancelacion() {
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
@@ -110,6 +114,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     public void cargarFolio(String folio) {
         this.folio = folio;
         lblFolio.setText("Folio: " + folio);
+        jLabel21.setText("Folio: " + folio);
     }
 
     public void cargarDatosCliente(ClienteDTO clienteCargado) {
@@ -178,6 +183,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         txtAreaRazonCancelacion = new javax.swing.JTextArea();
         btnRegistrarCancelacion = new javax.swing.JButton();
+        btnRegresarCancelacion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setResizable(false);
@@ -585,6 +591,18 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
+        btnRegresarCancelacion.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresarCancelacion.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresarCancelacion.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresarCancelacion.setText("Regresar");
+        btnRegresarCancelacion.setBorderPainted(false);
+        btnRegresarCancelacion.setFocusPainted(false);
+        btnRegresarCancelacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarCancelacionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelCancelacionSolicitudLayout = new javax.swing.GroupLayout(panelCancelacionSolicitud);
         panelCancelacionSolicitud.setLayout(panelCancelacionSolicitudLayout);
         panelCancelacionSolicitudLayout.setHorizontalGroup(
@@ -611,7 +629,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(720, 720, 720)
-                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(btnRegresarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 40, Short.MAX_VALUE))
         );
         panelCancelacionSolicitudLayout.setVerticalGroup(
@@ -638,7 +659,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
-                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnRegistrarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
+                        .addGap(604, 604, 604)
+                        .addComponent(btnRegresarCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 32, Short.MAX_VALUE))
         );
 
@@ -652,10 +676,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
-        boolean confirmarCancelacion = contratacionRenta.getCoordinador().confirmar("Cancelación Solicitud", "¿Realmente desea cancelar la solictud?");
-        if (confirmarCancelacion == true) {
-            contratacionRenta.abrirCancelacionSolicitud();
-        }
+        contratacionRenta.abrirCancelacionSolicitud();
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -689,20 +710,22 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
-        boolean confirmarCancelacion = contratacionRenta.getCoordinador().confirmar("Registrar Cancelación", "¿Está seguro de que desea registrar la cancelación?");
-        if (confirmarCancelacion) {
-            SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
-            solicitudDTO.setFolio(folio);
-            solicitudDTO.setMotivoCancelacion(txtAreaRazonCancelacion.getText().trim());
-            contratacionRenta.pasarDatosCancelacion(solicitudDTO);
-        }
+        SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
+        solicitudDTO.setFolio(folio);
+        solicitudDTO.setMotivoCancelacion(txtAreaRazonCancelacion.getText().trim());
+        contratacionRenta.pasarDatosCancelacion(solicitudDTO);
     }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
+
+    private void btnRegresarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarCancelacionActionPerformed
+        contratacionRenta.abrirSolicitudRenta();
+    }//GEN-LAST:event_btnRegresarCancelacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEquipo;
     private javax.swing.JButton btnCancelarSoli;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegistrarCancelacion;
+    private javax.swing.JButton btnRegresarCancelacion;
     private javax.swing.JComboBox<String> comboTipoTerreno;
     private javax.swing.JComboBox<String> comboTipoTrabajo;
     private javax.swing.JFormattedTextField formtxtFechaFinal;

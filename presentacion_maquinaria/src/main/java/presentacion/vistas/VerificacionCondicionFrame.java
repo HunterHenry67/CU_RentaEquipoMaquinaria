@@ -51,6 +51,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         lblEntrega = new javax.swing.JLabel();
         linea2 = new javax.swing.JSeparator();
         btnGenerar = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         btnNoGenerar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -151,6 +152,19 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setOpaque(true);
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         btnNoGenerar.setBackground(new java.awt.Color(236, 34, 31));
         btnNoGenerar.setBorderPainted(false);
         btnNoGenerar.setFocusPainted(false);
@@ -241,6 +255,10 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
                 .addComponent(linea2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 780, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(772, 772, 772)
                 .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
@@ -325,6 +343,10 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
                 .addGap(0, 266, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
                 .addComponent(btnGenerar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
@@ -355,8 +377,9 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
                 revisadas.append(revisadas.length() > 0 ? ", " : "").append(casilla.getText());
             }
         }
-        contratacion.setCondicionesAcordadas(revisadas.toString());
-        contratacionRenta.pasarDatosOrdenEntrega(contratacion);
+        ContratacionRentaDTO revisada = new ContratacionRentaDTO();
+        revisada.setCondicionesAcordadas(revisadas.toString());
+        contratacionRenta.pasarDatosOrdenEntrega(revisada);
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void btnNoGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoGenerarActionPerformed
@@ -403,9 +426,14 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
                 + fin.format(DateTimeFormatter.ofPattern("dd/MM")) + ".</html>");
     }
     
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.abrirPropuestaRenta();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnNoGenerar;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JCheckBox chkAccesorios;
     private javax.swing.JCheckBox chkCliente;
     private javax.swing.JCheckBox chkEquipo;

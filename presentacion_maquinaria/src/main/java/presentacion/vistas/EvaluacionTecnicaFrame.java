@@ -77,6 +77,7 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnEnviarVerificacion = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Evaluación Técnica");
@@ -152,14 +153,27 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         btnEnviarVerificacion.setBackground(new java.awt.Color(44, 44, 44));
         btnEnviarVerificacion.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnEnviarVerificacion.setForeground(new java.awt.Color(255, 255, 255));
-        btnEnviarVerificacion.setText("Enviar a verificacion de inventario");
-        btnEnviarVerificacion.setActionCommand("Enviar a verificacion de inventario");
+        btnEnviarVerificacion.setText("Enviar a verificación de inventario");
+        btnEnviarVerificacion.setActionCommand("Enviar a verificación de inventario");
         btnEnviarVerificacion.setBorderPainted(false);
         btnEnviarVerificacion.setFocusPainted(false);
         btnEnviarVerificacion.setOpaque(true);
         btnEnviarVerificacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEnviarVerificacionActionPerformed(evt);
+            }
+        });
+
+        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setOpaque(true);
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
             }
         });
 
@@ -205,6 +219,9 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(600, 600, 600)
                         .addComponent(btnEnviarVerificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -252,6 +269,9 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelFondoLayout.createSequentialGroup()
+                        .addGap(604, 604, 604)
                         .addComponent(btnEnviarVerificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 32, Short.MAX_VALUE))
         );
@@ -274,8 +294,13 @@ public class EvaluacionTecnicaFrame extends javax.swing.JFrame {
         contratacionRenta.pasarDatosVerificacionInventario(solicitud);
     }//GEN-LAST:event_btnEnviarVerificacionActionPerformed
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.abrirSeleccionAccesorios();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEnviarVerificacion;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

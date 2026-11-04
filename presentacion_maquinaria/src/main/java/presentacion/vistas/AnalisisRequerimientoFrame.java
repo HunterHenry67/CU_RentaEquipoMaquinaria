@@ -5,6 +5,8 @@
 package presentacion.vistas;
 
 import java.util.ArrayList;
+import java.util.List;
+import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
 import presentacion.control.RequerimientosTecnicos;
@@ -29,9 +31,6 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     // que ya se haya capturado de los requerimientos (así no se pierde al regresar)
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
-        if (solicitud.getRequerimientos() == null) {
-            solicitud.setRequerimientos(new ArrayList<>());
-        }
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
         lblUbicacion.setText("Ubicación: " + ubicacion());
@@ -80,6 +79,7 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         txtFieldAnchoAcceso = new javax.swing.JTextField();
         btnBuscarEquipos = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         btnSolicitarDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -187,6 +187,19 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setOpaque(true);
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         btnSolicitarDatos.setBackground(new java.awt.Color(236, 34, 31));
         btnSolicitarDatos.setBorderPainted(false);
         btnSolicitarDatos.setFocusPainted(false);
@@ -285,6 +298,10 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
                 .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 780, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(674, 674, 674)
                 .addComponent(btnBuscarEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
@@ -377,6 +394,10 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
                 .addGap(0, 136, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
                 .addComponent(btnBuscarEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
@@ -400,19 +421,16 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarEquiposActionPerformed
-        capturarRequerimientos();
-        contratacionRenta.pasarDatosEquiposCompatibles(solicitud);
+        contratacionRenta.pasarDatosEquiposCompatibles(capturarRequerimientos());
     }//GEN-LAST:event_btnBuscarEquiposActionPerformed
 
     private void btnSolicitarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarDatosActionPerformed
-        capturarRequerimientos();
-        contratacionRenta.pasarDatosSolicitudDatosFaltantes(solicitud);
+        contratacionRenta.pasarDatosSolicitudDatosFaltantes(capturarRequerimientos());
     }//GEN-LAST:event_btnSolicitarDatosActionPerformed
 
-    // Pasa lo escrito en los campos a los requerimientos de la solicitud. Si un campo que
-    // lleva número no trae uno, avisa y no guarda nada.
-    // Lo escrito en los campos va tal cual a la solicitud; el control lo revisa y lo convierte
-    private void capturarRequerimientos() {
+    // Lo escrito en los campos va tal cual en una lista nueva; el control la revisa, la convierte
+    // y hasta entonces la guarda en la solicitud
+    private List<RequerimientoTecnicoDTO> capturarRequerimientos() {
         String[][] campos = {
             {RequerimientosTecnicos.PROFUNDIDAD, txtFieldProfundidad.getText()},
             {RequerimientosTecnicos.POTENCIA, txtFieldPotencia.getText()},
@@ -421,12 +439,11 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
             {RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText()},
             {RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText()}
         };
-        if (solicitud.getRequerimientos() == null) {
-            solicitud.setRequerimientos(new ArrayList<>());
-        }
+        List<RequerimientoTecnicoDTO> capturados = new ArrayList<>();
         for (String[] campo : campos) {
-            RequerimientosTecnicos.capturar(solicitud.getRequerimientos(), campo[0], campo[1]);
+            RequerimientosTecnicos.capturar(capturados, campo[0], campo[1]);
         }
+        return capturados;
     }
 
 
@@ -437,9 +454,14 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         return obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion;
     }
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.abrirSolicitudRenta();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEquipos;
     private javax.swing.JButton btnSolicitarDatos;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

@@ -237,8 +237,7 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         int fila = tableUnidades.getSelectedRow();
-        solicitud.setUnidadSeleccionada(fila < 0 ? null : unidades.get(fila));
-        contratacionRenta.pasarDatosUnidadSeleccionada(solicitud);
+        contratacionRenta.pasarDatosUnidadSeleccionada(fila < 0 ? null : unidades.get(fila));
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     private void btnVerMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerMotivoActionPerformed

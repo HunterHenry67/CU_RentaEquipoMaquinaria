@@ -170,6 +170,12 @@ public class InicioSesionFrame extends javax.swing.JFrame {
         contratacionRenta.pasarDatosUsuario(usuario);
     }//GEN-LAST:event_btnIngresarActionPerformed
 
+    // Al cerrar sesión no se quedan escritos el correo ni la contraseña
+    public void limpiar() {
+        txtFieldCorreo.setText("");
+        psswFiledContrasenia.setText("");
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
     private javax.swing.JLabel jLabel1;

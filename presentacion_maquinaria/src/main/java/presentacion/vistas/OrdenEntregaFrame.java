@@ -75,6 +75,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblDepositoEstadoTit = new javax.swing.JLabel();
         lblDepositoEstado = new javax.swing.JLabel();
         lblMotivo = new javax.swing.JLabel();
+        btnTerminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Orden de Entrega");
@@ -183,6 +184,19 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         lblMotivo.setText("");
         lblMotivo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
+        btnTerminar.setBackground(new java.awt.Color(44, 44, 44));
+        btnTerminar.setBorderPainted(false);
+        btnTerminar.setFocusPainted(false);
+        btnTerminar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnTerminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnTerminar.setOpaque(true);
+        btnTerminar.setText("Terminar");
+        btnTerminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTerminarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -287,6 +301,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 360, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(760, 760, 760)
+                .addComponent(btnTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,6 +408,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
                 .addGap(540, 540, 540)
                 .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 96, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
+                .addComponent(btnTerminar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -405,6 +427,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
+        contratacionRenta.abrirMenuPrincipal();
+    }//GEN-LAST:event_btnTerminarActionPerformed
 
     // El controlador lo llama cada vez que se abre la pantalla.
     // Finalizada: la orden de entrega. Pendiente con cucharón: no se generó la orden porque falta una
@@ -440,10 +466,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
             lblFechaEntrega.setText(textoFechaInicio);
             mostrarIdentificacion();
             if (sinAccesorios) {
-                lblMotivo.setText("Motivo: el cliente no acepta el accesorio indispensable.");
+                lblMotivo.setText("<html>Motivo: el cliente no acepta el accesorio indispensable.</html>");
             } else {
-                lblMotivo.setText("Falta una condición obligatoria: la contratación no se formaliza y la unidad " + unidad
-                        + " no se aparta.");
+                lblMotivo.setText("<html>Falta una condición obligatoria: la contratación no se formaliza y la unidad " + unidad
+                        + " no se aparta.</html>");
             }
         }
         lblDireccion.setVisible(finalizada);
@@ -474,7 +500,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
         LocalDate fin = solicitud.getPeriodo().getFechaFin();
         textoFechaInicio = inicio.format(formato);
-        textoFechaEntrega = textoFechaEntrega;
+        textoFechaEntrega = textoFechaInicio;
         lblFin.setText(fin.format(formato));
         
         String direccion = solicitud.getDireccionObra();
@@ -487,7 +513,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
                 direccion = orden.getDireccionEntrega();
             }
         }
-        lblDireccion.setText("<html>Entrega en: \" + direccion + \"</html>");
+        lblDireccion.setText("<html>Entrega en: " + direccion + "</html>");
         
         textoAccesorios = Montos.nombres(contratacion.getAccesorios());
         textoPrecioAccesorios = Montos.moneda(Montos.accesorios(cotizacion, null));
@@ -524,6 +550,7 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnTerminar;
     private javax.swing.JLabel lblAccesorios;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblDeposito;

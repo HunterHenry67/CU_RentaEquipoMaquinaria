@@ -48,7 +48,8 @@ public class CotizacionFrame extends javax.swing.JFrame {
                 if (accesorios.length() > 0) {
                     accesorios.append(" + ");
                 }
-                accesorios.append(detalle.getDescripcion()).append(" ").append(formatoMoneda(detalle.getImporte()));
+                // solo la primera palabra de cada uno, para que quepa en el renglón ("kit $300 + cucharón $200")
+                accesorios.append(detalle.getDescripcion().split(" ")[0].toLowerCase()).append(" ").append(formatoMoneda(detalle.getImporte()));
             }
         }
         lblAccesorios.setText("Accesorios (" + (accesorios.length() > 0 ? accesorios : "ninguno") + "):");

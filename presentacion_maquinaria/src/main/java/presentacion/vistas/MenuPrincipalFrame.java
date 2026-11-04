@@ -33,6 +33,10 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnContratacionEquipo = new javax.swing.JButton();
         btnCerrarSesion = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtFieldFolio = new javax.swing.JTextField();
+        btnConsultarFolio = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menú Principal");
@@ -70,6 +74,31 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("CONSULTAR ORDEN DE ENTREGA");
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Folio:");
+
+        txtFieldFolio.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldFolio.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldFolio.setForeground(new java.awt.Color(0, 0, 0));
+
+        btnConsultarFolio.setBackground(new java.awt.Color(44, 44, 44));
+        btnConsultarFolio.setBorderPainted(false);
+        btnConsultarFolio.setFocusPainted(false);
+        btnConsultarFolio.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnConsultarFolio.setForeground(new java.awt.Color(255, 255, 255));
+        btnConsultarFolio.setOpaque(true);
+        btnConsultarFolio.setText("Consultar");
+        btnConsultarFolio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarFolioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
@@ -86,6 +115,22 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 780, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 870, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(txtFieldFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(296, 296, 296)
+                .addComponent(btnConsultarFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 534, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,6 +146,22 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
                 .addGap(604, 604, 604)
                 .addComponent(btnCerrarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(186, 186, 186)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 472, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(224, 224, 224)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 424, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(224, 224, 224)
+                .addComponent(txtFieldFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 424, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(218, 218, 218)
+                .addComponent(btnConsultarFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 418, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -125,12 +186,25 @@ public class MenuPrincipalFrame extends javax.swing.JFrame {
         contratacionRenta.abrirIniciarSesion();
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 
+    private void btnConsultarFolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarFolioActionPerformed
+        contratacionRenta.consultarOrdenPorFolio(txtFieldFolio.getText());
+    }//GEN-LAST:event_btnConsultarFolioActionPerformed
+
+    // El menú siempre abre con el campo del folio vacío
+    public void limpiar() {
+        txtFieldFolio.setText("");
+    }
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCerrarSesion;
+    private javax.swing.JButton btnConsultarFolio;
     private javax.swing.JButton btnContratacionEquipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel panelFondo;
+    private javax.swing.JTextField txtFieldFolio;
     // End of variables declaration//GEN-END:variables
 }

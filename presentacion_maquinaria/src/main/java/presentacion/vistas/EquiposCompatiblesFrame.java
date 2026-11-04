@@ -96,6 +96,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnContinuarAccesorios = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         btnNingunoCumple = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -178,6 +179,19 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setOpaque(true);
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         btnNingunoCumple.setBackground(new java.awt.Color(236, 34, 31));
         btnNingunoCumple.setBorderPainted(false);
         btnNingunoCumple.setFocusPainted(false);
@@ -240,6 +254,10 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 780, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(712, 712, 712)
                 .addComponent(btnContinuarAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
@@ -296,6 +314,10 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
                 .addGap(0, 170, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
                 .addComponent(btnContinuarAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
@@ -342,9 +364,14 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         return siNoEsta;
     }
 
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.abrirAnalisisRequerimiento();
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnContinuarAccesorios;
     private javax.swing.JButton btnNingunoCumple;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> comboAlternativa;
     private javax.swing.JComboBox<String> comboRecomendado;
     private javax.swing.JLabel jLabel1;

@@ -5,6 +5,7 @@
 package presentacion;
 
 import almacentemporal.AlmacenTemporal;
+import java.util.Locale;
 import javax.swing.UIManager;
 import presentacion.control.ContratacionRenta;
 import presentacion.control.CoordinadorAplicacion;
@@ -47,14 +48,22 @@ public class Main {
      */
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {     
-            // El mismo aspecto en Windows y en Mac: con el de Mac los botones de color salen en blanco
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (Exception ex) {
-                System.err.println("No se pudo cambiar el aspecto: " + ex.getMessage());
-            }
+            prepararAspecto();
             iniciar().abrirIniciarSesion();
         });
+    }
+
+    /**
+     * El mismo aspecto en Windows y en Mac (con el de Mac los botones de color salen en blanco) y
+     * el calendario y el selector de archivos en español.
+     */
+    public static void prepararAspecto() {
+        Locale.setDefault(Locale.forLanguageTag("es-MX"));
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception ex) {
+            System.err.println("No se pudo cambiar el aspecto: " + ex.getMessage());
+        }
     }
 
     /**

@@ -340,6 +340,7 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
 
     private void btnMarcarPendienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarPendienteActionPerformed
         contratacionRenta.cambiarEstadoRequisitos("Pendiente");
+        mostrarRequisitos();
     }//GEN-LAST:event_btnMarcarPendienteActionPerformed
 
     private void btnReintentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReintentarActionPerformed

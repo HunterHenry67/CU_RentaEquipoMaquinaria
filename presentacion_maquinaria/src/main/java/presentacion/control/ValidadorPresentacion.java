@@ -1,6 +1,11 @@
 package presentacion.control;
 
 import java.time.LocalDate;
+import objetosdto.ClienteDTO;
+import objetosdto.ClienteEmpresaDTO;
+import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.SolicitudRentaDTO;
+import objetosdto.UsuarioDTO;
 
 /**
  * Validaciones propias de la presentación: que lo capturado tenga un formato correcto.
@@ -18,6 +23,40 @@ public class ValidadorPresentacion {
 
     public static boolean textoVacio(String texto) {
         return texto == null || texto.isBlank();
+    }
+
+    // Recibe pares de nombre y valor y regresa los nombres de los que vienen vacíos ("Nombre, RFC")
+    public static String camposVacios(Object... nombreYValor) {
+        StringBuilder faltan = new StringBuilder();
+        for (int i = 0; i < nombreYValor.length; i += 2) {
+            Object valor = nombreYValor[i + 1];
+            if (valor == null || (valor instanceof String texto && textoVacio(texto))) {
+                faltan.append(faltan.length() > 0 ? ", " : "").append(nombreYValor[i]);
+            }
+        }
+        return faltan.toString();
+    }
+
+    public static String faltantesUsuario(UsuarioDTO usuario) {
+        return camposVacios("Correo", usuario.getCorreo(), "Contraseña", usuario.getContrasenia());
+    }
+
+    public static String faltantesCliente(ClienteDTO cliente) {
+        return camposVacios("Nombre", cliente.getNombre(), "Correo electrónico", cliente.getCorreo(),
+                "Teléfono", cliente.getTelefono(), "RFC", cliente.getRfc());
+    }
+
+    public static String faltantesEncargado(ClienteEmpresaDTO empresa) {
+        return camposVacios("Nombre del encargado", empresa.getNombreEncargadoEmpresa(),
+                "Teléfono del encargado", empresa.getTelefonoEncargadoEmpresa(), "Puesto del encargado", empresa.getPuestoEncargadoEmpresa());
+    }
+
+    public static String faltantesSolicitud(SolicitudRentaDTO solicitud) {
+        PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
+        return camposVacios("Fecha de inicio", periodo == null ? null : periodo.getFechaInicio(),
+                "Fecha final", periodo == null ? null : periodo.getFechaFin(),
+                "Nombre de la obra", solicitud.getNombreObra(), "Dirección", solicitud.getDireccionObra(),
+                "Actividad que va a realizar el cliente", solicitud.getDescripcionActividad());
     }
 
     public static boolean correoValido(String correo) {
