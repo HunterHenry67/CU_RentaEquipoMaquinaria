@@ -7,6 +7,7 @@ package presentacion.vistas;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.EquipoDTO;
+import objetosdto.EquipoSolicitadoDTO;
 import presentacion.control.IContratacionRenta;
 
 /**
@@ -208,11 +209,12 @@ public class BusquedaEquipoFrame extends javax.swing.JFrame {
 
     private void btnRegistrarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEquipoActionPerformed
         int filaSeleccionada = tableEquipoCatalogo.getSelectedRow();
-        objetosdto.EquipoSolicitadoDTO equipoSolicitado = null;
+        EquipoSolicitadoDTO equipoSolicitado = null;
         if (filaSeleccionada != -1) {
-            equipoSolicitado = new objetosdto.EquipoSolicitadoDTO();
+            equipoSolicitado = new EquipoSolicitadoDTO();
             equipoSolicitado.setDescripcionEquipo(tableEquipoCatalogo.getValueAt(filaSeleccionada, 0).toString());
             equipoSolicitado.setCantidad(1);
+            ((DefaultTableModel) tableEquipoCatalogo.getModel()).removeRow(filaSeleccionada);
         }
         contratacionRenta.pasarDatosEquipoSolicitado(equipoSolicitado);
     }//GEN-LAST:event_btnRegistrarEquipoActionPerformed

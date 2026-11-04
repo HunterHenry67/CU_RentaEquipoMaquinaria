@@ -51,7 +51,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.almacen = almacen;
         this.negocio = negocio;
     }
-
+    
     public void setCoordinador(ICoordinadorAplicacion coordinador) {
         this.coordinador = coordinador;
     }
@@ -207,9 +207,7 @@ public class ContratacionRenta implements IContratacionRenta {
     // La pantalla de solicitud pide pasar a la cancelación; se confirma antes
     @Override
     public void abrirCancelacionSolicitud() {
-        if (coordinador.confirmar("Cancelación de Solicitud", "¿Confirma que desea cancelar el proceso de solicitud?")) {
-            coordinador.mostrarCancelacionSolicitud();
-        }
+        coordinador.mostrarCancelacionSolicitud();
     }
 
     // La X de una pantalla sin botón para regresar: se confirma antes de dejar la operación
@@ -419,7 +417,6 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirMenuPrincipal();
     }
 
-    
     @Override
     public void pasarDatosAnalisisRequerimientos(SolicitudRentaDTO solicitud) {
         if (!requerimientosValidos(solicitud, "Solicitud de Datos Faltantes")) {
@@ -532,7 +529,6 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirEvaluacionTecnica();
     }
 
-    
     @Override
     public void pasarDatosVerificacionInventario(SolicitudRentaDTO solicitud) {
         solicitud.setEstadoSolicitud("En verificación de disponibilidad");
@@ -627,7 +623,6 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirVerificacionInventario();
     }
 
-    
     @Override
     public void pasarDatosRequisitosRenta(CotizacionDTO cotizacion) {
         this.cotizacionActual = cotizacion;
@@ -916,14 +911,12 @@ public class ContratacionRenta implements IContratacionRenta {
         return evaluacion == null ? null : evaluacion.getRecomendado();
     }
 
-   
     private List<AccesorioDTO> accesoriosDelRecomendado() {
         EquipoDTO recomendado = equipoRecomendado();
         EquipoDTO delCatalogo = recomendado == null ? null : almacen.buscarEquipoPorId(recomendado.getIdEquipo());
         return delCatalogo == null ? new ArrayList<>() : delCatalogo.getAccesorios();
     }
 
-  
     private List<UnidadFisicaDTO> unidadesDelRecomendado() {
         EquipoDTO recomendado = equipoRecomendado();
         if (recomendado == null) {
@@ -931,4 +924,10 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         return negocio.disponibilidad(almacen.obtenerUnidadesDeEquipo(recomendado.getIdEquipo()), solicitudActual.getPeriodo());
     }
+
+    @Override
+    public ICoordinadorAplicacion getCoordinador() {
+        return this.coordinador;
+    }
+ 
 }

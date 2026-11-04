@@ -9,12 +9,14 @@ import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.awt.CardLayout;
 import java.time.LocalDate;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.ClienteDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
+import presentacion.control.ICoordinadorAplicacion;
 import presentacion.control.RequerimientosTecnicos;
 
 /**
@@ -25,7 +27,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
     private String folio;
-
+    private ICoordinadorAplicacion coordinador;
     private DatePicker datePickerInicio;
     private DatePicker datePickerFinal;
 
@@ -40,6 +42,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         card.show(this.getContentPane(), "card1");
         this.pack();
         this.setLocationRelativeTo(null);
+    }
+    
+    public void setCoordinador(ICoordinadorAplicacion coordinador) {
+        this.coordinador = coordinador;
     }
 
     private void inicializarSelectoresFecha() {
@@ -651,7 +657,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
-        contratacionRenta.abrirCancelacionSolicitud();
+        boolean confirmarCancelacion = coordinador.confirmar("Cancelación Solicitud", "¿Realmente desea cancelar la solictud?");
+        if (confirmarCancelacion == true) {
+            contratacionRenta.abrirCancelacionSolicitud();
+        }      
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -685,10 +694,14 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
-        SolicitudRentaDTO cancelada = new SolicitudRentaDTO();
-        cancelada.setFolio(folio);
-        cancelada.setMotivoCancelacion(txtAreaRazonCancelacion.getText());
-        contratacionRenta.pasarDatosCancelacion(cancelada);
+        if (coordinador != null) {
+            boolean confirmarCancelacion = coordinador.confirmar("Cancelación Solicitud", "¿Realmente desea cancelar la solicitud?");
+            if (confirmarCancelacion == true) {
+                contratacionRenta.abrirCancelacionSolicitud();
+            }
+        } else {
+            contratacionRenta.abrirCancelacionSolicitud();
+        }
     }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

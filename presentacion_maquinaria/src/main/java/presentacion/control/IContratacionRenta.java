@@ -27,6 +27,9 @@ import objetosdto.UsuarioDTO;
 public interface IContratacionRenta {
 
     // Cambios de pantalla sin datos nuevos (regresar, cancelar, continuar)
+    
+    public ICoordinadorAplicacion getCoordinador();
+    
     public abstract void abrirIniciarSesion();
 
     public abstract void abrirMenuPrincipal();
