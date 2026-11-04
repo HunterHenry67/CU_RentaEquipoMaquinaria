@@ -77,6 +77,8 @@ public interface IContratacionRenta {
     public abstract void modificarCliente(ClienteDTO cliente);
 
     public abstract void registrarCliente(ClienteDTO cliente);
+    
+    public abstract void cambiarEstadoRequisitos(String estado);
 
     // Solicitud
     public abstract void buscarEquipos(String texto);

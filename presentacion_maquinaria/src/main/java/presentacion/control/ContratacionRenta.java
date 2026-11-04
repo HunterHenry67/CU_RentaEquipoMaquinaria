@@ -51,7 +51,7 @@ public class ContratacionRenta implements IContratacionRenta {
         this.almacen = almacen;
         this.negocio = negocio;
     }
-    
+
     public void setCoordinador(ICoordinadorAplicacion coordinador) {
         this.coordinador = coordinador;
     }
@@ -929,5 +929,26 @@ public class ContratacionRenta implements IContratacionRenta {
     public ICoordinadorAplicacion getCoordinador() {
         return this.coordinador;
     }
- 
+
+    @Override
+    public void cambiarEstadoRequisitos(String estado) {
+        if (!haySolicitud()) {
+            return;
+        }
+        if (!"Pendiente".equals(estado) && !"Cumplida".equals(estado)) {
+            return;
+        }
+        List<RequisitoRentaDTO> requisitos = solicitudActual.getRequisitos();
+
+        if (requisitos == null) {
+            return;
+        }
+        for (RequisitoRentaDTO requisito : requisitos) {
+            if ("Identificación oficial".equals(requisito.getDescripcion())) {
+                requisito.setEstadoRequisito(estado);
+            }
+        }
+        guardarSolicitud();
+    }
+
 }

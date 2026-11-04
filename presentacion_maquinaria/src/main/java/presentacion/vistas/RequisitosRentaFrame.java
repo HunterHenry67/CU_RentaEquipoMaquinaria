@@ -39,13 +39,14 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
     }
 
     /**
-     * El coordinador la llama cuando el control encontró un requisito obligatorio pendiente:
-     * la pantalla pasa a su estado de error (Regresar o Reintentar).
+     * El coordinador la llama cuando el control encontró un requisito
+     * obligatorio pendiente: la pantalla pasa a su estado de error (Regresar o
+     * Reintentar).
      */
     public void mostrarPendientes(boolean pendientes) {
         lblEstado.setText(pendientes
-            ? "<html>Falta documentación y/o depósito: con la identificación todavía pendiente la contratación no puede confirmarse hasta que el requisito quede cumplido.</html>"
-            : "");
+                ? "<html>Falta documentación y/o depósito: con la identificación todavía pendiente la contratación no puede confirmarse hasta que el requisito quede cumplido.</html>"
+                : "");
         btnMarcarPendiente.setVisible(!pendientes);
         btnValidar.setVisible(!pendientes);
         btnRegresar.setVisible(pendientes);
@@ -348,15 +349,10 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnReintentarActionPerformed
 
     private void cambiarEstadoIdentificacion(String estado) {
-        for (RequisitoRentaDTO requisito : requisitos) {
-            if ("Identificación oficial".equals(requisito.getDescripcion())) {
-                requisito.setEstadoRequisito(estado);
-            }
-        }
+        contratacionRenta.cambiarEstadoRequisitos("Pendiente");
         mostrarRequisitos();
     }
 
-    // Muestra en la tabla los requisitos con el estado que capturó el asesor
     private void mostrarRequisitos() {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableRequisitos.getModel();
         modelo.setRowCount(0);
