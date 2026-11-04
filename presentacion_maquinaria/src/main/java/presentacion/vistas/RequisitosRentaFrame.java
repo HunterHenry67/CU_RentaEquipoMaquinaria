@@ -339,19 +339,14 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnValidarActionPerformed
 
     private void btnMarcarPendienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMarcarPendienteActionPerformed
-        cambiarEstadoIdentificacion("Pendiente");
+        contratacionRenta.cambiarEstadoRequisitos("Pendiente");
     }//GEN-LAST:event_btnMarcarPendienteActionPerformed
 
     private void btnReintentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReintentarActionPerformed
-        // el cliente ya entregó la identificación: se marca cumplida y se valida otra vez
-        cambiarEstadoIdentificacion("Cumplida");
+        contratacionRenta.cambiarEstadoRequisitos("Cumplida");
+        mostrarRequisitos();
         contratacionRenta.pasarDatosPropuestaRenta(requisitos);
     }//GEN-LAST:event_btnReintentarActionPerformed
-
-    private void cambiarEstadoIdentificacion(String estado) {
-        contratacionRenta.cambiarEstadoRequisitos("Pendiente");
-        mostrarRequisitos();
-    }
 
     private void mostrarRequisitos() {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tableRequisitos.getModel();

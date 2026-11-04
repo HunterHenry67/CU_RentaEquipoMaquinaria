@@ -27,7 +27,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
     private String folio;
-    private ICoordinadorAplicacion coordinador;
     private DatePicker datePickerInicio;
     private DatePicker datePickerFinal;
 
@@ -42,10 +41,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         card.show(this.getContentPane(), "card1");
         this.pack();
         this.setLocationRelativeTo(null);
-    }
-    
-    public void setCoordinador(ICoordinadorAplicacion coordinador) {
-        this.coordinador = coordinador;
     }
 
     private void inicializarSelectoresFecha() {
@@ -657,10 +652,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
-        boolean confirmarCancelacion = coordinador.confirmar("Cancelación Solicitud", "¿Realmente desea cancelar la solictud?");
+        boolean confirmarCancelacion = contratacionRenta.getCoordinador().confirmar("Cancelación Solicitud", "¿Realmente desea cancelar la solictud?");
         if (confirmarCancelacion == true) {
             contratacionRenta.abrirCancelacionSolicitud();
-        }      
+        }
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -694,13 +689,12 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnRegistrarCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCancelacionActionPerformed
-        if (coordinador != null) {
-            boolean confirmarCancelacion = coordinador.confirmar("Cancelación Solicitud", "¿Realmente desea cancelar la solicitud?");
-            if (confirmarCancelacion == true) {
-                contratacionRenta.abrirCancelacionSolicitud();
-            }
-        } else {
-            contratacionRenta.abrirCancelacionSolicitud();
+        boolean confirmarCancelacion = contratacionRenta.getCoordinador().confirmar("Registrar Cancelación", "¿Está seguro de que desea registrar la cancelación?");
+        if (confirmarCancelacion) {
+            SolicitudRentaDTO solicitudDTO = new SolicitudRentaDTO();
+            solicitudDTO.setFolio(folio);
+            solicitudDTO.setMotivoCancelacion(txtAreaRazonCancelacion.getText().trim());
+            contratacionRenta.pasarDatosCancelacion(solicitudDTO);
         }
     }//GEN-LAST:event_btnRegistrarCancelacionActionPerformed
 
