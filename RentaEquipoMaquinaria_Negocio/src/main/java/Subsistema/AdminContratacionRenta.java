@@ -1,0 +1,114 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Subsistema;
+
+import java.util.List;
+import objetosdto.AccesorioDTO;
+import objetosdto.ClienteDTO;
+import objetosdto.ContratacionRentaDTO;
+import objetosdto.CotizacionDTO;
+import objetosdto.EquipoDTO;
+import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.EvaluacionTecnicaDTO;
+import objetosdto.PeriodoSolicitadoDTO;
+import objetosdto.RequerimientoTecnicoDTO;
+import objetosdto.RequisitoRentaDTO;
+import objetosdto.SolicitudRentaDTO;
+import objetosdto.UnidadFisicaDTO;
+
+/**
+ *
+ * @author BALAMRUSH
+ */
+public class AdminContratacionRenta implements IAdminContratacionRenta{
+
+    private GestorClientes gestorClientes;
+    private GestorContratacion gestorContratacion;
+    private GestorCotizacion gestorCotizacion;
+    private GestorDisponibilidad gestorDisponibilidad;
+    private GestorSolicitud gestorSolicitud;
+    
+    
+    @Override
+    public List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean registrarClienteNuevo(ClienteDTO cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean cancelarSolicitudRenta(SolicitudRentaDTO solicitudRenta) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean agregarEquipoSolicitud(SolicitudRentaDTO solicitud, EquipoSolicitadoDTO equipo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<EquipoDTO> buscarEquipoCompatibles(RequerimientoTecnicoDTO requerimiento) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean evaluarRequerimiento(EvaluacionTecnicaDTO evaluacionTecnica) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<AccesorioDTO> obtenerAccesoriosDisponibles() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List<UnidadFisicaDTO> verificarDisponibilidadUnidades(EquipoDTO equipo, PeriodoSolicitadoDTO periodo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean registrarSeleccionAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> accesorios) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public CotizacionDTO generarCotizacion(SolicitudRentaDTO solicitudRenta) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean verificarRequisitosRenta(RequisitoRentaDTO cliente) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean aceptarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean rechazarPropuestaRenta(SolicitudRentaDTO solicitud, String motivo) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean generarOrdenEntrega(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public EquipoSolicitadoDTO recuperarEquipoSeleccionado() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+}
