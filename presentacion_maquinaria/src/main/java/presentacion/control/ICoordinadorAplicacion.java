@@ -8,6 +8,7 @@ import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.mensajes.Mensaje;
@@ -43,11 +44,14 @@ public interface ICoordinadorAplicacion {
 
     public abstract void mostrarEquiposSolicitados(List<EquipoSolicitadoDTO> equipos);
 
+    // El periodo que quedó al cambiarlo desde la propuesta: la captura de la solicitud también lo muestra
+    public abstract void mostrarPeriodoSolicitud(PeriodoSolicitadoDTO periodo);
+
     public abstract void mostrarAnalisisRequerimiento(SolicitudRentaDTO solicitud);
 
     public abstract void mostrarSolicitudDatosFaltantes(SolicitudRentaDTO solicitud);
 
-    public abstract void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, EquipoDTO pedido);
+    public abstract void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, List<EquipoDTO> pedidos);
 
     public abstract void mostrarSinEquipoCompatible(SolicitudRentaDTO solicitud);
 
@@ -80,7 +84,7 @@ public interface ICoordinadorAplicacion {
 
     public abstract void mostrarMotivoRechazo();
 
-    public abstract void mostrarVerificacionCondicion(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion);
+    public abstract void mostrarVerificacionCondicion(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion, String horarioEntrega);
 
     public abstract void mostrarOrdenEntrega(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion);
 

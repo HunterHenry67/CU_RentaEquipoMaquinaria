@@ -50,6 +50,8 @@ public interface IContratacionRenta {
 
     public abstract void abrirVerificacionInventario();
 
+    public abstract void abrirCalendarioUnidad();
+
     public abstract void abrirCondicionesContratacion();
 
     public abstract void abrirCotizacion();
@@ -66,6 +68,8 @@ public interface IContratacionRenta {
     public abstract void abrirCancelacionSolicitud();
 
     public abstract void dejarOperacion();
+
+    public abstract void regresarAIdentificacionCliente();
 
     // Inicio de sesión y clientes
     public abstract void pasarDatosUsuario(UsuarioDTO usuario);
@@ -87,6 +91,8 @@ public interface IContratacionRenta {
 
     public abstract void pasarDatosEquipoSolicitado(EquipoSolicitadoDTO equipo);
 
+    public abstract void quitarEquipoSolicitado(EquipoSolicitadoDTO equipo);
+
     public abstract void registrarSolicitud(SolicitudRentaDTO solicitud);
 
     public abstract void pasarDatosCancelacion(SolicitudRentaDTO solicitud);
@@ -95,6 +101,8 @@ public interface IContratacionRenta {
     public abstract void pasarDatosAnalisisRequerimientos(List<RequerimientoTecnicoDTO> requerimientos);
 
     public abstract void pasarDatosSolicitudDatosFaltantes(List<RequerimientoTecnicoDTO> requerimientos);
+
+    public abstract void regresarDeAnalisis(List<RequerimientoTecnicoDTO> requerimientos);
 
     public abstract void pasarDatosEquiposCompatibles(List<RequerimientoTecnicoDTO> requerimientos);
 

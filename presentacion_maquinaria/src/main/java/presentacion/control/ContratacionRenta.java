@@ -66,12 +66,7 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirMenuPrincipal() {
-        solicitudActual = null;
-        cotizacionActual = null;
-        contratacionActual = null;
-        cotizacionContratacion = null;
-        clienteActual = null;
-        equiposEvaluados = new LinkedHashMap<>();
+        soltarOperacion();
         coordinador.mostrarMenuPrincipal();
     }
 
@@ -111,7 +106,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         equiposEvaluados = negocio.compararEquipos(almacen.obtenerCatalogoEquipo(), solicitudActual.getRequerimientos());
-        coordinador.mostrarEquiposCompatibles(solicitudActual, equiposEvaluados, equipoPedido());
+        coordinador.mostrarEquiposCompatibles(solicitudActual, equiposEvaluados, equiposPedidos());
     }
 
     private void abrirSinEquipoCompatible() {
@@ -153,7 +148,8 @@ public class ContratacionRenta implements IContratacionRenta {
         coordinador.mostrarVerificacionInventario(solicitudActual, unidadesDelRecomendado());
     }
 
-    private void abrirCalendarioUnidad() {
+    @Override
+    public void abrirCalendarioUnidad() {
         if (!haySolicitud()) {
             return;
         }
@@ -222,6 +218,15 @@ public class ContratacionRenta implements IContratacionRenta {
     public void dejarOperacion() {
         if (coordinador.confirmar(Mensaje.CONFIRMAR_DEJAR_OPERACION)) {
             abrirMenuPrincipal();
+        }
+    }
+
+    // Regresar de la solicitud: se deja lo que no se registró y se vuelve a elegir al cliente
+    @Override
+    public void regresarAIdentificacionCliente() {
+        if (coordinador.confirmar(Mensaje.CONFIRMAR_REGRESAR_SOLICITUD)) {
+            soltarOperacion();
+            abrirIdentificacionCliente();
         }
     }
 
@@ -364,6 +369,19 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     @Override
+    public void quitarEquipoSolicitado(EquipoSolicitadoDTO equipo) {
+        if (!ValidadorPresentacion.seleccionValida(equipo)) {
+            coordinador.mostrarAviso(Mensaje.EQUIPO_SIN_SELECCIONAR);
+            return;
+        }
+        if (solicitudActual == null) {
+            return;
+        }
+        solicitudActual.getEquiposSolicitados().removeIf(ya -> Objects.equals(ya.getDescripcionEquipo(), equipo.getDescripcionEquipo()));
+        coordinador.mostrarEquiposSolicitados(solicitudActual.getEquiposSolicitados());
+    }
+
+    @Override
     public void registrarSolicitud(SolicitudRentaDTO solicitud) {
         PeriodoSolicitadoDTO periodo = solicitud.getPeriodo();
         if (faltanDatos(Mensaje.FALTAN_DATOS_SOLICITUD, ValidadorPresentacion.faltantesSolicitud(solicitud))) {
@@ -389,7 +407,12 @@ public class ContratacionRenta implements IContratacionRenta {
         solicitudActual = solicitud;
         cotizacionActual = null;
         guardarSolicitud();
-        coordinador.mostrarMensaje(Mensaje.SOLICITUD_REGISTRADA);
+        int equipos = solicitud.getEquiposSolicitados().size();
+        if (equipos > 1) {
+            coordinador.mostrarMensaje(Mensaje.SOLICITUD_REGISTRADA_VARIOS_EQUIPOS, equipos);
+        } else {
+            coordinador.mostrarMensaje(Mensaje.SOLICITUD_REGISTRADA);
+        }
         abrirAnalisisRequerimiento();
     }
 
@@ -446,6 +469,17 @@ public class ContratacionRenta implements IContratacionRenta {
         abrirSolicitudDatosFaltantes();
     }
 
+    // Regresar del análisis: lo que se escribió se queda en la solicitud; un número mal escrito se avisa para corregirlo
+    @Override
+    public void regresarDeAnalisis(List<RequerimientoTecnicoDTO> requerimientos) {
+        if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_ANALISIS)) {
+            return;
+        }
+        solicitudActual.setRequerimientos(requerimientos);
+        guardarSolicitud();
+        abrirSolicitudRenta();
+    }
+
     @Override
     public void pasarDatosEquiposCompatibles(List<RequerimientoTecnicoDTO> requerimientos) {
         if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_ANALISIS)) {
@@ -489,6 +523,7 @@ public class ContratacionRenta implements IContratacionRenta {
         evaluacionParaGuardar().setMotivoIncumplimiento(capturada.getMotivoIncumplimiento());
         solicitudActual.setEstadoSolicitud("Sin solución técnica");
         guardarSolicitud();
+        coordinador.mostrarMensaje(Mensaje.EVALUACION_CERRADA, solicitudActual.getFolio());
         abrirMenuPrincipal();
     }
 
@@ -623,6 +658,7 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         periodo.setDiasRenta(negocio.diasRenta(periodo));
         solicitudActual.setPeriodo(periodo);
+        coordinador.mostrarPeriodoSolicitud(periodo);
         solicitudActual.setUnidadSeleccionada(null);
         cotizacionActual = null;
         guardarSolicitud();
@@ -669,7 +705,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if ("RECHAZADA".equals(estado)) {
             solicitudActual.setEstadoSolicitud("Rechazada");
             guardarSolicitud();
-            coordinador.mostrarOrdenRechazada(solicitudActual, contratacionActual, cotizacionContratacion, decision.getObservaciones().trim());
+            // lo que se muestra es la propuesta que rechazó el cliente, con su total
+            coordinador.mostrarOrdenRechazada(solicitudActual, contratacionActual, cotizacionActual, decision.getObservaciones().trim());
         } else if ("PENDIENTE POR ACCESORIO".equals(estado)) {
             // sin el accesorio indispensable no hay condiciones que revisar: la solicitud queda pendiente
             solicitudActual.setEstadoSolicitud("Pendiente por accesorio");
@@ -680,7 +717,7 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(Mensaje.UNIDAD_YA_NO_LIBRE);
             abrirVerificacionInventario();
         } else {
-            coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion);
+            coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion, negocio.horarioEntrega());
         }
     }
 
@@ -863,28 +900,35 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     // ---------------------------------------------------------------- evaluación técnica
-    // El equipo del catálogo que pidió el cliente (el primero de la solicitud)
-    private EquipoDTO equipoPedido() {
-        List<EquipoSolicitadoDTO> pedidos = solicitudActual.getEquiposSolicitados();
-        if (pedidos == null || pedidos.isEmpty() || ValidadorPresentacion.textoVacio(pedidos.get(0).getDescripcionEquipo())) {
-            return null;
+    // Los equipos del catálogo que pidió el cliente
+    private List<EquipoDTO> equiposPedidos() {
+        List<EquipoDTO> pedidos = new ArrayList<>();
+        for (EquipoSolicitadoDTO pedido : solicitudActual.getEquiposSolicitados()) {
+            if (!ValidadorPresentacion.textoVacio(pedido.getDescripcionEquipo())) {
+                List<EquipoDTO> encontrados = almacen.buscarEquipos(pedido.getDescripcionEquipo());
+                if (!encontrados.isEmpty()) {
+                    pedidos.add(encontrados.get(0));
+                }
+            }
         }
-        List<EquipoDTO> encontrados = almacen.buscarEquipos(pedidos.get(0).getDescripcionEquipo());
-        return encontrados.isEmpty() ? null : encontrados.get(0);
+        return pedidos;
     }
 
-    // La evaluación técnica va con el equipo que pidió el cliente; si todavía no hay, se crea
+    // La evaluación técnica es una para todos los equipos que pidió el cliente; si todavía no hay, se crea
     private EvaluacionTecnicaDTO evaluacionParaGuardar() {
         if (solicitudActual.getEquiposSolicitados().isEmpty()) {
             EquipoSolicitadoDTO pedido = new EquipoSolicitadoDTO();
             pedido.setCantidad(1);
             solicitudActual.getEquiposSolicitados().add(pedido);
         }
-        EquipoSolicitadoDTO pedido = solicitudActual.getEquiposSolicitados().get(0);
-        if (pedido.getEvaluacion() == null) {
-            pedido.setEvaluacion(new EvaluacionTecnicaDTO());
+        EvaluacionTecnicaDTO evaluacion = solicitudActual.getEquiposSolicitados().get(0).getEvaluacion();
+        if (evaluacion == null) {
+            evaluacion = new EvaluacionTecnicaDTO();
         }
-        return pedido.getEvaluacion();
+        for (EquipoSolicitadoDTO pedido : solicitudActual.getEquiposSolicitados()) {
+            pedido.setEvaluacion(evaluacion);
+        }
+        return evaluacion;
     }
 
     // Si se vuelve a elegir el mismo equipo se queda el que ya estaba, con los accesorios que ya
@@ -897,11 +941,16 @@ public class ContratacionRenta implements IContratacionRenta {
         return delCatalogo == null ? elegido : delCatalogo;
     }
 
-    // Por qué no se queda el equipo que pidió el cliente (null si sí cumple)
+    // Por qué no se quedan los equipos que pidió el cliente (null si todos cumplen)
     private String motivoDelPedido() {
-        EquipoDTO pedido = equipoPedido();
-        String motivo = pedido == null ? null : motivoDe(pedido);
-        return motivo == null ? null : pedido.getModelo() + ": " + motivo + ".";
+        StringBuilder motivos = new StringBuilder();
+        for (EquipoDTO pedido : equiposPedidos()) {
+            String motivo = motivoDe(pedido);
+            if (motivo != null) {
+                motivos.append(motivos.length() > 0 ? "\n" : "").append(pedido.getModelo()).append(": ").append(motivo).append(".");
+            }
+        }
+        return motivos.length() == 0 ? null : motivos.toString();
     }
 
     private String motivoDe(EquipoDTO equipo) {
@@ -924,6 +973,16 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     // ================================================================ apoyo
+    // Deja la operación que estaba en curso: lo que siga empieza de cero
+    private void soltarOperacion() {
+        solicitudActual = null;
+        cotizacionActual = null;
+        contratacionActual = null;
+        cotizacionContratacion = null;
+        clienteActual = null;
+        equiposEvaluados = new LinkedHashMap<>();
+    }
+
     // Si falta algún dato pide al coordinador que avise cuáles son
     private boolean faltanDatos(Mensaje aviso, String faltan) {
         if (faltan.isEmpty()) {

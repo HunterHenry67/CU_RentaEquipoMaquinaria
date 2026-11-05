@@ -39,7 +39,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     // ya comparados con los requerimientos (para cada uno, por qué no cumple o null si
     // cumple). Deja elegir el recomendado y la alternativa entre los que cumplen; si ya se
     // habían elegido, los vuelve a marcar.
-    public void cargarEquipos(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, EquipoDTO pedido) {
+    public void cargarEquipos(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, List<EquipoDTO> pedidos) {
         this.solicitud = solicitud;
         this.evaluados = evaluados;
         lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
@@ -49,8 +49,7 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         compatibles.clear();
         for (EquipoDTO equipo : evaluados.keySet()) {
             String motivo = evaluados.get(equipo);
-            boolean esElPedido = pedido != null && Objects.equals(pedido.getIdEquipo(), equipo.getIdEquipo());
-            String nombre = equipo.getModelo() + (esElPedido ? " (lo pidió el cliente)" : "");
+            String nombre = equipo.getModelo() + (esPedido(equipo, pedidos) ? " (lo pidió el cliente)" : "");
             modelo.addRow(new Object[]{nombre, motivo == null ? "Sí" : "No: " + motivo});
             if (motivo == null) {
                 compatibles.add(equipo);
@@ -352,6 +351,15 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     private void btnNingunoCumpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNingunoCumpleActionPerformed
         contratacionRenta.ningunEquipoCumple();
     }//GEN-LAST:event_btnNingunoCumpleActionPerformed
+
+    private boolean esPedido(EquipoDTO equipo, List<EquipoDTO> pedidos) {
+        for (EquipoDTO pedido : pedidos) {
+            if (Objects.equals(pedido.getIdEquipo(), equipo.getIdEquipo())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private int indice(EquipoDTO equipo, int siNoEsta) {
         if (equipo != null) {

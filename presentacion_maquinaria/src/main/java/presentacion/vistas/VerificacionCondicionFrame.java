@@ -335,12 +335,12 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
                 .addGap(0, 330, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(356, 356, 356)
-                .addComponent(lblEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 282, Short.MAX_VALUE))
+                .addComponent(lblEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 261, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(408, 408, 408)
+                .addGap(429, 429, 429)
                 .addComponent(linea2, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 266, Short.MAX_VALUE))
+                .addGap(0, 245, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -390,7 +390,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         return new javax.swing.JCheckBox[]{chkCliente, chkEquipo, chkAccesorios, chkPeriodo, chkTarifa};
     }
 
-    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
+    public void cargarDatos(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion, String horarioEntrega) {
         this.contratacion = contratacion;
         String unidad = contratacion.getUnidad() != null && contratacion.getUnidad().getNumeroEconomico() != null
                 ? contratacion.getUnidad().getNumeroEconomico() : "sin elegir";
@@ -420,7 +420,7 @@ public class VerificacionCondicionFrame extends javax.swing.JFrame {
         lblTarifa.setText(String.format("$%,.0f", renta) + " MXN");
         lblDepositoValor.setText(String.format("$%,.0f", deposito) + " MXN");
         lblTotal.setText("Total de la renta: " + String.format("$%,.0f", total) + " (renta, accesorios e impuestos)");
-        lblEntrega.setText("<html>Entrega confirmada: " + inicio.format(formato) + ", en "
+        lblEntrega.setText("<html>Entrega confirmada: " + inicio.format(formato) + " " + horarioEntrega + ", en "
                 + solicitud.getDireccionObra() + ".<br>Al generar la orden, la unidad " + unidad
                 + " queda ocupada del " + inicio.format(DateTimeFormatter.ofPattern("dd")) + " al "
                 + fin.format(DateTimeFormatter.ofPattern("dd/MM")) + ".</html>");

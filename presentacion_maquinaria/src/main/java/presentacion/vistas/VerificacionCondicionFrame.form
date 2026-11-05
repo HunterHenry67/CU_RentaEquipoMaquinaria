@@ -206,10 +206,10 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="356" max="-2" attributes="0"/>
-                          <Component id="lblEntrega" min="-2" pref="42" max="-2" attributes="0"/>
+                          <Component id="lblEntrega" min="-2" pref="63" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="408" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="429" max="-2" attributes="0"/>
                           <Component id="linea2" min="-2" pref="6" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">

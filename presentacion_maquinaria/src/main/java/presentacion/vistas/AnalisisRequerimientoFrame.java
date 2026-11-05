@@ -455,7 +455,7 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     }
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirSolicitudRenta();
+        contratacionRenta.regresarDeAnalisis(capturarRequerimientos());
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -303,7 +303,7 @@ public class CondicionesContratacionFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        contratacionRenta.abrirVerificacionInventario();
+        contratacionRenta.abrirCalendarioUnidad();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnEnviarValidacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarValidacionActionPerformed

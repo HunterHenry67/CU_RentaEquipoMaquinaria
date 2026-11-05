@@ -97,6 +97,13 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "card1");
     }
 
+    // El periodo se cambió desde la propuesta: la captura muestra el que quedó
+    public void cargarPeriodo(PeriodoSolicitadoDTO periodo) {
+        datePickerFinal.getSettings().setDateRangeLimits(null, null);
+        datePickerInicio.setDate(periodo.getFechaInicio());
+        datePickerFinal.setDate(periodo.getFechaFin());
+    }
+
     // Vuelve a la captura con lo que ya se había escrito
     public void mostrarCaptura() {
         CardLayout card = (CardLayout) this.getContentPane().getLayout();
@@ -159,6 +166,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         txtFieldDireccion = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         btnAgregarEquipo = new javax.swing.JButton();
+        btnQuitarEquipo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableEquipoSoli = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
@@ -173,6 +181,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         comboTipoTerreno = new javax.swing.JComboBox<>();
         btnCancelarSoli = new javax.swing.JButton();
+        btnRegresar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
         panelCancelacionSolicitud = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
@@ -268,6 +277,18 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
+        btnQuitarEquipo.setBackground(new java.awt.Color(236, 34, 31));
+        btnQuitarEquipo.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnQuitarEquipo.setForeground(new java.awt.Color(255, 255, 255));
+        btnQuitarEquipo.setText("Quitar un Equipo");
+        btnQuitarEquipo.setBorderPainted(false);
+        btnQuitarEquipo.setFocusPainted(false);
+        btnQuitarEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnQuitarEquipoActionPerformed(evt);
+            }
+        });
+
         tableEquipoSoli.setBackground(new java.awt.Color(255, 255, 255));
         tableEquipoSoli.setForeground(new java.awt.Color(0, 0, 0));
         tableEquipoSoli.setModel(new javax.swing.table.DefaultTableModel(
@@ -345,6 +366,18 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
             }
         });
 
+        btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
+        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegresar.setText("Regresar");
+        btnRegresar.setBorderPainted(false);
+        btnRegresar.setFocusPainted(false);
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
+
         btnRegistrar.setBackground(new java.awt.Color(44, 44, 44));
         btnRegistrar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegistrar.setForeground(new java.awt.Color(255, 255, 255));
@@ -415,6 +448,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addGap(743, 743, 743)
                         .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                        .addGap(554, 554, 554)
+                        .addComponent(btnQuitarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
@@ -445,8 +481,11 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addGap(636, 636, 636)
                         .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
+                        .addGap(172, 172, 172)
                         .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
                         .addGap(800, 800, 800)
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -508,6 +547,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                         .addGap(274, 274, 274)
                         .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                        .addGap(274, 274, 274)
+                        .addComponent(btnQuitarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
                         .addGap(316, 316, 316)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
@@ -540,6 +582,9 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
                         .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                        .addGap(604, 604, 604)
+                        .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelSolictudNormalLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -675,9 +720,23 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         contratacionRenta.abrirBusquedaEquipo();
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
+    private void btnQuitarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarEquipoActionPerformed
+        int fila = tableEquipoSoli.getSelectedRow();
+        EquipoSolicitadoDTO equipo = null;
+        if (fila != -1) {
+            equipo = new EquipoSolicitadoDTO();
+            equipo.setDescripcionEquipo(tableEquipoSoli.getValueAt(fila, 0).toString());
+        }
+        contratacionRenta.quitarEquipoSolicitado(equipo);
+    }//GEN-LAST:event_btnQuitarEquipoActionPerformed
+
     private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
         contratacionRenta.abrirCancelacionSolicitud();
     }//GEN-LAST:event_btnCancelarSoliActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        contratacionRenta.regresarAIdentificacionCliente();
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // se manda lo capturado; el control revisa los campos obligatorios, las fechas y el equipo
@@ -723,8 +782,10 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEquipo;
     private javax.swing.JButton btnCancelarSoli;
+    private javax.swing.JButton btnQuitarEquipo;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegistrarCancelacion;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JButton btnRegresarCancelacion;
     private javax.swing.JComboBox<String> comboTipoTerreno;
     private javax.swing.JComboBox<String> comboTipoTrabajo;

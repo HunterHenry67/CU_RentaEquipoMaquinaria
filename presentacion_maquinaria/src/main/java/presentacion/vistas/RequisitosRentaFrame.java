@@ -40,8 +40,8 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
 
     /**
      * El coordinador la llama cuando el control encontró un requisito
-     * obligatorio pendiente: la pantalla pasa a su estado de error (Regresar o
-     * Reintentar).
+     * obligatorio pendiente: la pantalla pasa a su estado de error (Reintentar
+     * en lugar de Validar). Regresar se ve siempre.
      */
     public void mostrarPendientes(boolean pendientes) {
         lblEstado.setText(pendientes
@@ -49,7 +49,6 @@ public class RequisitosRentaFrame extends javax.swing.JFrame {
                 : "");
         btnMarcarPendiente.setVisible(!pendientes);
         btnValidar.setVisible(!pendientes);
-        btnRegresar.setVisible(pendientes);
         btnReintentar.setVisible(pendientes);
     }
 

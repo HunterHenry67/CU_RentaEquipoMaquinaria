@@ -33,7 +33,7 @@ public class Formato {
         return periodo.getFechaInicio().format(formato) + " al " + periodo.getFechaFin().format(formato) + (periodo.getDiasRenta() == null ? "" : " · " + periodo.getDiasRenta() + " días");
     }
 
-    // La evaluación técnica del equipo que pidió el cliente (el primero de la solicitud)
+    // La evaluación técnica de la solicitud: es la misma para todos los equipos que pidió el cliente
     public static EvaluacionTecnicaDTO evaluacion(SolicitudRentaDTO solicitud) {
         return solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty() ? null
                 : solicitud.getEquiposSolicitados().get(0).getEvaluacion();

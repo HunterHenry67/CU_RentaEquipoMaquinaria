@@ -38,6 +38,9 @@ public interface INegocioSimulado {
 
     public abstract OrdenEntregaDTO generarOrdenEntrega(SolicitudRentaDTO solicitud);
 
+    // El horario de entrega que se confirma con el cliente antes de generar la orden
+    public abstract String horarioEntrega();
+
     // La unidad apartada para el periodo de la renta que se formalizó
     public abstract UnidadFisicaDTO ocuparUnidad(UnidadFisicaDTO unidad, PeriodoSolicitadoDTO periodo);
 

@@ -537,6 +537,10 @@ public class OrdenEntregaFrame extends javax.swing.JFrame {
     public void cargarDatosRechazada(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion, String motivo) {
         cargarDatos(solicitud, contratacion, cotizacion);
 
+        // la propuesta que se rechazó, con los accesorios que llevaba
+        EquipoDTO equipo = Formato.equipoRecomendado(solicitud);
+        lblAccesorios.setText(Montos.nombres(equipo == null ? null : equipo.getAccesorios()));
+
         setTitle("Solicitud - Rechazada");
         lblTitulo.setText("Solicitud - Rechazada");
         lblEstado.setText("Rechazada");

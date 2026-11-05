@@ -10,6 +10,7 @@ import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import presentacion.mensajes.Mensaje;
@@ -197,6 +198,11 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
+    public void mostrarPeriodoSolicitud(PeriodoSolicitadoDTO periodo) {
+        solicitudRentaFrame.cargarPeriodo(periodo);
+    }
+
+    @Override
     public void mostrarAnalisisRequerimiento(SolicitudRentaDTO solicitud) {
         analisisRequerimientoFrame.cargarSolicitud(solicitud);
         mostrar(analisisRequerimientoFrame);
@@ -209,8 +215,8 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
-    public void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, EquipoDTO pedido) {
-        equiposCompatiblesFrame.cargarEquipos(solicitud, evaluados, pedido);
+    public void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, List<EquipoDTO> pedidos) {
+        equiposCompatiblesFrame.cargarEquipos(solicitud, evaluados, pedidos);
         mostrar(equiposCompatiblesFrame);
     }
 
@@ -305,8 +311,8 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
-    public void mostrarVerificacionCondicion(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion) {
-        verificacionCondicionFrame.cargarDatos(solicitud, contratacion, cotizacion);
+    public void mostrarVerificacionCondicion(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion, CotizacionDTO cotizacion, String horarioEntrega) {
+        verificacionCondicionFrame.cargarDatos(solicitud, contratacion, cotizacion, horarioEntrega);
         mostrar(verificacionCondicionFrame);
     }
 

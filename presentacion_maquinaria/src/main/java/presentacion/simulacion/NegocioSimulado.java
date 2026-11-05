@@ -28,6 +28,7 @@ public class NegocioSimulado implements INegocioSimulado {
 
     private static final double TARIFA_DIARIA_SIMULADA = 1500.0;
     private static final double IVA_SIMULADO = 0.16;
+    private static final String HORARIO_ENTREGA_SIMULADO = "antes de las 8:00 AM";
 
     // Respuesta simulada del escenario: la retroexcavadora JCB (id 1) no cumple porque tiene 109 HP y se
     // piden 120 HP como mínimo; las excavadoras CAT 320 y CAT 336 sí cumplen. Comparar de verdad las
@@ -109,9 +110,14 @@ public class NegocioSimulado implements INegocioSimulado {
         orden.setFechaGeneracion(LocalDate.now());
         orden.setFechaEntrega(solicitud.getPeriodo().getFechaInicio());
         orden.setDireccionEntrega(solicitud.getDireccionObra());
-        orden.setHorario("antes de las 8:00 AM");
+        orden.setHorario(horarioEntrega());
         orden.setEstadoOrden("Finalizada");
         return orden;
+    }
+
+    @Override
+    public String horarioEntrega() {
+        return HORARIO_ENTREGA_SIMULADO;
     }
 
     @Override
