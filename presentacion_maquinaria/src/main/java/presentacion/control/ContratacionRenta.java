@@ -378,7 +378,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         periodo.setDiasRenta(negocio.diasRenta(periodo));
-        RequerimientosTecnicos.normalizar(solicitud.getRequerimientos());
+        ValidadorPresentacion.normalizar(solicitud.getRequerimientos());
         if (solicitud.getCliente() == null) {
             solicitud.setCliente(clienteActual);
         }
@@ -424,8 +424,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_DATOS_FALTANTES)) {
             return;
         }
-        if (ValidadorPresentacion.textoVacio(RequerimientosTecnicos.texto(requerimientos, RequerimientosTecnicos.ANCHO))
-                && ValidadorPresentacion.textoVacio(RequerimientosTecnicos.texto(requerimientos, RequerimientosTecnicos.TERRENO))) {
+        if (ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, RequerimientosTecnicos.ANCHO))
+                && ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, RequerimientosTecnicos.TERRENO))) {
             coordinador.mostrarAviso(Mensaje.FALTA_RESPUESTA_CLIENTE);
             return;
         }
@@ -742,10 +742,10 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudActual == null || !Objects.equals(solicitudActual.getFolio(), nueva.getFolio())) {
             return;
         }
-        List<RequerimientoTecnicoDTO> requerimientos = RequerimientosTecnicos.copia(solicitudActual.getRequerimientos());
-        String terreno = RequerimientosTecnicos.texto(nueva.getRequerimientos(), RequerimientosTecnicos.TERRENO);
+        List<RequerimientoTecnicoDTO> requerimientos = ValidadorPresentacion.copia(solicitudActual.getRequerimientos());
+        String terreno = ValidadorPresentacion.texto(nueva.getRequerimientos(), RequerimientosTecnicos.TERRENO);
         if (!ValidadorPresentacion.textoVacio(terreno)) {
-            RequerimientosTecnicos.capturar(requerimientos, RequerimientosTecnicos.TERRENO, terreno);
+            ValidadorPresentacion.capturar(requerimientos, RequerimientosTecnicos.TERRENO, terreno);
         }
         nueva.setRequerimientos(requerimientos);
         nueva.setRequisitos(solicitudActual.getRequisitos());
@@ -934,19 +934,19 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     private boolean requerimientosValidos(List<RequerimientoTecnicoDTO> requerimientos, Mensaje avisoNumero) {
-        String sinNumero = RequerimientosTecnicos.normalizar(requerimientos);
+        String sinNumero = ValidadorPresentacion.normalizar(requerimientos);
         if (sinNumero != null) {
-            coordinador.mostrarAviso(avisoNumero, sinNumero, RequerimientosTecnicos.unidad(sinNumero));
+            coordinador.mostrarAviso(avisoNumero, sinNumero, ValidadorPresentacion.unidad(sinNumero));
             return false;
         }
         return true;
     }
 
     private boolean hayRequerimientosConNumero(List<RequerimientoTecnicoDTO> requerimientos) {
-        return RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PROFUNDIDAD) != null
-                || RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.POTENCIA) != null
-                || RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.PESO) != null
-                || RequerimientosTecnicos.valor(requerimientos, RequerimientosTecnicos.ANCHO) != null;
+        return ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.PROFUNDIDAD) != null
+                || ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.POTENCIA) != null
+                || ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.PESO) != null
+                || ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.ANCHO) != null;
     }
 
     // La solicitud queda en el almacén temporal: se registra la primera vez y después se actualiza
