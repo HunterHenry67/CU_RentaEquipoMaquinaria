@@ -22,4 +22,5 @@
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>itson.rentaequipomaquinaria_negocio.RentaEquipoMaquinaria_Negocio</exec.mainClass>
     </properties>
+    <name>subsistemaAdminContratacionRenta</name>
 </project>
