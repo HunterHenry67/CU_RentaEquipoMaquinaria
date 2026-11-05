@@ -424,8 +424,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_DATOS_FALTANTES)) {
             return;
         }
-        if (ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, RequerimientosTecnicos.ANCHO))
-                && ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, RequerimientosTecnicos.TERRENO))) {
+        if (ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, ValidadorPresentacion.ANCHO))
+                && ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, ValidadorPresentacion.TERRENO))) {
             coordinador.mostrarAviso(Mensaje.FALTA_RESPUESTA_CLIENTE);
             return;
         }
@@ -743,9 +743,9 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         List<RequerimientoTecnicoDTO> requerimientos = ValidadorPresentacion.copia(solicitudActual.getRequerimientos());
-        String terreno = ValidadorPresentacion.texto(nueva.getRequerimientos(), RequerimientosTecnicos.TERRENO);
+        String terreno = ValidadorPresentacion.texto(nueva.getRequerimientos(), ValidadorPresentacion.TERRENO);
         if (!ValidadorPresentacion.textoVacio(terreno)) {
-            ValidadorPresentacion.capturar(requerimientos, RequerimientosTecnicos.TERRENO, terreno);
+            ValidadorPresentacion.capturar(requerimientos, ValidadorPresentacion.TERRENO, terreno);
         }
         nueva.setRequerimientos(requerimientos);
         nueva.setRequisitos(solicitudActual.getRequisitos());
@@ -943,10 +943,10 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     private boolean hayRequerimientosConNumero(List<RequerimientoTecnicoDTO> requerimientos) {
-        return ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.PROFUNDIDAD) != null
-                || ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.POTENCIA) != null
-                || ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.PESO) != null
-                || ValidadorPresentacion.valor(requerimientos, RequerimientosTecnicos.ANCHO) != null;
+        return ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.PROFUNDIDAD) != null
+                || ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.POTENCIA) != null
+                || ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.PESO) != null
+                || ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.ANCHO) != null;
     }
 
     // La solicitud queda en el almacén temporal: se registra la primera vez y después se actualiza

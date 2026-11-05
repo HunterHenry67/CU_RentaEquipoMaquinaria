@@ -15,7 +15,7 @@ import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
-import presentacion.control.RequerimientosTecnicos;
+import presentacion.control.ValidadorPresentacion;
 
 /**
  *
@@ -687,7 +687,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         solicitudDTO.setDireccionObra(txtFieldDireccion.getText().trim());
         String terreno = comboTipoTerreno.getSelectedItem().toString();
         if (!terreno.equals("Sin especificar")) {
-            RequerimientosTecnicos.capturar(solicitudDTO.getRequerimientos(), RequerimientosTecnicos.TERRENO, terreno);
+            ValidadorPresentacion.capturar(solicitudDTO.getRequerimientos(), ValidadorPresentacion.TERRENO, terreno);
         }
         String tipoTrabajo = comboTipoTrabajo.getSelectedItem().toString();
         String actividad = txtAreaActividadRealizar.getText().trim();

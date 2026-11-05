@@ -9,7 +9,7 @@ import java.util.List;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
-import presentacion.control.RequerimientosTecnicos;
+import presentacion.control.ValidadorPresentacion;
 
 /**
  *
@@ -39,12 +39,12 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         txtAreaActividad.setText(Formato.texto(solicitud.getDescripcionActividad())
                 + (condiciones.isEmpty() ? "" : "\nCondiciones a tomar en cuenta: " + condiciones));
         txtAreaActividad.setCaretPosition(0);
-        txtFieldProfundidad.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.PROFUNDIDAD));
-        txtFieldPotencia.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.POTENCIA));
-        txtFieldAlimentacion.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ALIMENTACION));
-        txtFieldPesoMaximo.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.PESO));
-        txtFieldTipoTerreno.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO));
-        txtFieldAnchoAcceso.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO));
+        txtFieldProfundidad.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.PROFUNDIDAD));
+        txtFieldPotencia.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.POTENCIA));
+        txtFieldAlimentacion.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.ALIMENTACION));
+        txtFieldPesoMaximo.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.PESO));
+        txtFieldTipoTerreno.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.TERRENO));
+        txtFieldAnchoAcceso.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.ANCHO));
     }
 
     /**
@@ -432,16 +432,16 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     // y hasta entonces la guarda en la solicitud
     private List<RequerimientoTecnicoDTO> capturarRequerimientos() {
         String[][] campos = {
-            {RequerimientosTecnicos.PROFUNDIDAD, txtFieldProfundidad.getText()},
-            {RequerimientosTecnicos.POTENCIA, txtFieldPotencia.getText()},
-            {RequerimientosTecnicos.ALIMENTACION, txtFieldAlimentacion.getText()},
-            {RequerimientosTecnicos.PESO, txtFieldPesoMaximo.getText()},
-            {RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText()},
-            {RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText()}
+            {ValidadorPresentacion.PROFUNDIDAD, txtFieldProfundidad.getText()},
+            {ValidadorPresentacion.POTENCIA, txtFieldPotencia.getText()},
+            {ValidadorPresentacion.ALIMENTACION, txtFieldAlimentacion.getText()},
+            {ValidadorPresentacion.PESO, txtFieldPesoMaximo.getText()},
+            {ValidadorPresentacion.TERRENO, txtFieldTipoTerreno.getText()},
+            {ValidadorPresentacion.ANCHO, txtFieldAnchoAcceso.getText()}
         };
         List<RequerimientoTecnicoDTO> capturados = new ArrayList<>();
         for (String[] campo : campos) {
-            RequerimientosTecnicos.capturar(capturados, campo[0], campo[1]);
+            ValidadorPresentacion.capturar(capturados, campo[0], campo[1]);
         }
         return capturados;
     }

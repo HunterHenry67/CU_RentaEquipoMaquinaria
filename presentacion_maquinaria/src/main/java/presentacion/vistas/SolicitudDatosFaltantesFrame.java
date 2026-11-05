@@ -8,7 +8,7 @@ import java.util.List;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.SolicitudRentaDTO;
 import presentacion.control.IContratacionRenta;
-import presentacion.control.RequerimientosTecnicos;
+import presentacion.control.ValidadorPresentacion;
 
 /**
  *
@@ -31,8 +31,8 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         this.solicitud = solicitud;
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
-        txtFieldAnchoAcceso.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.ANCHO));
-        txtFieldTipoTerreno.setText(RequerimientosTecnicos.texto(solicitud.getRequerimientos(), RequerimientosTecnicos.TERRENO));
+        txtFieldAnchoAcceso.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.ANCHO));
+        txtFieldTipoTerreno.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.TERRENO));
         jLabel6.setText("Estado de la solicitud: " + (solicitud.getEstadoSolicitud() != null
                 ? solicitud.getEstadoSolicitud() : "En espera de información"));
     }
@@ -271,9 +271,9 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRespuestaActionPerformed
-        List<RequerimientoTecnicoDTO> capturados = RequerimientosTecnicos.copia(solicitud.getRequerimientos());
-        RequerimientosTecnicos.capturar(capturados, RequerimientosTecnicos.ANCHO, txtFieldAnchoAcceso.getText());
-        RequerimientosTecnicos.capturar(capturados, RequerimientosTecnicos.TERRENO, txtFieldTipoTerreno.getText());
+        List<RequerimientoTecnicoDTO> capturados = ValidadorPresentacion.copia(solicitud.getRequerimientos());
+        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.ANCHO, txtFieldAnchoAcceso.getText());
+        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.TERRENO, txtFieldTipoTerreno.getText());
         contratacionRenta.pasarDatosAnalisisRequerimientos(capturados);
     }//GEN-LAST:event_btnRegistrarRespuestaActionPerformed
 
