@@ -4,11 +4,13 @@
  */
 package presentacion.vistas;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import objetosdto.EquipoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
@@ -21,55 +23,94 @@ import presentacion.control.IContratacionRenta;
  */
 public class EquiposCompatiblesFrame extends javax.swing.JFrame {
 
-    private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
-    private Map<EquipoDTO, String> evaluados = new LinkedHashMap<>();
-    private final List<EquipoDTO> compatibles = new ArrayList<>();
+    private static final int CUMPLE = 1;
+    private static final int RECOMENDADO = 3;
+    private static final int ALTERNATIVA = 4;
+    private static final String SI = "Sí";
+    private static final Color VERDE = new Color(0, 130, 0);
+    private static final Color ROJO = new Color(170, 20, 20);
 
-    private static final String NINGUNA = "(Ninguna)";
-    
+    private IContratacionRenta contratacionRenta;
+    // los equipos en el orden de los renglones de la tabla
+    private final List<EquipoDTO> equipos = new ArrayList<>();
+    // Solo se pueden marcar los que cumplen, uno por columna, y un equipo no puede ser las dos cosas
+    private final DefaultTableModel modelo = new DefaultTableModel(
+            new String[]{"Equipo", "¿Cumple?", "Por qué no cumple", "Recomendado", "Alternativa"}, 0) {
+        @Override
+        public Class<?> getColumnClass(int columna) {
+            return columna >= RECOMENDADO ? Boolean.class : Object.class;
+        }
+
+        @Override
+        public boolean isCellEditable(int fila, int columna) {
+            return columna >= RECOMENDADO && SI.equals(getValueAt(fila, CUMPLE));
+        }
+
+        @Override
+        public void setValueAt(Object valor, int fila, int columna) {
+            super.setValueAt(valor, fila, columna);
+            if (Boolean.TRUE.equals(valor)) {
+                for (int otra = 0; otra < getRowCount(); otra++) {
+                    if (otra != fila) {
+                        super.setValueAt(false, otra, columna);
+                    }
+                }
+                super.setValueAt(false, fila, columna == RECOMENDADO ? ALTERNATIVA : RECOMENDADO);
+            }
+        }
+    };
+
     public EquiposCompatiblesFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        tableEquipos.setModel(modelo);
+        Tablas.preparar(tableEquipos, 180, 84, 374, 120, 120);
+        Tablas.casillas(tableEquipos, RECOMENDADO, ALTERNATIVA);
+        tableEquipos.getColumnModel().getColumn(CUMPLE).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object valor) {
+                setText(String.valueOf(valor));
+                setFont(getFont().deriveFont(Font.BOLD));
+                setForeground(SI.equals(valor) ? VERDE : ROJO);
+            }
+        });
         Ventanas.cerrarAlMenu(this, contratacionRenta);
         this.setLocationRelativeTo(null);
     }
 
-    // El coordinador la llama cada vez que se abre la pantalla con los equipos del catálogo
-    // ya comparados con los requerimientos (para cada uno, por qué no cumple o null si
-    // cumple). Deja elegir el recomendado y la alternativa entre los que cumplen; si ya se
-    // habían elegido, los vuelve a marcar.
-    public void cargarEquipos(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, List<EquipoDTO> pedidos) {
-        this.solicitud = solicitud;
-        this.evaluados = evaluados;
-        lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
-
-        DefaultTableModel modelo = (DefaultTableModel) tableEquipos.getModel();
+    // El coordinador la llama cada vez que se abre la pantalla con los equipos que cumplen y los que pidió
+    // el cliente (para cada uno, por qué no cumple o null si cumple). Si ya se habían elegido el recomendado
+    // y la alternativa y siguen cumpliendo, los vuelve a marcar.
+    public void cargarEquipos(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados) {
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
+        lblRequerido.setText("<html>Lo requerido: " + Formato.requerimientos(solicitud) + "</html>");
+        lblEquipoPedido.setText("El cliente pidió: " + Formato.equiposPedidos(solicitud));
+        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
+        EquipoDTO recomendado = evaluacion == null ? null : evaluacion.getRecomendado();
+        EquipoDTO alternativa = evaluacion == null ? null : evaluacion.getAlternativo();
+        equipos.clear();
         modelo.setRowCount(0);
-        compatibles.clear();
-        for (EquipoDTO equipo : evaluados.keySet()) {
-            String motivo = evaluados.get(equipo);
-            String nombre = equipo.getModelo() + (esPedido(equipo, pedidos) ? " (lo pidió el cliente)" : "");
-            modelo.addRow(new Object[]{nombre, motivo == null ? "Sí" : "No: " + motivo});
-            if (motivo == null) {
-                compatibles.add(equipo);
+        for (Map.Entry<EquipoDTO, String> evaluado : evaluados.entrySet()) {
+            EquipoDTO equipo = evaluado.getKey();
+            String motivo = evaluado.getValue();
+            boolean cumple = motivo == null;
+            equipos.add(equipo);
+            modelo.addRow(new Object[]{Formato.texto(equipo.getModelo()), cumple ? SI : "No", cumple ? "" : Formato.conMayuscula(motivo),
+                cumple && esElMismo(equipo, recomendado), cumple && esElMismo(equipo, alternativa)});
+        }
+    }
+
+    private boolean esElMismo(EquipoDTO equipo, EquipoDTO elegido) {
+        return elegido != null && Objects.equals(equipo.getIdEquipo(), elegido.getIdEquipo());
+    }
+
+    private EquipoDTO marcado(int columna) {
+        for (int fila = 0; fila < equipos.size(); fila++) {
+            if (Boolean.TRUE.equals(modelo.getValueAt(fila, columna))) {
+                return equipos.get(fila);
             }
         }
-
-        comboRecomendado.removeAllItems();
-        comboAlternativa.removeAllItems();
-        comboAlternativa.addItem(NINGUNA);
-        for (EquipoDTO equipo : compatibles) {
-            comboRecomendado.addItem(equipo.getModelo());
-            comboAlternativa.addItem(equipo.getModelo());
-        }
-        EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
-        boolean yaElegidos = evaluacion != null && evaluacion.getRecomendado() != null;
-        if (!compatibles.isEmpty()) {
-            comboRecomendado.setSelectedIndex(yaElegidos ? indice(evaluacion.getRecomendado(), 0) : 0);
-        }
-        int alternativa = yaElegidos ? indice(evaluacion.getAlternativo(), -1) : (compatibles.size() > 1 ? 1 : -1);
-        comboAlternativa.setSelectedIndex(alternativa + 1);
+        return null;
     }
 
     /**
@@ -84,18 +125,14 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         panelFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblFolio = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblEquipoPedido = new javax.swing.JLabel();
+        lblRequerido = new javax.swing.JLabel();
+        lblEquipos = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableEquipos = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
-        comboRecomendado = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        comboAlternativa = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        btnContinuarAccesorios = new javax.swing.JButton();
+        lblNota = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
+        btnContinuarAccesorios = new javax.swing.JButton();
         btnNingunoCumple = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -108,18 +145,23 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Equipos Compatibles");
 
-        lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFolio.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));
-        lblFolio.setText("Folio:");
+        lblFolio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFolio.setText("Folio: FOL-89241");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel2.setText("<html>El sistema marca los equipos que cumplen con lo requerido. El asesor elige el recomendado y la alternativa.</html>");
-        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblEquipoPedido.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblEquipoPedido.setForeground(new java.awt.Color(0, 0, 0));
+        lblEquipoPedido.setText("El cliente pidió: Retroexcavadora JCB");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("SELECCIÓN DE EQUIPO");
+        lblRequerido.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblRequerido.setForeground(new java.awt.Color(0, 0, 0));
+        lblRequerido.setText("<html>Lo requerido: Profundidad 3.50 m · Potencia 120 HP mín. · Peso 22 t máx. · Ancho 4.20 m máx. · Terreno: Terracería compactada</html>");
+        lblRequerido.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        lblEquipos.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblEquipos.setForeground(new java.awt.Color(0, 0, 0));
+        lblEquipos.setText("EQUIPOS QUE CUMPLEN Y LOS QUE PIDIÓ EL CLIENTE");
 
         tableEquipos.setBackground(new java.awt.Color(255, 255, 255));
         tableEquipos.setForeground(new java.awt.Color(0, 0, 0));
@@ -128,12 +170,19 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Equipo", "Cumple"
+                "Equipo", "¿Cumple?", "Por qué no cumple", "Recomendado", "Alternativa"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Boolean.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -141,42 +190,10 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableEquipos);
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Equipo recomendado");
-
-        comboRecomendado.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        comboRecomendado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
-
-        jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Alternativa");
-
-        comboAlternativa.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        comboAlternativa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {  }));
-
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel4.setText("<html>No se elige un equipo solo porque pertenece a la categoría que pidió el cliente: debe cumplir con las características requeridas.</html>");
-        jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>Que un equipo cumpla no significa que esté disponible. La disponibilidad de las unidades se verifica en el siguiente paso, al consultar el inventario.</html>");
-        jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        btnContinuarAccesorios.setBackground(new java.awt.Color(44, 44, 44));
-        btnContinuarAccesorios.setBorderPainted(false);
-        btnContinuarAccesorios.setFocusPainted(false);
-        btnContinuarAccesorios.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnContinuarAccesorios.setForeground(new java.awt.Color(255, 255, 255));
-        btnContinuarAccesorios.setOpaque(true);
-        btnContinuarAccesorios.setText("Continuar a accesorios");
-        btnContinuarAccesorios.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnContinuarAccesoriosActionPerformed(evt);
-            }
-        });
+        lblNota.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        lblNota.setForeground(new java.awt.Color(70, 70, 70));
+        lblNota.setText("<html>Marca el equipo recomendado y, si hay, la alternativa. Que un equipo cumpla no significa que esté disponible: las unidades se revisan después.</html>");
+        lblNota.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
         btnRegresar.setBorderPainted(false);
@@ -191,11 +208,24 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
             }
         });
 
-        btnNingunoCumple.setBackground(new java.awt.Color(236, 34, 31));
-        btnNingunoCumple.setBorderPainted(false);
+        btnContinuarAccesorios.setBackground(new java.awt.Color(44, 44, 44));
+        btnContinuarAccesorios.setBorderPainted(false);
+        btnContinuarAccesorios.setFocusPainted(false);
+        btnContinuarAccesorios.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnContinuarAccesorios.setForeground(new java.awt.Color(255, 255, 255));
+        btnContinuarAccesorios.setOpaque(true);
+        btnContinuarAccesorios.setText("Continuar a accesorios");
+        btnContinuarAccesorios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContinuarAccesoriosActionPerformed(evt);
+            }
+        });
+
+        btnNingunoCumple.setBackground(new java.awt.Color(255, 255, 255));
+        btnNingunoCumple.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(44, 44, 44)));
         btnNingunoCumple.setFocusPainted(false);
         btnNingunoCumple.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnNingunoCumple.setForeground(new java.awt.Color(255, 255, 255));
+        btnNingunoCumple.setForeground(new java.awt.Color(44, 44, 44));
         btnNingunoCumple.setOpaque(true);
         btnNingunoCumple.setText("Ninguno cumple");
         btnNingunoCumple.addActionListener(new java.awt.event.ActionListener() {
@@ -210,52 +240,36 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(640, 640, 640)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblEquipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblRequerido, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 732, Short.MAX_VALUE))
+                .addComponent(lblEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(comboRecomendado, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(comboAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNota, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 780, Short.MAX_VALUE))
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 800, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(712, 712, 712)
                 .addComponent(btnContinuarAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,49 +282,33 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
+                .addGap(0, 626, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 582, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 630, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(104, 104, 104)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 534, Short.MAX_VALUE))
+                .addGap(68, 68, 68)
+                .addComponent(lblEquipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 590, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(164, 164, 164)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 494, Short.MAX_VALUE))
+                .addGap(92, 92, 92)
+                .addComponent(lblRequerido, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 544, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(194, 194, 194)
+                .addGap(146, 146, 146)
+                .addComponent(lblEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 512, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(172, 172, 172)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 356, Short.MAX_VALUE))
+                .addGap(0, 378, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(340, 340, 340)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(364, 364, 364)
-                .addComponent(comboRecomendado, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 282, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(340, 340, 340)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(364, 364, 364)
-                .addComponent(comboAlternativa, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 282, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(420, 420, 420)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 218, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(468, 468, 468)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 170, Short.MAX_VALUE))
+                .addGap(312, 312, 312)
+                .addComponent(lblNota, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 324, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -340,37 +338,16 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnContinuarAccesoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarAccesoriosActionPerformed
-        // lo que eligió el asesor; el control revisa la selección y arma la evaluación técnica
+        // lo que marcó el asesor; el control revisa la selección y arma la evaluación técnica
         EvaluacionTecnicaDTO seleccion = new EvaluacionTecnicaDTO();
-        seleccion.setRecomendado(compatibles.isEmpty() ? null : compatibles.get(comboRecomendado.getSelectedIndex()));
-        int indiceAlternativa = comboAlternativa.getSelectedIndex() - 1;
-        seleccion.setAlternativo(indiceAlternativa >= 0 ? compatibles.get(indiceAlternativa) : null);
+        seleccion.setRecomendado(marcado(RECOMENDADO));
+        seleccion.setAlternativo(marcado(ALTERNATIVA));
         contratacionRenta.pasarDatosSeleccionAccesorios(seleccion);
     }//GEN-LAST:event_btnContinuarAccesoriosActionPerformed
 
     private void btnNingunoCumpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNingunoCumpleActionPerformed
         contratacionRenta.ningunEquipoCumple();
     }//GEN-LAST:event_btnNingunoCumpleActionPerformed
-
-    private boolean esPedido(EquipoDTO equipo, List<EquipoDTO> pedidos) {
-        for (EquipoDTO pedido : pedidos) {
-            if (Objects.equals(pedido.getIdEquipo(), equipo.getIdEquipo())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private int indice(EquipoDTO equipo, int siNoEsta) {
-        if (equipo != null) {
-            for (int i = 0; i < compatibles.size(); i++) {
-                if (Objects.equals(compatibles.get(i).getIdEquipo(), equipo.getIdEquipo())) {
-                    return i;
-                }
-            }
-        }
-        return siNoEsta;
-    }
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         contratacionRenta.abrirAnalisisRequerimiento();
@@ -380,17 +357,13 @@ public class EquiposCompatiblesFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnContinuarAccesorios;
     private javax.swing.JButton btnNingunoCumple;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> comboAlternativa;
-    private javax.swing.JComboBox<String> comboRecomendado;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblEquipoPedido;
+    private javax.swing.JLabel lblEquipos;
     private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblNota;
+    private javax.swing.JLabel lblRequerido;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTable tableEquipos;
     // End of variables declaration//GEN-END:variables

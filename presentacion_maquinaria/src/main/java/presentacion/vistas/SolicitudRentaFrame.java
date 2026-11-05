@@ -352,7 +352,7 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         jLabel17.setText("Tipo de Terreno:");
 
         comboTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar", "Firme", "Arcilloso", "Arenoso", "Rocoso" }));
+        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar", "Terracería compactada", "Firme", "Arcilloso", "Arenoso", "Rocoso" }));
 
         btnCancelarSoli.setBackground(new java.awt.Color(236, 34, 31));
         btnCancelarSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N

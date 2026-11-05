@@ -106,7 +106,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         equiposEvaluados = negocio.compararEquipos(almacen.obtenerCatalogoEquipo(), solicitudActual.getRequerimientos());
-        coordinador.mostrarEquiposCompatibles(solicitudActual, equiposEvaluados, equiposPedidos());
+        coordinador.mostrarEquiposCompatibles(solicitudActual, equiposAMostrar());
     }
 
     private void abrirSinEquipoCompatible() {
@@ -447,13 +447,14 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_DATOS_FALTANTES)) {
             return;
         }
-        if (ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, ValidadorPresentacion.ANCHO))
-                && ValidadorPresentacion.textoVacio(ValidadorPresentacion.texto(requerimientos, ValidadorPresentacion.TERRENO))) {
+        // si sigue faltando lo mismo que antes, el cliente todavía no respondió nada
+        String faltan = ValidadorPresentacion.faltantesRequerimiento(requerimientos);
+        if (faltan.equals(ValidadorPresentacion.faltantesRequerimiento(solicitudActual.getRequerimientos()))) {
             coordinador.mostrarAviso(Mensaje.FALTA_RESPUESTA_CLIENTE);
             return;
         }
         solicitudActual.setRequerimientos(requerimientos);
-        solicitudActual.setEstadoSolicitud("En evaluación técnica");
+        solicitudActual.setEstadoSolicitud(faltan.isEmpty() ? "En evaluación técnica" : "En espera de información");
         guardarSolicitud();
         abrirAnalisisRequerimiento();
     }
@@ -461,6 +462,10 @@ public class ContratacionRenta implements IContratacionRenta {
     @Override
     public void pasarDatosSolicitudDatosFaltantes(List<RequerimientoTecnicoDTO> requerimientos) {
         if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_ANALISIS)) {
+            return;
+        }
+        if (ValidadorPresentacion.faltantesRequerimiento(requerimientos).isEmpty()) {
+            coordinador.mostrarAviso(Mensaje.SIN_DATOS_FALTANTES);
             return;
         }
         solicitudActual.setRequerimientos(requerimientos);
@@ -485,11 +490,11 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!haySolicitud() || !requerimientosValidos(requerimientos, Mensaje.NUMERO_INVALIDO_ANALISIS)) {
             return;
         }
-        if (!hayRequerimientosConNumero(requerimientos)) {
-            coordinador.mostrarAviso(Mensaje.FALTA_CARACTERISTICA);
+        if (faltanDatos(Mensaje.FALTAN_DATOS_ANALISIS, ValidadorPresentacion.faltantesRequerimiento(requerimientos))) {
             return;
         }
         solicitudActual.setRequerimientos(requerimientos);
+        solicitudActual.setEstadoSolicitud("En evaluación técnica");
         guardarSolicitud();
         abrirEquiposCompatibles();
     }
@@ -533,7 +538,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         if (!ValidadorPresentacion.seleccionValida(seleccion.getRecomendado())) {
-            coordinador.mostrarAviso(Mensaje.SIN_EQUIPO_COMPATIBLE);
+            coordinador.mostrarAviso(equiposEvaluados.containsValue(null) ? Mensaje.FALTA_ELEGIR_RECOMENDADO : Mensaje.SIN_EQUIPO_COMPATIBLE);
             return;
         }
         if (seleccion.getAlternativo() != null
@@ -900,6 +905,27 @@ public class ContratacionRenta implements IContratacionRenta {
     }
 
     // ---------------------------------------------------------------- evaluación técnica
+    // En la tabla van los equipos que cumplen y los que pidió el cliente, aunque no cumplan
+    private Map<EquipoDTO, String> equiposAMostrar() {
+        List<EquipoDTO> pedidos = equiposPedidos();
+        Map<EquipoDTO, String> mostrar = new LinkedHashMap<>();
+        for (Map.Entry<EquipoDTO, String> evaluado : equiposEvaluados.entrySet()) {
+            if (evaluado.getValue() == null || esPedido(evaluado.getKey(), pedidos)) {
+                mostrar.put(evaluado.getKey(), evaluado.getValue());
+            }
+        }
+        return mostrar;
+    }
+
+    private boolean esPedido(EquipoDTO equipo, List<EquipoDTO> pedidos) {
+        for (EquipoDTO pedido : pedidos) {
+            if (Objects.equals(pedido.getIdEquipo(), equipo.getIdEquipo())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Los equipos del catálogo que pidió el cliente
     private List<EquipoDTO> equiposPedidos() {
         List<EquipoDTO> pedidos = new ArrayList<>();
@@ -999,13 +1025,6 @@ public class ContratacionRenta implements IContratacionRenta {
             return false;
         }
         return true;
-    }
-
-    private boolean hayRequerimientosConNumero(List<RequerimientoTecnicoDTO> requerimientos) {
-        return ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.PROFUNDIDAD) != null
-                || ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.POTENCIA) != null
-                || ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.PESO) != null
-                || ValidadorPresentacion.valor(requerimientos, ValidadorPresentacion.ANCHO) != null;
     }
 
     // La solicitud queda en el almacén temporal: se registra la primera vez y después se actualiza

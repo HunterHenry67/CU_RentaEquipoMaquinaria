@@ -19,46 +19,66 @@ import presentacion.control.IContratacionRenta;
  */
 public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
 
+    private static final int VA_EN_LA_PROPUESTA = 2;
+
     private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
-    private final List<AccesorioDTO> indispensables = new ArrayList<>();
-    private final List<AccesorioDTO> opcionales = new ArrayList<>();
-    
+    // los accesorios en el orden de los renglones de la tabla
+    private final List<AccesorioDTO> accesorios = new ArrayList<>();
+    // El indispensable siempre va: solo se pueden marcar o quitar los opcionales
+    private final DefaultTableModel modelo = new DefaultTableModel(new String[]{"Accesorio", "Tipo", "Va en la propuesta"}, 0) {
+        @Override
+        public Class<?> getColumnClass(int columna) {
+            return columna == VA_EN_LA_PROPUESTA ? Boolean.class : Object.class;
+        }
+
+        @Override
+        public boolean isCellEditable(int fila, int columna) {
+            return columna == VA_EN_LA_PROPUESTA && fila < accesorios.size() && !esIndispensable(accesorios.get(fila));
+        }
+    };
+
     public SeleccionAccesoriosFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
+        tableAccesorios.setModel(modelo);
+        Tablas.preparar(tableAccesorios, 440, 220, 218);
+        Tablas.casillas(tableAccesorios, VA_EN_LA_PROPUESTA);
         Ventanas.cerrarCon(this, btnRegresar);
         this.setLocationRelativeTo(null);
     }
 
-    // El coordinador la llama cada vez que se abre la pantalla con los accesorios que hay
-    // para el equipo recomendado. Los indispensables siempre van; de los opcionales se
-    // marcan los que ya estaban propuestos.
+    // El coordinador la llama cada vez que se abre la pantalla con los accesorios que hay para el
+    // equipo recomendado; de los opcionales se marcan los que ya estaban propuestos.
     public void cargarAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> disponibles) {
-        this.solicitud = solicitud;
-        lblFolio.setText("Folio: " + (solicitud.getFolio() == null ? "" : solicitud.getFolio()));
+        lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         EquipoDTO recomendado = Formato.equipoRecomendado(solicitud);
-        lblEquipo.setText("Equipo seleccionado: " + (recomendado == null ? "" : recomendado.getModelo()));
-
-        // si quedó una casilla en edición de la vez anterior, se descarta antes de recargar
-        if (tableOpcionales.isEditing()) {
-            tableOpcionales.getCellEditor().cancelCellEditing();
-        }
-        DefaultTableModel tablaIndispensables = (DefaultTableModel) tableIndispensables.getModel();
-        DefaultTableModel tablaOpcionales = (DefaultTableModel) tableOpcionales.getModel();
-        tablaIndispensables.setRowCount(0);
-        tablaOpcionales.setRowCount(0);
-        indispensables.clear();
-        opcionales.clear();
+        lblEquipo.setText("Equipo recomendado: " + (recomendado == null ? "" : recomendado.getModelo()));
+        accesorios.clear();
+        modelo.setRowCount(0);
         for (AccesorioDTO accesorio : disponibles) {
-            if (Boolean.TRUE.equals(accesorio.getEsObligatorio())) {
-                indispensables.add(accesorio);
-                tablaIndispensables.addRow(new Object[]{descripcion(accesorio)});
-            } else {
-                opcionales.add(accesorio);
-                tablaOpcionales.addRow(new Object[]{descripcion(accesorio), propuesto(recomendado, accesorio)});
+            boolean indispensable = esIndispensable(accesorio);
+            accesorios.add(accesorio);
+            modelo.addRow(new Object[]{accesorio.getNombre(), indispensable ? "Indispensable" : "Opcional", indispensable || propuesto(recomendado, accesorio)});
+        }
+        if (accesorios.isEmpty()) {
+            modelo.addRow(new Object[]{"Este equipo no tiene accesorios", "", null});
+        }
+    }
+
+    private boolean esIndispensable(AccesorioDTO accesorio) {
+        return Boolean.TRUE.equals(accesorio.getEsObligatorio());
+    }
+
+    private boolean propuesto(EquipoDTO recomendado, AccesorioDTO accesorio) {
+        if (recomendado == null || recomendado.getAccesorios() == null) {
+            return false;
+        }
+        for (AccesorioDTO elegido : recomendado.getAccesorios()) {
+            if (Objects.equals(elegido.getIdAccesorio(), accesorio.getIdAccesorio())) {
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -74,14 +94,10 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lblFolio = new javax.swing.JLabel();
         lblEquipo = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblTituloAccesorios = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableIndispensables = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tableOpcionales = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        tableAccesorios = new javax.swing.JTable();
+        lblNota = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
         btnContinuar = new javax.swing.JButton();
 
@@ -95,57 +111,34 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Selección de Accesorios");
 
-        lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFolio.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));
-        lblFolio.setText("Folio:");
+        lblFolio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFolio.setText("Folio: FOL-89241");
 
-        lblEquipo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblEquipo.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         lblEquipo.setForeground(new java.awt.Color(0, 0, 0));
-        lblEquipo.setText("Equipo seleccionado:");
+        lblEquipo.setText("Equipo recomendado: Excavadora CAT 320");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("ACCESORIO INDISPENSABLE");
+        lblTituloAccesorios.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblTituloAccesorios.setForeground(new java.awt.Color(0, 0, 0));
+        lblTituloAccesorios.setText("ACCESORIOS DEL EQUIPO");
 
-        tableIndispensables.setBackground(new java.awt.Color(255, 255, 255));
-        tableIndispensables.setForeground(new java.awt.Color(0, 0, 0));
-        tableIndispensables.setModel(new javax.swing.table.DefaultTableModel(
+        tableAccesorios.setBackground(new java.awt.Color(255, 255, 255));
+        tableAccesorios.setForeground(new java.awt.Color(0, 0, 0));
+        tableAccesorios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Accesorio"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tableIndispensables);
-
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("ACCESORIO OPCIONAL");
-
-        tableOpcionales.setBackground(new java.awt.Color(255, 255, 255));
-        tableOpcionales.setForeground(new java.awt.Color(0, 0, 0));
-        tableOpcionales.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Accesorio", "Proponer"
+                "Accesorio", "Tipo", "Va en la propuesta"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true
+                false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -156,17 +149,12 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tableOpcionales);
+        jScrollPane1.setViewportView(tableAccesorios);
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel4.setText("<html>Se propone; el cliente decide al revisar la propuesta</html>");
-        jLabel4.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>El tipo de equipo y la actividad determinan cuál es el accesorio indispensable: no se puede quitar. El opcional solo se propone; la decisión del cliente se registra en la propuesta de renta.</html>");
-        jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblNota.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        lblNota.setForeground(new java.awt.Color(70, 70, 70));
+        lblNota.setText("<html>Marca lo que va en la propuesta; el cliente decide después. El tipo de equipo y la actividad determinan el accesorio indispensable: no se puede quitar.</html>");
+        lblNota.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
         btnRegresar.setBorderPainted(false);
@@ -200,11 +188,11 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(640, 640, 640)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -212,27 +200,15 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 693, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 360, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 732, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 360, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(620, 620, 620)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTituloAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 40, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblNota, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -246,41 +222,29 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
+                .addGap(0, 626, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 582, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 630, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(102, 102, 102)
+                .addGap(68, 68, 68)
                 .addComponent(lblEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 556, Short.MAX_VALUE))
+                .addGap(0, 590, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(142, 142, 142)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 516, Short.MAX_VALUE))
+                .addGap(108, 108, 108)
+                .addComponent(lblTituloAccesorios, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 550, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(172, 172, 172)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 432, Short.MAX_VALUE))
+                .addGap(134, 134, 134)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 450, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(272, 272, 272)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 386, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(302, 302, 302)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 302, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(324, 324, 324)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 314, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(402, 402, 402)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 236, Short.MAX_VALUE))
+                .addGap(240, 240, 240)
+                .addComponent(lblNota, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 396, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,50 +274,26 @@ public class SeleccionAccesoriosFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        if (tableOpcionales.isEditing()) {
-            tableOpcionales.getCellEditor().stopCellEditing();
-        }
         // los indispensables los agrega el control con la respuesta del negocio simulado
         List<AccesorioDTO> elegidos = new ArrayList<>();
-        for (int i = 0; i < opcionales.size(); i++) {
-            if (Boolean.TRUE.equals(tableOpcionales.getModel().getValueAt(i, 1))) {
-                elegidos.add(opcionales.get(i));
+        for (int fila = 0; fila < accesorios.size(); fila++) {
+            if (!esIndispensable(accesorios.get(fila)) && Boolean.TRUE.equals(modelo.getValueAt(fila, VA_EN_LA_PROPUESTA))) {
+                elegidos.add(accesorios.get(fila));
             }
         }
         contratacionRenta.pasarDatosEvaluacionTecnica(elegidos);
     }//GEN-LAST:event_btnContinuarActionPerformed
 
-    private boolean propuesto(EquipoDTO recomendado, AccesorioDTO accesorio) {
-        if (recomendado == null || recomendado.getAccesorios() == null) {
-            return false;
-        }
-        for (AccesorioDTO elegido : recomendado.getAccesorios()) {
-            if (Objects.equals(elegido.getIdAccesorio(), accesorio.getIdAccesorio())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String descripcion(AccesorioDTO accesorio) {
-        return accesorio.getNombre() + (accesorio.getCostoRenta() == null ? ""
-                : " · " + String.format("$%,.0f", accesorio.getCostoRenta()));
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnContinuar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblEquipo;
     private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblNota;
+    private javax.swing.JLabel lblTituloAccesorios;
     private javax.swing.JPanel panelFondo;
-    private javax.swing.JTable tableIndispensables;
-    private javax.swing.JTable tableOpcionales;
+    private javax.swing.JTable tableAccesorios;
     // End of variables declaration//GEN-END:variables
 }

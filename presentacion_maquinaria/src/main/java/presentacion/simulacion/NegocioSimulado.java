@@ -30,18 +30,33 @@ public class NegocioSimulado implements INegocioSimulado {
     private static final double IVA_SIMULADO = 0.16;
     private static final String HORARIO_ENTREGA_SIMULADO = "antes de las 8:00 AM";
 
-    // Respuesta simulada del escenario: la retroexcavadora JCB (id 1) no cumple porque tiene 109 HP y se
-    // piden 120 HP como mínimo; las excavadoras CAT 320 y CAT 336 sí cumplen. Comparar de verdad las
-    // características del equipo con los requerimientos es una regla del subsistema de negocio y aquí no se hace.
-    private static final Map<Long, String> INCUMPLIMIENTO_SIMULADO = Map.of(1L, "potencia de 109 HP; se piden 120 HP como mínimo");
-
+    // Respuesta simulada con lo único que el escenario dice de los equipos: la potencia de la retroexcavadora
+    // JCB (109 HP). Las excavadoras CAT 320 y CAT 336 cumplen. Comparar de verdad todas las características del
+    // equipo con los requerimientos es una regla del subsistema de negocio y aquí no se hace.
     @Override
     public Map<EquipoDTO, String> compararEquipos(List<EquipoDTO> catalogo, List<RequerimientoTecnicoDTO> requerimientos) {
+        Double potencia = potenciaRequerida(requerimientos);
         Map<EquipoDTO, String> evaluados = new LinkedHashMap<>();
         for (EquipoDTO equipo : catalogo) {
-            evaluados.put(equipo, INCUMPLIMIENTO_SIMULADO.get(equipo.getIdEquipo()));
+            boolean noCumple = potencia != null && equipo.getPotencia() != null && equipo.getPotencia() < potencia;
+            evaluados.put(equipo, noCumple ? "potencia de " + numero(equipo.getPotencia()) + " HP; se piden " + numero(potencia) + " HP como mínimo" : null);
         }
         return evaluados;
+    }
+
+    private Double potenciaRequerida(List<RequerimientoTecnicoDTO> requerimientos) {
+        if (requerimientos != null) {
+            for (RequerimientoTecnicoDTO requerimiento : requerimientos) {
+                if ("Potencia mínima".equals(requerimiento.getCaracteristica())) {
+                    return requerimiento.getValorRequerido();
+                }
+            }
+        }
+        return null;
+    }
+
+    private String numero(Double valor) {
+        return valor == Math.rint(valor) ? String.valueOf(valor.longValue()) : String.valueOf(valor);
     }
 
     // Respuesta simulada: cada unidad se queda con el estado que tiene registrado en el almacén (en el

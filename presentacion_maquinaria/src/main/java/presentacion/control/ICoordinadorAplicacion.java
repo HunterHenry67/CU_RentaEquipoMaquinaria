@@ -51,7 +51,7 @@ public interface ICoordinadorAplicacion {
 
     public abstract void mostrarSolicitudDatosFaltantes(SolicitudRentaDTO solicitud);
 
-    public abstract void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, List<EquipoDTO> pedidos);
+    public abstract void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados);
 
     public abstract void mostrarSinEquipoCompatible(SolicitudRentaDTO solicitud);
 

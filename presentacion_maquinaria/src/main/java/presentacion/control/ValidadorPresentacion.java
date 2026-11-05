@@ -24,12 +24,12 @@ public class ValidadorPresentacion {
     private static final String NUMERO = "^\\d+(\\.\\d+|,\\d{1,2})?$";
     public static final String PROFUNDIDAD = "Profundidad de trabajo";
     public static final String POTENCIA = "Potencia mínima";
-    public static final String ALIMENTACION = "Tipo de alimentación";
     public static final String PESO = "Peso máximo permitido";
     public static final String TERRENO = "Tipo de terreno";
     public static final String ANCHO = "Ancho de acceso";
     public static final String MINIMO = "Mínimo";
     public static final String MAXIMO = "Máximo";
+    public static final String SIN_ESPECIFICAR = "Sin especificar";
     private static final Pattern NUMEROPATRON = Pattern.compile("\\d+(?:[.,]\\d+)?");
     
     private ValidadorPresentacion() {
@@ -169,6 +169,33 @@ public class ValidadorPresentacion {
         }
         return requerimiento.getValorRequerido() == null ? ""
                 : formatoNumero(requerimiento.getValorRequerido()) + " " + requerimiento.getUnidadMedida();
+    }
+
+    /** Solo el número de esa característica, para el campo que trae la unidad a un lado ("3.50"); vacío si no se ha capturado. */
+    public static String numero(List<RequerimientoTecnicoDTO> lista, String caracteristica) {
+        Double valor = valor(lista, caracteristica);
+        return valor == null ? "" : formatoNumero(valor);
+    }
+
+    /** Si todavía falta esa característica. */
+    public static boolean valorVacio(List<RequerimientoTecnicoDTO> lista, String caracteristica) {
+        return textoVacio(texto(lista, caracteristica));
+    }
+
+    /** Las características que le faltan al requerimiento, separadas por coma; vacío si ya están todas. */
+    public static String faltantesRequerimiento(List<RequerimientoTecnicoDTO> lista) {
+        List<String> faltan = new java.util.ArrayList<>();
+        for (String caracteristica : new String[]{PROFUNDIDAD, POTENCIA, PESO, ANCHO, TERRENO}) {
+            if (valorVacio(lista, caracteristica)) {
+                faltan.add(caracteristica);
+            }
+        }
+        return String.join(", ", faltan);
+    }
+
+    /** Lo elegido en la lista de terrenos; "Sin especificar" es que todavía no se sabe. */
+    public static void capturarTerreno(List<RequerimientoTecnicoDTO> lista, String terreno) {
+        capturar(lista, TERRENO, SIN_ESPECIFICAR.equals(terreno) ? "" : terreno);
     }
 
     /** El valor con número de esa característica, o null si no se ha capturado. */

@@ -19,7 +19,7 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
     private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
-    
+
     public AnalisisRequerimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
@@ -27,24 +27,27 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    // El coordinador la llama cada vez que se abre la pantalla: muestra la solicitud y lo
-    // que ya se haya capturado de los requerimientos (así no se pierde al regresar)
+    // El coordinador la llama cada vez que se abre la pantalla: muestra lo que pidió el cliente y lo
+    // que ya se haya capturado del requerimiento (así no se pierde al regresar)
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
-        lblUbicacion.setText("Ubicación: " + ubicacion());
+        lblPeriodo.setText("Periodo: " + Formato.periodo(solicitud));
+        lblUbicacion.setText("Obra: " + Formato.ubicacion(solicitud));
+        lblEquipoPedido.setText("Equipo que pidió: " + Formato.equiposPedidos(solicitud));
         // la actividad y, si el asesor las escribió en la solicitud, las condiciones a tomar en cuenta
         String condiciones = Formato.texto(solicitud.getCondicionesEspeciales()).trim();
         txtAreaActividad.setText(Formato.texto(solicitud.getDescripcionActividad())
                 + (condiciones.isEmpty() ? "" : "\nCondiciones a tomar en cuenta: " + condiciones));
         txtAreaActividad.setCaretPosition(0);
-        txtFieldProfundidad.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.PROFUNDIDAD));
-        txtFieldPotencia.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.POTENCIA));
-        txtFieldAlimentacion.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.ALIMENTACION));
-        txtFieldPesoMaximo.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.PESO));
-        txtFieldTipoTerreno.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.TERRENO));
-        txtFieldAnchoAcceso.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.ANCHO));
+        List<RequerimientoTecnicoDTO> requerimientos = solicitud.getRequerimientos();
+        txtFieldProfundidad.setText(ValidadorPresentacion.numero(requerimientos, ValidadorPresentacion.PROFUNDIDAD));
+        txtFieldPotencia.setText(ValidadorPresentacion.numero(requerimientos, ValidadorPresentacion.POTENCIA));
+        txtFieldPesoMaximo.setText(ValidadorPresentacion.numero(requerimientos, ValidadorPresentacion.PESO));
+        txtFieldAnchoAcceso.setText(ValidadorPresentacion.numero(requerimientos, ValidadorPresentacion.ANCHO));
+        String terreno = ValidadorPresentacion.texto(requerimientos, ValidadorPresentacion.TERRENO);
+        comboTipoTerreno.setSelectedItem(terreno.isEmpty() ? ValidadorPresentacion.SIN_ESPECIFICAR : terreno);
     }
 
     /**
@@ -59,27 +62,32 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         panelFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblFolio = new javax.swing.JLabel();
+        lblPidio = new javax.swing.JLabel();
         lblCliente = new javax.swing.JLabel();
+        lblPeriodo = new javax.swing.JLabel();
         lblUbicacion = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lblEquipoPedido = new javax.swing.JLabel();
+        lblActividad = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaActividad = new javax.swing.JTextArea();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblDebeCumplir = new javax.swing.JLabel();
+        lblProfundidad = new javax.swing.JLabel();
         txtFieldProfundidad = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
+        lblProfundidadUnidad = new javax.swing.JLabel();
+        lblPotencia = new javax.swing.JLabel();
         txtFieldPotencia = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        txtFieldAlimentacion = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        lblPotenciaUnidad = new javax.swing.JLabel();
+        lblPesoMaximo = new javax.swing.JLabel();
         txtFieldPesoMaximo = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txtFieldTipoTerreno = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
+        lblPesoMaximoUnidad = new javax.swing.JLabel();
+        lblAnchoAcceso = new javax.swing.JLabel();
         txtFieldAnchoAcceso = new javax.swing.JTextField();
-        btnBuscarEquipos = new javax.swing.JButton();
+        lblAnchoAccesoUnidad = new javax.swing.JLabel();
+        lblTerreno = new javax.swing.JLabel();
+        comboTipoTerreno = new javax.swing.JComboBox<>();
+        lblAyuda = new javax.swing.JLabel();
         btnRegresar = new javax.swing.JButton();
+        btnBuscarEquipos = new javax.swing.JButton();
         btnSolicitarDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -92,100 +100,109 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Análisis de Requerimiento Técnico");
 
-        lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFolio.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));
-        lblFolio.setText("Folio:");
+        lblFolio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFolio.setText("Folio: FOL-89241");
+
+        lblPidio.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblPidio.setForeground(new java.awt.Color(0, 0, 0));
+        lblPidio.setText("LO QUE PIDIÓ EL CLIENTE");
 
         lblCliente.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblCliente.setForeground(new java.awt.Color(0, 0, 0));
-        lblCliente.setText("Cliente:");
+        lblCliente.setText("Cliente: Julián Martínez García");
+
+        lblPeriodo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPeriodo.setForeground(new java.awt.Color(0, 0, 0));
+        lblPeriodo.setText("Periodo: 10/09/2026 al 15/09/2026 · 6 días");
 
         lblUbicacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblUbicacion.setForeground(new java.awt.Color(0, 0, 0));
-        lblUbicacion.setText("Ubicación:");
+        lblUbicacion.setText("Obra: Remodelación Plaza Goya · Av. Guerrero #1105, Ciudad Obregón, Sonora");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Actividad declarada por el cliente");
+        lblEquipoPedido.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblEquipoPedido.setForeground(new java.awt.Color(0, 0, 0));
+        lblEquipoPedido.setText("Equipo que pidió: Retroexcavadora JCB");
 
-        txtAreaActividad.setBackground(new java.awt.Color(255, 255, 255));
+        lblActividad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblActividad.setForeground(new java.awt.Color(0, 0, 0));
+        lblActividad.setText("Actividad:");
+
+        jScrollPane1.setBorder(null);
+        txtAreaActividad.setBackground(new java.awt.Color(217, 217, 217));
         txtAreaActividad.setColumns(20);
         txtAreaActividad.setEditable(false);
-        txtAreaActividad.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtAreaActividad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         txtAreaActividad.setForeground(new java.awt.Color(0, 0, 0));
         txtAreaActividad.setLineWrap(true);
-        txtAreaActividad.setRows(3);
+        txtAreaActividad.setRows(2);
         txtAreaActividad.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtAreaActividad);
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("CARACTERÍSTICAS TÉCNICAS REQUERIDAS");
+        lblDebeCumplir.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblDebeCumplir.setForeground(new java.awt.Color(0, 0, 0));
+        lblDebeCumplir.setText("LO QUE DEBE CUMPLIR EL EQUIPO");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Profundidad de trabajo");
+        lblProfundidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblProfundidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblProfundidad.setText("Profundidad de trabajo");
 
         txtFieldProfundidad.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldProfundidad.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtFieldProfundidad.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Potencia mínima");
+        lblProfundidadUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblProfundidadUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblProfundidadUnidad.setText("m");
+
+        lblPotencia.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPotencia.setForeground(new java.awt.Color(0, 0, 0));
+        lblPotencia.setText("Potencia mínima");
 
         txtFieldPotencia.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldPotencia.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtFieldPotencia.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Tipo de alimentación");
+        lblPotenciaUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPotenciaUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblPotenciaUnidad.setText("HP");
 
-        txtFieldAlimentacion.setBackground(new java.awt.Color(255, 255, 255));
-        txtFieldAlimentacion.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFieldAlimentacion.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Peso máximo permitido");
+        lblPesoMaximo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPesoMaximo.setForeground(new java.awt.Color(0, 0, 0));
+        lblPesoMaximo.setText("Peso máximo permitido");
 
         txtFieldPesoMaximo.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldPesoMaximo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtFieldPesoMaximo.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("CONDICIONES DEL SITIO");
+        lblPesoMaximoUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPesoMaximoUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblPesoMaximoUnidad.setText("t");
 
-        jLabel9.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Tipo de terreno");
-
-        txtFieldTipoTerreno.setBackground(new java.awt.Color(255, 255, 255));
-        txtFieldTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFieldTipoTerreno.setForeground(new java.awt.Color(0, 0, 0));
-
-        jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Ancho de acceso");
+        lblAnchoAcceso.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAnchoAcceso.setForeground(new java.awt.Color(0, 0, 0));
+        lblAnchoAcceso.setText("Ancho de acceso");
 
         txtFieldAnchoAcceso.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldAnchoAcceso.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtFieldAnchoAcceso.setForeground(new java.awt.Color(0, 0, 0));
 
-        btnBuscarEquipos.setBackground(new java.awt.Color(44, 44, 44));
-        btnBuscarEquipos.setBorderPainted(false);
-        btnBuscarEquipos.setFocusPainted(false);
-        btnBuscarEquipos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnBuscarEquipos.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscarEquipos.setOpaque(true);
-        btnBuscarEquipos.setText("Buscar equipos compatibles");
-        btnBuscarEquipos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarEquiposActionPerformed(evt);
-            }
-        });
+        lblAnchoAccesoUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAnchoAccesoUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblAnchoAccesoUnidad.setText("m");
+
+        lblTerreno.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblTerreno.setForeground(new java.awt.Color(0, 0, 0));
+        lblTerreno.setText("Tipo de terreno");
+
+        comboTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar", "Terracería compactada", "Firme", "Arcilloso", "Arenoso", "Rocoso" }));
+
+        lblAyuda.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        lblAyuda.setForeground(new java.awt.Color(70, 70, 70));
+        lblAyuda.setText("<html>Si todavía no sabes un dato, déjalo vacío y usa «Solicitar datos al cliente».</html>");
+        lblAyuda.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
         btnRegresar.setBorderPainted(false);
@@ -200,11 +217,24 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
             }
         });
 
-        btnSolicitarDatos.setBackground(new java.awt.Color(236, 34, 31));
-        btnSolicitarDatos.setBorderPainted(false);
+        btnBuscarEquipos.setBackground(new java.awt.Color(44, 44, 44));
+        btnBuscarEquipos.setBorderPainted(false);
+        btnBuscarEquipos.setFocusPainted(false);
+        btnBuscarEquipos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnBuscarEquipos.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscarEquipos.setOpaque(true);
+        btnBuscarEquipos.setText("Buscar equipos compatibles");
+        btnBuscarEquipos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarEquiposActionPerformed(evt);
+            }
+        });
+
+        btnSolicitarDatos.setBackground(new java.awt.Color(255, 255, 255));
+        btnSolicitarDatos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(44, 44, 44)));
         btnSolicitarDatos.setFocusPainted(false);
         btnSolicitarDatos.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnSolicitarDatos.setForeground(new java.awt.Color(255, 255, 255));
+        btnSolicitarDatos.setForeground(new java.awt.Color(44, 44, 44));
         btnSolicitarDatos.setOpaque(true);
         btnSolicitarDatos.setText("Solicitar datos al cliente");
         btnSolicitarDatos.addActionListener(new java.awt.event.ActionListener() {
@@ -219,15 +249,23 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(640, 640, 640)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblPidio, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 490, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(490, 490, 490)
+                .addComponent(lblPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -235,72 +273,84 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblEquipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 579, Short.MAX_VALUE))
+                .addComponent(lblActividad, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 842, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(txtFieldProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(txtFieldPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(118, 118, 118)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 802, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(txtFieldAlimentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(txtFieldPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblDebeCumplir, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 717, Short.MAX_VALUE))
+                .addComponent(lblProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 720, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(txtFieldProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 570, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(398, 398, 398)
+                .addComponent(lblProfundidadUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 522, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
+                .addComponent(lblPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 720, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(txtFieldPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 570, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(398, 398, 398)
+                .addComponent(lblPotenciaUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 522, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(txtFieldTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
+                .addComponent(lblPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 720, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(240, 240, 240)
+                .addComponent(txtFieldPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 570, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(398, 398, 398)
+                .addComponent(lblPesoMaximoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 522, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 720, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 570, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(398, 398, 398)
+                .addComponent(lblAnchoAccesoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 522, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 720, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(240, 240, 240)
+                .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 522, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(lblAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 780, Short.MAX_VALUE))
+                .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 800, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(674, 674, 674)
                 .addComponent(btnBuscarEquipos, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -313,85 +363,105 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
+                .addGap(0, 626, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 582, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 630, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(102, 102, 102)
+                .addGap(68, 68, 68)
+                .addComponent(lblPidio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 590, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(94, 94, 94)
                 .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 556, Short.MAX_VALUE))
+                .addGap(0, 564, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(128, 128, 128)
+                .addGap(94, 94, 94)
+                .addComponent(lblPeriodo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 564, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(118, 118, 118)
                 .addComponent(lblUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 530, Short.MAX_VALUE))
+                .addGap(0, 540, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(lblEquipoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 516, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(166, 166, 166)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 494, Short.MAX_VALUE))
+                .addComponent(lblActividad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 492, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(190, 190, 190)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 432, Short.MAX_VALUE))
+                .addGap(168, 168, 168)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 468, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(272, 272, 272)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 386, Short.MAX_VALUE))
+                .addGap(224, 224, 224)
+                .addComponent(lblDebeCumplir, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 434, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(302, 302, 302)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 358, Short.MAX_VALUE))
+                .addGap(256, 256, 256)
+                .addComponent(lblProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 402, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(326, 326, 326)
-                .addComponent(txtFieldProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
+                .addGap(252, 252, 252)
+                .addComponent(txtFieldProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 398, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(302, 302, 302)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 358, Short.MAX_VALUE))
+                .addGap(256, 256, 256)
+                .addComponent(lblProfundidadUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 402, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(326, 326, 326)
-                .addComponent(txtFieldPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 320, Short.MAX_VALUE))
+                .addGap(292, 292, 292)
+                .addComponent(lblPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 366, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(372, 372, 372)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 288, Short.MAX_VALUE))
+                .addGap(288, 288, 288)
+                .addComponent(txtFieldPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 362, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(292, 292, 292)
+                .addComponent(lblPotenciaUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 366, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(328, 328, 328)
+                .addComponent(lblPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(324, 324, 324)
+                .addComponent(txtFieldPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 326, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(328, 328, 328)
+                .addComponent(lblPesoMaximoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(364, 364, 364)
+                .addComponent(lblAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 294, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(360, 360, 360)
+                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 290, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(364, 364, 364)
+                .addComponent(lblAnchoAccesoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 294, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(400, 400, 400)
+                .addComponent(lblTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 258, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(396, 396, 396)
-                .addComponent(txtFieldAlimentacion, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 250, Short.MAX_VALUE))
+                .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 254, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(372, 372, 372)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 288, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(396, 396, 396)
-                .addComponent(txtFieldPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 250, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(456, 456, 456)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 202, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(486, 486, 486)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 174, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(510, 510, 510)
-                .addComponent(txtFieldTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 136, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(486, 486, 486)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 174, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(510, 510, 510)
-                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 136, Short.MAX_VALUE))
+                .addGap(440, 440, 440)
+                .addComponent(lblAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 216, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -428,61 +498,52 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
         contratacionRenta.pasarDatosSolicitudDatosFaltantes(capturarRequerimientos());
     }//GEN-LAST:event_btnSolicitarDatosActionPerformed
 
-    // Lo escrito en los campos va tal cual en una lista nueva; el control la revisa, la convierte
-    // y hasta entonces la guarda en la solicitud
-    private List<RequerimientoTecnicoDTO> capturarRequerimientos() {
-        String[][] campos = {
-            {ValidadorPresentacion.PROFUNDIDAD, txtFieldProfundidad.getText()},
-            {ValidadorPresentacion.POTENCIA, txtFieldPotencia.getText()},
-            {ValidadorPresentacion.ALIMENTACION, txtFieldAlimentacion.getText()},
-            {ValidadorPresentacion.PESO, txtFieldPesoMaximo.getText()},
-            {ValidadorPresentacion.TERRENO, txtFieldTipoTerreno.getText()},
-            {ValidadorPresentacion.ANCHO, txtFieldAnchoAcceso.getText()}
-        };
-        List<RequerimientoTecnicoDTO> capturados = new ArrayList<>();
-        for (String[] campo : campos) {
-            ValidadorPresentacion.capturar(capturados, campo[0], campo[1]);
-        }
-        return capturados;
-    }
-
-
-
-    private String ubicacion() {
-        String obra = Formato.texto(solicitud.getNombreObra());
-        String direccion = Formato.texto(solicitud.getDireccionObra());
-        return obra.isEmpty() || direccion.isEmpty() ? obra + direccion : obra + " · " + direccion;
-    }
-
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         contratacionRenta.regresarDeAnalisis(capturarRequerimientos());
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    // Lo escrito en los campos va tal cual en una lista nueva; el control la revisa, la convierte
+    // y hasta entonces la guarda en la solicitud
+    private List<RequerimientoTecnicoDTO> capturarRequerimientos() {
+        List<RequerimientoTecnicoDTO> capturados = new ArrayList<>();
+        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.PROFUNDIDAD, txtFieldProfundidad.getText());
+        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.POTENCIA, txtFieldPotencia.getText());
+        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.PESO, txtFieldPesoMaximo.getText());
+        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.ANCHO, txtFieldAnchoAcceso.getText());
+        ValidadorPresentacion.capturarTerreno(capturados, String.valueOf(comboTipoTerreno.getSelectedItem()));
+        return capturados;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarEquipos;
-    private javax.swing.JButton btnSolicitarDatos;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JButton btnSolicitarDatos;
+    private javax.swing.JComboBox<String> comboTipoTerreno;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblActividad;
+    private javax.swing.JLabel lblAnchoAcceso;
+    private javax.swing.JLabel lblAnchoAccesoUnidad;
+    private javax.swing.JLabel lblAyuda;
     private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblDebeCumplir;
+    private javax.swing.JLabel lblEquipoPedido;
     private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblPeriodo;
+    private javax.swing.JLabel lblPesoMaximo;
+    private javax.swing.JLabel lblPesoMaximoUnidad;
+    private javax.swing.JLabel lblPidio;
+    private javax.swing.JLabel lblPotencia;
+    private javax.swing.JLabel lblPotenciaUnidad;
+    private javax.swing.JLabel lblProfundidad;
+    private javax.swing.JLabel lblProfundidadUnidad;
+    private javax.swing.JLabel lblTerreno;
     private javax.swing.JLabel lblUbicacion;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTextArea txtAreaActividad;
-    private javax.swing.JTextField txtFieldAlimentacion;
     private javax.swing.JTextField txtFieldAnchoAcceso;
     private javax.swing.JTextField txtFieldPesoMaximo;
     private javax.swing.JTextField txtFieldPotencia;
     private javax.swing.JTextField txtFieldProfundidad;
-    private javax.swing.JTextField txtFieldTipoTerreno;
     // End of variables declaration//GEN-END:variables
 }

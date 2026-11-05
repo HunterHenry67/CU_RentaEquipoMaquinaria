@@ -148,7 +148,7 @@ public class PruebasPresentacion {
         capturarRequerimientos();
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
         revisa("Buscar equipos abre Equipos compatibles", visible().equals("EquiposCompatiblesFrame"));
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         revisa("Continuar abre Selección de accesorios", visible().equals("SeleccionAccesoriosFrame"));
         marcarOpcional(true);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
@@ -199,17 +199,27 @@ public class PruebasPresentacion {
         escribir(AnalisisRequerimientoFrame.class, "txtFieldPotencia", "120");
         clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
         revisa("Solicitar datos abre Datos faltantes", visible().equals("SolicitudDatosFaltantesFrame"));
+        revisa("Datos faltantes solo pide lo que falta", !filaVisible("panelFaltaProfundidad") && !filaVisible("panelFaltaPotencia")
+                && filaVisible("panelFaltaPesoMaximo") && filaVisible("panelFaltaAnchoAcceso") && filaVisible("panelFaltaTerreno"));
         foto("P03_datos_faltantes");
         clic(SolicitudDatosFaltantesFrame.class, "btnRegresar");
         revisa("Regresar vuelve al Análisis", visible().equals("AnalisisRequerimientoFrame"));
         revisa("el Análisis conserva la profundidad y la potencia: " + texto(AnalisisRequerimientoFrame.class, "txtFieldProfundidad"),
                 texto(AnalisisRequerimientoFrame.class, "txtFieldProfundidad").startsWith("3.5") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
+        clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
+        escribir(SolicitudDatosFaltantesFrame.class, "txtFieldAnchoAcceso", "4.20");
+        clic(SolicitudDatosFaltantesFrame.class, "btnRegistrarRespuesta");
+        revisa("la respuesta del cliente regresa al Análisis y se suma a lo de antes", visible().equals("AnalisisRequerimientoFrame")
+                && texto(AnalisisRequerimientoFrame.class, "txtFieldAnchoAcceso").startsWith("4.2") && texto(AnalisisRequerimientoFrame.class, "txtFieldProfundidad").startsWith("3.5"));
+        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        revisa("si sigue faltando un dato no deja buscar: " + ultimoAviso().mensaje(), visible().equals("AnalisisRequerimientoFrame") && ultimoAviso().mensaje().contains("Falta capturar")
+                && ultimoAviso().mensaje().contains("Peso") && !ultimoAviso().mensaje().contains("Ancho"));
         capturarRequerimientos();
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         clic(SeleccionAccesoriosFrame.class, "btnRegresar");
         revisa("Regresar de accesorios vuelve a Equipos compatibles", visible().equals("EquiposCompatiblesFrame"));
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         marcarOpcional(true);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
@@ -266,9 +276,8 @@ public class PruebasPresentacion {
         clic(RequisitosRentaFrame.class, "btnValidar");
         clic(PropuestaRentaFrame.class, "btnCambiarEquipo");
         revisa("Cambiar equipo abre Equipos compatibles", visible().equals("EquiposCompatiblesFrame"));
-        seleccionarCombo(EquiposCompatiblesFrame.class, "comboRecomendado", "Excavadora CAT 336");
-        seleccionarCombo(EquiposCompatiblesFrame.class, "comboAlternativa", "Excavadora CAT 320");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        marcarEquipos("Excavadora CAT 336", "Excavadora CAT 320");
+        continuarAAccesorios();
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
         revisa("con el otro equipo salen sus unidades", tablaTexto(VerificacionInventarioFrame.class, "tableUnidades").contains("N-001"));
@@ -343,12 +352,12 @@ public class PruebasPresentacion {
                 && almacen.obtenerSolicitudes().get(0).getNombreObra().equals("Plaza Goya, segunda etapa") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
         revisa("lo que se escribió en el Análisis antes de regresar sigue ahí: " + texto(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo"), texto(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo").startsWith("25"));
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         marcarOpcional(true);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnRegresar");
         revisa("Regresar de Evaluación técnica vuelve a accesorios con el opcional marcado", visible().equals("SeleccionAccesoriosFrame")
-                && Boolean.TRUE.equals(tabla(SeleccionAccesoriosFrame.class, "tableOpcionales").getValueAt(0, 1)));
+                && Boolean.TRUE.equals(tabla(SeleccionAccesoriosFrame.class, "tableAccesorios").getValueAt(1, 2)));
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
         fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
@@ -368,7 +377,7 @@ public class PruebasPresentacion {
         revisa("Regresar de Verificación vuelve a la propuesta sin contratación registrada", visible().equals("PropuestaRentaFrame") && almacen.obtenerContrataciones().isEmpty());
         // modificar la propuesta: sin el opcional cambian las condiciones, la cotización y la propuesta
         clic(PropuestaRentaFrame.class, "btnCambiarEquipo");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         marcarOpcional(false);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
@@ -765,14 +774,18 @@ public class PruebasPresentacion {
         clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
         clic(SolicitudRentaFrame.class, "btnRegistrar");
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("análisis sin características: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("por lo menos una") && visible().equals("AnalisisRequerimientoFrame"));
+        revisa("análisis sin características: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta capturar") && ultimoAviso().mensaje().contains("Tipo de terreno") && visible().equals("AnalisisRequerimientoFrame"));
         clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
         clic(SolicitudDatosFaltantesFrame.class, "btnRegistrarRespuesta");
         revisa("datos faltantes sin respuesta: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("por lo menos un dato") && visible().equals("SolicitudDatosFaltantesFrame"));
         clic(SolicitudDatosFaltantesFrame.class, "btnRegresar");
         capturarRequerimientos();
+        clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
+        revisa("con todo capturado no hay datos que pedir: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Ya están todos") && visible().equals("AnalisisRequerimientoFrame"));
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
         clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        revisa("equipos sin marcar: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Marca en la tabla") && visible().equals("EquiposCompatiblesFrame"));
+        continuarAAccesorios();
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
         clic(VerificacionInventarioFrame.class, "btnSeleccionar");
@@ -845,7 +858,7 @@ public class PruebasPresentacion {
         revisa("profundidad: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().toLowerCase().contains("profundidad") && visible().equals("AnalisisRequerimientoFrame"));
         capturarRequerimientos();
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
         fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
@@ -929,7 +942,7 @@ public class PruebasPresentacion {
         capturarRequerimientos();
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
         revisa("corregido el número, continúa", visible().equals("EquiposCompatiblesFrame"));
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
         fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
@@ -1067,11 +1080,10 @@ public class PruebasPresentacion {
         revisa("quedan registrados los dos", almacen.obtenerSolicitudes().get(0).getEquiposSolicitados().size() == 2);
         capturarRequerimientos();
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        String comparados = tablaTexto(EquiposCompatiblesFrame.class, "tableEquipos");
-        revisa("Equipos compatibles marca los dos como pedidos", comparados.contains("Retroexcavadora JCB (lo pidió el cliente)") && comparados.contains("Excavadora CAT 336 (lo pidió el cliente)")
-                && !comparados.contains("Excavadora CAT 320 (lo pidió el cliente)"));
+        String pedidos = etiqueta(EquiposCompatiblesFrame.class, "lblEquipoPedido");
+        revisa("Equipos compatibles dice los dos que pidió: " + pedidos, pedidos.contains("Retroexcavadora JCB") && pedidos.contains("Excavadora CAT 336") && !pedidos.contains("CAT 320"));
         foto("P14_varios_equipos_compatibles");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         boolean todosEvaluados = true;
         String motivoRegistrado = "";
         for (EquipoSolicitadoDTO pedido : almacen.obtenerSolicitudes().get(0).getEquiposSolicitados()) {
@@ -1093,6 +1105,21 @@ public class PruebasPresentacion {
         clic(VerificacionCondicionFrame.class, "btnGenerar");
         revisa("la orden sale del equipo recomendado y la solicitud conserva los dos que pidió el cliente", visible().equals("OrdenEntregaFrame") && etiqueta(OrdenEntregaFrame.class, "lblEquipo").contains("CAT 320")
                 && almacen.obtenerSolicitudes().get(0).getEquiposSolicitados().size() == 2);
+        // la lista solo trae lo que cumple y lo que pidió el cliente
+        nuevaApp();
+        entrar();
+        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Excavadora CAT 320");
+        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        capturarSolicitud();
+        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        capturarRequerimientos();
+        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        String sinPedir = tablaTexto(EquiposCompatiblesFrame.class, "tableEquipos");
+        revisa("si no la pidió y no cumple, la JCB no sale en la lista: " + sinPedir, !sinPedir.contains("JCB") && sinPedir.contains("CAT 320") && sinPedir.contains("CAT 336"));
         sinExcepciones();
     }
 
@@ -1121,7 +1148,7 @@ public class PruebasPresentacion {
         revisa("solicitud: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Registrada Correctamente"));
         capturarRequerimientos();
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         marcarOpcional(true);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
@@ -1163,8 +1190,9 @@ public class PruebasPresentacion {
         foto("P16_04_analisis");
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
         foto("P16_05_equipos_compatibles");
-        revisa("la JCB no cumple y marca por qué", tablaTexto(EquiposCompatiblesFrame.class, "tableEquipos").contains("No:"));
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        revisa("la JCB no cumple y marca por qué", tablaTexto(EquiposCompatiblesFrame.class, "tableEquipos").contains("Potencia de 109 HP"));
+        revisa("la JCB no se puede marcar y las CAT sí", !tabla(EquiposCompatiblesFrame.class, "tableEquipos").isCellEditable(0, 3) && tabla(EquiposCompatiblesFrame.class, "tableEquipos").isCellEditable(1, 3));
+        continuarAAccesorios();
         marcarOpcional(true);
         foto("P16_06_accesorios");
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
@@ -1225,9 +1253,8 @@ public class PruebasPresentacion {
         capturarRequerimientos();
         sinDatosFijos(AnalisisRequerimientoFrame.class);
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        seleccionarCombo(EquiposCompatiblesFrame.class, "comboRecomendado", "Excavadora CAT 336");
-        seleccionarCombo(EquiposCompatiblesFrame.class, "comboAlternativa", "(Ninguna)");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        marcarEquipos("Excavadora CAT 336", null);
+        continuarAAccesorios();
         sinDatosFijos(SeleccionAccesoriosFrame.class);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         sinDatosFijos(EvaluacionTecnicaFrame.class);
@@ -1284,6 +1311,7 @@ public class PruebasPresentacion {
         escribir(AnalisisRequerimientoFrame.class, "txtFieldPotencia", "120");
         escribir(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo", "22");
         escribir(AnalisisRequerimientoFrame.class, "txtFieldAnchoAcceso", "4.20");
+        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Terracería compactada");
     }
 
     private static void hastaLosCompatibles() throws Exception {
@@ -1301,7 +1329,7 @@ public class PruebasPresentacion {
 
     private static void hastaElInventario() throws Exception {
         hastaLosCompatibles();
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        continuarAAccesorios();
         marcarOpcional(true);
         clic(SeleccionAccesoriosFrame.class, "btnContinuar");
         clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
@@ -1333,11 +1361,45 @@ public class PruebasPresentacion {
 
     private static void marcarOpcional(boolean marcar) throws Exception {
         edt(() -> {
-            JTable opcionales = (JTable) campo(ventana(SeleccionAccesoriosFrame.class), "tableOpcionales");
-            for (int i = 0; i < opcionales.getRowCount(); i++) {
-                opcionales.setValueAt(marcar, i, 1);
+            JTable accesorios = (JTable) campo(ventana(SeleccionAccesoriosFrame.class), "tableAccesorios");
+            for (int i = 0; i < accesorios.getRowCount(); i++) {
+                if (accesorios.isCellEditable(i, 2)) {
+                    accesorios.setValueAt(marcar, i, 2);
+                }
             }
         });
+    }
+
+    // Marca en la tabla el recomendado y la alternativa; sin alternativa, null
+    private static void marcarEquipos(String recomendado, String alternativa) throws Exception {
+        edt(() -> {
+            JTable equipos = (JTable) campo(ventana(EquiposCompatiblesFrame.class), "tableEquipos");
+            for (int i = 0; i < equipos.getRowCount(); i++) {
+                if (equipos.getValueAt(i, 0).equals(recomendado)) {
+                    equipos.setValueAt(true, i, 3);
+                }
+            }
+            for (int i = 0; i < equipos.getRowCount(); i++) {
+                equipos.setValueAt(equipos.getValueAt(i, 0).equals(alternativa), i, 4);
+            }
+        });
+    }
+
+    // Como en el escenario: si todavía no se marca el recomendado, la CAT 320 y de alternativa la CAT 336
+    private static void continuarAAccesorios() throws Exception {
+        JTable equipos = tabla(EquiposCompatiblesFrame.class, "tableEquipos");
+        boolean hayRecomendado = false;
+        for (int i = 0; i < equipos.getRowCount(); i++) {
+            hayRecomendado |= Boolean.TRUE.equals(equipos.getValueAt(i, 3));
+        }
+        if (!hayRecomendado) {
+            marcarEquipos("Excavadora CAT 320", "Excavadora CAT 336");
+        }
+        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+    }
+
+    private static boolean filaVisible(String fila) throws Exception {
+        return ((java.awt.Component) campo(ventana(SolicitudDatosFaltantesFrame.class), fila)).isVisible();
     }
 
     private static void marcarCondiciones() throws Exception {

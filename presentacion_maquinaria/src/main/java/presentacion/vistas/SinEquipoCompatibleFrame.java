@@ -15,8 +15,7 @@ import presentacion.control.IContratacionRenta;
 public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
-    
+
     public SinEquipoCompatibleFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
@@ -27,10 +26,10 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     // El coordinador la llama cada vez que se abre la pantalla; el motivo trae por qué no
     // cumple cada equipo y el asesor lo puede completar
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
-        this.solicitud = solicitud;
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
         EvaluacionTecnicaDTO evaluacion = Formato.evaluacion(solicitud);
+        lblResultado.setText("Resultado de la evaluación: " + (evaluacion == null ? "" : Formato.texto(evaluacion.getResultado())));
         txtAreaMotivo.setText(evaluacion == null ? "" : Formato.texto(evaluacion.getMotivoIncumplimiento()));
     }
 
@@ -46,15 +45,14 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
         panelFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblFolio = new javax.swing.JLabel();
+        lblResultado = new javax.swing.JLabel();
         lblCliente = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblMotivo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaMotivo = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        btnAjustarRequerimiento = new javax.swing.JButton();
+        lblNota = new javax.swing.JLabel();
         btnCerrarEvaluacion = new javax.swing.JButton();
+        btnAjustarRequerimiento = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Sin Equipo Compatible");
@@ -66,53 +64,36 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Sin Equipo Compatible");
 
-        lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFolio.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));
-        lblFolio.setText("Folio:");
+        lblFolio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFolio.setText("Folio: FOL-89241");
+
+        lblResultado.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblResultado.setForeground(new java.awt.Color(170, 20, 20));
+        lblResultado.setText("Resultado de la evaluación: Sin equipo compatible");
 
         lblCliente.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblCliente.setForeground(new java.awt.Color(0, 0, 0));
-        lblCliente.setText("Cliente:");
+        lblCliente.setText("Cliente: Julián Martínez García");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel2.setText("<html>Ningún tipo de equipo del catálogo cumple con las características requeridas para la actividad solicitada.</html>");
-        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Motivo registrado");
+        lblMotivo.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblMotivo.setForeground(new java.awt.Color(0, 0, 0));
+        lblMotivo.setText("MOTIVO");
 
         txtAreaMotivo.setBackground(new java.awt.Color(255, 255, 255));
         txtAreaMotivo.setColumns(20);
         txtAreaMotivo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtAreaMotivo.setForeground(new java.awt.Color(0, 0, 0));
         txtAreaMotivo.setLineWrap(true);
-        txtAreaMotivo.setRows(3);
+        txtAreaMotivo.setRows(2);
         txtAreaMotivo.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtAreaMotivo);
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Estado de la solicitud: Sin solución técnica");
-
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel5.setText("<html>El asesor registra que no hay equipo compatible y lo comenta con el cliente. El caso de uso no continúa a la verificación de disponibilidad.</html>");
-        jLabel5.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        btnAjustarRequerimiento.setBackground(new java.awt.Color(44, 44, 44));
-        btnAjustarRequerimiento.setBorderPainted(false);
-        btnAjustarRequerimiento.setFocusPainted(false);
-        btnAjustarRequerimiento.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnAjustarRequerimiento.setForeground(new java.awt.Color(255, 255, 255));
-        btnAjustarRequerimiento.setOpaque(true);
-        btnAjustarRequerimiento.setText("Ajustar el requerimiento");
-        btnAjustarRequerimiento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAjustarRequerimientoActionPerformed(evt);
-            }
-        });
+        lblNota.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        lblNota.setForeground(new java.awt.Color(70, 70, 70));
+        lblNota.setText("<html>Coméntale el motivo al cliente. Si cierras la evaluación, la solicitud queda como «Sin solución técnica» y ya no continúa.</html>");
+        lblNota.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         btnCerrarEvaluacion.setBackground(new java.awt.Color(236, 34, 31));
         btnCerrarEvaluacion.setBorderPainted(false);
@@ -127,17 +108,34 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
             }
         });
 
+        btnAjustarRequerimiento.setBackground(new java.awt.Color(44, 44, 44));
+        btnAjustarRequerimiento.setBorderPainted(false);
+        btnAjustarRequerimiento.setFocusPainted(false);
+        btnAjustarRequerimiento.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnAjustarRequerimiento.setForeground(new java.awt.Color(255, 255, 255));
+        btnAjustarRequerimiento.setOpaque(true);
+        btnAjustarRequerimiento.setText("Ajustar el requerimiento");
+        btnAjustarRequerimiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAjustarRequerimientoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelFondoLayout = new javax.swing.GroupLayout(panelFondo);
         panelFondo.setLayout(panelFondoLayout);
         panelFondoLayout.setHorizontalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(640, 640, 640)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -145,74 +143,62 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNota, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
+                .addComponent(btnCerrarEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 751, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(699, 699, 699)
                 .addComponent(btnAjustarRequerimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(514, 514, 514)
-                .addComponent(btnCerrarEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 277, Short.MAX_VALUE))
         );
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
+                .addGap(0, 626, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 582, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 630, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(102, 102, 102)
+                .addGap(68, 68, 68)
+                .addComponent(lblResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 590, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(92, 92, 92)
                 .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 556, Short.MAX_VALUE))
+                .addGap(0, 566, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 498, Short.MAX_VALUE))
+                .addGap(132, 132, 132)
+                .addComponent(lblMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 526, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(198, 198, 198)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 462, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(222, 222, 222)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 378, Short.MAX_VALUE))
+                .addGap(160, 160, 160)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 370, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(322, 322, 322)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 336, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(352, 352, 352)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 286, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(604, 604, 604)
-                .addComponent(btnAjustarRequerimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addComponent(lblNota, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 314, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnCerrarEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 32, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(604, 604, 604)
+                .addComponent(btnAjustarRequerimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
         );
 
@@ -244,13 +230,12 @@ public class SinEquipoCompatibleFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnAjustarRequerimiento;
     private javax.swing.JButton btnCerrarEvaluacion;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblMotivo;
+    private javax.swing.JLabel lblNota;
+    private javax.swing.JLabel lblResultado;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTextArea txtAreaMotivo;
     // End of variables declaration//GEN-END:variables

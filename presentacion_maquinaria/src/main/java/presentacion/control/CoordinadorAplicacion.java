@@ -215,8 +215,8 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
-    public void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados, List<EquipoDTO> pedidos) {
-        equiposCompatiblesFrame.cargarEquipos(solicitud, evaluados, pedidos);
+    public void mostrarEquiposCompatibles(SolicitudRentaDTO solicitud, Map<EquipoDTO, String> evaluados) {
+        equiposCompatiblesFrame.cargarEquipos(solicitud, evaluados);
         mostrar(equiposCompatiblesFrame);
     }
 

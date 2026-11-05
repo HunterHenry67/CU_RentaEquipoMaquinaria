@@ -18,7 +18,7 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
     private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
-    
+
     public SolicitudDatosFaltantesFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
         initComponents();
@@ -26,15 +26,23 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    // El coordinador la llama cada vez que se abre la pantalla
+    // El coordinador la llama cada vez que se abre la pantalla: solo pide lo que falta
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
         this.solicitud = solicitud;
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
-        lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
-        txtFieldAnchoAcceso.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.ANCHO));
-        txtFieldTipoTerreno.setText(ValidadorPresentacion.texto(solicitud.getRequerimientos(), ValidadorPresentacion.TERRENO));
-        jLabel6.setText("Estado de la solicitud: " + (solicitud.getEstadoSolicitud() != null
-                ? solicitud.getEstadoSolicitud() : "En espera de información"));
+        lblEstado.setText("Estado de la solicitud: " + Formato.texto(solicitud.getEstadoSolicitud()));
+        List<RequerimientoTecnicoDTO> requerimientos = solicitud.getRequerimientos();
+        mostrarFila(panelFaltaProfundidad, txtFieldProfundidad, requerimientos, ValidadorPresentacion.PROFUNDIDAD);
+        mostrarFila(panelFaltaPotencia, txtFieldPotencia, requerimientos, ValidadorPresentacion.POTENCIA);
+        mostrarFila(panelFaltaPesoMaximo, txtFieldPesoMaximo, requerimientos, ValidadorPresentacion.PESO);
+        mostrarFila(panelFaltaAnchoAcceso, txtFieldAnchoAcceso, requerimientos, ValidadorPresentacion.ANCHO);
+        panelFaltaTerreno.setVisible(ValidadorPresentacion.valorVacio(requerimientos, ValidadorPresentacion.TERRENO));
+        comboTipoTerreno.setSelectedItem(ValidadorPresentacion.SIN_ESPECIFICAR);
+    }
+
+    private void mostrarFila(javax.swing.JPanel fila, javax.swing.JTextField campo, List<RequerimientoTecnicoDTO> requerimientos, String caracteristica) {
+        fila.setVisible(ValidadorPresentacion.valorVacio(requerimientos, caracteristica));
+        campo.setText("");
     }
 
     /**
@@ -49,15 +57,29 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         panelFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblFolio = new javax.swing.JLabel();
-        lblCliente = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblEstado = new javax.swing.JLabel();
+        lblEstadoAyuda = new javax.swing.JLabel();
+        lblFaltan = new javax.swing.JLabel();
+        panelFilas = new javax.swing.JPanel();
+        panelFaltaProfundidad = new javax.swing.JPanel();
+        lblProfundidad = new javax.swing.JLabel();
+        txtFieldProfundidad = new javax.swing.JTextField();
+        lblProfundidadUnidad = new javax.swing.JLabel();
+        panelFaltaPotencia = new javax.swing.JPanel();
+        lblPotencia = new javax.swing.JLabel();
+        txtFieldPotencia = new javax.swing.JTextField();
+        lblPotenciaUnidad = new javax.swing.JLabel();
+        panelFaltaPesoMaximo = new javax.swing.JPanel();
+        lblPesoMaximo = new javax.swing.JLabel();
+        txtFieldPesoMaximo = new javax.swing.JTextField();
+        lblPesoMaximoUnidad = new javax.swing.JLabel();
+        panelFaltaAnchoAcceso = new javax.swing.JPanel();
+        lblAnchoAcceso = new javax.swing.JLabel();
         txtFieldAnchoAcceso = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtFieldTipoTerreno = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblAnchoAccesoUnidad = new javax.swing.JLabel();
+        panelFaltaTerreno = new javax.swing.JPanel();
+        lblTerreno = new javax.swing.JLabel();
+        comboTipoTerreno = new javax.swing.JComboBox<>();
         btnRegresar = new javax.swing.JButton();
         btnRegistrarRespuesta = new javax.swing.JButton();
 
@@ -71,47 +93,268 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Solicitud de Datos Faltantes");
 
-        lblFolio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFolio.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         lblFolio.setForeground(new java.awt.Color(0, 0, 0));
-        lblFolio.setText("Folio:");
+        lblFolio.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblFolio.setText("Folio: FOL-89241");
 
-        lblCliente.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        lblCliente.setForeground(new java.awt.Color(0, 0, 0));
-        lblCliente.setText("Cliente:");
+        lblEstado.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblEstado.setForeground(new java.awt.Color(200, 105, 0));
+        lblEstado.setText("Estado de la solicitud: En espera de información");
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel2.setText("<html>La evaluación técnica no puede continuar: faltan el tipo de terreno y el ancho de acceso a la obra. El asesor de renta solicita los dos datos al cliente.</html>");
-        jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblEstadoAyuda.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        lblEstadoAyuda.setForeground(new java.awt.Color(70, 70, 70));
+        lblEstadoAyuda.setText("<html>Pregúntale al cliente estos datos. La solicitud no se cancela: lo que ya capturaste se conserva.</html>");
+        lblEstadoAyuda.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("DATOS PENDIENTES POR CONFIRMAR");
+        lblFaltan.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
+        lblFaltan.setForeground(new java.awt.Color(0, 0, 0));
+        lblFaltan.setText("DATOS QUE FALTAN");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Ancho de acceso a la obra");
+        panelFilas.setBackground(new java.awt.Color(217, 217, 217));
+
+        panelFaltaProfundidad.setBackground(new java.awt.Color(217, 217, 217));
+
+        lblProfundidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblProfundidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblProfundidad.setText("Profundidad de trabajo");
+
+        txtFieldProfundidad.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldProfundidad.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldProfundidad.setForeground(new java.awt.Color(0, 0, 0));
+
+        lblProfundidadUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblProfundidadUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblProfundidadUnidad.setText("m");
+
+        javax.swing.GroupLayout panelFaltaProfundidadLayout = new javax.swing.GroupLayout(panelFaltaProfundidad);
+        panelFaltaProfundidad.setLayout(panelFaltaProfundidadLayout);
+        panelFaltaProfundidadLayout.setHorizontalGroup(
+            panelFaltaProfundidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaProfundidadLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(lblProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
+            .addGroup(panelFaltaProfundidadLayout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(txtFieldProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 530, Short.MAX_VALUE))
+            .addGroup(panelFaltaProfundidadLayout.createSequentialGroup()
+                .addGap(358, 358, 358)
+                .addComponent(lblProfundidadUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 482, Short.MAX_VALUE))
+        );
+        panelFaltaProfundidadLayout.setVerticalGroup(
+            panelFaltaProfundidadLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaProfundidadLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(panelFaltaProfundidadLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(txtFieldProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+            .addGroup(panelFaltaProfundidadLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblProfundidadUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        panelFaltaPotencia.setBackground(new java.awt.Color(217, 217, 217));
+
+        lblPotencia.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPotencia.setForeground(new java.awt.Color(0, 0, 0));
+        lblPotencia.setText("Potencia mínima");
+
+        txtFieldPotencia.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldPotencia.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldPotencia.setForeground(new java.awt.Color(0, 0, 0));
+
+        lblPotenciaUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPotenciaUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblPotenciaUnidad.setText("HP");
+
+        javax.swing.GroupLayout panelFaltaPotenciaLayout = new javax.swing.GroupLayout(panelFaltaPotencia);
+        panelFaltaPotencia.setLayout(panelFaltaPotenciaLayout);
+        panelFaltaPotenciaLayout.setHorizontalGroup(
+            panelFaltaPotenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaPotenciaLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(lblPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
+            .addGroup(panelFaltaPotenciaLayout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(txtFieldPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 530, Short.MAX_VALUE))
+            .addGroup(panelFaltaPotenciaLayout.createSequentialGroup()
+                .addGap(358, 358, 358)
+                .addComponent(lblPotenciaUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 482, Short.MAX_VALUE))
+        );
+        panelFaltaPotenciaLayout.setVerticalGroup(
+            panelFaltaPotenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaPotenciaLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(panelFaltaPotenciaLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(txtFieldPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+            .addGroup(panelFaltaPotenciaLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblPotenciaUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        panelFaltaPesoMaximo.setBackground(new java.awt.Color(217, 217, 217));
+
+        lblPesoMaximo.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPesoMaximo.setForeground(new java.awt.Color(0, 0, 0));
+        lblPesoMaximo.setText("Peso máximo permitido");
+
+        txtFieldPesoMaximo.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldPesoMaximo.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldPesoMaximo.setForeground(new java.awt.Color(0, 0, 0));
+
+        lblPesoMaximoUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblPesoMaximoUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblPesoMaximoUnidad.setText("t");
+
+        javax.swing.GroupLayout panelFaltaPesoMaximoLayout = new javax.swing.GroupLayout(panelFaltaPesoMaximo);
+        panelFaltaPesoMaximo.setLayout(panelFaltaPesoMaximoLayout);
+        panelFaltaPesoMaximoLayout.setHorizontalGroup(
+            panelFaltaPesoMaximoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaPesoMaximoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(lblPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
+            .addGroup(panelFaltaPesoMaximoLayout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(txtFieldPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 530, Short.MAX_VALUE))
+            .addGroup(panelFaltaPesoMaximoLayout.createSequentialGroup()
+                .addGap(358, 358, 358)
+                .addComponent(lblPesoMaximoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 482, Short.MAX_VALUE))
+        );
+        panelFaltaPesoMaximoLayout.setVerticalGroup(
+            panelFaltaPesoMaximoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaPesoMaximoLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(panelFaltaPesoMaximoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(txtFieldPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+            .addGroup(panelFaltaPesoMaximoLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblPesoMaximoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+
+        panelFaltaAnchoAcceso.setBackground(new java.awt.Color(217, 217, 217));
+
+        lblAnchoAcceso.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAnchoAcceso.setForeground(new java.awt.Color(0, 0, 0));
+        lblAnchoAcceso.setText("Ancho de acceso");
 
         txtFieldAnchoAcceso.setBackground(new java.awt.Color(255, 255, 255));
         txtFieldAnchoAcceso.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         txtFieldAnchoAcceso.setForeground(new java.awt.Color(0, 0, 0));
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Tipo de terreno");
+        lblAnchoAccesoUnidad.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAnchoAccesoUnidad.setForeground(new java.awt.Color(0, 0, 0));
+        lblAnchoAccesoUnidad.setText("m");
 
-        txtFieldTipoTerreno.setBackground(new java.awt.Color(255, 255, 255));
-        txtFieldTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFieldTipoTerreno.setForeground(new java.awt.Color(0, 0, 0));
+        javax.swing.GroupLayout panelFaltaAnchoAccesoLayout = new javax.swing.GroupLayout(panelFaltaAnchoAcceso);
+        panelFaltaAnchoAcceso.setLayout(panelFaltaAnchoAccesoLayout);
+        panelFaltaAnchoAccesoLayout.setHorizontalGroup(
+            panelFaltaAnchoAccesoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaAnchoAccesoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(lblAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
+            .addGroup(panelFaltaAnchoAccesoLayout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 530, Short.MAX_VALUE))
+            .addGroup(panelFaltaAnchoAccesoLayout.createSequentialGroup()
+                .addGap(358, 358, 358)
+                .addComponent(lblAnchoAccesoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 482, Short.MAX_VALUE))
+        );
+        panelFaltaAnchoAccesoLayout.setVerticalGroup(
+            panelFaltaAnchoAccesoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaAnchoAccesoLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(panelFaltaAnchoAccesoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+            .addGroup(panelFaltaAnchoAccesoLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblAnchoAccesoUnidad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Estado de la solicitud: En espera de información");
+        panelFaltaTerreno.setBackground(new java.awt.Color(217, 217, 217));
 
-        jLabel7.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(70, 70, 70));
-        jLabel7.setText("<html>La solicitud no se cancela. La información ya capturada se conserva y la evaluación se reanuda en cuanto el cliente responda.</html>");
-        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblTerreno.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblTerreno.setForeground(new java.awt.Color(0, 0, 0));
+        lblTerreno.setText("Tipo de terreno");
+
+        comboTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar", "Terracería compactada", "Firme", "Arcilloso", "Arenoso", "Rocoso" }));
+
+        javax.swing.GroupLayout panelFaltaTerrenoLayout = new javax.swing.GroupLayout(panelFaltaTerreno);
+        panelFaltaTerreno.setLayout(panelFaltaTerrenoLayout);
+        panelFaltaTerrenoLayout.setHorizontalGroup(
+            panelFaltaTerrenoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaTerrenoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(lblTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 680, Short.MAX_VALUE))
+            .addGroup(panelFaltaTerrenoLayout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 482, Short.MAX_VALUE))
+        );
+        panelFaltaTerrenoLayout.setVerticalGroup(
+            panelFaltaTerrenoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFaltaTerrenoLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(lblTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(panelFaltaTerrenoLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout panelFilasLayout = new javax.swing.GroupLayout(panelFilas);
+        panelFilas.setLayout(panelFilasLayout);
+        panelFilasLayout.setHorizontalGroup(
+            panelFilasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelFaltaProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelFaltaPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelFaltaPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelFaltaAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelFaltaTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        panelFilasLayout.setVerticalGroup(
+            panelFilasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFilasLayout.createSequentialGroup()
+                .addComponent(panelFaltaProfundidad, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelFaltaPotencia, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelFaltaPesoMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelFaltaAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelFaltaTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
 
         btnRegresar.setBackground(new java.awt.Color(236, 34, 31));
         btnRegresar.setBorderPainted(false);
@@ -145,47 +388,27 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 330, Short.MAX_VALUE))
+            .addGroup(panelFondoLayout.createSequentialGroup()
+                .addGap(640, 640, 640)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblEstadoAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblFaltan, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 618, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 500, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(500, 500, 500)
-                .addComponent(txtFieldTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 40, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelFilas, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -199,49 +422,29 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
         panelFondoLayout.setVerticalGroup(
             panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 622, Short.MAX_VALUE))
+                .addGap(0, 626, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 582, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 630, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(102, 102, 102)
-                .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 556, Short.MAX_VALUE))
+                .addGap(68, 68, 68)
+                .addComponent(lblEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 590, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 498, Short.MAX_VALUE))
+                .addGap(92, 92, 92)
+                .addComponent(lblEstadoAyuda, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 566, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(204, 204, 204)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 454, Short.MAX_VALUE))
+                .addGap(132, 132, 132)
+                .addComponent(lblFaltan, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 526, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(234, 234, 234)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 426, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(258, 258, 258)
-                .addComponent(txtFieldAnchoAcceso, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 388, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(234, 234, 234)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 426, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(258, 258, 258)
-                .addComponent(txtFieldTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 388, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(318, 318, 318)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(160, 160, 160)
+                .addComponent(panelFilas, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 340, Short.MAX_VALUE))
-            .addGroup(panelFondoLayout.createSequentialGroup()
-                .addGap(348, 348, 348)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 290, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
                 .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,27 +474,52 @@ public class SolicitudDatosFaltantesFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnRegistrarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarRespuestaActionPerformed
+        // a lo que ya estaba se le agrega lo que respondió el cliente
         List<RequerimientoTecnicoDTO> capturados = ValidadorPresentacion.copia(solicitud.getRequerimientos());
-        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.ANCHO, txtFieldAnchoAcceso.getText());
-        ValidadorPresentacion.capturar(capturados, ValidadorPresentacion.TERRENO, txtFieldTipoTerreno.getText());
+        capturarFila(capturados, panelFaltaProfundidad, ValidadorPresentacion.PROFUNDIDAD, txtFieldProfundidad.getText());
+        capturarFila(capturados, panelFaltaPotencia, ValidadorPresentacion.POTENCIA, txtFieldPotencia.getText());
+        capturarFila(capturados, panelFaltaPesoMaximo, ValidadorPresentacion.PESO, txtFieldPesoMaximo.getText());
+        capturarFila(capturados, panelFaltaAnchoAcceso, ValidadorPresentacion.ANCHO, txtFieldAnchoAcceso.getText());
+        if (panelFaltaTerreno.isVisible()) {
+            ValidadorPresentacion.capturarTerreno(capturados, String.valueOf(comboTipoTerreno.getSelectedItem()));
+        }
         contratacionRenta.pasarDatosAnalisisRequerimientos(capturados);
     }//GEN-LAST:event_btnRegistrarRespuestaActionPerformed
 
+    private void capturarFila(List<RequerimientoTecnicoDTO> capturados, javax.swing.JPanel fila, String caracteristica, String texto) {
+        if (fila.isVisible()) {
+            ValidadorPresentacion.capturar(capturados, caracteristica, texto);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrarRespuesta;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> comboTipoTerreno;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblAnchoAcceso;
+    private javax.swing.JLabel lblAnchoAccesoUnidad;
+    private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblEstadoAyuda;
+    private javax.swing.JLabel lblFaltan;
     private javax.swing.JLabel lblFolio;
+    private javax.swing.JLabel lblPesoMaximo;
+    private javax.swing.JLabel lblPesoMaximoUnidad;
+    private javax.swing.JLabel lblPotencia;
+    private javax.swing.JLabel lblPotenciaUnidad;
+    private javax.swing.JLabel lblProfundidad;
+    private javax.swing.JLabel lblProfundidadUnidad;
+    private javax.swing.JLabel lblTerreno;
+    private javax.swing.JPanel panelFaltaAnchoAcceso;
+    private javax.swing.JPanel panelFaltaPesoMaximo;
+    private javax.swing.JPanel panelFaltaPotencia;
+    private javax.swing.JPanel panelFaltaProfundidad;
+    private javax.swing.JPanel panelFaltaTerreno;
+    private javax.swing.JPanel panelFilas;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTextField txtFieldAnchoAcceso;
-    private javax.swing.JTextField txtFieldTipoTerreno;
+    private javax.swing.JTextField txtFieldPesoMaximo;
+    private javax.swing.JTextField txtFieldPotencia;
+    private javax.swing.JTextField txtFieldProfundidad;
     // End of variables declaration//GEN-END:variables
 }
