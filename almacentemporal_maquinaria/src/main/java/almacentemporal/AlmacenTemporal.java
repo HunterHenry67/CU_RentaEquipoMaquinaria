@@ -85,6 +85,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
         cat320.setCostoDiario(1500.0);
         cat320.setAccesorios(accesoriosExcavadora());
         EquipoDTO cat336 = equipo(3L, "CAT", "Excavadora CAT 336");
+        cat336.setCostoDiario(1500.0);
         cat336.setAccesorios(accesoriosExcavadora());
         catalogoEquipos.add(jcb);
         catalogoEquipos.add(cat320);

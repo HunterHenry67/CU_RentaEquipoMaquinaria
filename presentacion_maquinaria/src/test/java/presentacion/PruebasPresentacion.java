@@ -1669,7 +1669,6 @@ public class PruebasPresentacion {
             instancia.setAccessible(true);
             instancia.set(null, null);
             almacen = AlmacenTemporal.getInstance();
-            ponerTarifa("Excavadora CAT 336", 1500.0);
             control = Main.iniciar();
             coordinador = campo(control, "coordinador");
             control.abrirIniciarSesion();
@@ -1677,7 +1676,7 @@ public class PruebasPresentacion {
         avisos.clear();
     }
 
-    // La CAT 336 todavía no tiene tarifa en el almacén; para recorrer el flujo con ella se le pone aquí
+    // Para probar qué pasa con un equipo sin tarifa
     private static void ponerTarifa(String modelo, Double tarifa) throws Exception {
         for (EquipoDTO equipo : (List<EquipoDTO>) campo(almacen, "catalogoEquipos")) {
             if (equipo.getModelo().equals(modelo)) {
