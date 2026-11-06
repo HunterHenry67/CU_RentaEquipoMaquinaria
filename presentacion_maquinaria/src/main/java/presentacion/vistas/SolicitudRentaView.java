@@ -56,8 +56,8 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         formtxtFechaInicio.setVisible(false);
         formtxtFechaFinal.setVisible(false);
 
-        panelSolictudNormal.add(datePickerInicio);
-        panelSolictudNormal.add(datePickerFinal);
+        panelSolicitudNormal.add(datePickerInicio);
+        panelSolicitudNormal.add(datePickerFinal);
 
         datePickerInicio.addDateChangeListener(event -> {
             LocalDate nuevaInicio = event.getNewDate();
@@ -66,7 +66,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
             }
         });
 
-        panelSolictudNormal.repaint();
+        panelSolicitudNormal.repaint();
     }
 
     // El control la llama al volver al menú: la siguiente solicitud empieza en blanco
@@ -81,7 +81,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         datePickerFinal.getSettings().setDateRangeLimits(null, null);
         comboTipoTrabajo.setSelectedIndex(0);
         comboTipoTerreno.setSelectedIndex(0);
-        ((DefaultTableModel) tableEquipoSoli.getModel()).setRowCount(0);
+        ((DefaultTableModel) tableEquipoSolicitado.getModel()).setRowCount(0);
         ((CardLayout) getContentPane().getLayout()).show(getContentPane(), "card1");
     }
 
@@ -114,7 +114,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
     public void cargarFolio(String folio) {
         this.folio = folio;
         lblFolio.setText("Folio: " + folio);
-        jLabel21.setText("Folio: " + folio);
+        lblFolioCancelacion.setText("Folio: " + folio);
     }
 
     public void cargarDatosCliente(ClienteDTO clienteCargado) {
@@ -122,13 +122,13 @@ public class SolicitudRentaView extends javax.swing.JFrame {
             lblNombreCliente.setText("Nombre del Cliente: " + clienteCargado.getNombre());
             lblRFC.setText("RFC: " + clienteCargado.getRfc());
         }
-        if (lblRFCancelacion != null) {
-            lblRFCancelacion.setText("RFC: " + clienteCargado.getRfc());
+        if (lblRfcCancelacion != null) {
+            lblRfcCancelacion.setText("RFC: " + clienteCargado.getRfc());
         }
     }
 
     public void cargarEquiposSolicitadosEnTabla(List<EquipoSolicitadoDTO> listaEquipos) {
-        DefaultTableModel modelo = (DefaultTableModel) tableEquipoSoli.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tableEquipoSolicitado.getModel();
         modelo.setRowCount(0);
         for (objetosdto.EquipoSolicitadoDTO eq : listaEquipos) {
             Object[] fila = {eq.getDescripcionEquipo(), eq.getCantidad()
@@ -141,7 +141,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        panelSolictudNormal = new javax.swing.JPanel();
+        panelSolicitudNormal = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblNombreCliente = new javax.swing.JLabel();
@@ -161,7 +161,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         btnAgregarEquipo = new javax.swing.JButton();
         btnQuitarEquipo = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableEquipoSoli = new javax.swing.JTable();
+        tableEquipoSolicitado = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -173,14 +173,14 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         comboTipoTrabajo = new javax.swing.JComboBox<>();
         jLabel17 = new javax.swing.JLabel();
         comboTipoTerreno = new javax.swing.JComboBox<>();
-        btnCancelarSoli = new javax.swing.JButton();
+        btnCancelarSolicitud = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
         panelCancelacionSolicitud = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        lblRFCancelacion = new javax.swing.JLabel();
+        lblFolioCancelacion = new javax.swing.JLabel();
+        lblRfcCancelacion = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtAreaRazonCancelacion = new javax.swing.JTextArea();
@@ -192,7 +192,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         setTitle("Solicitud de Renta");
         getContentPane().setLayout(new java.awt.CardLayout());
 
-        panelSolictudNormal.setBackground(new java.awt.Color(217, 217, 217));
+        panelSolicitudNormal.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(0, 0, 0));
@@ -282,9 +282,9 @@ public class SolicitudRentaView extends javax.swing.JFrame {
             }
         });
 
-        tableEquipoSoli.setBackground(new java.awt.Color(255, 255, 255));
-        tableEquipoSoli.setForeground(new java.awt.Color(0, 0, 0));
-        tableEquipoSoli.setModel(new javax.swing.table.DefaultTableModel(
+        tableEquipoSolicitado.setBackground(new java.awt.Color(255, 255, 255));
+        tableEquipoSolicitado.setForeground(new java.awt.Color(0, 0, 0));
+        tableEquipoSolicitado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -300,7 +300,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tableEquipoSoli);
+        jScrollPane1.setViewportView(tableEquipoSolicitado);
 
         jLabel13.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(70, 70, 70));
@@ -347,15 +347,15 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         comboTipoTerreno.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         comboTipoTerreno.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sin especificar", "Terracería compactada", "Firme", "Arcilloso", "Arenoso", "Rocoso" }));
 
-        btnCancelarSoli.setBackground(new java.awt.Color(236, 34, 31));
-        btnCancelarSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnCancelarSoli.setForeground(new java.awt.Color(255, 255, 255));
-        btnCancelarSoli.setText("Cancelar Solicitud");
-        btnCancelarSoli.setBorderPainted(false);
-        btnCancelarSoli.setFocusPainted(false);
-        btnCancelarSoli.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelarSolicitud.setBackground(new java.awt.Color(236, 34, 31));
+        btnCancelarSolicitud.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnCancelarSolicitud.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelarSolicitud.setText("Cancelar Solicitud");
+        btnCancelarSolicitud.setBorderPainted(false);
+        btnCancelarSolicitud.setFocusPainted(false);
+        btnCancelarSolicitud.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarSoliActionPerformed(evt);
+                btnCancelarSolicitudActionPerformed(evt);
             }
         });
 
@@ -383,208 +383,208 @@ public class SolicitudRentaView extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout panelSolictudNormalLayout = new javax.swing.GroupLayout(panelSolictudNormal);
-        panelSolictudNormal.setLayout(panelSolictudNormalLayout);
-        panelSolictudNormalLayout.setHorizontalGroup(
-            panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelSolicitudNormalLayout = new javax.swing.GroupLayout(panelSolicitudNormal);
+        panelSolicitudNormal.setLayout(panelSolicitudNormalLayout);
+        panelSolicitudNormalLayout.setHorizontalGroup(
+            panelSolicitudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
+                .addGroup(panelSolicitudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(lblNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(250, 250, 250)
                         .addComponent(lblRFC, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(formtxtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(250, 250, 250)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(250, 250, 250)
                         .addComponent(formtxtFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(txtFieldNombreObra, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(txtFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(743, 743, 743)
                         .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(554, 554, 554)
                         .addComponent(btnQuitarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 880, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(176, 176, 176)
                         .addComponent(comboTipoTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(500, 500, 500)
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(636, 636, 636)
                         .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(172, 172, 172)
-                        .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                        .addComponent(btnCancelarSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(800, 800, 800)
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 40, Short.MAX_VALUE))
         );
-        panelSolictudNormalLayout.setVerticalGroup(
-            panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSolictudNormalLayout.createSequentialGroup()
-                .addGroup(panelSolictudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+        panelSolicitudNormalLayout.setVerticalGroup(
+            panelSolicitudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
+                .addGroup(panelSolicitudNormalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(104, 104, 104)
                         .addComponent(lblNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(lblFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(lblRFC, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(172, 172, 172)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(202, 202, 202)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(226, 226, 226)
                         .addComponent(formtxtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(202, 202, 202)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(226, 226, 226)
                         .addComponent(formtxtFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(76, 76, 76)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(104, 104, 104)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(128, 128, 128)
                         .addComponent(txtFieldNombreObra, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(168, 168, 168)
                         .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(192, 192, 192)
                         .addComponent(txtFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(282, 282, 282)
                         .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(274, 274, 274)
                         .addComponent(btnAgregarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(274, 274, 274)
                         .addComponent(btnQuitarEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(316, 316, 316)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(396, 396, 396)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(432, 432, 432)
                         .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(460, 460, 460)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(432, 432, 432)
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(460, 460, 460)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(538, 538, 538)
                         .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(538, 538, 538)
                         .addComponent(comboTipoTrabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(538, 538, 538)
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(538, 538, 538)
                         .addComponent(comboTipoTerreno, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
-                        .addComponent(btnCancelarSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                        .addComponent(btnCancelarSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
                         .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelSolictudNormalLayout.createSequentialGroup()
+                    .addGroup(panelSolicitudNormalLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
                         .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 32, Short.MAX_VALUE))
         );
 
-        getContentPane().add(panelSolictudNormal, "card1");
+        getContentPane().add(panelSolicitudNormal, "card1");
 
         panelCancelacionSolicitud.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -596,13 +596,13 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         jLabel20.setForeground(new java.awt.Color(0, 0, 0));
         jLabel20.setText("DATOS DEL CLIENTE");
 
-        jLabel21.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel21.setText("Folio:");
+        lblFolioCancelacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblFolioCancelacion.setForeground(new java.awt.Color(0, 0, 0));
+        lblFolioCancelacion.setText("Folio:");
 
-        lblRFCancelacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        lblRFCancelacion.setForeground(new java.awt.Color(0, 0, 0));
-        lblRFCancelacion.setText("RFC:");
+        lblRfcCancelacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblRfcCancelacion.setForeground(new java.awt.Color(0, 0, 0));
+        lblRfcCancelacion.setText("RFC:");
 
         jLabel23.setFont(new java.awt.Font("Dialog", 1, 15)); // NOI18N
         jLabel23.setForeground(new java.awt.Color(0, 0, 0));
@@ -655,10 +655,10 @@ public class SolicitudRentaView extends javax.swing.JFrame {
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblFolioCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(lblRFCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblRfcCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -685,10 +685,10 @@ public class SolicitudRentaView extends javax.swing.JFrame {
                         .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(104, 104, 104)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblFolioCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(130, 130, 130)
-                        .addComponent(lblRFCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblRfcCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelCancelacionSolicitudLayout.createSequentialGroup()
                         .addGap(172, 172, 172)
                         .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -714,18 +714,18 @@ public class SolicitudRentaView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEquipoActionPerformed
 
     private void btnQuitarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarEquipoActionPerformed
-        int fila = tableEquipoSoli.getSelectedRow();
+        int fila = tableEquipoSolicitado.getSelectedRow();
         EquipoSolicitadoDTO equipo = null;
         if (fila != -1) {
             equipo = new EquipoSolicitadoDTO();
-            equipo.setDescripcionEquipo(tableEquipoSoli.getValueAt(fila, 0).toString());
+            equipo.setDescripcionEquipo(tableEquipoSolicitado.getValueAt(fila, 0).toString());
         }
         contratacionRenta.quitarEquipoSolicitado(equipo);
     }//GEN-LAST:event_btnQuitarEquipoActionPerformed
 
-    private void btnCancelarSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSoliActionPerformed
+    private void btnCancelarSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarSolicitudActionPerformed
         contratacionRenta.abrirCancelacionSolicitud();
-    }//GEN-LAST:event_btnCancelarSoliActionPerformed
+    }//GEN-LAST:event_btnCancelarSolicitudActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         contratacionRenta.regresarAIdentificacionCliente();
@@ -752,10 +752,10 @@ public class SolicitudRentaView extends javax.swing.JFrame {
         periodo.setFechaInicio(datePickerInicio.getDate());
         periodo.setFechaFin(datePickerFinal.getDate());
         solicitudDTO.setPeriodo(periodo);
-        for (int i = 0; i < tableEquipoSoli.getRowCount(); i++) {
+        for (int i = 0; i < tableEquipoSolicitado.getRowCount(); i++) {
             EquipoSolicitadoDTO equipo = new EquipoSolicitadoDTO();
-            equipo.setDescripcionEquipo(tableEquipoSoli.getValueAt(i, 0).toString());
-            equipo.setCantidad(Integer.parseInt(tableEquipoSoli.getValueAt(i, 1).toString()));
+            equipo.setDescripcionEquipo(tableEquipoSolicitado.getValueAt(i, 0).toString());
+            equipo.setCantidad(Integer.parseInt(tableEquipoSolicitado.getValueAt(i, 1).toString()));
             solicitudDTO.getEquiposSolicitados().add(equipo);
         }
         this.contratacionRenta.registrarSolicitud(solicitudDTO);
@@ -774,7 +774,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarEquipo;
-    private javax.swing.JButton btnCancelarSoli;
+    private javax.swing.JButton btnCancelarSolicitud;
     private javax.swing.JButton btnQuitarEquipo;
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JButton btnRegistrarCancelacion;
@@ -796,7 +796,7 @@ public class SolicitudRentaView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel lblFolioCancelacion;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -809,10 +809,10 @@ public class SolicitudRentaView extends javax.swing.JFrame {
     private javax.swing.JLabel lblFolio;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblRFC;
-    private javax.swing.JLabel lblRFCancelacion;
+    private javax.swing.JLabel lblRfcCancelacion;
     private javax.swing.JPanel panelCancelacionSolicitud;
-    private javax.swing.JPanel panelSolictudNormal;
-    private javax.swing.JTable tableEquipoSoli;
+    private javax.swing.JPanel panelSolicitudNormal;
+    private javax.swing.JTable tableEquipoSolicitado;
     private javax.swing.JTextArea txtAreaActividadRealizar;
     private javax.swing.JTextArea txtAreaCondicionExtra;
     private javax.swing.JTextArea txtAreaRazonCancelacion;

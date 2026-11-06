@@ -33,7 +33,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
             txtFieldNombre.setText(dto.getNombre());
             txtFieldRFC.setText(dto.getRfc());
             txtFieldTelefono.setText(dto.getTelefono());
-            txtFieldCorreoElectro.setText(dto.getCorreo());
+            txtFieldCorreoElectronico.setText(dto.getCorreo());
             if (dto instanceof ClienteEmpresaDTO) {
                 panelEncargado.setVisible(true);
                 radioBtnEmpresa.setSelected(true);
@@ -54,7 +54,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
             txtFieldNombre.setText("");
             txtFieldRFC.setText("");
             txtFieldTelefono.setText("");
-            txtFieldCorreoElectro.setText("");
+            txtFieldCorreoElectronico.setText("");
             txtFieldNombreEncargado.setText("");
             txtFieldPuestoEncargado.setText("");
             txtFieldTelefonoEncargado.setText("");
@@ -83,7 +83,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtFieldNombre = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtFieldCorreoElectro = new javax.swing.JTextField();
+        txtFieldCorreoElectronico = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtFieldTelefono = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -151,9 +151,9 @@ public class RegistroClienteView extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Correo Electrónico:");
 
-        txtFieldCorreoElectro.setBackground(new java.awt.Color(255, 255, 255));
-        txtFieldCorreoElectro.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFieldCorreoElectro.setForeground(new java.awt.Color(0, 0, 0));
+        txtFieldCorreoElectronico.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldCorreoElectronico.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldCorreoElectronico.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
@@ -363,7 +363,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(500, 500, 500)
-                .addComponent(txtFieldCorreoElectro, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -430,7 +430,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
                 .addGap(0, 504, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(180, 180, 180)
-                .addComponent(txtFieldCorreoElectro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 466, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(226, 226, 226)
@@ -517,7 +517,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
         cliente.setNombre(txtFieldNombre.getText().trim());
         cliente.setRfc(txtFieldRFC.getText().trim());
         cliente.setTelefono(txtFieldTelefono.getText().trim());
-        cliente.setCorreo(txtFieldCorreoElectro.getText().trim());
+        cliente.setCorreo(txtFieldCorreoElectronico.getText().trim());
         contratacionRenta.registrarCliente(cliente);
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
@@ -541,7 +541,7 @@ public class RegistroClienteView extends javax.swing.JFrame {
     private javax.swing.JPanel panelFondo;
     private javax.swing.JRadioButton radioBtnClientePart;
     private javax.swing.JRadioButton radioBtnEmpresa;
-    private javax.swing.JTextField txtFieldCorreoElectro;
+    private javax.swing.JTextField txtFieldCorreoElectronico;
     private javax.swing.JTextField txtFieldNombre;
     private javax.swing.JTextField txtFieldNombreEncargado;
     private javax.swing.JTextField txtFieldPuestoEncargado;

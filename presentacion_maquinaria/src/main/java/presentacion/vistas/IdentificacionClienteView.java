@@ -27,7 +27,7 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
 
     
     public void cargarClientes(List<ClienteDTO> listaClientes) {
-        txtFieldBusqCliente.setText("");
+        txtFieldBusquedaCliente.setText("");
         cargarClientesEnTabla(listaClientes);
     }
 
@@ -49,15 +49,15 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
         panelFondo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        comboFiltroBusqCliente = new javax.swing.JComboBox<>();
-        txtFieldBusqCliente = new javax.swing.JTextField();
+        comboFiltroBusquedaCliente = new javax.swing.JComboBox<>();
+        txtFieldBusquedaCliente = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableCliente = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
-        btnRegistrarNuevCliente = new javax.swing.JButton();
+        btnRegistrarNuevoCliente = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
-        btnRegistrarNuevSoli = new javax.swing.JButton();
+        btnRegistrarNuevaSolicitud = new javax.swing.JButton();
         btnModificarDatos = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -74,12 +74,12 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Búsqueda de Cliente Por:");
 
-        comboFiltroBusqCliente.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        comboFiltroBusqCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RFC", "Nombre", "Teléfono" }));
+        comboFiltroBusquedaCliente.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        comboFiltroBusquedaCliente.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RFC", "Nombre", "Teléfono" }));
 
-        txtFieldBusqCliente.setBackground(new java.awt.Color(255, 255, 255));
-        txtFieldBusqCliente.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        txtFieldBusqCliente.setForeground(new java.awt.Color(0, 0, 0));
+        txtFieldBusquedaCliente.setBackground(new java.awt.Color(255, 255, 255));
+        txtFieldBusquedaCliente.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        txtFieldBusquedaCliente.setForeground(new java.awt.Color(0, 0, 0));
 
         btnBuscar.setBackground(new java.awt.Color(44, 44, 44));
         btnBuscar.setBorderPainted(false);
@@ -118,16 +118,16 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("¿Es un cliente nuevo?");
 
-        btnRegistrarNuevCliente.setBackground(new java.awt.Color(44, 44, 44));
-        btnRegistrarNuevCliente.setBorderPainted(false);
-        btnRegistrarNuevCliente.setFocusPainted(false);
-        btnRegistrarNuevCliente.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnRegistrarNuevCliente.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrarNuevCliente.setOpaque(true);
-        btnRegistrarNuevCliente.setText("Registrar Cliente Nuevo");
-        btnRegistrarNuevCliente.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrarNuevoCliente.setBackground(new java.awt.Color(44, 44, 44));
+        btnRegistrarNuevoCliente.setBorderPainted(false);
+        btnRegistrarNuevoCliente.setFocusPainted(false);
+        btnRegistrarNuevoCliente.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegistrarNuevoCliente.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrarNuevoCliente.setOpaque(true);
+        btnRegistrarNuevoCliente.setText("Registrar Cliente Nuevo");
+        btnRegistrarNuevoCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarNuevClienteActionPerformed(evt);
+                btnRegistrarNuevoClienteActionPerformed(evt);
             }
         });
 
@@ -144,16 +144,16 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
             }
         });
 
-        btnRegistrarNuevSoli.setBackground(new java.awt.Color(44, 44, 44));
-        btnRegistrarNuevSoli.setBorderPainted(false);
-        btnRegistrarNuevSoli.setFocusPainted(false);
-        btnRegistrarNuevSoli.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnRegistrarNuevSoli.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistrarNuevSoli.setOpaque(true);
-        btnRegistrarNuevSoli.setText("Registrar Nueva Solicitud");
-        btnRegistrarNuevSoli.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrarNuevaSolicitud.setBackground(new java.awt.Color(44, 44, 44));
+        btnRegistrarNuevaSolicitud.setBorderPainted(false);
+        btnRegistrarNuevaSolicitud.setFocusPainted(false);
+        btnRegistrarNuevaSolicitud.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegistrarNuevaSolicitud.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrarNuevaSolicitud.setOpaque(true);
+        btnRegistrarNuevaSolicitud.setText("Registrar Nueva Solicitud");
+        btnRegistrarNuevaSolicitud.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarNuevSoliActionPerformed(evt);
+                btnRegistrarNuevaSolicitudActionPerformed(evt);
             }
         });
 
@@ -184,11 +184,11 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
                 .addGap(0, 729, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(comboFiltroBusqCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboFiltroBusquedaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 740, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(236, 236, 236)
-                .addComponent(txtFieldBusqCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldBusquedaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 204, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(800, 800, 800)
@@ -204,7 +204,7 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
                 .addGap(0, 754, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(212, 212, 212)
-                .addComponent(btnRegistrarNuevCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRegistrarNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 532, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -212,7 +212,7 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
                 .addGap(0, 800, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(693, 693, 693)
-                .addComponent(btnRegistrarNuevSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRegistrarNuevaSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 40, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(518, 518, 518)
@@ -231,11 +231,11 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
                 .addGap(0, 580, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(104, 104, 104)
-                .addComponent(comboFiltroBusqCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboFiltroBusquedaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 542, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(104, 104, 104)
-                .addComponent(txtFieldBusqCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFieldBusquedaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 542, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(104, 104, 104)
@@ -251,7 +251,7 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
                 .addGap(0, 234, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(412, 412, 412)
-                .addComponent(btnRegistrarNuevCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRegistrarNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 234, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
@@ -259,7 +259,7 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
                 .addGap(0, 32, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
-                .addComponent(btnRegistrarNuevSoli, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRegistrarNuevaSolicitud, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 32, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(604, 604, 604)
@@ -283,24 +283,24 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // la búsqueda la hace el control en el almacén temporal; aquí solo se manda lo escrito
-        contratacionRenta.buscarClientes(comboFiltroBusqCliente.getSelectedItem().toString(), txtFieldBusqCliente.getText());
+        contratacionRenta.buscarClientes(comboFiltroBusquedaCliente.getSelectedItem().toString(), txtFieldBusquedaCliente.getText());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
 
 
 
-    private void btnRegistrarNuevClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevClienteActionPerformed
+    private void btnRegistrarNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevoClienteActionPerformed
         this.contratacionRenta.pasarDatosRegistroCliente(null);
-    }//GEN-LAST:event_btnRegistrarNuevClienteActionPerformed
+    }//GEN-LAST:event_btnRegistrarNuevoClienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         contratacionRenta.abrirMenuPrincipal();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnRegistrarNuevSoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevSoliActionPerformed
+    private void btnRegistrarNuevaSolicitudActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarNuevaSolicitudActionPerformed
         int fila = tableCliente.getSelectedRow();
         contratacionRenta.pasarDatosSolicitudRenta(fila == -1 ? null : clientesMostrados.get(fila));
-    }//GEN-LAST:event_btnRegistrarNuevSoliActionPerformed
+    }//GEN-LAST:event_btnRegistrarNuevaSolicitudActionPerformed
 
     private void btnModificarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarDatosActionPerformed
         int fila = tableCliente.getSelectedRow();
@@ -312,15 +312,15 @@ public class IdentificacionClienteView extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnModificarDatos;
-    private javax.swing.JButton btnRegistrarNuevCliente;
-    private javax.swing.JButton btnRegistrarNuevSoli;
-    private javax.swing.JComboBox<String> comboFiltroBusqCliente;
+    private javax.swing.JButton btnRegistrarNuevoCliente;
+    private javax.swing.JButton btnRegistrarNuevaSolicitud;
+    private javax.swing.JComboBox<String> comboFiltroBusquedaCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel panelFondo;
     private javax.swing.JTable tableCliente;
-    private javax.swing.JTextField txtFieldBusqCliente;
+    private javax.swing.JTextField txtFieldBusquedaCliente;
     // End of variables declaration//GEN-END:variables
 }

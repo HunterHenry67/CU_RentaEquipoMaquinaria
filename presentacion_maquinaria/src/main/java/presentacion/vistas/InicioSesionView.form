@@ -69,7 +69,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="psswFiledContrasenia" min="-2" pref="420" max="-2" attributes="0"/>
+                          <Component id="psswFieldContrasenia" min="-2" pref="420" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="800" max="-2" attributes="0"/>
@@ -106,7 +106,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="234" max="-2" attributes="0"/>
-                          <Component id="psswFiledContrasenia" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="psswFieldContrasenia" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
@@ -179,7 +179,7 @@
             <Property name="text" type="java.lang.String" value="Contrase&#xf1;a:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="psswFiledContrasenia">
+        <Component class="javax.swing.JPasswordField" name="psswFieldContrasenia">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>

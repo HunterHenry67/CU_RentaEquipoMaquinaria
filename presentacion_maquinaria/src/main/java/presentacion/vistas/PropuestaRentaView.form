@@ -73,11 +73,11 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="lblAccesorioOb" min="-2" pref="360" max="-2" attributes="0"/>
+                          <Component id="lblAccesorioObligatorio" min="-2" pref="360" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="lblAccesorioOp" min="-2" pref="360" max="-2" attributes="0"/>
+                          <Component id="lblAccesorioOpcional" min="-2" pref="360" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
@@ -93,7 +93,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="420" max="-2" attributes="0"/>
-                          <Component id="lblRentatxt" min="-2" pref="200" max="-2" attributes="0"/>
+                          <Component id="lblRentaDetalle" min="-2" pref="200" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="620" max="-2" attributes="0"/>
@@ -101,7 +101,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="420" max="-2" attributes="0"/>
-                          <Component id="jLabel7" min="-2" pref="200" max="-2" attributes="0"/>
+                          <Component id="lblNombreIndispensable" min="-2" pref="200" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="620" max="-2" attributes="0"/>
@@ -218,11 +218,11 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="228" max="-2" attributes="0"/>
-                          <Component id="lblAccesorioOb" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="lblAccesorioObligatorio" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="252" max="-2" attributes="0"/>
-                          <Component id="lblAccesorioOp" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="lblAccesorioOpcional" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
@@ -238,7 +238,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
-                          <Component id="lblRentatxt" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="lblRentaDetalle" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
@@ -246,7 +246,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
-                          <Component id="jLabel7" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="lblNombreIndispensable" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="174" max="-2" attributes="0"/>
@@ -401,7 +401,7 @@
             <Property name="text" type="java.lang.String" value="Accesorios"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblAccesorioOb">
+        <Component class="javax.swing.JLabel" name="lblAccesorioObligatorio">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="15" style="0"/>
@@ -412,7 +412,7 @@
             <Property name="text" type="java.lang.String" value="Kit de se&#xf1;alizaci&#xf3;n - indispensable"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblAccesorioOp">
+        <Component class="javax.swing.JLabel" name="lblAccesorioOpcional">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="15" style="0"/>
@@ -456,7 +456,7 @@
             <Property name="text" type="java.lang.String" value="IMPORTE"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="lblRentatxt">
+        <Component class="javax.swing.JLabel" name="lblRentaDetalle">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="15" style="0"/>
@@ -479,7 +479,7 @@
             <Property name="text" type="java.lang.String" value="$9,000"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel7">
+        <Component class="javax.swing.JLabel" name="lblNombreIndispensable">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="15" style="0"/>
@@ -514,7 +514,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel8" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
+                          <Component id="lblNombreOpcional" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="200" max="-2" attributes="0"/>
                               <Component id="lblCucharon" min="-2" pref="100" max="-2" attributes="0"/>
@@ -528,7 +528,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel8" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="lblNombreOpcional" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                           <Component id="lblCucharon" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -537,7 +537,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel8">
+            <Component class="javax.swing.JLabel" name="lblNombreOpcional">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="15" style="0"/>

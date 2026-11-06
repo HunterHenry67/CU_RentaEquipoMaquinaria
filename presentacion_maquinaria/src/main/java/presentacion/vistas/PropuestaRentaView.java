@@ -52,17 +52,17 @@ public class PropuestaRentaView extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         lblEquipo = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        lblAccesorioOb = new javax.swing.JLabel();
-        lblAccesorioOp = new javax.swing.JLabel();
+        lblAccesorioObligatorio = new javax.swing.JLabel();
+        lblAccesorioOpcional = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblPeriodo = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        lblRentatxt = new javax.swing.JLabel();
+        lblRentaDetalle = new javax.swing.JLabel();
         lblRenta = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblNombreIndispensable = new javax.swing.JLabel();
         lblSenalizacion = new javax.swing.JLabel();
         filaCucharon = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        lblNombreOpcional = new javax.swing.JLabel();
         lblCucharon = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
@@ -113,13 +113,13 @@ public class PropuestaRentaView extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(70, 70, 70));
         jLabel4.setText("Accesorios");
 
-        lblAccesorioOb.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        lblAccesorioOb.setForeground(new java.awt.Color(0, 0, 0));
-        lblAccesorioOb.setText("Kit de señalización - indispensable");
+        lblAccesorioObligatorio.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAccesorioObligatorio.setForeground(new java.awt.Color(0, 0, 0));
+        lblAccesorioObligatorio.setText("Kit de señalización - indispensable");
 
-        lblAccesorioOp.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        lblAccesorioOp.setForeground(new java.awt.Color(0, 0, 0));
-        lblAccesorioOp.setText("Cucharón adicional - opcional");
+        lblAccesorioOpcional.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblAccesorioOpcional.setForeground(new java.awt.Color(0, 0, 0));
+        lblAccesorioOpcional.setText("Cucharón adicional - opcional");
 
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(70, 70, 70));
@@ -133,18 +133,18 @@ public class PropuestaRentaView extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("IMPORTE");
 
-        lblRentatxt.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        lblRentatxt.setForeground(new java.awt.Color(0, 0, 0));
-        lblRentatxt.setText("Renta (6 días × $1,500)");
+        lblRentaDetalle.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblRentaDetalle.setForeground(new java.awt.Color(0, 0, 0));
+        lblRentaDetalle.setText("Renta (6 días × $1,500)");
 
         lblRenta.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblRenta.setForeground(new java.awt.Color(0, 0, 0));
         lblRenta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblRenta.setText("$9,000");
 
-        jLabel7.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Kit de señalización");
+        lblNombreIndispensable.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblNombreIndispensable.setForeground(new java.awt.Color(0, 0, 0));
+        lblNombreIndispensable.setText("Kit de señalización");
 
         lblSenalizacion.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblSenalizacion.setForeground(new java.awt.Color(0, 0, 0));
@@ -153,9 +153,9 @@ public class PropuestaRentaView extends javax.swing.JFrame {
 
         filaCucharon.setBackground(new java.awt.Color(217, 217, 217));
 
-        jLabel8.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel8.setText("Cucharón adicional");
+        lblNombreOpcional.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
+        lblNombreOpcional.setForeground(new java.awt.Color(0, 0, 0));
+        lblNombreOpcional.setText("Cucharón adicional");
 
         lblCucharon.setFont(new java.awt.Font("Dialog", 0, 15)); // NOI18N
         lblCucharon.setForeground(new java.awt.Color(0, 0, 0));
@@ -168,7 +168,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
             filaCucharonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filaCucharonLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNombreOpcional, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 100, Short.MAX_VALUE))
             .addGroup(filaCucharonLayout.createSequentialGroup()
                 .addGap(200, 200, 200)
@@ -179,7 +179,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
             filaCucharonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(filaCucharonLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNombreOpcional, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(filaCucharonLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
@@ -344,11 +344,11 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 .addGap(0, 800, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblAccesorioOb, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAccesorioObligatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 560, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
-                .addComponent(lblAccesorioOp, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAccesorioOpcional, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 560, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
@@ -364,7 +364,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 .addGap(0, 459, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(420, 420, 420)
-                .addComponent(lblRentatxt, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblRentaDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 340, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(620, 620, 620)
@@ -372,7 +372,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 .addGap(0, 240, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(420, 420, 420)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNombreIndispensable, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 340, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(620, 620, 620)
@@ -483,11 +483,11 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 .addGap(0, 454, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(228, 228, 228)
-                .addComponent(lblAccesorioOb, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAccesorioObligatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 430, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(252, 252, 252)
-                .addComponent(lblAccesorioOp, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblAccesorioOpcional, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 406, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(288, 288, 288)
@@ -503,7 +503,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 .addGap(0, 540, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(148, 148, 148)
-                .addComponent(lblRentatxt, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblRentaDetalle, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 510, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(148, 148, 148)
@@ -511,7 +511,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 .addGap(0, 510, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(174, 174, 174)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblNombreIndispensable, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 484, Short.MAX_VALUE))
             .addGroup(panelFondoLayout.createSequentialGroup()
                 .addGap(174, 174, 174)
@@ -677,14 +677,14 @@ public class PropuestaRentaView extends javax.swing.JFrame {
                 }
             }        
         }
-        lblAccesorioOb.setText(nombreIndispensables + " - indispensable");
-        jLabel7.setText(nombreIndispensables);
-        lblAccesorioOb.setVisible(hayObligatorio);
-        jLabel7.setVisible(hayObligatorio);
+        lblAccesorioObligatorio.setText(nombreIndispensables + " - indispensable");
+        lblNombreIndispensable.setText(nombreIndispensables);
+        lblAccesorioObligatorio.setVisible(hayObligatorio);
+        lblNombreIndispensable.setVisible(hayObligatorio);
         lblSenalizacion.setVisible(hayObligatorio);
         
-        lblAccesorioOp.setText(nombreOpcional + " - opcional");
-        jLabel8.setText(nombreOpcional);
+        lblAccesorioOpcional.setText(nombreOpcional + " - opcional");
+        lblNombreOpcional.setText(nombreOpcional);
         
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate inicio = solicitud.getPeriodo().getFechaInicio();
@@ -705,7 +705,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
         double iva = Montos.iva(cotizacion);
         double total = Montos.total(cotizacion);
 
-        lblRentatxt.setText("Renta (" + dias + " días × " + moneda.format(tarifaDia) + ")");
+        lblRentaDetalle.setText("Renta (" + dias + " días × " + moneda.format(tarifaDia) + ")");
         lblRenta.setText(moneda.format(renta));
         lblSenalizacion.setText(moneda.format(totalIndispensables));
         lblCucharon.setText(moneda.format(totalOpcionales));
@@ -715,7 +715,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
         lblDeposito.setText(moneda.format(deposito));
 
         filaCucharon.setVisible(hayOpcional);
-        lblAccesorioOp.setVisible(hayOpcional);
+        lblAccesorioOpcional.setVisible(hayOpcional);
     }
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -741,13 +741,13 @@ public class PropuestaRentaView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel lblNombreIndispensable;
+    private javax.swing.JLabel lblNombreOpcional;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel lblAccesorioOb;
-    private javax.swing.JLabel lblAccesorioOp;
+    private javax.swing.JLabel lblAccesorioObligatorio;
+    private javax.swing.JLabel lblAccesorioOpcional;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblCucharon;
     private javax.swing.JLabel lblDeposito;
@@ -755,7 +755,7 @@ public class PropuestaRentaView extends javax.swing.JFrame {
     private javax.swing.JLabel lblIva;
     private javax.swing.JLabel lblPeriodo;
     private javax.swing.JLabel lblRenta;
-    private javax.swing.JLabel lblRentatxt;
+    private javax.swing.JLabel lblRentaDetalle;
     private javax.swing.JLabel lblSenalizacion;
     private javax.swing.JLabel lblSubtotal;
     private javax.swing.JLabel lblTotal;

@@ -57,11 +57,11 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="comboFiltroBusqCliente" min="-2" pref="180" max="-2" attributes="0"/>
+                          <Component id="comboFiltroBusquedaCliente" min="-2" pref="180" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="236" max="-2" attributes="0"/>
-                          <Component id="txtFieldBusqCliente" min="-2" pref="520" max="-2" attributes="0"/>
+                          <Component id="txtFieldBusquedaCliente" min="-2" pref="520" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="800" max="-2" attributes="0"/>
@@ -77,7 +77,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="212" max="-2" attributes="0"/>
-                          <Component id="btnRegistrarNuevCliente" min="-2" pref="216" max="-2" attributes="0"/>
+                          <Component id="btnRegistrarNuevoCliente" min="-2" pref="216" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
@@ -85,7 +85,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="693" max="-2" attributes="0"/>
-                          <Component id="btnRegistrarNuevSoli" min="-2" pref="227" max="-2" attributes="0"/>
+                          <Component id="btnRegistrarNuevaSolicitud" min="-2" pref="227" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="518" max="-2" attributes="0"/>
@@ -110,11 +110,11 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
-                          <Component id="comboFiltroBusqCliente" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="comboFiltroBusquedaCliente" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
-                          <Component id="txtFieldBusqCliente" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="txtFieldBusquedaCliente" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="104" max="-2" attributes="0"/>
@@ -130,7 +130,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="412" max="-2" attributes="0"/>
-                          <Component id="btnRegistrarNuevCliente" min="-2" pref="34" max="-2" attributes="0"/>
+                          <Component id="btnRegistrarNuevoCliente" min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
@@ -138,7 +138,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
-                          <Component id="btnRegistrarNuevSoli" min="-2" pref="44" max="-2" attributes="0"/>
+                          <Component id="btnRegistrarNuevaSolicitud" min="-2" pref="44" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="604" max="-2" attributes="0"/>
@@ -173,7 +173,7 @@
             <Property name="text" type="java.lang.String" value="B&#xfa;squeda de Cliente Por:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="comboFiltroBusqCliente">
+        <Component class="javax.swing.JComboBox" name="comboFiltroBusquedaCliente">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Dialog" size="14" style="0"/>
@@ -190,7 +190,7 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtFieldBusqCliente">
+        <Component class="javax.swing.JTextField" name="txtFieldBusquedaCliente">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -257,7 +257,7 @@
             <Property name="text" type="java.lang.String" value="&#xbf;Es un cliente nuevo?"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnRegistrarNuevCliente">
+        <Component class="javax.swing.JButton" name="btnRegistrarNuevoCliente">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="2c" green="2c" red="2c" type="rgb"/>
@@ -273,7 +273,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarNuevClienteActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarNuevoClienteActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCancelar">
@@ -295,7 +295,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnRegistrarNuevSoli">
+        <Component class="javax.swing.JButton" name="btnRegistrarNuevaSolicitud">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="2c" green="2c" red="2c" type="rgb"/>
@@ -311,7 +311,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarNuevSoliActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarNuevaSolicitudActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnModificarDatos">

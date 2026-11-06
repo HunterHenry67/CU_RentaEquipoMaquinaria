@@ -32,7 +32,7 @@ public class InicioSesionView extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtFieldCorreo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        psswFiledContrasenia = new javax.swing.JPasswordField();
+        psswFieldContrasenia = new javax.swing.JPasswordField();
         btnIngresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -66,9 +66,9 @@ public class InicioSesionView extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Contraseña:");
 
-        psswFiledContrasenia.setBackground(new java.awt.Color(255, 255, 255));
-        psswFiledContrasenia.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        psswFiledContrasenia.setForeground(new java.awt.Color(0, 0, 0));
+        psswFieldContrasenia.setBackground(new java.awt.Color(255, 255, 255));
+        psswFieldContrasenia.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        psswFieldContrasenia.setForeground(new java.awt.Color(0, 0, 0));
 
         btnIngresar.setBackground(new java.awt.Color(44, 44, 44));
         btnIngresar.setBorderPainted(false);
@@ -105,7 +105,7 @@ public class InicioSesionView extends javax.swing.JFrame {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(psswFiledContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(psswFieldContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(800, 800, 800)
                         .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -132,7 +132,7 @@ public class InicioSesionView extends javax.swing.JFrame {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(234, 234, 234)
-                        .addComponent(psswFiledContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(psswFieldContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelFondoLayout.createSequentialGroup()
                         .addGap(604, 604, 604)
                         .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -155,21 +155,21 @@ public class InicioSesionView extends javax.swing.JFrame {
 
     private void txtFieldCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldCorreoActionPerformed
         // con Enter en el correo se pasa a la contraseña
-        psswFiledContrasenia.requestFocusInWindow();
+        psswFieldContrasenia.requestFocusInWindow();
     }//GEN-LAST:event_txtFieldCorreoActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // el control revisa lo capturado y avisa si falta algo
         UsuarioDTO usuario = new UsuarioDTO();
         usuario.setCorreo(txtFieldCorreo.getText().trim());
-        usuario.setContrasenia(new String(psswFiledContrasenia.getPassword()));
+        usuario.setContrasenia(new String(psswFieldContrasenia.getPassword()));
         contratacionRenta.pasarDatosUsuario(usuario);
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     // Al cerrar sesión no se quedan escritos el correo ni la contraseña
     public void limpiar() {
         txtFieldCorreo.setText("");
-        psswFiledContrasenia.setText("");
+        psswFieldContrasenia.setText("");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -179,7 +179,7 @@ public class InicioSesionView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel panelFondo;
-    private javax.swing.JPasswordField psswFiledContrasenia;
+    private javax.swing.JPasswordField psswFieldContrasenia;
     private javax.swing.JTextField txtFieldCorreo;
     // End of variables declaration//GEN-END:variables
 }
