@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package presentacion.vistas;
 
 import java.time.format.DateTimeFormatter;
@@ -17,7 +13,6 @@ import presentacion.control.IContratacionRenta;
 public class UnidadOcupadaFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     public UnidadOcupadaFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -27,7 +22,6 @@ public class UnidadOcupadaFrame extends javax.swing.JFrame {
     }
 
     public void cargarOcupada(SolicitudRentaDTO solicitud, UnidadFisicaDTO unidad) {
-        this.solicitud = solicitud;
         lblPeriodo.setText("Periodo solicitado: " + Formato.periodo(solicitud));
         lblMotivo.setText("Motivo: " + motivo(unidad));
     }

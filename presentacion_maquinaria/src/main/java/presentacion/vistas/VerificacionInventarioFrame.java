@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package presentacion.vistas;
 
 import java.util.ArrayList;
@@ -19,7 +15,6 @@ import presentacion.control.IContratacionRenta;
 public class VerificacionInventarioFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
     private List<UnidadFisicaDTO> unidades = new ArrayList<>();
 
     public VerificacionInventarioFrame(IContratacionRenta contratacionRenta) {
@@ -246,7 +241,6 @@ public class VerificacionInventarioFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerMotivoActionPerformed
 
     public void cargarSolicitud(SolicitudRentaDTO solicitud, List<UnidadFisicaDTO> unidades) {
-        this.solicitud = solicitud;
         this.unidades = unidades == null ? new ArrayList<>() : unidades;
 
         EquipoDTO recomendado = Formato.equipoRecomendado(solicitud);

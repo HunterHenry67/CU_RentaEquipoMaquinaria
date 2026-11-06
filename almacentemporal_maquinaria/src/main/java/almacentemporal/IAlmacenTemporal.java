@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package almacentemporal;
 
 import java.util.List;
@@ -25,8 +21,6 @@ public interface IAlmacenTemporal {
     public abstract List<ClienteDTO> obtenerClientes();
 
     public abstract List<ClienteDTO> buscarClientes(String filtro, String texto);
-
-    public abstract ClienteDTO buscarClientePorId(Long idCliente);
 
     public abstract ClienteDTO buscarClientePorRfc(String rfc);
 
@@ -64,8 +58,6 @@ public interface IAlmacenTemporal {
     public abstract void actualizarCotizacion(CotizacionDTO cotizacion);
 
     public abstract CotizacionDTO buscarCotizacionPorFolio(String folio);
-
-    public abstract List<CotizacionDTO> obtenerCotizaciones();
 
     public abstract ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion);
 

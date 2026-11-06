@@ -32,11 +32,6 @@ public class Montos {
         return detalle == null || detalle.getImporte() == null ? 0 : detalle.getImporte();
     }
 
-    public static int dias(CotizacionDTO cotizacion) {
-        DetalleCotizacionDTO detalle = equipo(cotizacion);
-        return detalle == null || detalle.getCantidad() == null ? 0 : detalle.getCantidad();
-    }
-
     public static double tarifaDiaria(CotizacionDTO cotizacion) {
         DetalleCotizacionDTO detalle = equipo(cotizacion);
         return detalle == null || detalle.getPrecioUnitario() == null ? 0 : detalle.getPrecioUnitario();

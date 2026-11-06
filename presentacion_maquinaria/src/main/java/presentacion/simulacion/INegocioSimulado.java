@@ -15,7 +15,7 @@ import objetosdto.UnidadFisicaDTO;
 
 /**
  * Respuestas simuladas de las reglas de negocio. El Control de Aplicación las pide aquí
- * mientras no existe el subsistema de negocio (admContratacionRenta); cuando exista, el
+ * mientras no existe el subsistema de negocio (subsistemaContratacionRenta); cuando exista, el
  * control le pedirá lo mismo a ese subsistema y las pantallas no cambian.
  */
 public interface INegocioSimulado {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package presentacion.vistas;
 
 import com.github.lgooddatepicker.components.DatePicker;
@@ -71,14 +67,6 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         });
 
         panelSolictudNormal.repaint();
-    }
-
-    public LocalDate getFechaInicio() {
-        return datePickerInicio.getDate();
-    }
-
-    public LocalDate getFechaFinal() {
-        return datePickerFinal.getDate();
     }
 
     // El control la llama al volver al menú: la siguiente solicitud empieza en blanco

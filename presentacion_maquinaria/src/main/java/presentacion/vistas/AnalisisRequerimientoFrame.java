@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package presentacion.vistas;
 
 import java.util.ArrayList;
@@ -18,7 +14,6 @@ import presentacion.control.ValidadorPresentacion;
 public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     public AnalisisRequerimientoFrame(IContratacionRenta contratacionRenta) {
         this.contratacionRenta = contratacionRenta;
@@ -30,7 +25,6 @@ public class AnalisisRequerimientoFrame extends javax.swing.JFrame {
     // El coordinador la llama cada vez que se abre la pantalla: muestra lo que pidió el cliente y lo
     // que ya se haya capturado del requerimiento (así no se pierde al regresar)
     public void cargarSolicitud(SolicitudRentaDTO solicitud) {
-        this.solicitud = solicitud;
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         lblCliente.setText("Cliente: " + Formato.nombreCliente(solicitud));
         lblPeriodo.setText("Periodo: " + Formato.periodo(solicitud));

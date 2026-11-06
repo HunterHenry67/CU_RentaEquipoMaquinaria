@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package presentacion.control;
 
 import almacentemporal.IAlmacenTemporal;
@@ -41,7 +37,6 @@ public class ContratacionRenta implements IContratacionRenta {
     private final IAlmacenTemporal almacen;
     private final INegocioSimulado negocio;
     private ICoordinadorAplicacion coordinador;
-    private UsuarioDTO usuario;
     private ClienteDTO clienteActual;
     private SolicitudRentaDTO solicitudActual;
     private CotizacionDTO cotizacionActual;
@@ -60,7 +55,6 @@ public class ContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirIniciarSesion() {
-        usuario = null;
         coordinador.mostrarInicioSesion();
     }
 
@@ -245,7 +239,6 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         // la revisión de la cuenta es del negocio; por ahora se acepta cualquier usuario con datos válidos
-        this.usuario = usuario;
         coordinador.mostrarMensaje(Mensaje.SESION_INICIADA);
         abrirMenuPrincipal();
     }

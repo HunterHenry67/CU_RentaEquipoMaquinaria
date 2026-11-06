@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package almacentemporal;
 
 import java.text.Normalizer;
@@ -143,16 +139,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
             }
         }
         return encontrados;
-    }
-
-    @Override
-    public ClienteDTO buscarClientePorId(Long idCliente) {
-        for (ClienteDTO c : clientes) {
-            if (Objects.equals(c.getIdCliente(), idCliente)) {
-                return copia(c);
-            }
-        }
-        return null;
     }
 
     @Override
@@ -328,15 +314,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
             }
         }
         return encontrada == null ? null : copia(encontrada);
-    }
-
-    @Override
-    public List<CotizacionDTO> obtenerCotizaciones() {
-        List<CotizacionDTO> lista = new ArrayList<>();
-        for (CotizacionDTO c : cotizaciones) {
-            lista.add(copia(c));
-        }
-        return lista;
     }
 
     @Override

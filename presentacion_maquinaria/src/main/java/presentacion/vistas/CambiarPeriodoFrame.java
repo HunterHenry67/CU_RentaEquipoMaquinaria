@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package presentacion.vistas;
 
 import objetosdto.SolicitudRentaDTO;
@@ -18,7 +14,6 @@ import presentacion.control.IContratacionRenta;
 public class CambiarPeriodoFrame extends javax.swing.JFrame {
 
     private IContratacionRenta contratacionRenta;
-    private SolicitudRentaDTO solicitud = new SolicitudRentaDTO();
 
     private DatePicker selectorFechaInicio;
     private DatePicker selectorFechaFin;
@@ -74,7 +69,6 @@ public class CambiarPeriodoFrame extends javax.swing.JFrame {
     }
 
     public void cargarPeriodo(SolicitudRentaDTO solicitud) {
-        this.solicitud = solicitud;
         lblFolio.setText("Folio: " + Formato.texto(solicitud.getFolio()));
         lblCliente.setText("Cliente: " + (solicitud.getCliente() == null ? "" : Formato.texto(solicitud.getCliente().getNombre())));
 
