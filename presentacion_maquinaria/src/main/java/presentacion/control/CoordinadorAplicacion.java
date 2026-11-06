@@ -203,6 +203,11 @@ public class CoordinadorAplicacion implements ICoordinadorAplicacion {
     }
 
     @Override
+    public void mostrarTerrenoSolicitud(String terreno) {
+        solicitudRentaFrame.cargarTerreno(terreno);
+    }
+
+    @Override
     public void mostrarAnalisisRequerimiento(SolicitudRentaDTO solicitud) {
         analisisRequerimientoFrame.cargarSolicitud(solicitud);
         mostrar(analisisRequerimientoFrame);

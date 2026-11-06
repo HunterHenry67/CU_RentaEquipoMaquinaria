@@ -346,11 +346,28 @@ public class PruebasPresentacion {
         revisa("Regresar de Equipos compatibles vuelve al Análisis con lo capturado", visible().equals("AnalisisRequerimientoFrame") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
         clic(AnalisisRequerimientoFrame.class, "btnRegresar");
         revisa("Regresar del Análisis vuelve a la solicitud con lo capturado", visible().equals("SolicitudRentaFrame") && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
+        revisa("la solicitud muestra el terreno capturado en el Análisis: " + combo(SolicitudRentaFrame.class, "comboTipoTerreno"), combo(SolicitudRentaFrame.class, "comboTipoTerreno").equals("Terracería compactada"));
         escribir(SolicitudRentaFrame.class, "txtFieldNombreObra", "Plaza Goya, segunda etapa");
         clic(SolicitudRentaFrame.class, "btnRegistrar");
         revisa("modificar la solicitud no crea otra y conserva los requerimientos", visible().equals("AnalisisRequerimientoFrame") && almacen.obtenerSolicitudes().size() == 1
                 && almacen.obtenerSolicitudes().get(0).getNombreObra().equals("Plaza Goya, segunda etapa") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
         revisa("lo que se escribió en el Análisis antes de regresar sigue ahí: " + texto(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo"), texto(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo").startsWith("25"));
+        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Firme");
+        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
+        revisa("cambiar el terreno en el Análisis también se ve en la solicitud", combo(SolicitudRentaFrame.class, "comboTipoTerreno").equals("Firme"));
+        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        revisa("registrar otra vez no regresa el terreno anterior", combo(AnalisisRequerimientoFrame.class, "comboTipoTerreno").equals("Firme"));
+        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Sin especificar");
+        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
+        revisa("sin terreno en el Análisis, la solicitud dice Sin especificar", combo(SolicitudRentaFrame.class, "comboTipoTerreno").equals("Sin especificar"));
+        seleccionarCombo(SolicitudRentaFrame.class, "comboTipoTerreno", "Arenoso");
+        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        revisa("el terreno que se cambia en la solicitud llega al Análisis", combo(AnalisisRequerimientoFrame.class, "comboTipoTerreno").equals("Arenoso"));
+        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
+        seleccionarCombo(SolicitudRentaFrame.class, "comboTipoTerreno", "Sin especificar");
+        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        revisa("quitar el terreno en la solicitud lo quita del Análisis", combo(AnalisisRequerimientoFrame.class, "comboTipoTerreno").equals("Sin especificar"));
+        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Terracería compactada");
         clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
         continuarAAccesorios();
         marcarOpcional(true);
@@ -1571,6 +1588,10 @@ public class PruebasPresentacion {
     private static void seleccionarCombo(Class<? extends JFrame> pantalla, String nombre, String opcion) throws Exception {
         JComboBox<?> c = (JComboBox<?>) campo(ventana(pantalla), nombre);
         edt(() -> c.setSelectedItem(opcion));
+    }
+
+    private static String combo(Class<? extends JFrame> pantalla, String nombre) throws Exception {
+        return String.valueOf(((JComboBox<?>) campo(ventana(pantalla), nombre)).getSelectedItem());
     }
 
     private static DatePicker selector(Class<? extends JFrame> pantalla, String nombre) throws Exception {

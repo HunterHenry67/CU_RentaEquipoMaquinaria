@@ -47,6 +47,9 @@ public interface ICoordinadorAplicacion {
     // El periodo que quedó al cambiarlo desde la propuesta: la captura de la solicitud también lo muestra
     public abstract void mostrarPeriodoSolicitud(PeriodoSolicitadoDTO periodo);
 
+    // El terreno que quedó en el análisis: la captura de la solicitud también lo muestra
+    public abstract void mostrarTerrenoSolicitud(String terreno);
+
     public abstract void mostrarAnalisisRequerimiento(SolicitudRentaDTO solicitud);
 
     public abstract void mostrarSolicitudDatosFaltantes(SolicitudRentaDTO solicitud);

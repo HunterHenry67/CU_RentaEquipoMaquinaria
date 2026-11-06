@@ -104,6 +104,11 @@ public class SolicitudRentaFrame extends javax.swing.JFrame {
         datePickerFinal.setDate(periodo.getFechaFin());
     }
 
+    // El terreno se capturó en el análisis: la captura muestra el que quedó
+    public void cargarTerreno(String terreno) {
+        comboTipoTerreno.setSelectedItem(ValidadorPresentacion.textoVacio(terreno) ? ValidadorPresentacion.SIN_ESPECIFICAR : terreno);
+    }
+
     // Vuelve a la captura con lo que ya se había escrito
     public void mostrarCaptura() {
         CardLayout card = (CardLayout) this.getContentPane().getLayout();

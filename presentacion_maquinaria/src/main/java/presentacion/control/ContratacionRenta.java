@@ -482,6 +482,7 @@ public class ContratacionRenta implements IContratacionRenta {
         }
         solicitudActual.setRequerimientos(requerimientos);
         guardarSolicitud();
+        coordinador.mostrarTerrenoSolicitud(ValidadorPresentacion.texto(requerimientos, ValidadorPresentacion.TERRENO));
         abrirSolicitudRenta();
     }
 
@@ -785,10 +786,9 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         List<RequerimientoTecnicoDTO> requerimientos = ValidadorPresentacion.copia(solicitudActual.getRequerimientos());
-        String terreno = ValidadorPresentacion.texto(nueva.getRequerimientos(), ValidadorPresentacion.TERRENO);
-        if (!ValidadorPresentacion.textoVacio(terreno)) {
-            ValidadorPresentacion.capturar(requerimientos, ValidadorPresentacion.TERRENO, terreno);
-        }
+        // la captura ya muestra el terreno del análisis: lo que diga al registrar es lo que queda
+        ValidadorPresentacion.capturar(requerimientos, ValidadorPresentacion.TERRENO,
+                ValidadorPresentacion.texto(nueva.getRequerimientos(), ValidadorPresentacion.TERRENO));
         nueva.setRequerimientos(requerimientos);
         nueva.setRequisitos(solicitudActual.getRequisitos());
         nueva.setUnidadSeleccionada(solicitudActual.getUnidadSeleccionada());
