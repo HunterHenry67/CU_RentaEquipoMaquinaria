@@ -30,7 +30,7 @@ import presentacion.vistas.UnidadMantenimientoView;
 import presentacion.vistas.UnidadOcupadaView;
 import presentacion.vistas.VerificacionCondicionView;
 import presentacion.vistas.VerificacionInventarioView;
-import subsistemaContratacionRenta.SubsistemaContratacionRenta;
+import Subsistema.AdminContratacionRenta;
 import subsistemaInicioSesion.SubsistemaInicioSesion;
 
 /**
@@ -68,7 +68,7 @@ public class Main {
      * Aplicación recibe las ventanas para mostrarlas. El control le pide al coordinador cada cambio.
      */
     public static IContratacionRenta iniciar() {
-        ControlContratacionRenta control = new ControlContratacionRenta(new SubsistemaContratacionRenta(), new SubsistemaInicioSesion());
+        ControlContratacionRenta control = new ControlContratacionRenta(new AdminContratacionRenta(), new SubsistemaInicioSesion());
         CoordinadorAplicacion coordinador = new CoordinadorAplicacion(
                 new InicioSesionView(control),
                 new MenuPrincipalView(control),

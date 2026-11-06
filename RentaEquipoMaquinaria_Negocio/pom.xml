@@ -8,19 +8,18 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>RentaEquipoMaquinaria_Persistencia</artifactId>
+            <artifactId>objetosdto_maquinaria</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>objetosdto_maquinaria</artifactId>
+            <artifactId>objetosnegocio_maquinaria</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>itson.rentaequipomaquinaria_negocio.RentaEquipoMaquinaria_Negocio</exec.mainClass>
     </properties>
     <name>subsistemaAdminContratacionRenta</name>
 </project>

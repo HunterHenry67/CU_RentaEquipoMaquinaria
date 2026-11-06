@@ -58,8 +58,8 @@ import presentacion.controles.IContratacionRenta;
 import presentacion.controles.ICoordinadorAplicacion;
 import presentacion.controles.Mensaje;
 import presentacion.vistas.*;
-import subsistemaContratacionRenta.ISubsistemaContratacionRenta;
-import subsistemaContratacionRenta.SubsistemaContratacionRenta;
+import Subsistema.IAdminContratacionRenta;
+import Subsistema.AdminContratacionRenta;
 import subsistemaInicioSesion.ISubsistemaInicioSesion;
 import subsistemaInicioSesion.SubsistemaInicioSesion;
 
@@ -633,26 +633,26 @@ public class PruebasPresentacion {
         for (Field f : ControlContratacionRenta.class.getDeclaredFields()) {
             delControl.add(f.getType());
         }
-        revisa("el Control conoce a los subsistemas solo por su interfaz", delControl.contains(ISubsistemaContratacionRenta.class) && delControl.contains(ISubsistemaInicioSesion.class)
-                && !delControl.contains(SubsistemaContratacionRenta.class) && !delControl.contains(SubsistemaInicioSesion.class));
+        revisa("el Control conoce a los subsistemas solo por su interfaz", delControl.contains(IAdminContratacionRenta.class) && delControl.contains(ISubsistemaInicioSesion.class)
+                && !delControl.contains(AdminContratacionRenta.class) && !delControl.contains(SubsistemaInicioSesion.class));
         revisa("el Control no usa el almacén", !delControl.contains(IAlmacenTemporal.class) && !delControl.contains(AlmacenTemporal.class));
         revisa("ya no hay negocio simulado", !existeClase("presentacion.simulacion.NegocioSimulado") && !existeClase("presentacion.simulacion.INegocioSimulado"));
         boolean fachadaSinEstado = true;
-        for (Field f : SubsistemaContratacionRenta.class.getDeclaredFields()) {
+        for (Field f : AdminContratacionRenta.class.getDeclaredFields()) {
             fachadaSinEstado &= f.getType().getSimpleName().startsWith("Gestor");
         }
         revisa("la fachada solo guarda sus clases internas", fachadaSinEstado);
-        boolean soloFachadaPublica = Modifier.isPublic(SubsistemaContratacionRenta.class.getModifiers()) && Modifier.isPublic(SubsistemaInicioSesion.class.getModifiers());
-        for (String interna : new String[]{"subsistemaContratacionRenta.GestorClientes", "subsistemaContratacionRenta.GestorSolicitud", "subsistemaContratacionRenta.GestorDisponibilidad",
-            "subsistemaContratacionRenta.GestorCotizacion", "subsistemaContratacionRenta.GestorContratacion", "subsistemaInicioSesion.AutenticadorUsuario"}) {
+        boolean soloFachadaPublica = Modifier.isPublic(AdminContratacionRenta.class.getModifiers()) && Modifier.isPublic(SubsistemaInicioSesion.class.getModifiers());
+        for (String interna : new String[]{"Subsistema.GestorClientes", "Subsistema.GestorSolicitud", "Subsistema.GestorDisponibilidad",
+            "Subsistema.GestorCotizacion", "Subsistema.GestorContratacion", "subsistemaInicioSesion.AutenticadorUsuario"}) {
             soloFachadaPublica &= !Modifier.isPublic(Class.forName(interna).getModifiers());
         }
         revisa("de cada subsistema solo la interfaz y la fachada son públicas", soloFachadaPublica);
         boolean gestoresPorInterfaz = true;
-        for (Field f : Class.forName("subsistemaContratacionRenta.GestorCotizacion").getDeclaredFields()) {
+        for (Field f : Class.forName("Subsistema.GestorCotizacion").getDeclaredFields()) {
             gestoresPorInterfaz &= !f.getType().getSimpleName().endsWith("BO") || f.getType().isInterface();
         }
-        for (Field f : Class.forName("subsistemaContratacionRenta.GestorDisponibilidad").getDeclaredFields()) {
+        for (Field f : Class.forName("Subsistema.GestorDisponibilidad").getDeclaredFields()) {
             gestoresPorInterfaz &= !f.getType().getSimpleName().endsWith("BO") || f.getType().isInterface();
         }
         revisa("los gestores guardan sus BO por su interfaz", gestoresPorInterfaz);
@@ -1351,7 +1351,7 @@ public class PruebasPresentacion {
         caso("P17", "C5", "Reglas del subsistema", "Pedirle al subsistema, sin pantallas, la comparación de equipos, la disponibilidad por periodo, la cotización, la cancelación y el inicio de sesión; luego contraseña incorrecta y equipo sin tarifa desde las pantallas.",
                 "Las respuestas salen de los datos registrados y lo que no se puede hacer se avisa sin errores.");
         nuevaApp();
-        ISubsistemaContratacionRenta subsistema = new SubsistemaContratacionRenta();
+        IAdminContratacionRenta subsistema = new AdminContratacionRenta();
 
         // comparación de equipos: las cuatro características, con lo que tenga registrado cada equipo
         List<RequerimientoTecnicoDTO> requerimientos = List.of(new RequerimientoTecnicoDTO("Profundidad de trabajo", 3.5, "m", "Mínimo"),
@@ -1386,7 +1386,7 @@ public class PruebasPresentacion {
 
         // disponibilidad: sale de las ocupaciones que caen en el periodo
         nuevaApp();
-        subsistema = new SubsistemaContratacionRenta();
+        subsistema = new AdminContratacionRenta();
         EquipoDTO equipo = subsistema.buscarEquipoPorId(2L);
         revisa("del 10 al 15, como en el escenario", "M-001 Disponible, M-002 En mantenimiento, M-003 Ocupada".equals(estados(subsistema, equipo, 10, 15)));
         revisa("del 20 al 25 las tres están libres", "M-001 Disponible, M-002 Disponible, M-003 Disponible".equals(estados(subsistema, equipo, 20, 25)));
@@ -1491,19 +1491,19 @@ public class PruebasPresentacion {
 
     private interface Peticion {
 
-        void pedir(ISubsistemaContratacionRenta subsistema) throws Exception;
+        void pedir(IAdminContratacionRenta subsistema) throws Exception;
     }
 
     private static boolean lanza(Class<? extends Exception> tipo, Peticion peticion) {
         try {
-            peticion.pedir(new SubsistemaContratacionRenta());
+            peticion.pedir(new AdminContratacionRenta());
             return false;
         } catch (Exception ex) {
             return tipo.isInstance(ex);
         }
     }
 
-    private static String motivoDe(ISubsistemaContratacionRenta subsistema, List<RequerimientoTecnicoDTO> requerimientos, String modelo) {
+    private static String motivoDe(IAdminContratacionRenta subsistema, List<RequerimientoTecnicoDTO> requerimientos, String modelo) {
         for (Map.Entry<EquipoDTO, String> evaluado : subsistema.buscarEquiposCompatibles(requerimientos).entrySet()) {
             if (evaluado.getKey().getModelo().equals(modelo)) {
                 return evaluado.getValue();
@@ -1512,7 +1512,7 @@ public class PruebasPresentacion {
         return "(no está en el catálogo)";
     }
 
-    private static String estados(ISubsistemaContratacionRenta subsistema, EquipoDTO equipo, int inicio, int fin) {
+    private static String estados(IAdminContratacionRenta subsistema, EquipoDTO equipo, int inicio, int fin) {
         List<String> estados = new ArrayList<>();
         PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, inicio), LocalDate.of(2026, 9, fin), fin - inicio + 1);
         for (UnidadFisicaDTO unidad : subsistema.verificarDisponibilidadUnidades(equipo, periodo)) {

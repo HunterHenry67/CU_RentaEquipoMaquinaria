@@ -1,114 +1,205 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Subsistema;
 
 import java.util.List;
+import java.util.Map;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
 import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
-import objetosdto.EquipoSolicitadoDTO;
-import objetosdto.EvaluacionTecnicaDTO;
+import objetosdto.OrdenEntregaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
+import objetosdto.ResultadoCancelacionDTO;
+import objetosdto.ResultadoContratacionDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 
 /**
- *
- * @author BALAMRUSH
+ * Fachada del subsistema: recibe lo que pide el Control de Aplicación y se lo pasa a la clase interna
+ * que le corresponde. No guarda información del negocio ni decide nada.
  */
-public class AdminContratacionRenta implements IAdminContratacionRenta{
+public class AdminContratacionRenta implements IAdminContratacionRenta {
 
-    private GestorClientes gestorClientes;
-    private GestorContratacion gestorContratacion;
-    private GestorCotizacion gestorCotizacion;
-    private GestorDisponibilidad gestorDisponibilidad;
-    private GestorSolicitud gestorSolicitud;
-    
-    
+    private final GestorClientes gestorClientes = new GestorClientes();
+    private final GestorSolicitud gestorSolicitud = new GestorSolicitud();
+    private final GestorDisponibilidad gestorDisponibilidad = new GestorDisponibilidad();
+    private final GestorCotizacion gestorCotizacion = new GestorCotizacion();
+    private final GestorContratacion gestorContratacion = new GestorContratacion();
+
     @Override
-    public List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<ClienteDTO> obtenerClientes() {
+        return gestorClientes.listar();
     }
 
     @Override
-    public boolean registrarClienteNuevo(ClienteDTO cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<ClienteDTO> buscarClientes(String filtro, String texto) {
+        return gestorClientes.buscarPorFiltro(filtro, texto);
     }
 
     @Override
-    public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ClienteDTO buscarClientePorRfc(String rfc) {
+        return gestorClientes.buscarPorRfc(rfc);
     }
 
     @Override
-    public boolean cancelarSolicitudRenta(SolicitudRentaDTO solicitudRenta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ClienteDTO registrarClienteNuevo(ClienteDTO cliente) {
+        return gestorClientes.registrar(cliente);
     }
 
     @Override
-    public boolean agregarEquipoSolicitud(SolicitudRentaDTO solicitud, EquipoSolicitadoDTO equipo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void actualizarCliente(ClienteDTO cliente) {
+        gestorClientes.actualizar(cliente);
     }
 
     @Override
-    public List<EquipoDTO> buscarEquipoCompatibles(RequerimientoTecnicoDTO requerimiento) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean rfcEnUso(ClienteDTO cliente, ClienteDTO registrado) {
+        return gestorClientes.rfcEnUso(cliente, registrado);
     }
 
     @Override
-    public boolean evaluarRequerimiento(EvaluacionTecnicaDTO evaluacionTecnica) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean verificarRequisitosRenta(List<RequisitoRentaDTO> requisitos) {
+        return gestorClientes.cumpleRequisitos(requisitos);
     }
 
     @Override
-    public List<AccesorioDTO> obtenerAccesoriosDisponibles() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String siguienteFolio() {
+        return gestorSolicitud.generarFolio();
+    }
+
+    @Override
+    public SolicitudRentaDTO registrarSolicitud(SolicitudRentaDTO solicitud) {
+        return gestorSolicitud.crear(solicitud);
+    }
+
+    @Override
+    public SolicitudRentaDTO consultarSolicitud(String folio) {
+        return gestorSolicitud.obtenerPorFolio(folio);
+    }
+
+    @Override
+    public void actualizarSolicitud(SolicitudRentaDTO solicitud) {
+        gestorSolicitud.actualizar(solicitud);
+    }
+
+    @Override
+    public ResultadoCancelacionDTO cancelarSolicitudRenta(SolicitudRentaDTO solicitud) {
+        return gestorSolicitud.cancelar(solicitud);
+    }
+
+    @Override
+    public List<RequisitoRentaDTO> obtenerRequisitosRenta() {
+        return gestorSolicitud.listarRequisitos();
+    }
+
+    @Override
+    public int diasRenta(PeriodoSolicitadoDTO periodo) {
+        return gestorSolicitud.diasRenta(periodo);
+    }
+
+    @Override
+    public List<EquipoDTO> obtenerCatalogoEquipo() {
+        return gestorDisponibilidad.listarCatalogo();
+    }
+
+    @Override
+    public List<EquipoDTO> buscarEquipos(String texto) {
+        return gestorDisponibilidad.buscarPorNombre(texto);
+    }
+
+    @Override
+    public EquipoDTO buscarEquipoPorId(Long idEquipo) {
+        return gestorDisponibilidad.buscarPorId(idEquipo);
+    }
+
+    @Override
+    public Map<EquipoDTO, String> buscarEquiposCompatibles(List<RequerimientoTecnicoDTO> requerimientos) {
+        return gestorDisponibilidad.buscarCompatibles(requerimientos);
+    }
+
+    @Override
+    public List<AccesorioDTO> obtenerAccesoriosPropuestos(EquipoDTO equipo, List<AccesorioDTO> elegidos) {
+        return gestorDisponibilidad.accesoriosPropuestos(equipo, elegidos);
+    }
+
+    @Override
+    public UnidadFisicaDTO buscarUnidadPorId(Long idUnidad) {
+        return gestorDisponibilidad.buscarUnidad(idUnidad);
     }
 
     @Override
     public List<UnidadFisicaDTO> verificarDisponibilidadUnidades(EquipoDTO equipo, PeriodoSolicitadoDTO periodo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return gestorDisponibilidad.unidadesLibres(equipo, periodo);
     }
 
     @Override
-    public boolean registrarSeleccionAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> accesorios) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean estaDisponible(UnidadFisicaDTO unidad) {
+        return gestorDisponibilidad.estaDisponible(unidad);
     }
 
     @Override
-    public CotizacionDTO generarCotizacion(SolicitudRentaDTO solicitudRenta) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public UnidadFisicaDTO ocuparUnidad(UnidadFisicaDTO unidad, PeriodoSolicitadoDTO periodo) {
+        return gestorDisponibilidad.ocupar(unidad, periodo);
     }
 
     @Override
-    public boolean verificarRequisitosRenta(RequisitoRentaDTO cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public double tarifaDiaria(EquipoDTO equipo) {
+        return gestorCotizacion.tarifaDiaria(equipo);
     }
 
     @Override
-    public boolean aceptarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public CotizacionDTO generarCotizacion(String folio, EquipoDTO equipo, int dias, List<AccesorioDTO> accesorios) {
+        return gestorCotizacion.calcularTotal(folio, equipo, dias, accesorios);
     }
 
     @Override
-    public boolean rechazarPropuestaRenta(SolicitudRentaDTO solicitud, String motivo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Double depositoGarantia(List<RequisitoRentaDTO> requisitos) {
+        return gestorCotizacion.depositoGarantia(requisitos);
     }
 
     @Override
-    public boolean generarOrdenEntrega(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public CotizacionDTO registrarCotizacion(CotizacionDTO cotizacion) {
+        return gestorCotizacion.guardar(cotizacion);
     }
 
     @Override
-    public EquipoSolicitadoDTO recuperarEquipoSeleccionado() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public CotizacionDTO consultarCotizacion(String folio) {
+        return gestorCotizacion.obtenerPorFolio(folio);
     }
-    
+
+    @Override
+    public void actualizarCotizacion(CotizacionDTO cotizacion) {
+        gestorCotizacion.actualizar(cotizacion);
+    }
+
+    @Override
+    public List<AccesorioDTO> accesoriosAceptados(String tipoDecision, List<AccesorioDTO> propuestos) {
+        return gestorContratacion.accesoriosAceptados(tipoDecision, propuestos);
+    }
+
+    @Override
+    public String estadoContratacion(String tipoDecision) {
+        return gestorContratacion.estadoContratacion(tipoDecision);
+    }
+
+    @Override
+    public String horarioEntrega() {
+        return gestorContratacion.horarioEntrega();
+    }
+
+    @Override
+    public ResultadoContratacionDTO registrarContratacion(ContratacionRentaDTO contratacion) {
+        return gestorContratacion.crearContratacion(contratacion);
+    }
+
+    @Override
+    public ContratacionRentaDTO consultarContratacion(String folio) {
+        return gestorContratacion.obtenerPorFolio(folio);
+    }
+
+    @Override
+    public OrdenEntregaDTO generarOrdenEntrega(SolicitudRentaDTO solicitud) {
+        return gestorContratacion.construirOrden(solicitud);
+    }
 }

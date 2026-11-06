@@ -23,7 +23,7 @@ import objetosdto.ResultadoCancelacionDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import objetosdto.UsuarioDTO;
-import subsistemaContratacionRenta.ISubsistemaContratacionRenta;
+import Subsistema.IAdminContratacionRenta;
 import subsistemaInicioSesion.ISubsistemaInicioSesion;
 
 /**
@@ -34,7 +34,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
     // Las condiciones que el asesor revisa antes de generar la orden (las casillas de la pantalla)
     private static final List<String> CONDICIONES = Arrays.asList("Cliente", "Equipo y Unidad", "Accesorios aceptados", "Periodo", "Tarifa");
 
-    private final ISubsistemaContratacionRenta subsistema;
+    private final IAdminContratacionRenta subsistema;
     private final ISubsistemaInicioSesion subsistemaSesion;
     private ICoordinadorAplicacion coordinador;
     private ClienteDTO clienteActual;
@@ -44,7 +44,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
     private CotizacionDTO cotizacionContratacion;
     private Map<EquipoDTO, String> equiposEvaluados = new LinkedHashMap<>();
 
-    public ControlContratacionRenta(ISubsistemaContratacionRenta subsistema, ISubsistemaInicioSesion subsistemaSesion) {
+    public ControlContratacionRenta(IAdminContratacionRenta subsistema, ISubsistemaInicioSesion subsistemaSesion) {
         this.subsistema = subsistema;
         this.subsistemaSesion = subsistemaSesion;
     }

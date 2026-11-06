@@ -14,7 +14,6 @@
         <module>../objetosdto_maquinaria</module>
         <module>../almacentemporal_maquinaria</module>
         <module>../objetosnegocio_maquinaria</module>
-        <module>../negocios_subsistemaContratacionRenta</module>
         <module>../negocios_subsistemaInicioSesion</module>
     </modules>
     <properties>
