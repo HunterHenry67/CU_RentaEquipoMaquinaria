@@ -8,7 +8,7 @@ import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.SolicitudRentaDTO;
-import presentacion.control.ValidadorPresentacion;
+import presentacion.controles.ValidadorPresentacion;
 
 /**
  * Textos que varias pantallas muestran igual a partir de la solicitud que les pasa el

@@ -4,8 +4,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.AbstractButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import presentacion.control.IContratacionRenta;
+import presentacion.controles.IContratacionRenta;
 
 /**
  * Qué hace la X de las pantallas intermedias (en su .form no cierran solas: DO_NOTHING_ON_CLOSE).
@@ -16,19 +15,6 @@ import presentacion.control.IContratacionRenta;
 public class Ventanas {
 
     private Ventanas() {
-    }
-
-    public static void mostrarAviso(JFrame ventana, String titulo, String mensaje) {
-        JOptionPane.showMessageDialog(ventana, mensaje, titulo, JOptionPane.WARNING_MESSAGE);
-    }
-
-    public static void mostrarMensaje(JFrame ventana, String titulo, String mensaje) {
-        JOptionPane.showMessageDialog(ventana, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public static boolean confirmar(JFrame ventana, String titulo, String mensaje) {
-        return JOptionPane.showConfirmDialog(ventana, mensaje, titulo, JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
     }
 
     // La X hace lo mismo que el botón para regresar o cancelar de la pantalla

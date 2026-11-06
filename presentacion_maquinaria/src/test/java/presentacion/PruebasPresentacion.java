@@ -44,10 +44,10 @@ import objetosdto.ContratacionRentaDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.SolicitudRentaDTO;
-import presentacion.control.ContratacionRenta;
-import presentacion.control.IContratacionRenta;
-import presentacion.control.ICoordinadorAplicacion;
-import presentacion.mensajes.Mensaje;
+import presentacion.controles.ControlContratacionRenta;
+import presentacion.controles.IContratacionRenta;
+import presentacion.controles.ICoordinadorAplicacion;
+import presentacion.controles.Mensaje;
 import presentacion.vistas.*;
 
 /**
@@ -119,7 +119,7 @@ public class PruebasPresentacion {
         caso("P01", "C10", "Inicio del sistema", "Crear todas las ventanas como Main y abrir la inicial.",
                 "La aplicación inicia sin errores que bloqueen el uso.");
         nuevaApp();
-        revisa("abre el inicio de sesión", visible().equals("InicioSesionFrame"));
+        revisa("abre el inicio de sesión", visible().equals("InicioSesionView"));
         revisa("están las 25 pantallas", cuantasVentanas() == 25);
         foto("P01_inicio");
         sinExcepciones();
@@ -130,46 +130,46 @@ public class PruebasPresentacion {
                 "Se muestra la vista prevista sin abrir pantallas incorrectas.");
         nuevaApp();
         entrar();
-        revisa("Ingresar abre el menú", visible().equals("MenuPrincipalFrame"));
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        revisa("Contratación abre Identificación de cliente", visible().equals("IdentificacionClienteFrame"));
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        revisa("Registrar nueva solicitud abre Solicitud de renta", visible().equals("SolicitudRentaFrame"));
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        revisa("Agregar equipo abre Búsqueda de equipo", visible().equals("BusquedaEquipoFrame"));
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        revisa("Registrar equipo regresa a la solicitud", visible().equals("SolicitudRentaFrame"));
+        revisa("Ingresar abre el menú", visible().equals("MenuPrincipalView"));
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        revisa("Contratación abre Identificación de cliente", visible().equals("IdentificacionClienteView"));
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        revisa("Registrar nueva solicitud abre Solicitud de renta", visible().equals("SolicitudRentaView"));
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        revisa("Agregar equipo abre Búsqueda de equipo", visible().equals("BusquedaEquipoView"));
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        revisa("Registrar equipo regresa a la solicitud", visible().equals("SolicitudRentaView"));
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("Registrar abre Análisis de requerimiento", visible().equals("AnalisisRequerimientoFrame"));
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("Registrar abre Análisis de requerimiento", visible().equals("AnalisisRequerimientoView"));
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("Buscar equipos abre Equipos compatibles", visible().equals("EquiposCompatiblesFrame"));
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        revisa("Buscar equipos abre Equipos compatibles", visible().equals("EquiposCompatiblesView"));
         continuarAAccesorios();
-        revisa("Continuar abre Selección de accesorios", visible().equals("SeleccionAccesoriosFrame"));
+        revisa("Continuar abre Selección de accesorios", visible().equals("SeleccionAccesoriosView"));
         marcarOpcional(true);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        revisa("Continuar abre Evaluación técnica", visible().equals("EvaluacionTecnicaFrame"));
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        revisa("Enviar a verificación abre Inventario", visible().equals("VerificacionInventarioFrame"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        revisa("Seleccionar unidad abre el calendario", visible().equals("CalendarioUnidadFrame"));
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        revisa("del calendario pasa a Condiciones", visible().equals("CondicionesContratacionFrame"));
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        revisa("Enviar a validación abre la Cotización", visible().equals("CotizacionFrame"));
-        clic(CotizacionFrame.class, "btnContinuar");
-        revisa("Continuar abre Requisitos", visible().equals("RequisitosRentaFrame"));
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        revisa("Validar abre la Propuesta", visible().equals("PropuestaRentaFrame"));
-        clic(PropuestaRentaFrame.class, "btnAceptar");
-        revisa("Aceptar abre Verificación de condiciones", visible().equals("VerificacionCondicionFrame"));
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        revisa("Continuar abre Evaluación técnica", visible().equals("EvaluacionTecnicaView"));
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        revisa("Enviar a verificación abre Inventario", visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        revisa("Seleccionar unidad abre el calendario", visible().equals("CalendarioUnidadView"));
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        revisa("del calendario pasa a Condiciones", visible().equals("CondicionesContratacionView"));
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        revisa("Enviar a validación abre la Cotización", visible().equals("CotizacionView"));
+        clic(CotizacionView.class, "btnContinuar");
+        revisa("Continuar abre Requisitos", visible().equals("RequisitosRentaView"));
+        clic(RequisitosRentaView.class, "btnValidar");
+        revisa("Validar abre la Propuesta", visible().equals("PropuestaRentaView"));
+        clic(PropuestaRentaView.class, "btnAceptar");
+        revisa("Aceptar abre Verificación de condiciones", visible().equals("VerificacionCondicionView"));
         marcarCondiciones();
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
-        revisa("Generar abre la Orden de entrega", visible().equals("OrdenEntregaFrame"));
+        clic(VerificacionCondicionView.class, "btnGenerar");
+        revisa("Generar abre la Orden de entrega", visible().equals("OrdenEntregaView"));
         sinExcepciones();
     }
 
@@ -178,234 +178,234 @@ public class PruebasPresentacion {
                 "Regresa a la pantalla esperada y conserva datos necesarios.");
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
-        revisa("Registrar cliente abre su pantalla", visible().equals("RegistroClienteFrame"));
-        clic(RegistroClienteFrame.class, "btnCancelar");
-        revisa("Cancelar del registro regresa a Identificación", visible().equals("IdentificacionClienteFrame"));
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
+        revisa("Registrar cliente abre su pantalla", visible().equals("RegistroClienteView"));
+        clic(RegistroClienteView.class, "btnCancelar");
+        revisa("Cancelar del registro regresa a Identificación", visible().equals("IdentificacionClienteView"));
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        clic(BusquedaEquipoFrame.class, "btnRegresar");
-        revisa("Regresar de la búsqueda vuelve a la solicitud", visible().equals("SolicitudRentaFrame"));
-        revisa("la solicitud conserva lo capturado", texto(SolicitudRentaFrame.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldProfundidad", "3.50");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldPotencia", "120");
-        clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
-        revisa("Solicitar datos abre Datos faltantes", visible().equals("SolicitudDatosFaltantesFrame"));
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        clic(BusquedaEquipoView.class, "btnRegresar");
+        revisa("Regresar de la búsqueda vuelve a la solicitud", visible().equals("SolicitudRentaView"));
+        revisa("la solicitud conserva lo capturado", texto(SolicitudRentaView.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        escribir(AnalisisRequerimientoView.class, "txtFieldProfundidad", "3.50");
+        escribir(AnalisisRequerimientoView.class, "txtFieldPotencia", "120");
+        clic(AnalisisRequerimientoView.class, "btnSolicitarDatos");
+        revisa("Solicitar datos abre Datos faltantes", visible().equals("SolicitudDatosFaltantesView"));
         revisa("Datos faltantes solo pide lo que falta", !filaVisible("panelFaltaProfundidad") && !filaVisible("panelFaltaPotencia")
                 && filaVisible("panelFaltaPesoMaximo") && filaVisible("panelFaltaAnchoAcceso") && filaVisible("panelFaltaTerreno"));
         foto("P03_datos_faltantes");
-        clic(SolicitudDatosFaltantesFrame.class, "btnRegresar");
-        revisa("Regresar vuelve al Análisis", visible().equals("AnalisisRequerimientoFrame"));
-        revisa("el Análisis conserva la profundidad y la potencia: " + texto(AnalisisRequerimientoFrame.class, "txtFieldProfundidad"),
-                texto(AnalisisRequerimientoFrame.class, "txtFieldProfundidad").startsWith("3.5") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
-        clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
-        escribir(SolicitudDatosFaltantesFrame.class, "txtFieldAnchoAcceso", "4.20");
-        clic(SolicitudDatosFaltantesFrame.class, "btnRegistrarRespuesta");
-        revisa("la respuesta del cliente regresa al Análisis y se suma a lo de antes", visible().equals("AnalisisRequerimientoFrame")
-                && texto(AnalisisRequerimientoFrame.class, "txtFieldAnchoAcceso").startsWith("4.2") && texto(AnalisisRequerimientoFrame.class, "txtFieldProfundidad").startsWith("3.5"));
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("si sigue faltando un dato no deja buscar: " + ultimoAviso().mensaje(), visible().equals("AnalisisRequerimientoFrame") && ultimoAviso().mensaje().contains("Falta capturar")
+        clic(SolicitudDatosFaltantesView.class, "btnRegresar");
+        revisa("Regresar vuelve al Análisis", visible().equals("AnalisisRequerimientoView"));
+        revisa("el Análisis conserva la profundidad y la potencia: " + texto(AnalisisRequerimientoView.class, "txtFieldProfundidad"),
+                texto(AnalisisRequerimientoView.class, "txtFieldProfundidad").startsWith("3.5") && texto(AnalisisRequerimientoView.class, "txtFieldPotencia").startsWith("120"));
+        clic(AnalisisRequerimientoView.class, "btnSolicitarDatos");
+        escribir(SolicitudDatosFaltantesView.class, "txtFieldAnchoAcceso", "4.20");
+        clic(SolicitudDatosFaltantesView.class, "btnRegistrarRespuesta");
+        revisa("la respuesta del cliente regresa al Análisis y se suma a lo de antes", visible().equals("AnalisisRequerimientoView")
+                && texto(AnalisisRequerimientoView.class, "txtFieldAnchoAcceso").startsWith("4.2") && texto(AnalisisRequerimientoView.class, "txtFieldProfundidad").startsWith("3.5"));
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        revisa("si sigue faltando un dato no deja buscar: " + ultimoAviso().mensaje(), visible().equals("AnalisisRequerimientoView") && ultimoAviso().mensaje().contains("Falta capturar")
                 && ultimoAviso().mensaje().contains("Peso") && !ultimoAviso().mensaje().contains("Ancho"));
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         continuarAAccesorios();
-        clic(SeleccionAccesoriosFrame.class, "btnRegresar");
-        revisa("Regresar de accesorios vuelve a Equipos compatibles", visible().equals("EquiposCompatiblesFrame"));
+        clic(SeleccionAccesoriosView.class, "btnRegresar");
+        revisa("Regresar de accesorios vuelve a Equipos compatibles", visible().equals("EquiposCompatiblesView"));
         continuarAAccesorios();
         marcarOpcional(true);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        clic(VerificacionInventarioFrame.class, "btnRegresar");
-        revisa("Regresar del inventario vuelve a Evaluación técnica", visible().equals("EvaluacionTecnicaFrame"));
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnRegresar");
-        revisa("Regresar del calendario vuelve al inventario", visible().equals("VerificacionInventarioFrame"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnRegresar");
-        revisa("Regresar de condiciones vuelve al calendario con la misma unidad", visible().equals("CalendarioUnidadFrame") && etiqueta(CalendarioUnidadFrame.class, "lblUnidad").contains("M-001"));
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnRegresar");
-        revisa("Regresar de la cotización vuelve a condiciones", visible().equals("CondicionesContratacionFrame"));
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        revisa("Requisitos tiene Regresar a la vista sin ningún requisito pendiente", ((JButton) campo(ventana(RequisitosRentaFrame.class), "btnRegresar")).isShowing());
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        clic(VerificacionInventarioView.class, "btnRegresar");
+        revisa("Regresar del inventario vuelve a Evaluación técnica", visible().equals("EvaluacionTecnicaView"));
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnRegresar");
+        revisa("Regresar del calendario vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnRegresar");
+        revisa("Regresar de condiciones vuelve al calendario con la misma unidad", visible().equals("CalendarioUnidadView") && etiqueta(CalendarioUnidadView.class, "lblUnidad").contains("M-001"));
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnRegresar");
+        revisa("Regresar de la cotización vuelve a condiciones", visible().equals("CondicionesContratacionView"));
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        revisa("Requisitos tiene Regresar a la vista sin ningún requisito pendiente", ((JButton) campo(ventana(RequisitosRentaView.class), "btnRegresar")).isShowing());
         foto("P03_requisitos_con_regresar");
-        clic(RequisitosRentaFrame.class, "btnRegresar");
-        revisa("Regresar de Requisitos vuelve a la cotización", visible().equals("CotizacionFrame"));
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnRechazar");
+        clic(RequisitosRentaView.class, "btnRegresar");
+        revisa("Regresar de Requisitos vuelve a la cotización", visible().equals("CotizacionView"));
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnRechazar");
         foto("P03_motivo_del_rechazo");
-        clic(MotivoRechazoFrame.class, "btnRegresar");
-        revisa("Regresar del rechazo vuelve a la propuesta", visible().equals("PropuestaRentaFrame"));
-        clic(PropuestaRentaFrame.class, "btnCambiarPeriodo");
+        clic(MotivoRechazoView.class, "btnRegresar");
+        revisa("Regresar del rechazo vuelve a la propuesta", visible().equals("PropuestaRentaView"));
+        clic(PropuestaRentaView.class, "btnCambiarPeriodo");
         foto("P03_cambiar_periodo");
-        clic(CambiarPeriodoFrame.class, "btnRegresar");
-        revisa("Regresar de cambiar periodo vuelve a la propuesta", visible().equals("PropuestaRentaFrame"));
-        revisa("la propuesta sigue con el cliente y la unidad: " + etiqueta(PropuestaRentaFrame.class, "lblEquipo"),
-                etiqueta(PropuestaRentaFrame.class, "lblCliente").contains("Julián") && etiqueta(PropuestaRentaFrame.class, "lblEquipo").contains("M-001"));
+        clic(CambiarPeriodoView.class, "btnRegresar");
+        revisa("Regresar de cambiar periodo vuelve a la propuesta", visible().equals("PropuestaRentaView"));
+        revisa("la propuesta sigue con el cliente y la unidad: " + etiqueta(PropuestaRentaView.class, "lblEquipo"),
+                etiqueta(PropuestaRentaView.class, "lblCliente").contains("Julián") && etiqueta(PropuestaRentaView.class, "lblEquipo").contains("M-001"));
         // cambiar el periodo y seguir avanzando sin perder lo demás
-        clic(PropuestaRentaFrame.class, "btnCambiarPeriodo");
-        fecha(CambiarPeriodoFrame.class, "selectorFechaInicio", LocalDate.of(2026, 9, 20));
-        fecha(CambiarPeriodoFrame.class, "selectorFechaFin", LocalDate.of(2026, 9, 23));
-        clic(CambiarPeriodoFrame.class, "btnConsultarInventario");
-        revisa("con otro periodo vuelve al inventario", visible().equals("VerificacionInventarioFrame"));
-        revisa("la captura de la solicitud ya muestra el periodo nuevo", LocalDate.of(2026, 9, 20).equals(selector(SolicitudRentaFrame.class, "datePickerInicio").getDate())
-                && LocalDate.of(2026, 9, 23).equals(selector(SolicitudRentaFrame.class, "datePickerFinal").getDate()));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        revisa("la cotización se rehace con 4 días y sigue con el cliente", etiquetas(CotizacionFrame.class).contains("Julián") && etiquetas(CotizacionFrame.class).contains("4 días"));
+        clic(PropuestaRentaView.class, "btnCambiarPeriodo");
+        fecha(CambiarPeriodoView.class, "selectorFechaInicio", LocalDate.of(2026, 9, 20));
+        fecha(CambiarPeriodoView.class, "selectorFechaFin", LocalDate.of(2026, 9, 23));
+        clic(CambiarPeriodoView.class, "btnConsultarInventario");
+        revisa("con otro periodo vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        revisa("la captura de la solicitud ya muestra el periodo nuevo", LocalDate.of(2026, 9, 20).equals(selector(SolicitudRentaView.class, "datePickerInicio").getDate())
+                && LocalDate.of(2026, 9, 23).equals(selector(SolicitudRentaView.class, "datePickerFinal").getDate()));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        revisa("la cotización se rehace con 4 días y sigue con el cliente", etiquetas(CotizacionView.class).contains("Julián") && etiquetas(CotizacionView.class).contains("4 días"));
         foto("P03_cambio_de_periodo");
         // cambiar el equipo desde la propuesta y volver a avanzar sin perder lo demás
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnCambiarEquipo");
-        revisa("Cambiar equipo abre Equipos compatibles", visible().equals("EquiposCompatiblesFrame"));
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnCambiarEquipo");
+        revisa("Cambiar equipo abre Equipos compatibles", visible().equals("EquiposCompatiblesView"));
         marcarEquipos("Excavadora CAT 336", "Excavadora CAT 320");
         continuarAAccesorios();
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        revisa("con el otro equipo salen sus unidades", tablaTexto(VerificacionInventarioFrame.class, "tableUnidades").contains("N-001"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "N-002");
-        clic(VerificacionInventarioFrame.class, "btnVerMotivo");
-        clic(UnidadMantenimientoFrame.class, "btnRegresar");
-        revisa("Regresar de mantenimiento vuelve al inventario", visible().equals("VerificacionInventarioFrame"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "N-003");
-        clic(VerificacionInventarioFrame.class, "btnVerMotivo");
-        clic(UnidadOcupadaFrame.class, "btnRegresar");
-        revisa("Regresar de ocupada vuelve al inventario", visible().equals("VerificacionInventarioFrame"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "N-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnMarcarPendiente");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        revisa("con un requisito pendiente también se ve Regresar", ((JButton) campo(ventana(RequisitosRentaFrame.class), "btnRegresar")).isShowing());
-        clic(RequisitosRentaFrame.class, "btnRegresar");
-        revisa("Regresar con requisito pendiente vuelve a la cotización", visible().equals("CotizacionFrame"));
-        clic(CotizacionFrame.class, "btnContinuar");
-        revisa("el requisito pendiente se conserva al regresar", tablaTexto(RequisitosRentaFrame.class, "tableRequisitos").contains("Pendiente"));
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(RequisitosRentaFrame.class, "btnReintentar");
-        revisa("la propuesta ya es de la CAT 336 con el mismo periodo: " + etiqueta(PropuestaRentaFrame.class, "lblEquipo"),
-                etiqueta(PropuestaRentaFrame.class, "lblEquipo").contains("CAT 336 · unidad N-001") && etiqueta(PropuestaRentaFrame.class, "lblPeriodo").startsWith("20/09/2026"));
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        revisa("con el otro equipo salen sus unidades", tablaTexto(VerificacionInventarioView.class, "tableUnidades").contains("N-001"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "N-002");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
+        clic(UnidadMantenimientoView.class, "btnRegresar");
+        revisa("Regresar de mantenimiento vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "N-003");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
+        clic(UnidadOcupadaView.class, "btnRegresar");
+        revisa("Regresar de ocupada vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "N-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnMarcarPendiente");
+        clic(RequisitosRentaView.class, "btnValidar");
+        revisa("con un requisito pendiente también se ve Regresar", ((JButton) campo(ventana(RequisitosRentaView.class), "btnRegresar")).isShowing());
+        clic(RequisitosRentaView.class, "btnRegresar");
+        revisa("Regresar con requisito pendiente vuelve a la cotización", visible().equals("CotizacionView"));
+        clic(CotizacionView.class, "btnContinuar");
+        revisa("el requisito pendiente se conserva al regresar", tablaTexto(RequisitosRentaView.class, "tableRequisitos").contains("Pendiente"));
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(RequisitosRentaView.class, "btnReintentar");
+        revisa("la propuesta ya es de la CAT 336 con el mismo periodo: " + etiqueta(PropuestaRentaView.class, "lblEquipo"),
+                etiqueta(PropuestaRentaView.class, "lblEquipo").contains("CAT 336 · unidad N-001") && etiqueta(PropuestaRentaView.class, "lblPeriodo").startsWith("20/09/2026"));
 
         // las pantallas que no tenían Regresar
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        String folioDeLaCaptura = etiqueta(SolicitudRentaFrame.class, "lblFolio");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        String folioDeLaCaptura = etiqueta(SolicitudRentaView.class, "lblFolio");
         foto("P03_solicitud_con_regresar");
         contestar("No");
-        clic(SolicitudRentaFrame.class, "btnRegresar");
+        clic(SolicitudRentaView.class, "btnRegresar");
         revisa("Regresar de la solicitud pregunta; con No sigue con lo capturado", ultimoAviso().botones().equals(List.of("Sí", "No"))
-                && visible().equals("SolicitudRentaFrame") && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
+                && visible().equals("SolicitudRentaView") && texto(SolicitudRentaView.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
         contestar("Sí");
-        clic(SolicitudRentaFrame.class, "btnRegresar");
-        revisa("con Sí vuelve a Identificación sin registrar nada", visible().equals("IdentificacionClienteFrame") && almacen.obtenerSolicitudes().isEmpty());
-        fila(IdentificacionClienteFrame.class, "tableCliente", "LOMF920410H12");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        revisa("la solicitud del otro cliente empieza en blanco y con el mismo folio", visible().equals("SolicitudRentaFrame") && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").isEmpty()
-                && tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 0 && etiqueta(SolicitudRentaFrame.class, "lblFolio").equals(folioDeLaCaptura));
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Excavadora CAT 320");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        revisa("el equipo de la solicitud anterior no regresa", tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 1
-                && tablaTexto(SolicitudRentaFrame.class, "tableEquipoSoli").contains("CAT 320"));
+        clic(SolicitudRentaView.class, "btnRegresar");
+        revisa("con Sí vuelve a Identificación sin registrar nada", visible().equals("IdentificacionClienteView") && almacen.obtenerSolicitudes().isEmpty());
+        fila(IdentificacionClienteView.class, "tableCliente", "LOMF920410H12");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        revisa("la solicitud del otro cliente empieza en blanco y con el mismo folio", visible().equals("SolicitudRentaView") && texto(SolicitudRentaView.class, "txtFieldNombreObra").isEmpty()
+                && tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 0 && etiqueta(SolicitudRentaView.class, "lblFolio").equals(folioDeLaCaptura));
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Excavadora CAT 320");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        revisa("el equipo de la solicitud anterior no regresa", tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 1
+                && tablaTexto(SolicitudRentaView.class, "tableEquipoSoli").contains("CAT 320"));
 
         nuevaApp();
         entrar();
         hastaLosCompatibles();
-        clic(EquiposCompatiblesFrame.class, "btnRegresar");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo", "abc");
-        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
-        revisa("Regresar con un número mal escrito avisa y deja corregirlo: " + ultimoAviso().mensaje(), visible().equals("AnalisisRequerimientoFrame") && ultimoAviso().mensaje().contains("Peso"));
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo", "25");
-        revisa("Regresar de Equipos compatibles vuelve al Análisis con lo capturado", visible().equals("AnalisisRequerimientoFrame") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
-        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
-        revisa("Regresar del Análisis vuelve a la solicitud con lo capturado", visible().equals("SolicitudRentaFrame") && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
-        revisa("la solicitud muestra el terreno capturado en el Análisis: " + combo(SolicitudRentaFrame.class, "comboTipoTerreno"), combo(SolicitudRentaFrame.class, "comboTipoTerreno").equals("Terracería compactada"));
-        escribir(SolicitudRentaFrame.class, "txtFieldNombreObra", "Plaza Goya, segunda etapa");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("modificar la solicitud no crea otra y conserva los requerimientos", visible().equals("AnalisisRequerimientoFrame") && almacen.obtenerSolicitudes().size() == 1
-                && almacen.obtenerSolicitudes().get(0).getNombreObra().equals("Plaza Goya, segunda etapa") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
-        revisa("lo que se escribió en el Análisis antes de regresar sigue ahí: " + texto(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo"), texto(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo").startsWith("25"));
-        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Firme");
-        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
-        revisa("cambiar el terreno en el Análisis también se ve en la solicitud", combo(SolicitudRentaFrame.class, "comboTipoTerreno").equals("Firme"));
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("registrar otra vez no regresa el terreno anterior", combo(AnalisisRequerimientoFrame.class, "comboTipoTerreno").equals("Firme"));
-        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Sin especificar");
-        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
-        revisa("sin terreno en el Análisis, la solicitud dice Sin especificar", combo(SolicitudRentaFrame.class, "comboTipoTerreno").equals("Sin especificar"));
-        seleccionarCombo(SolicitudRentaFrame.class, "comboTipoTerreno", "Arenoso");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("el terreno que se cambia en la solicitud llega al Análisis", combo(AnalisisRequerimientoFrame.class, "comboTipoTerreno").equals("Arenoso"));
-        clic(AnalisisRequerimientoFrame.class, "btnRegresar");
-        seleccionarCombo(SolicitudRentaFrame.class, "comboTipoTerreno", "Sin especificar");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("quitar el terreno en la solicitud lo quita del Análisis", combo(AnalisisRequerimientoFrame.class, "comboTipoTerreno").equals("Sin especificar"));
-        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Terracería compactada");
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(EquiposCompatiblesView.class, "btnRegresar");
+        escribir(AnalisisRequerimientoView.class, "txtFieldPesoMaximo", "abc");
+        clic(AnalisisRequerimientoView.class, "btnRegresar");
+        revisa("Regresar con un número mal escrito avisa y deja corregirlo: " + ultimoAviso().mensaje(), visible().equals("AnalisisRequerimientoView") && ultimoAviso().mensaje().contains("Peso"));
+        escribir(AnalisisRequerimientoView.class, "txtFieldPesoMaximo", "25");
+        revisa("Regresar de Equipos compatibles vuelve al Análisis con lo capturado", visible().equals("AnalisisRequerimientoView") && texto(AnalisisRequerimientoView.class, "txtFieldPotencia").startsWith("120"));
+        clic(AnalisisRequerimientoView.class, "btnRegresar");
+        revisa("Regresar del Análisis vuelve a la solicitud con lo capturado", visible().equals("SolicitudRentaView") && texto(SolicitudRentaView.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
+        revisa("la solicitud muestra el terreno capturado en el Análisis: " + combo(SolicitudRentaView.class, "comboTipoTerreno"), combo(SolicitudRentaView.class, "comboTipoTerreno").equals("Terracería compactada"));
+        escribir(SolicitudRentaView.class, "txtFieldNombreObra", "Plaza Goya, segunda etapa");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("modificar la solicitud no crea otra y conserva los requerimientos", visible().equals("AnalisisRequerimientoView") && almacen.obtenerSolicitudes().size() == 1
+                && almacen.obtenerSolicitudes().get(0).getNombreObra().equals("Plaza Goya, segunda etapa") && texto(AnalisisRequerimientoView.class, "txtFieldPotencia").startsWith("120"));
+        revisa("lo que se escribió en el Análisis antes de regresar sigue ahí: " + texto(AnalisisRequerimientoView.class, "txtFieldPesoMaximo"), texto(AnalisisRequerimientoView.class, "txtFieldPesoMaximo").startsWith("25"));
+        seleccionarCombo(AnalisisRequerimientoView.class, "comboTipoTerreno", "Firme");
+        clic(AnalisisRequerimientoView.class, "btnRegresar");
+        revisa("cambiar el terreno en el Análisis también se ve en la solicitud", combo(SolicitudRentaView.class, "comboTipoTerreno").equals("Firme"));
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("registrar otra vez no regresa el terreno anterior", combo(AnalisisRequerimientoView.class, "comboTipoTerreno").equals("Firme"));
+        seleccionarCombo(AnalisisRequerimientoView.class, "comboTipoTerreno", "Sin especificar");
+        clic(AnalisisRequerimientoView.class, "btnRegresar");
+        revisa("sin terreno en el Análisis, la solicitud dice Sin especificar", combo(SolicitudRentaView.class, "comboTipoTerreno").equals("Sin especificar"));
+        seleccionarCombo(SolicitudRentaView.class, "comboTipoTerreno", "Arenoso");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("el terreno que se cambia en la solicitud llega al Análisis", combo(AnalisisRequerimientoView.class, "comboTipoTerreno").equals("Arenoso"));
+        clic(AnalisisRequerimientoView.class, "btnRegresar");
+        seleccionarCombo(SolicitudRentaView.class, "comboTipoTerreno", "Sin especificar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("quitar el terreno en la solicitud lo quita del Análisis", combo(AnalisisRequerimientoView.class, "comboTipoTerreno").equals("Sin especificar"));
+        seleccionarCombo(AnalisisRequerimientoView.class, "comboTipoTerreno", "Terracería compactada");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         continuarAAccesorios();
         marcarOpcional(true);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnRegresar");
-        revisa("Regresar de Evaluación técnica vuelve a accesorios con el opcional marcado", visible().equals("SeleccionAccesoriosFrame")
-                && Boolean.TRUE.equals(tabla(SeleccionAccesoriosFrame.class, "tableAccesorios").getValueAt(1, 2)));
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnRegresar");
-        revisa("Regresar de la propuesta vuelve a Requisitos", visible().equals("RequisitosRentaFrame"));
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnAceptarParcial");
-        clic(PropuestaPendienteFrame.class, "btnRegresar");
-        revisa("Regresar del accesorio indispensable vuelve a la propuesta", visible().equals("PropuestaRentaFrame"));
-        clic(PropuestaRentaFrame.class, "btnAceptar");
-        clic(VerificacionCondicionFrame.class, "btnRegresar");
-        revisa("Regresar de Verificación vuelve a la propuesta sin contratación registrada", visible().equals("PropuestaRentaFrame") && almacen.obtenerContrataciones().isEmpty());
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnRegresar");
+        revisa("Regresar de Evaluación técnica vuelve a accesorios con el opcional marcado", visible().equals("SeleccionAccesoriosView")
+                && Boolean.TRUE.equals(tabla(SeleccionAccesoriosView.class, "tableAccesorios").getValueAt(1, 2)));
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnRegresar");
+        revisa("Regresar de la propuesta vuelve a Requisitos", visible().equals("RequisitosRentaView"));
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnAceptarParcial");
+        clic(PropuestaPendienteView.class, "btnRegresar");
+        revisa("Regresar del accesorio indispensable vuelve a la propuesta", visible().equals("PropuestaRentaView"));
+        clic(PropuestaRentaView.class, "btnAceptar");
+        clic(VerificacionCondicionView.class, "btnRegresar");
+        revisa("Regresar de Verificación vuelve a la propuesta sin contratación registrada", visible().equals("PropuestaRentaView") && almacen.obtenerContrataciones().isEmpty());
         // modificar la propuesta: sin el opcional cambian las condiciones, la cotización y la propuesta
-        clic(PropuestaRentaFrame.class, "btnCambiarEquipo");
+        clic(PropuestaRentaView.class, "btnCambiarEquipo");
         continuarAAccesorios();
         marcarOpcional(false);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
         Object cotizacion = campo(control, "cotizacionActual");
         revisa("en Condiciones ya no queda la cotización anterior", Double.valueOf(10788.0).equals(cotizacion.getClass().getMethod("getTotal").invoke(cotizacion)));
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        revisa("sin el opcional la propuesta da $10,788", etiquetas(PropuestaRentaFrame.class).contains("10,788"));
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        revisa("sin el opcional la propuesta da $10,788", etiquetas(PropuestaRentaView.class).contains("10,788"));
         foto("P03_propuesta_modificada");
         sinExcepciones();
     }
@@ -415,70 +415,70 @@ public class PruebasPresentacion {
                 "Se cancela el flujo de forma controlada; no hay registros involuntarios.");
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         capturarSolicitud();
         String folio = almacen.siguienteFolio();
 
         contestar("No");
         capturaDeAviso = "P04_confirmacion";
-        clic(SolicitudRentaFrame.class, "btnCancelarSoli");
+        clic(SolicitudRentaView.class, "btnCancelarSoli");
         revisa("pregunta antes de cancelar y sus botones son Sí y No", ultimoAviso().botones().equals(List.of("Sí", "No")));
-        revisa("con No sigue en la solicitud con lo capturado", visible().equals("SolicitudRentaFrame") && tarjetaCaptura() && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
+        revisa("con No sigue en la solicitud con lo capturado", visible().equals("SolicitudRentaView") && tarjetaCaptura() && texto(SolicitudRentaView.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
 
         contestar("Sí");
-        clic(SolicitudRentaFrame.class, "btnCancelarSoli");
+        clic(SolicitudRentaView.class, "btnCancelarSoli");
         revisa("con Sí pide la razón", !tarjetaCaptura());
-        revisa("la pantalla muestra el folio: " + etiqueta(SolicitudRentaFrame.class, "jLabel21"), etiqueta(SolicitudRentaFrame.class, "jLabel21").equals("Folio: " + folio));
+        revisa("la pantalla muestra el folio: " + etiqueta(SolicitudRentaView.class, "jLabel21"), etiqueta(SolicitudRentaView.class, "jLabel21").equals("Folio: " + folio));
         foto("P04_razon_de_cancelacion");
 
-        escribir(SolicitudRentaFrame.class, "txtAreaRazonCancelacion", "    ");
+        escribir(SolicitudRentaView.class, "txtAreaRazonCancelacion", "    ");
         capturaDeAviso = "P04_razon_vacia";
-        clic(SolicitudRentaFrame.class, "btnRegistrarCancelacion");
-        revisa("sin razón avisa y no sale: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("razón") && visible().equals("SolicitudRentaFrame"));
+        clic(SolicitudRentaView.class, "btnRegistrarCancelacion");
+        revisa("sin razón avisa y no sale: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("razón") && visible().equals("SolicitudRentaView"));
         revisa("sin razón no registra nada", almacen.obtenerSolicitudes().isEmpty());
 
-        clic(SolicitudRentaFrame.class, "btnRegresarCancelacion");
-        revisa("Regresar vuelve a la captura con los datos", tarjetaCaptura() && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
+        clic(SolicitudRentaView.class, "btnRegresarCancelacion");
+        revisa("Regresar vuelve a la captura con los datos", tarjetaCaptura() && texto(SolicitudRentaView.class, "txtFieldNombreObra").equals("Remodelación Plaza Goya"));
 
         contestar("Sí");
-        clic(SolicitudRentaFrame.class, "btnCancelarSoli");
-        escribir(SolicitudRentaFrame.class, "txtAreaRazonCancelacion", "El cliente ya no requiere el equipo");
+        clic(SolicitudRentaView.class, "btnCancelarSoli");
+        escribir(SolicitudRentaView.class, "txtAreaRazonCancelacion", "El cliente ya no requiere el equipo");
         contestar("No");
-        clic(SolicitudRentaFrame.class, "btnRegistrarCancelacion");
+        clic(SolicitudRentaView.class, "btnRegistrarCancelacion");
         revisa("pregunta antes de registrar; con No sigue en la razón y no registra", ultimoAviso().botones().equals(List.of("Sí", "No"))
-                && !tarjetaCaptura() && visible().equals("SolicitudRentaFrame") && almacen.obtenerSolicitudes().isEmpty());
+                && !tarjetaCaptura() && visible().equals("SolicitudRentaView") && almacen.obtenerSolicitudes().isEmpty());
         contestar("Sí");
         capturaDeAviso = "P04_cancelacion_registrada";
-        clic(SolicitudRentaFrame.class, "btnRegistrarCancelacion");
+        clic(SolicitudRentaView.class, "btnRegistrarCancelacion");
         revisa("confirma la cancelación: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("cancelación"));
-        revisa("regresa al menú", visible().equals("MenuPrincipalFrame"));
+        revisa("regresa al menú", visible().equals("MenuPrincipalView"));
         SolicitudRentaDTO cancelada = almacen.buscarSolicitudPorFolio(folio);
         revisa("queda una sola solicitud, cancelada y con su razón", almacen.obtenerSolicitudes().size() == 1 && cancelada != null
                 && "Cancelada".equals(cancelada.getEstadoSolicitud()) && "El cliente ya no requiere el equipo".equals(cancelada.getMotivoCancelacion()));
         revisa("no se registró ninguna contratación", almacen.obtenerContrataciones().isEmpty());
 
         // cancelar otra vez, con la siguiente solicitud
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        revisa("la siguiente solicitud empieza en blanco", tarjetaCaptura() && texto(SolicitudRentaFrame.class, "txtFieldNombreObra").isEmpty() && texto(SolicitudRentaFrame.class, "txtAreaRazonCancelacion").isEmpty());
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        revisa("la siguiente solicitud empieza en blanco", tarjetaCaptura() && texto(SolicitudRentaView.class, "txtFieldNombreObra").isEmpty() && texto(SolicitudRentaView.class, "txtAreaRazonCancelacion").isEmpty());
         contestar("Sí");
-        clic(SolicitudRentaFrame.class, "btnCancelarSoli");
-        escribir(SolicitudRentaFrame.class, "txtAreaRazonCancelacion", "Cambió de obra");
-        clic(SolicitudRentaFrame.class, "btnRegistrarCancelacion");
-        revisa("una segunda cancelación seguida también queda registrada", almacen.obtenerSolicitudes().size() == 2 && visible().equals("MenuPrincipalFrame"));
+        clic(SolicitudRentaView.class, "btnCancelarSoli");
+        escribir(SolicitudRentaView.class, "txtAreaRazonCancelacion", "Cambió de obra");
+        clic(SolicitudRentaView.class, "btnRegistrarCancelacion");
+        revisa("una segunda cancelación seguida también queda registrada", almacen.obtenerSolicitudes().size() == 2 && visible().equals("MenuPrincipalView"));
         // la X de una pantalla sin Regresar pregunta antes de salir
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         contestar("No");
-        cerrarConX(SolicitudRentaFrame.class);
-        revisa("con la X y No se queda en la pantalla", visible().equals("SolicitudRentaFrame"));
+        cerrarConX(SolicitudRentaView.class);
+        revisa("con la X y No se queda en la pantalla", visible().equals("SolicitudRentaView"));
         contestar("Sí");
-        cerrarConX(SolicitudRentaFrame.class);
-        revisa("con la X y Sí regresa al menú", visible().equals("MenuPrincipalFrame"));
+        cerrarConX(SolicitudRentaView.class);
+        revisa("con la X y Sí regresa al menú", visible().equals("MenuPrincipalView"));
         sinExcepciones();
     }
 
@@ -488,23 +488,23 @@ public class PruebasPresentacion {
         nuevaApp();
         int ventanas = cuantasVentanas();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        revisa("dos clics en Contratación: una sola pantalla visible", visible().equals("IdentificacionClienteFrame"));
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        revisa("dos clics en Agregar equipo: una sola pantalla visible", visible().equals("BusquedaEquipoFrame"));
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        revisa("agregar otra vez el mismo equipo no lo repite", tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 1);
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        revisa("dos clics en Contratación: una sola pantalla visible", visible().equals("IdentificacionClienteView"));
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        revisa("dos clics en Agregar equipo: una sola pantalla visible", visible().equals("BusquedaEquipoView"));
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        revisa("agregar otra vez el mismo equipo no lo repite", tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 1);
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         revisa("dos clics en Registrar: una sola solicitud en el almacén", almacen.obtenerSolicitudes().size() == 1);
         revisa("no se crearon ventanas nuevas", cuantasVentanas() == ventanas);
 
@@ -512,30 +512,30 @@ public class PruebasPresentacion {
         nuevaApp();
         entrar();
         String primero = contratacionHastaLaOrden();
-        cerrarConX(OrdenEntregaFrame.class);
-        revisa("la X de la orden regresa al menú", visible().equals("MenuPrincipalFrame"));
+        cerrarConX(OrdenEntregaView.class);
+        revisa("la X de la orden regresa al menú", visible().equals("MenuPrincipalView"));
         hastaElInventario();
         revisa("la segunda solicitud tiene otro folio", !almacen.siguienteFolio().equals(primero));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
         revisa("la M-001 ya apartada no se puede volver a elegir: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("disponible"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnVerMotivo");
-        clic(UnidadOcupadaFrame.class, "btnUsarAlternativa");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "N-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnAceptar");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
+        clic(UnidadOcupadaView.class, "btnUsarAlternativa");
+        fila(VerificacionInventarioView.class, "tableUnidades", "N-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnAceptar");
         marcarCondiciones();
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
-        revisa("la segunda orden es de la CAT 336 con la N-001", etiqueta(OrdenEntregaFrame.class, "lblEquipo").contains("CAT 336") && etiqueta(OrdenEntregaFrame.class, "lblUnidad").contains("N-001"));
-        clic(OrdenEntregaFrame.class, "btnTerminar");
-        escribir(MenuPrincipalFrame.class, "txtFieldFolio", primero);
-        clic(MenuPrincipalFrame.class, "btnConsultarFolio");
-        revisa("la primera orden sigue con la CAT 320 y la M-001", etiqueta(OrdenEntregaFrame.class, "lblEquipo").contains("CAT 320") && etiqueta(OrdenEntregaFrame.class, "lblUnidad").contains("M-001"));
+        clic(VerificacionCondicionView.class, "btnGenerar");
+        revisa("la segunda orden es de la CAT 336 con la N-001", etiqueta(OrdenEntregaView.class, "lblEquipo").contains("CAT 336") && etiqueta(OrdenEntregaView.class, "lblUnidad").contains("N-001"));
+        clic(OrdenEntregaView.class, "btnTerminar");
+        escribir(MenuPrincipalView.class, "txtFieldFolio", primero);
+        clic(MenuPrincipalView.class, "btnConsultarFolio");
+        revisa("la primera orden sigue con la CAT 320 y la M-001", etiqueta(OrdenEntregaView.class, "lblEquipo").contains("CAT 320") && etiqueta(OrdenEntregaView.class, "lblUnidad").contains("M-001"));
         sinExcepciones();
     }
 
@@ -544,20 +544,20 @@ public class PruebasPresentacion {
                 "Los valores se integran correctamente al DTO correspondiente.");
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         capturarCliente("Ana Ruiz Soto", "ruas900101ab1", "6441112233", "ana.ruiz@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         ClienteDTO cliente = almacen.buscarClientePorRfc("RUAS900101AB1");
         revisa("el ClienteDTO trae lo capturado", cliente != null && "Ana Ruiz Soto".equals(cliente.getNombre()) && "6441112233".equals(cliente.getTelefono())
                 && "ana.ruiz@gmail.com".equals(cliente.getCorreo()) && "Particular".equals(cliente.getTipoCliente()));
-        revisa("pasa a la solicitud con ese cliente", visible().equals("SolicitudRentaFrame") && etiquetas(SolicitudRentaFrame.class).contains("Ana Ruiz Soto"));
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        revisa("pasa a la solicitud con ese cliente", visible().equals("SolicitudRentaView") && etiquetas(SolicitudRentaView.class).contains("Ana Ruiz Soto"));
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
         String folio = almacen.siguienteFolio();
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         SolicitudRentaDTO solicitud = almacen.buscarSolicitudPorFolio(folio);
         revisa("el SolicitudRentaDTO trae obra, dirección, actividad, periodo y equipo", solicitud != null
                 && "Remodelación Plaza Goya".equals(solicitud.getNombreObra())
@@ -571,19 +571,19 @@ public class PruebasPresentacion {
 
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
-        clic(RegistroClienteFrame.class, "radioBtnEmpresa");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
+        clic(RegistroClienteView.class, "radioBtnEmpresa");
         capturarCliente("Constructora Sur", "CSU101010AB1", "6441112233", "ventas@csur.com");
-        escribir(RegistroClienteFrame.class, "txtFieldNombreEncargado", "Rosa Díaz");
-        escribir(RegistroClienteFrame.class, "txtFieldTelefonoEncargado", "6449990011");
-        escribir(RegistroClienteFrame.class, "txtFieldPuestoEncargado", "Gerente");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        escribir(RegistroClienteView.class, "txtFieldNombreEncargado", "Rosa Díaz");
+        escribir(RegistroClienteView.class, "txtFieldTelefonoEncargado", "6449990011");
+        escribir(RegistroClienteView.class, "txtFieldPuestoEncargado", "Gerente");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("empresa sin identificación: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("identificación del encargado"));
-        Field archivo = RegistroClienteFrame.class.getDeclaredField("archivoIdentificacion");
+        Field archivo = RegistroClienteView.class.getDeclaredField("archivoIdentificacion");
         archivo.setAccessible(true);
-        archivo.set(ventana(RegistroClienteFrame.class), "identificacion_rosa.pdf");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        archivo.set(ventana(RegistroClienteView.class), "identificacion_rosa.pdf");
+        clic(RegistroClienteView.class, "btnRegistrar");
         ClienteDTO empresa = almacen.buscarClientePorRfc("CSU101010AB1");
         revisa("el ClienteEmpresaDTO trae al encargado", empresa instanceof ClienteEmpresaDTO e && "Rosa Díaz".equals(e.getNombreEncargadoEmpresa())
                 && "Gerente".equals(e.getPuestoEncargadoEmpresa()) && "6449990011".equals(e.getTelefonoEncargadoEmpresa()) && "identificacion_rosa.pdf".equals(e.getArchivoIdentificacionEncargado()));
@@ -602,7 +602,7 @@ public class PruebasPresentacion {
             for (Field f : v.getClass().getDeclaredFields()) {
                 sinOtrasVistas &= !JFrame.class.isAssignableFrom(f.getType());
                 sinAlmacen &= !IAlmacenTemporal.class.isAssignableFrom(f.getType())
-                        && !f.getType().getName().equals("presentacion.control.ICoordinadorAplicacion");
+                        && !f.getType().getName().equals("presentacion.controles.ICoordinadorAplicacion");
             }
         }
         revisa("cada pantalla recibe en su constructor solo la interfaz del Control", soloControl);
@@ -614,7 +614,7 @@ public class PruebasPresentacion {
         }
         revisa("la interfaz del Control no le entrega el coordinador a las pantallas", interfazSinCoordinador);
         boolean controlSinVentanas = true;
-        for (Field f : ContratacionRenta.class.getDeclaredFields()) {
+        for (Field f : ControlContratacionRenta.class.getDeclaredFields()) {
             controlSinVentanas &= !Component.class.isAssignableFrom(f.getType());
         }
         revisa("el Control no tiene ventanas", controlSinVentanas);
@@ -631,7 +631,7 @@ public class PruebasPresentacion {
         }
         revisa("el Control no puede mandar texto: pide los avisos con un Mensaje", sinTexto);
         boolean controlSinMensajes = true;
-        File fuente = new File("src/main/java/presentacion/control/ContratacionRenta.java");
+        File fuente = new File("src/main/java/presentacion/controles/ControlContratacionRenta.java");
         if (fuente.exists()) {
             String codigo = Files.readString(fuente.toPath());
             controlSinMensajes = !codigo.matches("(?s).*(mostrarAviso|mostrarMensaje|confirmar)\\(\\s*\"\\s*.*") && !codigo.contains("JOptionPane");
@@ -640,7 +640,7 @@ public class PruebasPresentacion {
         boolean vistasSinCambiar = true;
         File carpetaVistas = new File("src/main/java/presentacion/vistas");
         if (carpetaVistas.exists()) {
-            for (File f : carpetaVistas.listFiles((d, n) -> n.endsWith("Frame.java"))) {
+            for (File f : carpetaVistas.listFiles((d, n) -> n.endsWith("View.java"))) {
                 String codigo = Files.readString(f.toPath());
                 if (codigo.matches("(?s).*\\b(solicitud|contratacion|cotizacion|evaluacion|requisito|requisitos|unidad)\\.(set[A-Z]|getRequerimientos\\(\\)\\.).*")
                         || codigo.contains("capturar(solicitud.")) {
@@ -659,10 +659,10 @@ public class PruebasPresentacion {
         nuevaApp();
         int antes = almacen.obtenerClientes().size();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         capturarCliente("Luis Peña Mora", "PEML850612XY3", "6443334455", "luis.pena@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("el almacén tiene un cliente más", almacen.obtenerClientes().size() == antes + 1);
         revisa("se encuentra por RFC y tiene id", almacen.buscarClientePorRfc("PEML850612XY3") != null && almacen.buscarClientePorRfc("PEML850612XY3").getIdCliente() != null);
         sinExcepciones();
@@ -673,34 +673,34 @@ public class PruebasPresentacion {
                 "Se recupera la misma información mientras la aplicación siga abierta.");
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         capturarCliente("Luis Peña Mora", "PEML850612XY3", "6443334455", "luis.pena@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         contestar("Sí");
-        cerrarConX(SolicitudRentaFrame.class);
-        revisa("volvió al menú", visible().equals("MenuPrincipalFrame"));
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        escribir(IdentificacionClienteFrame.class, "txtFieldBusqCliente", "PEML850612XY3");
-        seleccionarCombo(IdentificacionClienteFrame.class, "comboFiltroBusqCliente", "RFC");
-        clic(IdentificacionClienteFrame.class, "btnBuscar");
-        JTable clientes = tabla(IdentificacionClienteFrame.class, "tableCliente");
+        cerrarConX(SolicitudRentaView.class);
+        revisa("volvió al menú", visible().equals("MenuPrincipalView"));
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        escribir(IdentificacionClienteView.class, "txtFieldBusqCliente", "PEML850612XY3");
+        seleccionarCombo(IdentificacionClienteView.class, "comboFiltroBusqCliente", "RFC");
+        clic(IdentificacionClienteView.class, "btnBuscar");
+        JTable clientes = tabla(IdentificacionClienteView.class, "tableCliente");
         revisa("el cliente registrado se encuentra navegando: " + filaTexto(clientes, 0), clientes.getRowCount() == 1 && filaTexto(clientes, 0).contains("Luis Peña Mora") && filaTexto(clientes, 0).contains("6443334455"));
         foto("P09_cliente_recuperado");
 
-        clic(IdentificacionClienteFrame.class, "btnCancelar");
+        clic(IdentificacionClienteView.class, "btnCancelar");
         String folio = contratacionHastaLaOrden();
-        String total = etiqueta(OrdenEntregaFrame.class, "lblTotal");
-        String unidad = etiqueta(OrdenEntregaFrame.class, "lblUnidad");
-        clic(OrdenEntregaFrame.class, "btnTerminar");
-        revisa("Terminar regresa al menú", visible().equals("MenuPrincipalFrame"));
-        escribir(MenuPrincipalFrame.class, "txtFieldFolio", folio.toLowerCase());
-        clic(MenuPrincipalFrame.class, "btnConsultarFolio");
-        revisa("el folio abre la orden registrada", visible().equals("OrdenEntregaFrame"));
-        revisa("trae el mismo total y la misma unidad: " + total + " / " + unidad, etiqueta(OrdenEntregaFrame.class, "lblTotal").equals(total) && etiqueta(OrdenEntregaFrame.class, "lblUnidad").equals(unidad));
+        String total = etiqueta(OrdenEntregaView.class, "lblTotal");
+        String unidad = etiqueta(OrdenEntregaView.class, "lblUnidad");
+        clic(OrdenEntregaView.class, "btnTerminar");
+        revisa("Terminar regresa al menú", visible().equals("MenuPrincipalView"));
+        escribir(MenuPrincipalView.class, "txtFieldFolio", folio.toLowerCase());
+        clic(MenuPrincipalView.class, "btnConsultarFolio");
+        revisa("el folio abre la orden registrada", visible().equals("OrdenEntregaView"));
+        revisa("trae el mismo total y la misma unidad: " + total + " / " + unidad, etiqueta(OrdenEntregaView.class, "lblTotal").equals(total) && etiqueta(OrdenEntregaView.class, "lblUnidad").equals(unidad));
         foto("P09_orden_recuperada_por_folio");
-        clic(OrdenEntregaFrame.class, "btnTerminar");
-        revisa("el menú queda con el campo vacío", texto(MenuPrincipalFrame.class, "txtFieldFolio").isEmpty());
+        clic(OrdenEntregaView.class, "btnTerminar");
+        revisa("el menú queda con el campo vacío", texto(MenuPrincipalView.class, "txtFieldFolio").isEmpty());
         sinExcepciones();
     }
 
@@ -709,43 +709,43 @@ public class PruebasPresentacion {
                 "Se informa sin bloquear ni provocar excepciones.");
         nuevaApp();
         entrar();
-        escribir(MenuPrincipalFrame.class, "txtFieldFolio", "FOL-1");
+        escribir(MenuPrincipalView.class, "txtFieldFolio", "FOL-1");
         capturaDeAviso = "P10_folio_no_encontrado";
-        clic(MenuPrincipalFrame.class, "btnConsultarFolio");
-        revisa("folio inexistente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("No se encontró") && visible().equals("MenuPrincipalFrame"));
-        escribir(MenuPrincipalFrame.class, "txtFieldFolio", "   ");
-        clic(MenuPrincipalFrame.class, "btnConsultarFolio");
-        revisa("folio vacío: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta capturar: Folio") && visible().equals("MenuPrincipalFrame"));
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        escribir(IdentificacionClienteFrame.class, "txtFieldBusqCliente", "ZZZ");
+        clic(MenuPrincipalView.class, "btnConsultarFolio");
+        revisa("folio inexistente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("No se encontró") && visible().equals("MenuPrincipalView"));
+        escribir(MenuPrincipalView.class, "txtFieldFolio", "   ");
+        clic(MenuPrincipalView.class, "btnConsultarFolio");
+        revisa("folio vacío: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta capturar: Folio") && visible().equals("MenuPrincipalView"));
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        escribir(IdentificacionClienteView.class, "txtFieldBusqCliente", "ZZZ");
         capturaDeAviso = "P10_cliente_no_encontrado";
-        clic(IdentificacionClienteFrame.class, "btnBuscar");
-        revisa("cliente inexistente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("No se encontró") && tabla(IdentificacionClienteFrame.class, "tableCliente").getRowCount() == 0);
-        revisa("sigue en Identificación", visible().equals("IdentificacionClienteFrame"));
+        clic(IdentificacionClienteView.class, "btnBuscar");
+        revisa("cliente inexistente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("No se encontró") && tabla(IdentificacionClienteView.class, "tableCliente").getRowCount() == 0);
+        revisa("sigue en Identificación", visible().equals("IdentificacionClienteView"));
         avisos.clear();
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        revisa("sin cliente seleccionado no avanza: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("seleccionar un cliente") && visible().equals("IdentificacionClienteFrame"));
-        escribir(IdentificacionClienteFrame.class, "txtFieldBusqCliente", "");
-        clic(IdentificacionClienteFrame.class, "btnBuscar");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        escribir(BusquedaEquipoFrame.class, "txtFieldBusqueda", "XYZ");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        revisa("sin cliente seleccionado no avanza: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("seleccionar un cliente") && visible().equals("IdentificacionClienteView"));
+        escribir(IdentificacionClienteView.class, "txtFieldBusqCliente", "");
+        clic(IdentificacionClienteView.class, "btnBuscar");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        escribir(BusquedaEquipoView.class, "txtFieldBusqueda", "XYZ");
         capturaDeAviso = "P10_equipo_no_encontrado";
-        clic(BusquedaEquipoFrame.class, "btnBuscar");
-        revisa("equipo inexistente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("No hay equipos") && tabla(BusquedaEquipoFrame.class, "tableEquipoCatalogo").getRowCount() == 0);
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        revisa("sin equipo seleccionado avisa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("seleccione un equipo") && visible().equals("BusquedaEquipoFrame"));
-        clic(BusquedaEquipoFrame.class, "btnRegresar");
+        clic(BusquedaEquipoView.class, "btnBuscar");
+        revisa("equipo inexistente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("No hay equipos") && tabla(BusquedaEquipoView.class, "tableEquipoCatalogo").getRowCount() == 0);
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        revisa("sin equipo seleccionado avisa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("seleccione un equipo") && visible().equals("BusquedaEquipoView"));
+        clic(BusquedaEquipoView.class, "btnRegresar");
         contestar("Sí");
-        clic(SolicitudRentaFrame.class, "btnCancelarSoli");
-        String folio = etiqueta(SolicitudRentaFrame.class, "jLabel21").replace("Folio: ", "");
-        escribir(SolicitudRentaFrame.class, "txtAreaRazonCancelacion", "Prueba de consulta");
-        clic(SolicitudRentaFrame.class, "btnRegistrarCancelacion");
-        escribir(MenuPrincipalFrame.class, "txtFieldFolio", folio);
+        clic(SolicitudRentaView.class, "btnCancelarSoli");
+        String folio = etiqueta(SolicitudRentaView.class, "jLabel21").replace("Folio: ", "");
+        escribir(SolicitudRentaView.class, "txtAreaRazonCancelacion", "Prueba de consulta");
+        clic(SolicitudRentaView.class, "btnRegistrarCancelacion");
+        escribir(MenuPrincipalView.class, "txtFieldFolio", folio);
         capturaDeAviso = "P10_solicitud_sin_orden";
-        clic(MenuPrincipalFrame.class, "btnConsultarFolio");
-        revisa("solicitud sin orden: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("no tiene orden") && ultimoAviso().mensaje().contains("Cancelada") && visible().equals("MenuPrincipalFrame"));
+        clic(MenuPrincipalView.class, "btnConsultarFolio");
+        revisa("solicitud sin orden: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("no tiene orden") && ultimoAviso().mensaje().contains("Cancelada") && visible().equals("MenuPrincipalView"));
         sinExcepciones();
     }
 
@@ -754,72 +754,72 @@ public class PruebasPresentacion {
                 "La operación se detiene y se informa qué dato falta.");
         nuevaApp();
         capturaDeAviso = "P11_inicio_sesion_vacio";
-        clic(InicioSesionFrame.class, "btnIngresar");
-        revisa("inicio de sesión: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Correo, Contraseña.") && visible().equals("InicioSesionFrame"));
-        escribir(InicioSesionFrame.class, "txtFieldCorreo", "   ");
-        clic(InicioSesionFrame.class, "btnIngresar");
-        revisa("con solo espacios tampoco entra", ultimoAviso().mensaje().contains("Correo") && visible().equals("InicioSesionFrame"));
+        clic(InicioSesionView.class, "btnIngresar");
+        revisa("inicio de sesión: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Correo, Contraseña.") && visible().equals("InicioSesionView"));
+        escribir(InicioSesionView.class, "txtFieldCorreo", "   ");
+        clic(InicioSesionView.class, "btnIngresar");
+        revisa("con solo espacios tampoco entra", ultimoAviso().mensaje().contains("Correo") && visible().equals("InicioSesionView"));
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         capturaDeAviso = "P11_cliente_vacio";
-        clic(RegistroClienteFrame.class, "btnRegistrar");
-        revisa("cliente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Nombre, Correo electrónico, Teléfono, RFC.") && visible().equals("RegistroClienteFrame"));
+        clic(RegistroClienteView.class, "btnRegistrar");
+        revisa("cliente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Nombre, Correo electrónico, Teléfono, RFC.") && visible().equals("RegistroClienteView"));
         capturarCliente("Ana Ruiz Soto", "", "6441112233", "ana.ruiz@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("dice solo el que falta: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: RFC."));
-        clic(RegistroClienteFrame.class, "radioBtnEmpresa");
+        clic(RegistroClienteView.class, "radioBtnEmpresa");
         capturarCliente("Constructora Sur", "CSU101010AB1", "6441112233", "ventas@csur.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("empresa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Nombre del encargado, Teléfono del encargado, Puesto del encargado."));
-        clic(RegistroClienteFrame.class, "btnCancelar");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(RegistroClienteView.class, "btnCancelar");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         capturaDeAviso = "P11_solicitud_vacia";
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("solicitud: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Fecha de inicio, Fecha final, Nombre de la obra, Dirección.") && visible().equals("SolicitudRentaFrame"));
-        seleccionarCombo(SolicitudRentaFrame.class, "comboTipoTrabajo", "Sin especificar");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("solicitud: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Fecha de inicio, Fecha final, Nombre de la obra, Dirección.") && visible().equals("SolicitudRentaView"));
+        seleccionarCombo(SolicitudRentaView.class, "comboTipoTrabajo", "Sin especificar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         revisa("sin tipo de trabajo también pide la actividad: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().endsWith("Actividad que va a realizar el cliente."));
-        seleccionarCombo(SolicitudRentaFrame.class, "comboTipoTrabajo", "Excavación de cepas");
+        seleccionarCombo(SolicitudRentaView.class, "comboTipoTrabajo", "Excavación de cepas");
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("solicitud sin equipo: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("agregar el equipo") && visible().equals("SolicitudRentaFrame"));
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("análisis sin características: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta capturar") && ultimoAviso().mensaje().contains("Tipo de terreno") && visible().equals("AnalisisRequerimientoFrame"));
-        clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
-        clic(SolicitudDatosFaltantesFrame.class, "btnRegistrarRespuesta");
-        revisa("datos faltantes sin respuesta: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("por lo menos un dato") && visible().equals("SolicitudDatosFaltantesFrame"));
-        clic(SolicitudDatosFaltantesFrame.class, "btnRegresar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("solicitud sin equipo: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("agregar el equipo") && visible().equals("SolicitudRentaView"));
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        revisa("análisis sin características: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta capturar") && ultimoAviso().mensaje().contains("Tipo de terreno") && visible().equals("AnalisisRequerimientoView"));
+        clic(AnalisisRequerimientoView.class, "btnSolicitarDatos");
+        clic(SolicitudDatosFaltantesView.class, "btnRegistrarRespuesta");
+        revisa("datos faltantes sin respuesta: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("por lo menos un dato") && visible().equals("SolicitudDatosFaltantesView"));
+        clic(SolicitudDatosFaltantesView.class, "btnRegresar");
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnSolicitarDatos");
-        revisa("con todo capturado no hay datos que pedir: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Ya están todos") && visible().equals("AnalisisRequerimientoFrame"));
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
-        revisa("equipos sin marcar: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Marca en la tabla") && visible().equals("EquiposCompatiblesFrame"));
+        clic(AnalisisRequerimientoView.class, "btnSolicitarDatos");
+        revisa("con todo capturado no hay datos que pedir: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Ya están todos") && visible().equals("AnalisisRequerimientoView"));
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        clic(EquiposCompatiblesView.class, "btnContinuarAccesorios");
+        revisa("equipos sin marcar: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Marca en la tabla") && visible().equals("EquiposCompatiblesView"));
         continuarAAccesorios();
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        revisa("inventario sin unidad: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Selecciona una unidad") && visible().equals("VerificacionInventarioFrame"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnRechazar");
-        escribir(MotivoRechazoFrame.class, "txtMotivo", "   ");
-        clic(MotivoRechazoFrame.class, "btnEnviar");
-        revisa("rechazo sin motivo: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("motivo del rechazo") && visible().equals("MotivoRechazoFrame"));
-        clic(MotivoRechazoFrame.class, "btnRegresar");
-        clic(PropuestaRentaFrame.class, "btnAceptar");
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
-        revisa("condiciones sin marcar: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta revisar") && visible().equals("VerificacionCondicionFrame"));
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        revisa("inventario sin unidad: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Selecciona una unidad") && visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnRechazar");
+        escribir(MotivoRechazoView.class, "txtMotivo", "   ");
+        clic(MotivoRechazoView.class, "btnEnviar");
+        revisa("rechazo sin motivo: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("motivo del rechazo") && visible().equals("MotivoRechazoView"));
+        clic(MotivoRechazoView.class, "btnRegresar");
+        clic(PropuestaRentaView.class, "btnAceptar");
+        clic(VerificacionCondicionView.class, "btnGenerar");
+        revisa("condiciones sin marcar: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Falta revisar") && visible().equals("VerificacionCondicionView"));
         sinExcepciones();
     }
 
@@ -827,90 +827,90 @@ public class PruebasPresentacion {
         caso("P12", "C6", "Formato incorrecto", "Correo \"asesor@\", contraseña \"123\", RFC \"ABC\", teléfono \"644abc\", profundidad \"abc\" y fecha final antes de la inicial.",
                 "Se muestra un error comprensible y no se procesa el dato inválido.");
         nuevaApp();
-        escribir(InicioSesionFrame.class, "txtFieldCorreo", "asesor@");
-        escribir(InicioSesionFrame.class, "psswFiledContrasenia", "12345678");
+        escribir(InicioSesionView.class, "txtFieldCorreo", "asesor@");
+        escribir(InicioSesionView.class, "psswFiledContrasenia", "12345678");
         capturaDeAviso = "P12_correo_invalido";
-        clic(InicioSesionFrame.class, "btnIngresar");
-        revisa("correo: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("formato válido") && visible().equals("InicioSesionFrame"));
-        escribir(InicioSesionFrame.class, "txtFieldCorreo", "asesor@maquinaria.com");
-        escribir(InicioSesionFrame.class, "psswFiledContrasenia", "123");
-        clic(InicioSesionFrame.class, "btnIngresar");
-        revisa("contraseña: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("8 caracteres") && visible().equals("InicioSesionFrame"));
+        clic(InicioSesionView.class, "btnIngresar");
+        revisa("correo: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("formato válido") && visible().equals("InicioSesionView"));
+        escribir(InicioSesionView.class, "txtFieldCorreo", "asesor@maquinaria.com");
+        escribir(InicioSesionView.class, "psswFiledContrasenia", "123");
+        clic(InicioSesionView.class, "btnIngresar");
+        revisa("contraseña: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("8 caracteres") && visible().equals("InicioSesionView"));
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         int clientes = almacen.obtenerClientes().size();
         capturarCliente("Ana Ruiz Soto", "ABC", "6441112233", "ana.ruiz@gmail.com");
         capturaDeAviso = "P12_rfc_invalido";
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("RFC: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("RFC") && ultimoAviso().mensaje().contains("MARJ8503158A1"));
         capturarCliente("Ana Ruiz Soto", "RUAS900101AB1", "644abc", "ana.ruiz@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("teléfono: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("10 dígitos"));
         capturarCliente("Ana Ruiz Soto", "RUAS900101AB1", "6441112233", "ana.ruiz");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("correo del cliente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("correo electrónico"));
         capturarCliente("Ana Ruiz Soto", "MARJ8503158A1", "6441112233", "ana.ruiz@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("RFC repetido: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Ya hay un cliente"));
-        revisa("ningún dato inválido quedó registrado", almacen.obtenerClientes().size() == clientes && visible().equals("RegistroClienteFrame"));
-        clic(RegistroClienteFrame.class, "btnCancelar");
-        seleccionarCombo(IdentificacionClienteFrame.class, "comboFiltroBusqCliente", "Teléfono");
-        escribir(IdentificacionClienteFrame.class, "txtFieldBusqCliente", "abc");
-        clic(IdentificacionClienteFrame.class, "btnBuscar");
+        revisa("ningún dato inválido quedó registrado", almacen.obtenerClientes().size() == clientes && visible().equals("RegistroClienteView"));
+        clic(RegistroClienteView.class, "btnCancelar");
+        seleccionarCombo(IdentificacionClienteView.class, "comboFiltroBusqCliente", "Teléfono");
+        escribir(IdentificacionClienteView.class, "txtFieldBusqCliente", "abc");
+        clic(IdentificacionClienteView.class, "btnBuscar");
         revisa("búsqueda por teléfono: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("solo números"));
-        escribir(IdentificacionClienteFrame.class, "txtFieldBusqCliente", "");
-        clic(IdentificacionClienteFrame.class, "btnBuscar");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        escribir(IdentificacionClienteView.class, "txtFieldBusqCliente", "");
+        clic(IdentificacionClienteView.class, "btnBuscar");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldProfundidad", "abc");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        escribir(AnalisisRequerimientoView.class, "txtFieldProfundidad", "abc");
         capturaDeAviso = "P12_numero_invalido";
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("profundidad: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().toLowerCase().contains("profundidad") && visible().equals("AnalisisRequerimientoFrame"));
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        revisa("profundidad: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().toLowerCase().contains("profundidad") && visible().equals("AnalisisRequerimientoView"));
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         continuarAAccesorios();
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnCambiarPeriodo");
-        fecha(CambiarPeriodoFrame.class, "selectorFechaInicio", null);
-        fecha(CambiarPeriodoFrame.class, "selectorFechaFin", null);
-        clic(CambiarPeriodoFrame.class, "btnConsultarInventario");
-        revisa("periodo sin fechas: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("fecha") && visible().equals("CambiarPeriodoFrame"));
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnCambiarPeriodo");
+        fecha(CambiarPeriodoView.class, "selectorFechaInicio", null);
+        fecha(CambiarPeriodoView.class, "selectorFechaFin", null);
+        clic(CambiarPeriodoView.class, "btnConsultarInventario");
+        revisa("periodo sin fechas: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("fecha") && visible().equals("CambiarPeriodoView"));
         // primero la final y después una inicial posterior: el calendario ya no lo evita
-        fecha(CambiarPeriodoFrame.class, "selectorFechaFin", LocalDate.of(2026, 9, 10));
-        fecha(CambiarPeriodoFrame.class, "selectorFechaInicio", LocalDate.of(2026, 9, 15));
+        fecha(CambiarPeriodoView.class, "selectorFechaFin", LocalDate.of(2026, 9, 10));
+        fecha(CambiarPeriodoView.class, "selectorFechaInicio", LocalDate.of(2026, 9, 15));
         avisos.clear();
-        clic(CambiarPeriodoFrame.class, "btnConsultarInventario");
-        revisa("periodo con la final antes de la inicial no continúa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("fecha") && visible().equals("CambiarPeriodoFrame"));
+        clic(CambiarPeriodoView.class, "btnConsultarInventario");
+        revisa("periodo con la final antes de la inicial no continúa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("fecha") && visible().equals("CambiarPeriodoView"));
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
-        fecha(SolicitudRentaFrame.class, "datePickerInicio", null);
-        fecha(SolicitudRentaFrame.class, "datePickerFinal", LocalDate.of(2026, 9, 10));
-        fecha(SolicitudRentaFrame.class, "datePickerInicio", LocalDate.of(2026, 9, 15));
+        fecha(SolicitudRentaView.class, "datePickerInicio", null);
+        fecha(SolicitudRentaView.class, "datePickerFinal", LocalDate.of(2026, 9, 10));
+        fecha(SolicitudRentaView.class, "datePickerInicio", LocalDate.of(2026, 9, 15));
         avisos.clear();
         capturaDeAviso = "P12_fecha_invalida";
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         revisa("solicitud con la final antes de la inicial no continúa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Fecha final") || ultimoAviso().mensaje().contains("fecha final"));
-        revisa("sigue en la solicitud y no registró nada", visible().equals("SolicitudRentaFrame") && almacen.obtenerSolicitudes().isEmpty());
+        revisa("sigue en la solicitud y no registró nada", visible().equals("SolicitudRentaView") && almacen.obtenerSolicitudes().isEmpty());
         sinExcepciones();
     }
 
@@ -919,36 +919,36 @@ public class PruebasPresentacion {
                 "Permite corregir y continuar, sin perder datos válidos innecesariamente.");
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         capturarCliente("Ana Ruiz Soto", "ABC", "6441112233", "ana.ruiz@gmail.com");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
-        revisa("después del error sigue en el registro", visible().equals("RegistroClienteFrame"));
-        revisa("los demás campos siguen capturados", texto(RegistroClienteFrame.class, "txtFieldNombre").equals("Ana Ruiz Soto")
-                && texto(RegistroClienteFrame.class, "txtFieldTelefono").equals("6441112233") && texto(RegistroClienteFrame.class, "txtFieldCorreoElectro").equals("ana.ruiz@gmail.com"));
+        clic(RegistroClienteView.class, "btnRegistrar");
+        revisa("después del error sigue en el registro", visible().equals("RegistroClienteView"));
+        revisa("los demás campos siguen capturados", texto(RegistroClienteView.class, "txtFieldNombre").equals("Ana Ruiz Soto")
+                && texto(RegistroClienteView.class, "txtFieldTelefono").equals("6441112233") && texto(RegistroClienteView.class, "txtFieldCorreoElectro").equals("ana.ruiz@gmail.com"));
         foto("P13_cliente_tras_error");
-        escribir(RegistroClienteFrame.class, "txtFieldRFC", "RUAS900101AB1");
-        clic(RegistroClienteFrame.class, "btnRegistrar");
-        revisa("corregido el RFC, se registra y continúa", visible().equals("SolicitudRentaFrame") && almacen.buscarClientePorRfc("RUAS900101AB1") != null);
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        escribir(RegistroClienteView.class, "txtFieldRFC", "RUAS900101AB1");
+        clic(RegistroClienteView.class, "btnRegistrar");
+        revisa("corregido el RFC, se registra y continúa", visible().equals("SolicitudRentaView") && almacen.buscarClientePorRfc("RUAS900101AB1") != null);
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
-        escribir(SolicitudRentaFrame.class, "txtFieldNombreObra", "");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        escribir(SolicitudRentaView.class, "txtFieldNombreObra", "");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         revisa("sin obra avisa cuál falta: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().equals("Falta capturar: Nombre de la obra."));
-        revisa("conserva dirección, actividad, fechas y equipo", texto(SolicitudRentaFrame.class, "txtFieldDireccion").startsWith("Av. Guerrero")
-                && texto(SolicitudRentaFrame.class, "txtAreaActividadRealizar").contains("cepas")
-                && LocalDate.of(2026, 9, 10).equals(selector(SolicitudRentaFrame.class, "datePickerInicio").getDate())
-                && tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 1);
+        revisa("conserva dirección, actividad, fechas y equipo", texto(SolicitudRentaView.class, "txtFieldDireccion").startsWith("Av. Guerrero")
+                && texto(SolicitudRentaView.class, "txtAreaActividadRealizar").contains("cepas")
+                && LocalDate.of(2026, 9, 10).equals(selector(SolicitudRentaView.class, "datePickerInicio").getDate())
+                && tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 1);
         foto("P13_solicitud_tras_error");
-        escribir(SolicitudRentaFrame.class, "txtFieldNombreObra", "Remodelación Plaza Goya");
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
-        revisa("corregida la obra, continúa al análisis", visible().equals("AnalisisRequerimientoFrame"));
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldProfundidad", "abc");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldPotencia", "120");
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("con un número inválido sigue en el análisis y conserva la potencia", visible().equals("AnalisisRequerimientoFrame") && texto(AnalisisRequerimientoFrame.class, "txtFieldPotencia").startsWith("120"));
+        escribir(SolicitudRentaView.class, "txtFieldNombreObra", "Remodelación Plaza Goya");
+        clic(SolicitudRentaView.class, "btnRegistrar");
+        revisa("corregida la obra, continúa al análisis", visible().equals("AnalisisRequerimientoView"));
+        escribir(AnalisisRequerimientoView.class, "txtFieldProfundidad", "abc");
+        escribir(AnalisisRequerimientoView.class, "txtFieldPotencia", "120");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        revisa("con un número inválido sigue en el análisis y conserva la potencia", visible().equals("AnalisisRequerimientoView") && texto(AnalisisRequerimientoView.class, "txtFieldPotencia").startsWith("120"));
         SolicitudRentaDTO enControl = (SolicitudRentaDTO) campo(control, "solicitudActual");
         boolean sinTextoMalo = true;
         for (RequerimientoTecnicoDTO r : enControl.getRequerimientos()) {
@@ -956,17 +956,17 @@ public class PruebasPresentacion {
         }
         revisa("el dato incorrecto no llega a la solicitud del Control", sinTextoMalo);
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        revisa("corregido el número, continúa", visible().equals("EquiposCompatiblesFrame"));
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        revisa("corregido el número, continúa", visible().equals("EquiposCompatiblesView"));
         continuarAAccesorios();
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnRegresar");
-        edt(() -> tabla(VerificacionInventarioFrame.class, "tableUnidades").clearSelection());
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnRegresar");
+        edt(() -> tabla(VerificacionInventarioView.class, "tableUnidades").clearSelection());
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
         revisa("seleccionar sin fila avisa y no borra la unidad ya elegida", ultimoAviso().mensaje().contains("Selecciona una unidad")
                 && ((SolicitudRentaDTO) campo(control, "solicitudActual")).getUnidadSeleccionada() != null);
         sinExcepciones();
@@ -979,20 +979,20 @@ public class PruebasPresentacion {
         nuevaApp();
         entrar();
         hastaElInventario();
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-002");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        revisa("una unidad en mantenimiento no se puede elegir: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("disponible") && visible().equals("VerificacionInventarioFrame"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-002");
-        clic(VerificacionInventarioFrame.class, "btnVerMotivo");
-        revisa("Ver motivo abre Unidad en mantenimiento", visible().equals("UnidadMantenimientoFrame"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-002");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        revisa("una unidad en mantenimiento no se puede elegir: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("disponible") && visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-002");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
+        revisa("Ver motivo abre Unidad en mantenimiento", visible().equals("UnidadMantenimientoView"));
         foto("P14_unidad_en_mantenimiento");
-        clic(UnidadMantenimientoFrame.class, "btnOtraUnidad");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-003");
-        clic(VerificacionInventarioFrame.class, "btnVerMotivo");
-        revisa("Ver motivo abre Unidad ocupada", visible().equals("UnidadOcupadaFrame"));
+        clic(UnidadMantenimientoView.class, "btnOtraUnidad");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-003");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
+        revisa("Ver motivo abre Unidad ocupada", visible().equals("UnidadOcupadaView"));
         foto("P14_unidad_ocupada");
-        clic(UnidadOcupadaFrame.class, "btnUsarAlternativa");
-        revisa("Usar la alternativa cambia el equipo y vuelve al inventario", visible().equals("VerificacionInventarioFrame") && etiquetas(VerificacionInventarioFrame.class).contains("CAT 336") && tablaTexto(VerificacionInventarioFrame.class, "tableUnidades").contains("N-001"));
+        clic(UnidadOcupadaView.class, "btnUsarAlternativa");
+        revisa("Usar la alternativa cambia el equipo y vuelve al inventario", visible().equals("VerificacionInventarioView") && etiquetas(VerificacionInventarioView.class).contains("CAT 336") && tablaTexto(VerificacionInventarioView.class, "tableUnidades").contains("N-001"));
         foto("P14_inventario_con_la_alternativa");
 
         // ninguno cumple
@@ -1000,103 +1000,103 @@ public class PruebasPresentacion {
         entrar();
         hastaLosCompatibles();
         contestar("Sí");
-        clic(EquiposCompatiblesFrame.class, "btnNingunoCumple");
-        revisa("Ninguno cumple abre Sin equipo compatible", visible().equals("SinEquipoCompatibleFrame"));
+        clic(EquiposCompatiblesView.class, "btnNingunoCumple");
+        revisa("Ninguno cumple abre Sin equipo compatible", visible().equals("SinEquipoCompatibleView"));
         foto("P14_sin_equipo_compatible");
-        clic(SinEquipoCompatibleFrame.class, "btnAjustarRequerimiento");
-        revisa("Ajustar regresa al análisis", visible().equals("AnalisisRequerimientoFrame"));
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(SinEquipoCompatibleView.class, "btnAjustarRequerimiento");
+        revisa("Ajustar regresa al análisis", visible().equals("AnalisisRequerimientoView"));
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         contestar("Sí");
-        clic(EquiposCompatiblesFrame.class, "btnNingunoCumple");
-        escribir(SinEquipoCompatibleFrame.class, "txtAreaMotivo", "Ningún equipo alcanza la profundidad");
+        clic(EquiposCompatiblesView.class, "btnNingunoCumple");
+        escribir(SinEquipoCompatibleView.class, "txtAreaMotivo", "Ningún equipo alcanza la profundidad");
         capturaDeAviso = "P14_evaluacion_cerrada";
-        clic(SinEquipoCompatibleFrame.class, "btnCerrarEvaluacion");
+        clic(SinEquipoCompatibleView.class, "btnCerrarEvaluacion");
         revisa("Cerrar evaluación avisa cómo queda la solicitud: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("sin solución técnica")
                 && ultimoAviso().mensaje().contains(almacen.obtenerSolicitudes().get(0).getFolio()));
-        revisa("Cerrar evaluación regresa al menú y deja el estado", visible().equals("MenuPrincipalFrame") && "Sin solución técnica".equals(almacen.obtenerSolicitudes().get(0).getEstadoSolicitud()));
+        revisa("Cerrar evaluación regresa al menú y deja el estado", visible().equals("MenuPrincipalView") && "Sin solución técnica".equals(almacen.obtenerSolicitudes().get(0).getEstadoSolicitud()));
 
         // requisito pendiente
         nuevaApp();
         entrar();
         hastaLosRequisitos();
-        clic(RequisitosRentaFrame.class, "btnMarcarPendiente");
-        revisa("Marcar pendiente lo cambia en la tabla (el Control hace el cambio)", tablaTexto(RequisitosRentaFrame.class, "tableRequisitos").contains("Pendiente") && visible().equals("RequisitosRentaFrame"));
+        clic(RequisitosRentaView.class, "btnMarcarPendiente");
+        revisa("Marcar pendiente lo cambia en la tabla (el Control hace el cambio)", tablaTexto(RequisitosRentaView.class, "tableRequisitos").contains("Pendiente") && visible().equals("RequisitosRentaView"));
         foto("P14_requisito_marcado_pendiente");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        revisa("con un requisito pendiente no continúa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("pendientes") && visible().equals("RequisitosRentaFrame"));
+        clic(RequisitosRentaView.class, "btnValidar");
+        revisa("con un requisito pendiente no continúa: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("pendientes") && visible().equals("RequisitosRentaView"));
         foto("P14_requisito_pendiente");
-        clic(RequisitosRentaFrame.class, "btnReintentar");
-        revisa("Reintentar lo deja cumplido y continúa a la propuesta", visible().equals("PropuestaRentaFrame"));
+        clic(RequisitosRentaView.class, "btnReintentar");
+        revisa("Reintentar lo deja cumplido y continúa a la propuesta", visible().equals("PropuestaRentaView"));
 
         // aceptación parcial, con el indispensable
-        clic(PropuestaRentaFrame.class, "btnAceptarParcial");
-        revisa("Aceptar parcial abre la propuesta pendiente", visible().equals("PropuestaPendienteFrame"));
+        clic(PropuestaRentaView.class, "btnAceptarParcial");
+        revisa("Aceptar parcial abre la propuesta pendiente", visible().equals("PropuestaPendienteView"));
         foto("P14_propuesta_pendiente");
-        clic(PropuestaPendienteFrame.class, "btnAceptar");
-        revisa("sigue a Verificación de condiciones", visible().equals("VerificacionCondicionFrame"));
-        clic(VerificacionCondicionFrame.class, "btnNoGenerar");
-        revisa("No generar deja la solicitud pendiente y no aparta la unidad", visible().equals("OrdenEntregaFrame") && etiqueta(OrdenEntregaFrame.class, "lblEstado").equals("Pendiente")
-                && etiqueta(OrdenEntregaFrame.class, "lblMotivo").contains("no se aparta") && "Disponible".equals(almacen.obtenerUnidadesDeEquipo(2L).get(0).getEstadoUnidad()));
+        clic(PropuestaPendienteView.class, "btnAceptar");
+        revisa("sigue a Verificación de condiciones", visible().equals("VerificacionCondicionView"));
+        clic(VerificacionCondicionView.class, "btnNoGenerar");
+        revisa("No generar deja la solicitud pendiente y no aparta la unidad", visible().equals("OrdenEntregaView") && etiqueta(OrdenEntregaView.class, "lblEstado").equals("Pendiente")
+                && etiqueta(OrdenEntregaView.class, "lblMotivo").contains("no se aparta") && "Disponible".equals(almacen.obtenerUnidadesDeEquipo(2L).get(0).getEstadoUnidad()));
         foto("P14_solicitud_pendiente_por_condicion");
         String pendiente = almacen.obtenerSolicitudes().get(0).getFolio();
-        clic(OrdenEntregaFrame.class, "btnTerminar");
-        escribir(MenuPrincipalFrame.class, "txtFieldFolio", pendiente);
-        clic(MenuPrincipalFrame.class, "btnConsultarFolio");
-        revisa("por folio se recupera como pendiente", visible().equals("OrdenEntregaFrame") && etiqueta(OrdenEntregaFrame.class, "lblEstado").equals("Pendiente"));
+        clic(OrdenEntregaView.class, "btnTerminar");
+        escribir(MenuPrincipalView.class, "txtFieldFolio", pendiente);
+        clic(MenuPrincipalView.class, "btnConsultarFolio");
+        revisa("por folio se recupera como pendiente", visible().equals("OrdenEntregaView") && etiqueta(OrdenEntregaView.class, "lblEstado").equals("Pendiente"));
 
         // sin el indispensable
         nuevaApp();
         entrar();
         hastaLaPropuesta();
-        clic(PropuestaRentaFrame.class, "btnAceptarParcial");
-        clic(PropuestaPendienteFrame.class, "btnNoContinuar");
-        revisa("sin el indispensable queda pendiente, sin accesorios", visible().equals("OrdenEntregaFrame") && etiqueta(OrdenEntregaFrame.class, "lblMotivo").contains("indispensable"));
+        clic(PropuestaRentaView.class, "btnAceptarParcial");
+        clic(PropuestaPendienteView.class, "btnNoContinuar");
+        revisa("sin el indispensable queda pendiente, sin accesorios", visible().equals("OrdenEntregaView") && etiqueta(OrdenEntregaView.class, "lblMotivo").contains("indispensable"));
         foto("P14_solicitud_pendiente_sin_indispensable");
 
         // rechazo
         nuevaApp();
         entrar();
         hastaLaPropuesta();
-        clic(PropuestaRentaFrame.class, "btnRechazar");
-        escribir(MotivoRechazoFrame.class, "txtMotivo", "El cliente consiguió otra máquina");
-        clic(MotivoRechazoFrame.class, "btnEnviar");
-        revisa("el rechazo muestra el motivo: " + etiqueta(OrdenEntregaFrame.class, "lblMotivo"), visible().equals("OrdenEntregaFrame") && etiqueta(OrdenEntregaFrame.class, "lblMotivo").contains("otra máquina"));
+        clic(PropuestaRentaView.class, "btnRechazar");
+        escribir(MotivoRechazoView.class, "txtMotivo", "El cliente consiguió otra máquina");
+        clic(MotivoRechazoView.class, "btnEnviar");
+        revisa("el rechazo muestra el motivo: " + etiqueta(OrdenEntregaView.class, "lblMotivo"), visible().equals("OrdenEntregaView") && etiqueta(OrdenEntregaView.class, "lblMotivo").contains("otra máquina"));
         foto("P14_rechazo");
         revisa("la solicitud queda Rechazada", "Rechazada".equals(almacen.obtenerSolicitudes().get(0).getEstadoSolicitud()));
-        revisa("el rechazo muestra la propuesta que se rechazó: " + etiqueta(OrdenEntregaFrame.class, "lblAccesorios") + " / " + etiqueta(OrdenEntregaFrame.class, "lblPrecioAccesorios") + " / " + etiqueta(OrdenEntregaFrame.class, "lblTotal"),
-                etiqueta(OrdenEntregaFrame.class, "lblAccesorios").contains("Kit de señalización") && etiqueta(OrdenEntregaFrame.class, "lblAccesorios").contains("Cucharón")
-                && etiqueta(OrdenEntregaFrame.class, "lblPrecioAccesorios").equals("$500") && etiqueta(OrdenEntregaFrame.class, "lblTotal").contains("11,020"));
+        revisa("el rechazo muestra la propuesta que se rechazó: " + etiqueta(OrdenEntregaView.class, "lblAccesorios") + " / " + etiqueta(OrdenEntregaView.class, "lblPrecioAccesorios") + " / " + etiqueta(OrdenEntregaView.class, "lblTotal"),
+                etiqueta(OrdenEntregaView.class, "lblAccesorios").contains("Kit de señalización") && etiqueta(OrdenEntregaView.class, "lblAccesorios").contains("Cucharón")
+                && etiqueta(OrdenEntregaView.class, "lblPrecioAccesorios").equals("$500") && etiqueta(OrdenEntregaView.class, "lblTotal").contains("11,020"));
         revisa("el rechazo no registra contratación ni aparta la unidad", almacen.obtenerContrataciones().isEmpty() && "Disponible".equals(almacen.obtenerUnidadesDeEquipo(2L).get(0).getEstadoUnidad()));
 
         // varios equipos en la solicitud: se quita el que se agregó por error y los demás se evalúan
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
         for (String equipo : new String[]{"Excavadora CAT 336", "Retroexcavadora JCB", "Excavadora CAT 320"}) {
-            clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-            fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", equipo);
-            clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+            clic(SolicitudRentaView.class, "btnAgregarEquipo");
+            fila(BusquedaEquipoView.class, "tableEquipoCatalogo", equipo);
+            clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         }
-        revisa("no hay tope de equipos: la solicitud trae los tres", tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 3);
-        clic(SolicitudRentaFrame.class, "btnQuitarEquipo");
+        revisa("no hay tope de equipos: la solicitud trae los tres", tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 3);
+        clic(SolicitudRentaView.class, "btnQuitarEquipo");
         revisa("Quitar sin elegir un renglón avisa y no quita nada: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("seleccione")
-                && tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 3);
-        fila(SolicitudRentaFrame.class, "tableEquipoSoli", "CAT 320");
-        clic(SolicitudRentaFrame.class, "btnQuitarEquipo");
-        revisa("Quitar deja los otros dos", tabla(SolicitudRentaFrame.class, "tableEquipoSoli").getRowCount() == 2
-                && !tablaTexto(SolicitudRentaFrame.class, "tableEquipoSoli").contains("CAT 320"));
+                && tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 3);
+        fila(SolicitudRentaView.class, "tableEquipoSoli", "CAT 320");
+        clic(SolicitudRentaView.class, "btnQuitarEquipo");
+        revisa("Quitar deja los otros dos", tabla(SolicitudRentaView.class, "tableEquipoSoli").getRowCount() == 2
+                && !tablaTexto(SolicitudRentaView.class, "tableEquipoSoli").contains("CAT 320"));
         capturarSolicitud();
         foto("P14_varios_equipos");
         capturaDeAviso = "P14_varios_equipos_registrados";
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         revisa("al registrar dice que son 2 equipos y que se revisan todos: " + ultimoAviso().mensaje().replace("\n", " "), ultimoAviso().mensaje().contains("2 equipos")
                 && ultimoAviso().mensaje().contains("revisan todos"));
         revisa("quedan registrados los dos", almacen.obtenerSolicitudes().get(0).getEquiposSolicitados().size() == 2);
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        String pedidos = etiqueta(EquiposCompatiblesFrame.class, "lblEquipoPedido");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        String pedidos = etiqueta(EquiposCompatiblesView.class, "lblEquipoPedido");
         revisa("Equipos compatibles dice los dos que pidió: " + pedidos, pedidos.contains("Retroexcavadora JCB") && pedidos.contains("Excavadora CAT 336") && !pedidos.contains("CAT 320"));
         foto("P14_varios_equipos_compatibles");
         continuarAAccesorios();
@@ -1108,33 +1108,33 @@ public class PruebasPresentacion {
         }
         revisa("los dos quedan evaluados; el motivo es el del que no cumple: " + motivoRegistrado, todosEvaluados && motivoRegistrado.contains("Retroexcavadora JCB") && !motivoRegistrado.contains("CAT 336"));
         marcarOpcional(true);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        clic(PropuestaRentaFrame.class, "btnAceptar");
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
+        clic(PropuestaRentaView.class, "btnAceptar");
         marcarCondiciones();
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
-        revisa("la orden sale del equipo recomendado y la solicitud conserva los dos que pidió el cliente", visible().equals("OrdenEntregaFrame") && etiqueta(OrdenEntregaFrame.class, "lblEquipo").contains("CAT 320")
+        clic(VerificacionCondicionView.class, "btnGenerar");
+        revisa("la orden sale del equipo recomendado y la solicitud conserva los dos que pidió el cliente", visible().equals("OrdenEntregaView") && etiqueta(OrdenEntregaView.class, "lblEquipo").contains("CAT 320")
                 && almacen.obtenerSolicitudes().get(0).getEquiposSolicitados().size() == 2);
         // la lista solo trae lo que cumple y lo que pidió el cliente
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Excavadora CAT 320");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Excavadora CAT 320");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
-        String sinPedir = tablaTexto(EquiposCompatiblesFrame.class, "tableEquipos");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
+        String sinPedir = tablaTexto(EquiposCompatiblesView.class, "tableEquipos");
         revisa("si no la pidió y no cumple, la JCB no sale en la lista: " + sinPedir, !sinPedir.contains("JCB") && sinPedir.contains("CAT 320") && sinPedir.contains("CAT 336"));
         sinExcepciones();
     }
@@ -1148,38 +1148,38 @@ public class PruebasPresentacion {
         revisa("inicio de sesión: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Exitoso") && ultimoAviso().tipo() == JOptionPane.INFORMATION_MESSAGE);
         revisa("el botón de los avisos dice Aceptar", ultimoAviso().botones().equals(List.of("Aceptar")));
         revisa("el selector de archivos y el calendario están en español", "Abrir".equals(javax.swing.UIManager.getString("FileChooser.openButtonText", java.util.Locale.getDefault()))
-                && "es".equals(selector(SolicitudRentaFrame.class, "datePickerInicio").getSettings().getLocale().getLanguage()));
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevCliente");
+                && "es".equals(selector(SolicitudRentaView.class, "datePickerInicio").getSettings().getLocale().getLanguage()));
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevCliente");
         capturarCliente("Ana Ruiz Soto", "RUAS900101AB1", "6441112233", "ana.ruiz@gmail.com");
         avisos.clear();
-        clic(RegistroClienteFrame.class, "btnRegistrar");
+        clic(RegistroClienteView.class, "btnRegistrar");
         revisa("cliente: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("registrado correctamente"));
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
         capturaDeAviso = "P15_solicitud_registrada";
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         revisa("solicitud: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("Registrada Correctamente"));
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         continuarAAccesorios();
         marcarOpcional(true);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
         revisa("evaluación: " + ultimoAviso().mensaje().replace("\n", " "), ultimoAviso().mensaje().contains("registrada con éxito"));
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
-        clic(RequisitosRentaFrame.class, "btnValidar");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
+        clic(RequisitosRentaView.class, "btnValidar");
         revisa("requisitos: " + ultimoAviso().mensaje().replace("\n", " "), ultimoAviso().mensaje().contains("validados"));
-        clic(PropuestaRentaFrame.class, "btnAceptar");
+        clic(PropuestaRentaView.class, "btnAceptar");
         marcarCondiciones();
         capturaDeAviso = "P15_orden_registrada";
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
+        clic(VerificacionCondicionView.class, "btnGenerar");
         revisa("orden: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("orden de entrega") && ultimoAviso().mensaje().contains("registrada"));
         sinExcepciones();
     }
@@ -1189,195 +1189,195 @@ public class PruebasPresentacion {
                 "El recorrido concluye sin fallas y respeta el orden establecido.");
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
         foto("P16_01_identificacion");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
         foto("P16_02_busqueda_equipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
         foto("P16_03_solicitud");
-        String folio = etiqueta(SolicitudRentaFrame.class, "lblFolio").replace("Folio: ", "");
+        String folio = etiqueta(SolicitudRentaView.class, "lblFolio").replace("Folio: ", "");
         revisa("el folio es el del escenario: " + folio, folio.equals("FOL-89241"));
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         capturarRequerimientos();
         foto("P16_04_analisis");
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         foto("P16_05_equipos_compatibles");
-        revisa("la JCB no cumple y marca por qué", tablaTexto(EquiposCompatiblesFrame.class, "tableEquipos").contains("Potencia de 109 HP"));
-        revisa("la JCB no se puede marcar y las CAT sí", !tabla(EquiposCompatiblesFrame.class, "tableEquipos").isCellEditable(0, 3) && tabla(EquiposCompatiblesFrame.class, "tableEquipos").isCellEditable(1, 3));
+        revisa("la JCB no cumple y marca por qué", tablaTexto(EquiposCompatiblesView.class, "tableEquipos").contains("Potencia de 109 HP"));
+        revisa("la JCB no se puede marcar y las CAT sí", !tabla(EquiposCompatiblesView.class, "tableEquipos").isCellEditable(0, 3) && tabla(EquiposCompatiblesView.class, "tableEquipos").isCellEditable(1, 3));
         continuarAAccesorios();
         marcarOpcional(true);
         foto("P16_06_accesorios");
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
         foto("P16_07_evaluacion_tecnica");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
         foto("P16_08_inventario");
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
         foto("P16_09_calendario");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
         foto("P16_10_condiciones");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
         foto("P16_11_cotizacion");
-        revisa("la cotización da el total del escenario: $11,020", etiquetas(CotizacionFrame.class).contains("11,020"));
-        clic(CotizacionFrame.class, "btnContinuar");
+        revisa("la cotización da el total del escenario: $11,020", etiquetas(CotizacionView.class).contains("11,020"));
+        clic(CotizacionView.class, "btnContinuar");
         foto("P16_12_requisitos");
-        clic(RequisitosRentaFrame.class, "btnValidar");
+        clic(RequisitosRentaView.class, "btnValidar");
         foto("P16_13_propuesta");
-        revisa("la propuesta dice equipo y unidad: " + etiqueta(PropuestaRentaFrame.class, "lblEquipo"), etiqueta(PropuestaRentaFrame.class, "lblEquipo").equals("Excavadora CAT 320 · unidad M-001"));
-        revisa("la propuesta trae los dos accesorios en su fila: " + etiqueta(PropuestaRentaFrame.class, "lblAccesorioOb") + " / " + etiqueta(PropuestaRentaFrame.class, "lblAccesorioOp"),
-                etiqueta(PropuestaRentaFrame.class, "lblAccesorioOb").contains("Kit de señalización") && etiqueta(PropuestaRentaFrame.class, "lblAccesorioOp").contains("Cucharón"));
-        clic(PropuestaRentaFrame.class, "btnAceptar");
+        revisa("la propuesta dice equipo y unidad: " + etiqueta(PropuestaRentaView.class, "lblEquipo"), etiqueta(PropuestaRentaView.class, "lblEquipo").equals("Excavadora CAT 320 · unidad M-001"));
+        revisa("la propuesta trae los dos accesorios en su fila: " + etiqueta(PropuestaRentaView.class, "lblAccesorioOb") + " / " + etiqueta(PropuestaRentaView.class, "lblAccesorioOp"),
+                etiqueta(PropuestaRentaView.class, "lblAccesorioOb").contains("Kit de señalización") && etiqueta(PropuestaRentaView.class, "lblAccesorioOp").contains("Cucharón"));
+        clic(PropuestaRentaView.class, "btnAceptar");
         foto("P16_14_verificacion");
-        revisa("Verificación dice la fecha, la hora y el lugar de la entrega: " + etiqueta(VerificacionCondicionFrame.class, "lblEntrega"),
-                etiqueta(VerificacionCondicionFrame.class, "lblEntrega").contains("10/09/2026 antes de las 8:00 AM, en Av. Guerrero #1105"));
+        revisa("Verificación dice la fecha, la hora y el lugar de la entrega: " + etiqueta(VerificacionCondicionView.class, "lblEntrega"),
+                etiqueta(VerificacionCondicionView.class, "lblEntrega").contains("10/09/2026 antes de las 8:00 AM, en Av. Guerrero #1105"));
         marcarCondiciones();
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
+        clic(VerificacionCondicionView.class, "btnGenerar");
         foto("P16_15_orden_de_entrega");
-        revisa("la orden dice la dirección: " + etiqueta(OrdenEntregaFrame.class, "lblDireccion"), etiqueta(OrdenEntregaFrame.class, "lblDireccion").contains("Av. Guerrero #1105"));
-        revisa("la orden dice la fecha y la hora de entrega, las mismas de Verificación: " + etiqueta(OrdenEntregaFrame.class, "lblFechaEntrega"), etiqueta(OrdenEntregaFrame.class, "lblFechaEntrega").equals("10/09/2026, antes de las 8:00 AM"));
-        revisa("la orden dice el total: " + etiqueta(OrdenEntregaFrame.class, "lblTotal"), etiqueta(OrdenEntregaFrame.class, "lblTotal").contains("11,020"));
+        revisa("la orden dice la dirección: " + etiqueta(OrdenEntregaView.class, "lblDireccion"), etiqueta(OrdenEntregaView.class, "lblDireccion").contains("Av. Guerrero #1105"));
+        revisa("la orden dice la fecha y la hora de entrega, las mismas de Verificación: " + etiqueta(OrdenEntregaView.class, "lblFechaEntrega"), etiqueta(OrdenEntregaView.class, "lblFechaEntrega").equals("10/09/2026, antes de las 8:00 AM"));
+        revisa("la orden dice el total: " + etiqueta(OrdenEntregaView.class, "lblTotal"), etiqueta(OrdenEntregaView.class, "lblTotal").contains("11,020"));
         ContratacionRentaDTO contratacion = almacen.buscarContratacionPorFolio(folio);
         revisa("la contratación queda FORMALIZADA con su orden", contratacion != null && "FORMALIZADA".equals(contratacion.getEstado()) && contratacion.getOrdenEntrega() != null);
         revisa("la M-001 queda apartada", "Ocupada".equals(almacen.obtenerUnidadesDeEquipo(2L).get(0).getEstadoUnidad()));
         revisa("la solicitud queda Formalizada", "Formalizada".equals(almacen.buscarSolicitudPorFolio(folio).getEstadoSolicitud()));
-        clic(OrdenEntregaFrame.class, "btnTerminar");
-        revisa("al terminar vuelve al menú", visible().equals("MenuPrincipalFrame"));
-        clic(MenuPrincipalFrame.class, "btnCerrarSesion");
-        revisa("Cerrar sesión vuelve al inicio sin dejar escritos el correo ni la contraseña", visible().equals("InicioSesionFrame")
-                && texto(InicioSesionFrame.class, "txtFieldCorreo").isEmpty() && texto(InicioSesionFrame.class, "psswFiledContrasenia").isEmpty());
+        clic(OrdenEntregaView.class, "btnTerminar");
+        revisa("al terminar vuelve al menú", visible().equals("MenuPrincipalView"));
+        clic(MenuPrincipalView.class, "btnCerrarSesion");
+        revisa("Cerrar sesión vuelve al inicio sin dejar escritos el correo ni la contraseña", visible().equals("InicioSesionView")
+                && texto(InicioSesionView.class, "txtFieldCorreo").isEmpty() && texto(InicioSesionView.class, "psswFiledContrasenia").isEmpty());
 
         // con otro cliente, otra obra y otro periodo no debe quedar ningún dato fijo del escenario
         nuevaApp();
         entrar();
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "LOMF920410H12");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "CAT 336");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
-        escribir(SolicitudRentaFrame.class, "txtFieldNombreObra", "Bodega Norte");
-        escribir(SolicitudRentaFrame.class, "txtFieldDireccion", "Calle 200 #45, Navojoa");
-        escribir(SolicitudRentaFrame.class, "txtAreaActividadRealizar", "Nivelar el terreno");
-        fecha(SolicitudRentaFrame.class, "datePickerInicio", LocalDate.of(2026, 12, 1));
-        fecha(SolicitudRentaFrame.class, "datePickerFinal", LocalDate.of(2026, 12, 3));
-        sinDatosFijos(SolicitudRentaFrame.class);
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "LOMF920410H12");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "CAT 336");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
+        escribir(SolicitudRentaView.class, "txtFieldNombreObra", "Bodega Norte");
+        escribir(SolicitudRentaView.class, "txtFieldDireccion", "Calle 200 #45, Navojoa");
+        escribir(SolicitudRentaView.class, "txtAreaActividadRealizar", "Nivelar el terreno");
+        fecha(SolicitudRentaView.class, "datePickerInicio", LocalDate.of(2026, 12, 1));
+        fecha(SolicitudRentaView.class, "datePickerFinal", LocalDate.of(2026, 12, 3));
+        sinDatosFijos(SolicitudRentaView.class);
+        clic(SolicitudRentaView.class, "btnRegistrar");
         capturarRequerimientos();
-        sinDatosFijos(AnalisisRequerimientoFrame.class);
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        sinDatosFijos(AnalisisRequerimientoView.class);
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
         marcarEquipos("Excavadora CAT 336", null);
         continuarAAccesorios();
-        sinDatosFijos(SeleccionAccesoriosFrame.class);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        sinDatosFijos(EvaluacionTecnicaFrame.class);
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
-        sinDatosFijos(VerificacionInventarioFrame.class);
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "N-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        sinDatosFijos(CalendarioUnidadFrame.class);
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        sinDatosFijos(CondicionesContratacionFrame.class);
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        sinDatosFijos(CotizacionFrame.class);
-        clic(CotizacionFrame.class, "btnContinuar");
-        sinDatosFijos(RequisitosRentaFrame.class);
-        clic(RequisitosRentaFrame.class, "btnValidar");
-        sinDatosFijos(PropuestaRentaFrame.class);
-        clic(PropuestaRentaFrame.class, "btnAceptarParcial");
-        sinDatosFijos(PropuestaPendienteFrame.class);
-        clic(PropuestaPendienteFrame.class, "btnAceptar");
-        sinDatosFijos(VerificacionCondicionFrame.class);
+        sinDatosFijos(SeleccionAccesoriosView.class);
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        sinDatosFijos(EvaluacionTecnicaView.class);
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        sinDatosFijos(VerificacionInventarioView.class);
+        fila(VerificacionInventarioView.class, "tableUnidades", "N-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        sinDatosFijos(CalendarioUnidadView.class);
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        sinDatosFijos(CondicionesContratacionView.class);
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        sinDatosFijos(CotizacionView.class);
+        clic(CotizacionView.class, "btnContinuar");
+        sinDatosFijos(RequisitosRentaView.class);
+        clic(RequisitosRentaView.class, "btnValidar");
+        sinDatosFijos(PropuestaRentaView.class);
+        clic(PropuestaRentaView.class, "btnAceptarParcial");
+        sinDatosFijos(PropuestaPendienteView.class);
+        clic(PropuestaPendienteView.class, "btnAceptar");
+        sinDatosFijos(VerificacionCondicionView.class);
         marcarCondiciones();
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
-        sinDatosFijos(OrdenEntregaFrame.class);
+        clic(VerificacionCondicionView.class, "btnGenerar");
+        sinDatosFijos(OrdenEntregaView.class);
         foto("P16_16_otro_cliente");
-        revisa("la orden es de la otra clienta y dice sus datos", etiqueta(OrdenEntregaFrame.class, "lblCliente").contains("María Fernanda") && etiqueta(OrdenEntregaFrame.class, "lblDireccion").contains("Calle 200"));
+        revisa("la orden es de la otra clienta y dice sus datos", etiqueta(OrdenEntregaView.class, "lblCliente").contains("María Fernanda") && etiqueta(OrdenEntregaView.class, "lblDireccion").contains("Calle 200"));
         revisa("durante todas las pruebas se abrieron las 25 pantallas: " + pantallasVistas.size(), pantallasVistas.size() == 25);
         sinExcepciones();
     }
 
     // ================================================================ recorridos de apoyo
     private static void entrar() throws Exception {
-        escribir(InicioSesionFrame.class, "txtFieldCorreo", "asesor@maquinaria.com");
-        escribir(InicioSesionFrame.class, "psswFiledContrasenia", "maquinaria2026");
-        clic(InicioSesionFrame.class, "btnIngresar");
+        escribir(InicioSesionView.class, "txtFieldCorreo", "asesor@maquinaria.com");
+        escribir(InicioSesionView.class, "psswFiledContrasenia", "maquinaria2026");
+        clic(InicioSesionView.class, "btnIngresar");
     }
 
     private static void capturarCliente(String nombre, String rfc, String telefono, String correo) throws Exception {
-        escribir(RegistroClienteFrame.class, "txtFieldNombre", nombre);
-        escribir(RegistroClienteFrame.class, "txtFieldRFC", rfc);
-        escribir(RegistroClienteFrame.class, "txtFieldTelefono", telefono);
-        escribir(RegistroClienteFrame.class, "txtFieldCorreoElectro", correo);
+        escribir(RegistroClienteView.class, "txtFieldNombre", nombre);
+        escribir(RegistroClienteView.class, "txtFieldRFC", rfc);
+        escribir(RegistroClienteView.class, "txtFieldTelefono", telefono);
+        escribir(RegistroClienteView.class, "txtFieldCorreoElectro", correo);
     }
 
     private static void capturarSolicitud() throws Exception {
-        escribir(SolicitudRentaFrame.class, "txtFieldNombreObra", "Remodelación Plaza Goya");
-        escribir(SolicitudRentaFrame.class, "txtFieldDireccion", "Av. Guerrero #1105, Ciudad Obregón, Sonora");
-        escribir(SolicitudRentaFrame.class, "txtAreaActividadRealizar", "Excavar cepas para la cimentación y retirar el material, 3.50 m de profundidad");
-        fecha(SolicitudRentaFrame.class, "datePickerInicio", LocalDate.of(2026, 9, 10));
-        fecha(SolicitudRentaFrame.class, "datePickerFinal", LocalDate.of(2026, 9, 15));
+        escribir(SolicitudRentaView.class, "txtFieldNombreObra", "Remodelación Plaza Goya");
+        escribir(SolicitudRentaView.class, "txtFieldDireccion", "Av. Guerrero #1105, Ciudad Obregón, Sonora");
+        escribir(SolicitudRentaView.class, "txtAreaActividadRealizar", "Excavar cepas para la cimentación y retirar el material, 3.50 m de profundidad");
+        fecha(SolicitudRentaView.class, "datePickerInicio", LocalDate.of(2026, 9, 10));
+        fecha(SolicitudRentaView.class, "datePickerFinal", LocalDate.of(2026, 9, 15));
     }
 
     private static void capturarRequerimientos() throws Exception {
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldProfundidad", "3.50");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldPotencia", "120");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldPesoMaximo", "22");
-        escribir(AnalisisRequerimientoFrame.class, "txtFieldAnchoAcceso", "4.20");
-        seleccionarCombo(AnalisisRequerimientoFrame.class, "comboTipoTerreno", "Terracería compactada");
+        escribir(AnalisisRequerimientoView.class, "txtFieldProfundidad", "3.50");
+        escribir(AnalisisRequerimientoView.class, "txtFieldPotencia", "120");
+        escribir(AnalisisRequerimientoView.class, "txtFieldPesoMaximo", "22");
+        escribir(AnalisisRequerimientoView.class, "txtFieldAnchoAcceso", "4.20");
+        seleccionarCombo(AnalisisRequerimientoView.class, "comboTipoTerreno", "Terracería compactada");
     }
 
     private static void hastaLosCompatibles() throws Exception {
-        clic(MenuPrincipalFrame.class, "btnContratacionEquipo");
-        fila(IdentificacionClienteFrame.class, "tableCliente", "MARJ8503158A1");
-        clic(IdentificacionClienteFrame.class, "btnRegistrarNuevSoli");
-        clic(SolicitudRentaFrame.class, "btnAgregarEquipo");
-        fila(BusquedaEquipoFrame.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
-        clic(BusquedaEquipoFrame.class, "btnRegistrarEquipo");
+        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
+        clic(IdentificacionClienteView.class, "btnRegistrarNuevSoli");
+        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
+        clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
         capturarSolicitud();
-        clic(SolicitudRentaFrame.class, "btnRegistrar");
+        clic(SolicitudRentaView.class, "btnRegistrar");
         capturarRequerimientos();
-        clic(AnalisisRequerimientoFrame.class, "btnBuscarEquipos");
+        clic(AnalisisRequerimientoView.class, "btnBuscarEquipos");
     }
 
     private static void hastaElInventario() throws Exception {
         hastaLosCompatibles();
         continuarAAccesorios();
         marcarOpcional(true);
-        clic(SeleccionAccesoriosFrame.class, "btnContinuar");
-        clic(EvaluacionTecnicaFrame.class, "btnEnviarVerificacion");
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
     }
 
     private static void hastaLosRequisitos() throws Exception {
         hastaElInventario();
-        fila(VerificacionInventarioFrame.class, "tableUnidades", "M-001");
-        clic(VerificacionInventarioFrame.class, "btnSeleccionar");
-        clic(CalendarioUnidadFrame.class, "btnSeleccionarUnidad");
-        clic(CondicionesContratacionFrame.class, "btnEnviarValidacion");
-        clic(CotizacionFrame.class, "btnContinuar");
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        clic(CondicionesContratacionView.class, "btnEnviarValidacion");
+        clic(CotizacionView.class, "btnContinuar");
     }
 
     private static void hastaLaPropuesta() throws Exception {
         hastaLosRequisitos();
-        clic(RequisitosRentaFrame.class, "btnValidar");
+        clic(RequisitosRentaView.class, "btnValidar");
     }
 
     // Termina en la orden de entrega y regresa el folio
     private static String contratacionHastaLaOrden() throws Exception {
         hastaLaPropuesta();
         String folio = almacen.obtenerSolicitudes().get(almacen.obtenerSolicitudes().size() - 1).getFolio();
-        clic(PropuestaRentaFrame.class, "btnAceptar");
+        clic(PropuestaRentaView.class, "btnAceptar");
         marcarCondiciones();
-        clic(VerificacionCondicionFrame.class, "btnGenerar");
+        clic(VerificacionCondicionView.class, "btnGenerar");
         return folio;
     }
 
     private static void marcarOpcional(boolean marcar) throws Exception {
         edt(() -> {
-            JTable accesorios = (JTable) campo(ventana(SeleccionAccesoriosFrame.class), "tableAccesorios");
+            JTable accesorios = (JTable) campo(ventana(SeleccionAccesoriosView.class), "tableAccesorios");
             for (int i = 0; i < accesorios.getRowCount(); i++) {
                 if (accesorios.isCellEditable(i, 2)) {
                     accesorios.setValueAt(marcar, i, 2);
@@ -1389,7 +1389,7 @@ public class PruebasPresentacion {
     // Marca en la tabla el recomendado y la alternativa; sin alternativa, null
     private static void marcarEquipos(String recomendado, String alternativa) throws Exception {
         edt(() -> {
-            JTable equipos = (JTable) campo(ventana(EquiposCompatiblesFrame.class), "tableEquipos");
+            JTable equipos = (JTable) campo(ventana(EquiposCompatiblesView.class), "tableEquipos");
             for (int i = 0; i < equipos.getRowCount(); i++) {
                 if (equipos.getValueAt(i, 0).equals(recomendado)) {
                     equipos.setValueAt(true, i, 3);
@@ -1403,7 +1403,7 @@ public class PruebasPresentacion {
 
     // Como en el escenario: si todavía no se marca el recomendado, la CAT 320 y de alternativa la CAT 336
     private static void continuarAAccesorios() throws Exception {
-        JTable equipos = tabla(EquiposCompatiblesFrame.class, "tableEquipos");
+        JTable equipos = tabla(EquiposCompatiblesView.class, "tableEquipos");
         boolean hayRecomendado = false;
         for (int i = 0; i < equipos.getRowCount(); i++) {
             hayRecomendado |= Boolean.TRUE.equals(equipos.getValueAt(i, 3));
@@ -1411,16 +1411,16 @@ public class PruebasPresentacion {
         if (!hayRecomendado) {
             marcarEquipos("Excavadora CAT 320", "Excavadora CAT 336");
         }
-        clic(EquiposCompatiblesFrame.class, "btnContinuarAccesorios");
+        clic(EquiposCompatiblesView.class, "btnContinuarAccesorios");
     }
 
     private static boolean filaVisible(String fila) throws Exception {
-        return ((java.awt.Component) campo(ventana(SolicitudDatosFaltantesFrame.class), fila)).isVisible();
+        return ((java.awt.Component) campo(ventana(SolicitudDatosFaltantesView.class), fila)).isVisible();
     }
 
     private static void marcarCondiciones() throws Exception {
         edt(() -> {
-            JFrame verificacion = ventana(VerificacionCondicionFrame.class);
+            JFrame verificacion = ventana(VerificacionCondicionView.class);
             for (String casilla : new String[]{"chkCliente", "chkEquipo", "chkAccesorios", "chkPeriodo", "chkTarifa"}) {
                 ((JCheckBox) campo(verificacion, casilla)).setSelected(true);
             }
@@ -1604,7 +1604,7 @@ public class PruebasPresentacion {
 
     // true si la solicitud muestra la captura; false si muestra la razón de cancelación
     private static boolean tarjetaCaptura() throws Exception {
-        return ((Component) campo(ventana(SolicitudRentaFrame.class), "txtFieldNombreObra")).isShowing();
+        return ((Component) campo(ventana(SolicitudRentaView.class), "txtFieldNombreObra")).isShowing();
     }
 
     private static Object campo(Object o, String nombre) throws Exception {

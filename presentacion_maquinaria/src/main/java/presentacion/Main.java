@@ -3,35 +3,35 @@ package presentacion;
 import almacentemporal.AlmacenTemporal;
 import java.util.Locale;
 import javax.swing.UIManager;
-import presentacion.control.ContratacionRenta;
-import presentacion.control.CoordinadorAplicacion;
-import presentacion.control.IContratacionRenta;
+import presentacion.controles.ControlContratacionRenta;
+import presentacion.controles.CoordinadorAplicacion;
+import presentacion.controles.IContratacionRenta;
 import presentacion.simulacion.NegocioSimulado;
-import presentacion.vistas.AnalisisRequerimientoFrame;
-import presentacion.vistas.BusquedaEquipoFrame;
-import presentacion.vistas.CalendarioUnidadFrame;
-import presentacion.vistas.CambiarPeriodoFrame;
-import presentacion.vistas.CondicionesContratacionFrame;
-import presentacion.vistas.CotizacionFrame;
-import presentacion.vistas.EquiposCompatiblesFrame;
-import presentacion.vistas.EvaluacionTecnicaFrame;
-import presentacion.vistas.IdentificacionClienteFrame;
-import presentacion.vistas.InicioSesionFrame;
-import presentacion.vistas.MenuPrincipalFrame;
-import presentacion.vistas.MotivoRechazoFrame;
-import presentacion.vistas.OrdenEntregaFrame;
-import presentacion.vistas.PropuestaPendienteFrame;
-import presentacion.vistas.PropuestaRentaFrame;
-import presentacion.vistas.RegistroClienteFrame;
-import presentacion.vistas.RequisitosRentaFrame;
-import presentacion.vistas.SeleccionAccesoriosFrame;
-import presentacion.vistas.SinEquipoCompatibleFrame;
-import presentacion.vistas.SolicitudDatosFaltantesFrame;
-import presentacion.vistas.SolicitudRentaFrame;
-import presentacion.vistas.UnidadMantenimientoFrame;
-import presentacion.vistas.UnidadOcupadaFrame;
-import presentacion.vistas.VerificacionCondicionFrame;
-import presentacion.vistas.VerificacionInventarioFrame;
+import presentacion.vistas.AnalisisRequerimientoView;
+import presentacion.vistas.BusquedaEquipoView;
+import presentacion.vistas.CalendarioUnidadView;
+import presentacion.vistas.CambiarPeriodoView;
+import presentacion.vistas.CondicionesContratacionView;
+import presentacion.vistas.CotizacionView;
+import presentacion.vistas.EquiposCompatiblesView;
+import presentacion.vistas.EvaluacionTecnicaView;
+import presentacion.vistas.IdentificacionClienteView;
+import presentacion.vistas.InicioSesionView;
+import presentacion.vistas.MenuPrincipalView;
+import presentacion.vistas.MotivoRechazoView;
+import presentacion.vistas.OrdenEntregaView;
+import presentacion.vistas.PropuestaPendienteView;
+import presentacion.vistas.PropuestaRentaView;
+import presentacion.vistas.RegistroClienteView;
+import presentacion.vistas.RequisitosRentaView;
+import presentacion.vistas.SeleccionAccesoriosView;
+import presentacion.vistas.SinEquipoCompatibleView;
+import presentacion.vistas.SolicitudDatosFaltantesView;
+import presentacion.vistas.SolicitudRentaView;
+import presentacion.vistas.UnidadMantenimientoView;
+import presentacion.vistas.UnidadOcupadaView;
+import presentacion.vistas.VerificacionCondicionView;
+import presentacion.vistas.VerificacionInventarioView;
 
 /**
  *
@@ -68,33 +68,33 @@ public class Main {
      * Aplicación recibe las ventanas para mostrarlas. El control le pide al coordinador cada cambio.
      */
     public static IContratacionRenta iniciar() {
-        ContratacionRenta control = new ContratacionRenta(new AlmacenTemporal(), new NegocioSimulado());
+        ControlContratacionRenta control = new ControlContratacionRenta(new AlmacenTemporal(), new NegocioSimulado());
         CoordinadorAplicacion coordinador = new CoordinadorAplicacion(
-                new InicioSesionFrame(control),
-                new MenuPrincipalFrame(control),
-                new IdentificacionClienteFrame(control),
-                new RegistroClienteFrame(control),
-                new BusquedaEquipoFrame(control),
-                new SolicitudRentaFrame(control),
-                new AnalisisRequerimientoFrame(control),
-                new SolicitudDatosFaltantesFrame(control),
-                new EquiposCompatiblesFrame(control),
-                new SinEquipoCompatibleFrame(control),
-                new SeleccionAccesoriosFrame(control),
-                new EvaluacionTecnicaFrame(control),
-                new CambiarPeriodoFrame(control),
-                new VerificacionInventarioFrame(control),
-                new UnidadMantenimientoFrame(control),
-                new UnidadOcupadaFrame(control),
-                new CalendarioUnidadFrame(control),
-                new CondicionesContratacionFrame(control),
-                new CotizacionFrame(control),
-                new RequisitosRentaFrame(control),
-                new PropuestaRentaFrame(control),
-                new PropuestaPendienteFrame(control),
-                new MotivoRechazoFrame(control),
-                new VerificacionCondicionFrame(control),
-                new OrdenEntregaFrame(control));
+                new InicioSesionView(control),
+                new MenuPrincipalView(control),
+                new IdentificacionClienteView(control),
+                new RegistroClienteView(control),
+                new BusquedaEquipoView(control),
+                new SolicitudRentaView(control),
+                new AnalisisRequerimientoView(control),
+                new SolicitudDatosFaltantesView(control),
+                new EquiposCompatiblesView(control),
+                new SinEquipoCompatibleView(control),
+                new SeleccionAccesoriosView(control),
+                new EvaluacionTecnicaView(control),
+                new CambiarPeriodoView(control),
+                new VerificacionInventarioView(control),
+                new UnidadMantenimientoView(control),
+                new UnidadOcupadaView(control),
+                new CalendarioUnidadView(control),
+                new CondicionesContratacionView(control),
+                new CotizacionView(control),
+                new RequisitosRentaView(control),
+                new PropuestaRentaView(control),
+                new PropuestaPendienteView(control),
+                new MotivoRechazoView(control),
+                new VerificacionCondicionView(control),
+                new OrdenEntregaView(control));
         control.setCoordinador(coordinador);
         return control;
     }
