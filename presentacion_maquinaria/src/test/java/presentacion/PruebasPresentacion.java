@@ -1,5 +1,6 @@
 package presentacion;
 
+import almacentemporal.AlmacenTemporal;
 import almacentemporal.IAlmacenTemporal;
 import com.github.lgooddatepicker.components.DatePicker;
 import java.awt.Color;
@@ -15,6 +16,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayDeque;
@@ -41,17 +43,28 @@ import javax.swing.text.JTextComponent;
 import objetosdto.ClienteDTO;
 import objetosdto.ClienteEmpresaDTO;
 import objetosdto.ContratacionRentaDTO;
+import objetosdto.CotizacionDTO;
+import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
+import objetosdto.OrdenEntregaDTO;
+import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
+import objetosdto.ResultadoCancelacionDTO;
+import objetosdto.ResultadoContratacionDTO;
 import objetosdto.SolicitudRentaDTO;
+import objetosdto.UnidadFisicaDTO;
 import presentacion.controles.ControlContratacionRenta;
 import presentacion.controles.IContratacionRenta;
 import presentacion.controles.ICoordinadorAplicacion;
 import presentacion.controles.Mensaje;
 import presentacion.vistas.*;
+import subsistemaContratacionRenta.ISubsistemaContratacionRenta;
+import subsistemaContratacionRenta.SubsistemaContratacionRenta;
+import subsistemaInicioSesion.ISubsistemaInicioSesion;
+import subsistemaInicioSesion.SubsistemaInicioSesion;
 
 /**
- * Plan de pruebas de la capa de presentación (casos P01 a P16 de la rúbrica). Abre las pantallas
+ * Plan de pruebas de la capa de presentación (casos P01 a P16 de la rúbrica y P17 con las reglas del subsistema). Abre las pantallas
  * reales, escribe en sus campos y oprime sus botones; los avisos se contestan con el botón que se ve
  * en pantalla. Se corre aparte (Run File en NetBeans) y deja en la carpeta que se le indique el
  * resultado de cada caso y las capturas:
@@ -107,6 +120,7 @@ public class PruebasPresentacion {
         p14Alternativos();
         p15Mensajes();
         p16FlujoCompleto();
+        p17Subsistema();
 
         escribirResultados();
         System.out.println();
@@ -280,14 +294,11 @@ public class PruebasPresentacion {
         clic(SeleccionAccesoriosView.class, "btnContinuar");
         clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
         revisa("con el otro equipo salen sus unidades", tablaTexto(VerificacionInventarioView.class, "tableUnidades").contains("N-001"));
+        revisa("del 20 al 23 ya no cruzan el mantenimiento ni la otra renta: " + tablaTexto(VerificacionInventarioView.class, "tableUnidades"),
+                !tablaTexto(VerificacionInventarioView.class, "tableUnidades").contains("mantenimiento") && !tablaTexto(VerificacionInventarioView.class, "tableUnidades").contains("Ocupada"));
         fila(VerificacionInventarioView.class, "tableUnidades", "N-002");
         clic(VerificacionInventarioView.class, "btnVerMotivo");
-        clic(UnidadMantenimientoView.class, "btnRegresar");
-        revisa("Regresar de mantenimiento vuelve al inventario", visible().equals("VerificacionInventarioView"));
-        fila(VerificacionInventarioView.class, "tableUnidades", "N-003");
-        clic(VerificacionInventarioView.class, "btnVerMotivo");
-        clic(UnidadOcupadaView.class, "btnRegresar");
-        revisa("Regresar de ocupada vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        revisa("Ver motivo de una unidad libre lo dice y no cambia de pantalla", ultimoAviso().mensaje().contains("disponible") && visible().equals("VerificacionInventarioView"));
         fila(VerificacionInventarioView.class, "tableUnidades", "N-001");
         clic(VerificacionInventarioView.class, "btnSeleccionar");
         clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
@@ -489,12 +500,12 @@ public class PruebasPresentacion {
         int ventanas = cuantasVentanas();
         entrar();
         clic(MenuPrincipalView.class, "btnContratacionEquipo");
-        clic(MenuPrincipalView.class, "btnContratacionEquipo");
+        segundoClic(MenuPrincipalView.class, "btnContratacionEquipo");
         revisa("dos clics en Contratación: una sola pantalla visible", visible().equals("IdentificacionClienteView"));
         fila(IdentificacionClienteView.class, "tableCliente", "MARJ8503158A1");
         clic(IdentificacionClienteView.class, "btnRegistrarNuevaSolicitud");
         clic(SolicitudRentaView.class, "btnAgregarEquipo");
-        clic(SolicitudRentaView.class, "btnAgregarEquipo");
+        segundoClic(SolicitudRentaView.class, "btnAgregarEquipo");
         revisa("dos clics en Agregar equipo: una sola pantalla visible", visible().equals("BusquedaEquipoView"));
         fila(BusquedaEquipoView.class, "tableEquipoCatalogo", "Retroexcavadora JCB");
         clic(BusquedaEquipoView.class, "btnRegistrarEquipo");
@@ -504,7 +515,7 @@ public class PruebasPresentacion {
         revisa("agregar otra vez el mismo equipo no lo repite", tabla(SolicitudRentaView.class, "tableEquipoSolicitado").getRowCount() == 1);
         capturarSolicitud();
         clic(SolicitudRentaView.class, "btnRegistrar");
-        clic(SolicitudRentaView.class, "btnRegistrar");
+        segundoClic(SolicitudRentaView.class, "btnRegistrar");
         revisa("dos clics en Registrar: una sola solicitud en el almacén", almacen.obtenerSolicitudes().size() == 1);
         revisa("no se crearon ventanas nuevas", cuantasVentanas() == ventanas);
 
@@ -618,6 +629,33 @@ public class PruebasPresentacion {
             controlSinVentanas &= !Component.class.isAssignableFrom(f.getType());
         }
         revisa("el Control no tiene ventanas", controlSinVentanas);
+        Set<Class<?>> delControl = new java.util.HashSet<>();
+        for (Field f : ControlContratacionRenta.class.getDeclaredFields()) {
+            delControl.add(f.getType());
+        }
+        revisa("el Control conoce a los subsistemas solo por su interfaz", delControl.contains(ISubsistemaContratacionRenta.class) && delControl.contains(ISubsistemaInicioSesion.class)
+                && !delControl.contains(SubsistemaContratacionRenta.class) && !delControl.contains(SubsistemaInicioSesion.class));
+        revisa("el Control no usa el almacén", !delControl.contains(IAlmacenTemporal.class) && !delControl.contains(AlmacenTemporal.class));
+        revisa("ya no hay negocio simulado", !existeClase("presentacion.simulacion.NegocioSimulado") && !existeClase("presentacion.simulacion.INegocioSimulado"));
+        boolean fachadaSinEstado = true;
+        for (Field f : SubsistemaContratacionRenta.class.getDeclaredFields()) {
+            fachadaSinEstado &= f.getType().getSimpleName().startsWith("Gestor");
+        }
+        revisa("la fachada solo guarda sus clases internas", fachadaSinEstado);
+        boolean soloFachadaPublica = Modifier.isPublic(SubsistemaContratacionRenta.class.getModifiers()) && Modifier.isPublic(SubsistemaInicioSesion.class.getModifiers());
+        for (String interna : new String[]{"subsistemaContratacionRenta.GestorClientes", "subsistemaContratacionRenta.GestorSolicitud", "subsistemaContratacionRenta.GestorDisponibilidad",
+            "subsistemaContratacionRenta.GestorCotizacion", "subsistemaContratacionRenta.GestorContratacion", "subsistemaInicioSesion.AutenticadorUsuario"}) {
+            soloFachadaPublica &= !Modifier.isPublic(Class.forName(interna).getModifiers());
+        }
+        revisa("de cada subsistema solo la interfaz y la fachada son públicas", soloFachadaPublica);
+        boolean gestoresPorInterfaz = true;
+        for (Field f : Class.forName("subsistemaContratacionRenta.GestorCotizacion").getDeclaredFields()) {
+            gestoresPorInterfaz &= !f.getType().getSimpleName().endsWith("BO") || f.getType().isInterface();
+        }
+        for (Field f : Class.forName("subsistemaContratacionRenta.GestorDisponibilidad").getDeclaredFields()) {
+            gestoresPorInterfaz &= !f.getType().getSimpleName().endsWith("BO") || f.getType().isInterface();
+        }
+        revisa("los gestores guardan sus BO por su interfaz", gestoresPorInterfaz);
         boolean coordinadorSinAlmacen = true;
         for (Field f : coordinador.getClass().getDeclaredFields()) {
             coordinadorSinAlmacen &= !IAlmacenTemporal.class.isAssignableFrom(f.getType()) && !IContratacionRenta.class.isAssignableFrom(f.getType());
@@ -965,6 +1003,7 @@ public class PruebasPresentacion {
         clic(VerificacionInventarioView.class, "btnSeleccionar");
         clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
         clic(CondicionesContratacionView.class, "btnRegresar");
+        clic(CalendarioUnidadView.class, "btnRegresar");
         edt(() -> tabla(VerificacionInventarioView.class, "tableUnidades").clearSelection());
         clic(VerificacionInventarioView.class, "btnSeleccionar");
         revisa("seleccionar sin fila avisa y no borra la unidad ya elegida", ultimoAviso().mensaje().contains("Selecciona una unidad")
@@ -986,11 +1025,19 @@ public class PruebasPresentacion {
         clic(VerificacionInventarioView.class, "btnVerMotivo");
         revisa("Ver motivo abre Unidad en mantenimiento", visible().equals("UnidadMantenimientoView"));
         foto("P14_unidad_en_mantenimiento");
+        clic(UnidadMantenimientoView.class, "btnRegresar");
+        revisa("Regresar de mantenimiento vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-002");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
         clic(UnidadMantenimientoView.class, "btnOtraUnidad");
         fila(VerificacionInventarioView.class, "tableUnidades", "M-003");
         clic(VerificacionInventarioView.class, "btnVerMotivo");
         revisa("Ver motivo abre Unidad ocupada", visible().equals("UnidadOcupadaView"));
         foto("P14_unidad_ocupada");
+        clic(UnidadOcupadaView.class, "btnRegresar");
+        revisa("Regresar de ocupada vuelve al inventario", visible().equals("VerificacionInventarioView"));
+        fila(VerificacionInventarioView.class, "tableUnidades", "M-003");
+        clic(VerificacionInventarioView.class, "btnVerMotivo");
         clic(UnidadOcupadaView.class, "btnUsarAlternativa");
         revisa("Usar la alternativa cambia el equipo y vuelve al inventario", visible().equals("VerificacionInventarioView") && etiquetas(VerificacionInventarioView.class).contains("CAT 336") && tablaTexto(VerificacionInventarioView.class, "tableUnidades").contains("N-001"));
         foto("P14_inventario_con_la_alternativa");
@@ -1300,6 +1347,189 @@ public class PruebasPresentacion {
         sinExcepciones();
     }
 
+    private static void p17Subsistema() throws Exception {
+        caso("P17", "C5", "Reglas del subsistema", "Pedirle al subsistema, sin pantallas, la comparación de equipos, la disponibilidad por periodo, la cotización, la cancelación y el inicio de sesión; luego contraseña incorrecta y equipo sin tarifa desde las pantallas.",
+                "Las respuestas salen de los datos registrados y lo que no se puede hacer se avisa sin errores.");
+        nuevaApp();
+        ISubsistemaContratacionRenta subsistema = new SubsistemaContratacionRenta();
+
+        // comparación de equipos: las cuatro características, con lo que tenga registrado cada equipo
+        List<RequerimientoTecnicoDTO> requerimientos = List.of(new RequerimientoTecnicoDTO("Profundidad de trabajo", 3.5, "m", "Mínimo"),
+                new RequerimientoTecnicoDTO("Potencia mínima", 120.0, "HP", "Mínimo"), new RequerimientoTecnicoDTO("Peso máximo permitido", 22.0, "t", "Máximo"),
+                new RequerimientoTecnicoDTO("Ancho de acceso", 4.2, "m", "Máximo"), new RequerimientoTecnicoDTO("Tipo de terreno: Arenoso", null, null, null));
+        revisa("la JCB no cumple por los 109 HP: " + motivoDe(subsistema, requerimientos, "Retroexcavadora JCB"),
+                "potencia de 109 HP; se piden 120 HP como mínimo".equals(motivoDe(subsistema, requerimientos, "Retroexcavadora JCB")));
+        revisa("sin datos registrados la CAT 320 no se descarta", motivoDe(subsistema, requerimientos, "Excavadora CAT 320") == null);
+        EquipoDTO cat320 = null;
+        for (EquipoDTO equipo : (List<EquipoDTO>) campo(almacen, "catalogoEquipos")) {
+            cat320 = equipo.getModelo().equals("Excavadora CAT 320") ? equipo : cat320;
+        }
+        cat320.setProfundidadExcavacion(3.5);
+        cat320.setPotencia(120.0);
+        cat320.setPeso(22.0);
+        cat320.setAnchoOperacion(4.2);
+        revisa("justo en cada límite cumple", motivoDe(subsistema, requerimientos, "Excavadora CAT 320") == null);
+        cat320.setProfundidadExcavacion(3.0);
+        revisa("le falta profundidad: " + motivoDe(subsistema, requerimientos, "Excavadora CAT 320"), "profundidad de 3 m; se piden 3.50 m como mínimo".equals(motivoDe(subsistema, requerimientos, "Excavadora CAT 320")));
+        cat320.setProfundidadExcavacion(3.5);
+        cat320.setPotencia(119.5);
+        revisa("le falta potencia: " + motivoDe(subsistema, requerimientos, "Excavadora CAT 320"), "potencia de 119.50 HP; se piden 120 HP como mínimo".equals(motivoDe(subsistema, requerimientos, "Excavadora CAT 320")));
+        cat320.setPotencia(120.0);
+        cat320.setPeso(30.0);
+        revisa("pesa de más: " + motivoDe(subsistema, requerimientos, "Excavadora CAT 320"), "peso de 30 t; se piden 22 t como máximo".equals(motivoDe(subsistema, requerimientos, "Excavadora CAT 320")));
+        cat320.setPeso(22.0);
+        cat320.setAnchoOperacion(5.5);
+        revisa("no cabe por el acceso: " + motivoDe(subsistema, requerimientos, "Excavadora CAT 320"), "ancho de 5.50 m; se piden 4.20 m como máximo".equals(motivoDe(subsistema, requerimientos, "Excavadora CAT 320")));
+        cat320.setPeso(30.0);
+        revisa("con dos fallas dice las dos: " + motivoDe(subsistema, requerimientos, "Excavadora CAT 320"), "peso de 30 t; se piden 22 t como máximo · ancho de 5.50 m; se piden 4.20 m como máximo".equals(motivoDe(subsistema, requerimientos, "Excavadora CAT 320")));
+        revisa("sin requerimientos ninguno se descarta", motivoDe(subsistema, null, "Excavadora CAT 320") == null && motivoDe(subsistema, null, "Retroexcavadora JCB") == null);
+
+        // disponibilidad: sale de las ocupaciones que caen en el periodo
+        nuevaApp();
+        subsistema = new SubsistemaContratacionRenta();
+        EquipoDTO equipo = subsistema.buscarEquipoPorId(2L);
+        revisa("del 10 al 15, como en el escenario", "M-001 Disponible, M-002 En mantenimiento, M-003 Ocupada".equals(estados(subsistema, equipo, 10, 15)));
+        revisa("del 20 al 25 las tres están libres", "M-001 Disponible, M-002 Disponible, M-003 Disponible".equals(estados(subsistema, equipo, 20, 25)));
+        revisa("el último día de la ocupación todavía cuenta", "M-001 Disponible, M-002 En mantenimiento, M-003 Ocupada".equals(estados(subsistema, equipo, 15, 20)));
+        revisa("el día siguiente ya no", "M-001 Disponible, M-002 Disponible, M-003 Disponible".equals(estados(subsistema, equipo, 16, 20)));
+        revisa("el primer día de la ocupación ya cuenta", "M-001 Disponible, M-002 En mantenimiento, M-003 Ocupada".equals(estados(subsistema, equipo, 13, 13)));
+        revisa("el día anterior todavía no", "M-001 Disponible, M-002 En mantenimiento, M-003 Disponible".equals(estados(subsistema, equipo, 1, 12)));
+        revisa("antes del mantenimiento también está libre la M-002", "M-001 Disponible, M-002 Disponible, M-003 Disponible".equals(estados(subsistema, equipo, 1, 9)));
+        PeriodoSolicitadoDTO escenario = new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 10), LocalDate.of(2026, 9, 15), 6);
+        PeriodoSolicitadoDTO otro = new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, 20), LocalDate.of(2026, 9, 25), 6);
+        revisa("solo trae las ocupaciones que caen en el periodo", subsistema.verificarDisponibilidadUnidades(equipo, escenario).get(2).getOcupaciones().size() == 1
+                && subsistema.verificarDisponibilidadUnidades(equipo, otro).get(2).getOcupaciones().isEmpty());
+        revisa("preguntar no cambia lo registrado", "Ocupada".equals(almacen.obtenerUnidadesDeEquipo(2L).get(2).getEstadoUnidad()) && almacen.obtenerUnidadesDeEquipo(2L).get(2).getOcupaciones().size() == 1);
+        UnidadFisicaDTO m001 = subsistema.ocuparUnidad(subsistema.buscarUnidadPorId(almacen.obtenerUnidadesDeEquipo(2L).get(0).getIdUnidad()), otro);
+        revisa("apartar la unidad la deja registrada", "Ocupada".equals(m001.getEstadoUnidad()) && "Ocupada".equals(almacen.obtenerUnidadesDeEquipo(2L).get(0).getEstadoUnidad())
+                && almacen.obtenerUnidadesDeEquipo(2L).get(0).getOcupaciones().size() == 1);
+        revisa("apartada del 20 al 25 sale ocupada en esas fechas y libre en otras", estados(subsistema, equipo, 20, 25).startsWith("M-001 Ocupada") && estados(subsistema, equipo, 10, 15).startsWith("M-001 Disponible"));
+        revisa("un equipo sin unidades se avisa con una excepción", lanza(IllegalArgumentException.class, sub -> {
+            EquipoDTO sinUnidades = new EquipoDTO();
+            sinUnidades.setIdEquipo(99L);
+            sinUnidades.setModelo("Sin unidades");
+            sub.verificarDisponibilidadUnidades(sinUnidades, escenario);
+        }));
+
+        // cotización
+        CotizacionDTO cotizacion = subsistema.generarCotizacion("FOL-X", equipo, 6, equipo.getAccesorios());
+        revisa("la cuenta del escenario: $9,500 + IVA = $11,020", cotizacion.getSubtotal() == 9500.0 && cotizacion.getIva() == 1520.0 && cotizacion.getTotal() == 11020.0 && "FOL-X".equals(cotizacion.getFolioSolicitud()));
+        revisa("con la tarifa registrada", subsistema.tarifaDiaria(equipo) == 1500.0);
+        revisa("el depósito es el del requisito", subsistema.depositoGarantia(subsistema.obtenerRequisitosRenta()) == 3200.0);
+        ponerTarifa("Excavadora CAT 336", null);
+        EquipoDTO cat336 = subsistema.buscarEquipoPorId(3L);
+        revisa("sin tarifa no se cotiza", lanza(IllegalStateException.class, sub -> sub.generarCotizacion("FOL-X", cat336, 6, cat336.getAccesorios())));
+        revisa("sin tarifa no hay tarifa diaria", lanza(IllegalStateException.class, sub -> sub.tarifaDiaria(cat336)));
+
+        // clientes y solicitudes
+        int clientes = almacen.obtenerClientes().size();
+        ClienteDTO repetido = new ClienteDTO(null, "Otro", "MARJ8503158A1", "6440000000", "otro@correo.com", "Particular");
+        revisa("un RFC repetido no se registra", lanza(IllegalArgumentException.class, sub -> sub.registrarClienteNuevo(repetido)) && almacen.obtenerClientes().size() == clientes);
+        revisa("un folio que no existe se avisa con una excepción", lanza(IllegalArgumentException.class, sub -> sub.consultarSolicitud("FOL-1")));
+        revisa("sin cotización ni contratación regresa null", subsistema.consultarCotizacion("FOL-1") == null && subsistema.consultarContratacion("FOL-1") == null);
+        SolicitudRentaDTO nueva = new SolicitudRentaDTO();
+        nueva.setFolio(subsistema.siguienteFolio());
+        ResultadoCancelacionDTO cancelacion = subsistema.cancelarSolicitudRenta(nueva);
+        revisa("una solicitud sin registrar se cancela y queda registrada", cancelacion.getCancelada() && "Cancelada".equals(cancelacion.getEstadoSolicitud())
+                && "Cancelada".equals(subsistema.consultarSolicitud(nueva.getFolio()).getEstadoSolicitud()));
+        SolicitudRentaDTO formalizada = new SolicitudRentaDTO();
+        formalizada.setFolio(subsistema.siguienteFolio());
+        formalizada.setEstadoSolicitud("Formalizada");
+        formalizada = subsistema.registrarSolicitud(formalizada);
+        ResultadoCancelacionDTO negada = subsistema.cancelarSolicitudRenta(formalizada);
+        revisa("con contratación formalizada no se cancela y dice por qué: " + negada.getMotivo(), !negada.getCancelada() && negada.getMotivo() != null
+                && "Formalizada".equals(subsistema.consultarSolicitud(formalizada.getFolio()).getEstadoSolicitud()));
+
+        // contratación
+        ContratacionRentaDTO pendiente = new ContratacionRentaDTO();
+        pendiente.setFolioSolicitud("FOL-P");
+        pendiente.setEstado("PENDIENTE");
+        ResultadoContratacionDTO sinFormalizar = subsistema.registrarContratacion(pendiente);
+        revisa("pendiente: no queda formalizada y dice por qué", !sinFormalizar.getFormalizada() && sinFormalizar.getMotivo() != null && sinFormalizar.getContratacion().getIdContratacion() != null);
+        SolicitudRentaDTO conPeriodo = new SolicitudRentaDTO();
+        conPeriodo.setPeriodo(escenario);
+        conPeriodo.setDireccionObra("Av. Guerrero #1105");
+        OrdenEntregaDTO orden = subsistema.generarOrdenEntrega(conPeriodo);
+        revisa("la orden queda registrada, con la fecha, la dirección y el horario", orden.getIdOrdenEntrega() != null && orden.getFechaEntrega().equals(escenario.getFechaInicio())
+                && "Av. Guerrero #1105".equals(orden.getDireccionEntrega()) && orden.getHorario().equals(subsistema.horarioEntrega()));
+        ContratacionRentaDTO formal = new ContratacionRentaDTO();
+        formal.setFolioSolicitud("FOL-F");
+        formal.setEstado("FORMALIZADA");
+        formal.setOrdenEntrega(orden);
+        ResultadoContratacionDTO conOrden = subsistema.registrarContratacion(formal);
+        revisa("formalizada: sin motivo y conserva su orden", conOrden.getFormalizada() && conOrden.getMotivo() == null
+                && orden.getIdOrdenEntrega().equals(subsistema.consultarContratacion("FOL-F").getOrdenEntrega().getIdOrdenEntrega()));
+
+        // inicio de sesión
+        ISubsistemaInicioSesion sesion = new SubsistemaInicioSesion();
+        revisa("la cuenta registrada entra, sin regresar la contraseña", sesion.autenticarUsuario("asesor@maquinaria.com", "maquinaria2026") != null
+                && sesion.autenticarUsuario("ASESOR@maquinaria.com", "maquinaria2026").getContrasenia() == null);
+        revisa("otra contraseña u otro correo no entran", sesion.autenticarUsuario("asesor@maquinaria.com", "otraclave2026") == null && sesion.autenticarUsuario("otro@maquinaria.com", "maquinaria2026") == null);
+
+        // desde las pantallas
+        nuevaApp();
+        escribir(InicioSesionView.class, "txtFieldCorreo", "asesor@maquinaria.com");
+        escribir(InicioSesionView.class, "psswFieldContrasenia", "otraclave2026");
+        clic(InicioSesionView.class, "btnIngresar");
+        revisa("con otra contraseña avisa y no entra: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("no corresponden") && visible().equals("InicioSesionView"));
+        entrar();
+        revisa("con la correcta entra", visible().equals("MenuPrincipalView"));
+        ponerTarifa("Excavadora CAT 336", null);
+        hastaLosCompatibles();
+        marcarEquipos("Excavadora CAT 336", null);
+        continuarAAccesorios();
+        clic(SeleccionAccesoriosView.class, "btnContinuar");
+        clic(EvaluacionTecnicaView.class, "btnEnviarVerificacion");
+        fila(VerificacionInventarioView.class, "tableUnidades", "N-001");
+        clic(VerificacionInventarioView.class, "btnSeleccionar");
+        clic(CalendarioUnidadView.class, "btnSeleccionarUnidad");
+        revisa("un equipo sin tarifa no se cotiza: avisa y se queda: " + ultimoAviso().mensaje(), ultimoAviso().mensaje().contains("CAT 336") && ultimoAviso().mensaje().contains("tarifa")
+                && visible().equals("CalendarioUnidadView") && almacen.buscarCotizacionPorFolio(almacen.obtenerSolicitudes().get(0).getFolio()) == null);
+        foto("P17_equipo_sin_tarifa");
+        sinExcepciones();
+    }
+
+    private interface Peticion {
+
+        void pedir(ISubsistemaContratacionRenta subsistema) throws Exception;
+    }
+
+    private static boolean lanza(Class<? extends Exception> tipo, Peticion peticion) {
+        try {
+            peticion.pedir(new SubsistemaContratacionRenta());
+            return false;
+        } catch (Exception ex) {
+            return tipo.isInstance(ex);
+        }
+    }
+
+    private static String motivoDe(ISubsistemaContratacionRenta subsistema, List<RequerimientoTecnicoDTO> requerimientos, String modelo) {
+        for (Map.Entry<EquipoDTO, String> evaluado : subsistema.buscarEquiposCompatibles(requerimientos).entrySet()) {
+            if (evaluado.getKey().getModelo().equals(modelo)) {
+                return evaluado.getValue();
+            }
+        }
+        return "(no está en el catálogo)";
+    }
+
+    private static String estados(ISubsistemaContratacionRenta subsistema, EquipoDTO equipo, int inicio, int fin) {
+        List<String> estados = new ArrayList<>();
+        PeriodoSolicitadoDTO periodo = new PeriodoSolicitadoDTO(LocalDate.of(2026, 9, inicio), LocalDate.of(2026, 9, fin), fin - inicio + 1);
+        for (UnidadFisicaDTO unidad : subsistema.verificarDisponibilidadUnidades(equipo, periodo)) {
+            estados.add(unidad.getNumeroEconomico() + " " + unidad.getEstadoUnidad());
+        }
+        return String.join(", ", estados);
+    }
+
+    private static boolean existeClase(String nombre) {
+        try {
+            Class.forName(nombre);
+            return true;
+        } catch (ClassNotFoundException ex) {
+            return false;
+        }
+    }
+
     // ================================================================ recorridos de apoyo
     private static void entrar() throws Exception {
         escribir(InicioSesionView.class, "txtFieldCorreo", "asesor@maquinaria.com");
@@ -1434,12 +1664,26 @@ public class PruebasPresentacion {
                 w.dispose();
             }
             Main.prepararAspecto();
+            // cada prueba empieza con el almacén como al abrir la aplicación
+            Field instancia = AlmacenTemporal.class.getDeclaredField("instance");
+            instancia.setAccessible(true);
+            instancia.set(null, null);
+            almacen = AlmacenTemporal.getInstance();
+            ponerTarifa("Excavadora CAT 336", 1500.0);
             control = Main.iniciar();
             coordinador = campo(control, "coordinador");
-            almacen = (IAlmacenTemporal) campo(control, "almacen");
             control.abrirIniciarSesion();
         });
         avisos.clear();
+    }
+
+    // La CAT 336 todavía no tiene tarifa en el almacén; para recorrer el flujo con ella se le pone aquí
+    private static void ponerTarifa(String modelo, Double tarifa) throws Exception {
+        for (EquipoDTO equipo : (List<EquipoDTO>) campo(almacen, "catalogoEquipos")) {
+            if (equipo.getModelo().equals(modelo)) {
+                equipo.setCostoDiario(tarifa);
+            }
+        }
     }
 
     private static List<JFrame> ventanas() throws Exception {
@@ -1473,6 +1717,15 @@ public class PruebasPresentacion {
     }
 
     private static void clic(Class<? extends JFrame> pantalla, String boton) throws Exception {
+        AbstractButton b = (AbstractButton) campo(ventana(pantalla), boton);
+        if (!b.isShowing()) {
+            revisa(boton + " de " + pantalla.getSimpleName() + " tiene que estar a la vista para oprimirlo", false);
+        }
+        segundoClic(pantalla, boton);
+    }
+
+    // El segundo clic de un doble clic: llega cuando la pantalla ya pudo haberse ido
+    private static void segundoClic(Class<? extends JFrame> pantalla, String boton) throws Exception {
         AbstractButton b = (AbstractButton) campo(ventana(pantalla), boton);
         ejecutar(b::doClick, pantalla.getSimpleName() + "." + boton);
         pantallasVistas.add(visible());

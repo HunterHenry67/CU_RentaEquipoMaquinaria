@@ -270,7 +270,7 @@ public class SeleccionAccesoriosView extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        // los indispensables los agrega el control con la respuesta del negocio simulado
+        // los indispensables los agrega el control con la respuesta del subsistema
         List<AccesorioDTO> elegidos = new ArrayList<>();
         for (int fila = 0; fila < accesorios.size(); fila++) {
             if (!esIndispensable(accesorios.get(fila)) && Boolean.TRUE.equals(modelo.getValueAt(fila, VA_EN_LA_PROPUESTA))) {

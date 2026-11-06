@@ -1,12 +1,10 @@
 package presentacion;
 
-import almacentemporal.AlmacenTemporal;
 import java.util.Locale;
 import javax.swing.UIManager;
 import presentacion.controles.ControlContratacionRenta;
 import presentacion.controles.CoordinadorAplicacion;
 import presentacion.controles.IContratacionRenta;
-import presentacion.simulacion.NegocioSimulado;
 import presentacion.vistas.AnalisisRequerimientoView;
 import presentacion.vistas.BusquedaEquipoView;
 import presentacion.vistas.CalendarioUnidadView;
@@ -32,6 +30,8 @@ import presentacion.vistas.UnidadMantenimientoView;
 import presentacion.vistas.UnidadOcupadaView;
 import presentacion.vistas.VerificacionCondicionView;
 import presentacion.vistas.VerificacionInventarioView;
+import subsistemaContratacionRenta.SubsistemaContratacionRenta;
+import subsistemaInicioSesion.SubsistemaInicioSesion;
 
 /**
  *
@@ -63,12 +63,12 @@ public class Main {
     }
 
     /**
-     * Arma la capa de presentación. El Control de Aplicación usa el almacén temporal y el negocio
-     * simulado; cada ventana recibe el control para pedirle lo que necesite, y el Coordinador de
+     * Arma la capa de presentación. El Control de Aplicación le pide lo del negocio a los dos
+     * subsistemas; cada ventana recibe el control para pedirle lo que necesite, y el Coordinador de
      * Aplicación recibe las ventanas para mostrarlas. El control le pide al coordinador cada cambio.
      */
     public static IContratacionRenta iniciar() {
-        ControlContratacionRenta control = new ControlContratacionRenta(new AlmacenTemporal(), new NegocioSimulado());
+        ControlContratacionRenta control = new ControlContratacionRenta(new SubsistemaContratacionRenta(), new SubsistemaInicioSesion());
         CoordinadorAplicacion coordinador = new CoordinadorAplicacion(
                 new InicioSesionView(control),
                 new MenuPrincipalView(control),

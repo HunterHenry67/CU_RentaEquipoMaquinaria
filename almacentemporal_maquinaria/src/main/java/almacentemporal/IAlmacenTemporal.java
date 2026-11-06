@@ -5,6 +5,7 @@ import objetosdto.ClienteDTO;
 import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.EquipoDTO;
+import objetosdto.OrdenEntregaDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
@@ -64,6 +65,8 @@ public interface IAlmacenTemporal {
     public abstract ContratacionRentaDTO buscarContratacionPorFolio(String folio);
 
     public abstract List<ContratacionRentaDTO> obtenerContrataciones();
+
+    public abstract OrdenEntregaDTO registrarOrdenEntrega(OrdenEntregaDTO orden);
 
     // Requisitos de la renta
     public abstract List<RequisitoRentaDTO> obtenerRequisitosRenta();

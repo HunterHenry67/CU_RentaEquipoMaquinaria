@@ -1,6 +1,5 @@
 package presentacion.controles;
 
-import almacentemporal.IAlmacenTemporal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,10 +19,12 @@ import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
+import objetosdto.ResultadoCancelacionDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import objetosdto.UsuarioDTO;
-import presentacion.simulacion.INegocioSimulado;
+import subsistemaContratacionRenta.ISubsistemaContratacionRenta;
+import subsistemaInicioSesion.ISubsistemaInicioSesion;
 
 /**
  * @author Home
@@ -33,8 +34,8 @@ public class ControlContratacionRenta implements IContratacionRenta {
     // Las condiciones que el asesor revisa antes de generar la orden (las casillas de la pantalla)
     private static final List<String> CONDICIONES = Arrays.asList("Cliente", "Equipo y Unidad", "Accesorios aceptados", "Periodo", "Tarifa");
 
-    private final IAlmacenTemporal almacen;
-    private final INegocioSimulado negocio;
+    private final ISubsistemaContratacionRenta subsistema;
+    private final ISubsistemaInicioSesion subsistemaSesion;
     private ICoordinadorAplicacion coordinador;
     private ClienteDTO clienteActual;
     private SolicitudRentaDTO solicitudActual;
@@ -43,9 +44,9 @@ public class ControlContratacionRenta implements IContratacionRenta {
     private CotizacionDTO cotizacionContratacion;
     private Map<EquipoDTO, String> equiposEvaluados = new LinkedHashMap<>();
 
-    public ControlContratacionRenta(IAlmacenTemporal almacen, INegocioSimulado negocio) {
-        this.almacen = almacen;
-        this.negocio = negocio;
+    public ControlContratacionRenta(ISubsistemaContratacionRenta subsistema, ISubsistemaInicioSesion subsistemaSesion) {
+        this.subsistema = subsistema;
+        this.subsistemaSesion = subsistemaSesion;
     }
 
     public void setCoordinador(ICoordinadorAplicacion coordinador) {
@@ -65,12 +66,12 @@ public class ControlContratacionRenta implements IContratacionRenta {
 
     @Override
     public void abrirIdentificacionCliente() {
-        coordinador.mostrarIdentificacionCliente(almacen.obtenerClientes());
+        coordinador.mostrarIdentificacionCliente(subsistema.obtenerClientes());
     }
 
     @Override
     public void abrirBusquedaEquipo() {
-        coordinador.mostrarBusquedaEquipo(almacen.obtenerCatalogoEquipo());
+        coordinador.mostrarBusquedaEquipo(subsistema.obtenerCatalogoEquipo());
     }
 
     @Override
@@ -98,7 +99,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
         if (!haySolicitud()) {
             return;
         }
-        equiposEvaluados = negocio.compararEquipos(almacen.obtenerCatalogoEquipo(), solicitudActual.getRequerimientos());
+        equiposEvaluados = subsistema.buscarEquiposCompatibles(solicitudActual.getRequerimientos());
         coordinador.mostrarEquiposCompatibles(solicitudActual, equiposAMostrar());
     }
 
@@ -237,7 +238,10 @@ public class ControlContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(Mensaje.CONTRASENIA_CORTA);
             return;
         }
-        // la revisión de la cuenta es del negocio; por ahora se acepta cualquier usuario con datos válidos
+        if (subsistemaSesion.autenticarUsuario(usuario.getCorreo().trim(), usuario.getContrasenia()) == null) {
+            coordinador.mostrarAviso(Mensaje.CREDENCIALES_INCORRECTAS);
+            return;
+        }
         coordinador.mostrarMensaje(Mensaje.SESION_INICIADA);
         abrirMenuPrincipal();
     }
@@ -245,14 +249,14 @@ public class ControlContratacionRenta implements IContratacionRenta {
     @Override
     public void buscarClientes(String filtro, String texto) {
         if (ValidadorPresentacion.textoVacio(texto)) {
-            coordinador.mostrarClientesEncontrados(almacen.obtenerClientes());
+            coordinador.mostrarClientesEncontrados(subsistema.obtenerClientes());
             return;
         }
         if ("Teléfono".equals(filtro) && !ValidadorPresentacion.numeroEntero(texto.trim())) {
             coordinador.mostrarAviso(Mensaje.TELEFONO_BUSQUEDA_INVALIDO);
             return;
         }
-        List<ClienteDTO> encontrados = almacen.buscarClientes(filtro, texto);
+        List<ClienteDTO> encontrados = subsistema.buscarClientes(filtro, texto);
         coordinador.mostrarClientesEncontrados(encontrados);
         if (encontrados.isEmpty()) {
             coordinador.mostrarMensaje(Mensaje.CLIENTE_NO_ENCONTRADO);
@@ -266,7 +270,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
             return;
         }
         this.clienteActual = cliente;
-        coordinador.mostrarSolicitudNueva(cliente, almacen.siguienteFolio());
+        coordinador.mostrarSolicitudNueva(cliente, subsistema.siguienteFolio());
     }
 
     // Registrar cliente nuevo (null) o modificar uno que ya existe
@@ -314,17 +318,17 @@ public class ControlContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(Mensaje.TELEFONO_ENCARGADO_INVALIDO);
             return;
         }
-        if (negocio.rfcEnUso(cliente, almacen.buscarClientePorRfc(cliente.getRfc()))) {
+        if (subsistema.rfcEnUso(cliente, subsistema.buscarClientePorRfc(cliente.getRfc()))) {
             coordinador.mostrarAviso(Mensaje.RFC_REPETIDO);
             return;
         }
         cliente.setRfc(cliente.getRfc().trim().toUpperCase());
         Mensaje mensaje;
         if (cliente.getIdCliente() == null) {
-            cliente = almacen.registrarCliente(cliente);
+            cliente = subsistema.registrarClienteNuevo(cliente);
             mensaje = empresa != null ? Mensaje.EMPRESA_REGISTRADA : Mensaje.CLIENTE_REGISTRADO;
         } else {
-            almacen.actualizarCliente(cliente);
+            subsistema.actualizarCliente(cliente);
             mensaje = empresa != null ? Mensaje.EMPRESA_ACTUALIZADA : Mensaje.CLIENTE_ACTUALIZADO;
         }
         coordinador.mostrarMensaje(mensaje);
@@ -333,7 +337,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
 
     @Override
     public void buscarEquipos(String texto) {
-        List<EquipoDTO> encontrados = ValidadorPresentacion.textoVacio(texto) ? almacen.obtenerCatalogoEquipo() : almacen.buscarEquipos(texto);
+        List<EquipoDTO> encontrados = ValidadorPresentacion.textoVacio(texto) ? subsistema.obtenerCatalogoEquipo() : subsistema.buscarEquipos(texto);
         coordinador.mostrarEquiposEncontrados(encontrados);
         if (encontrados.isEmpty()) {
             coordinador.mostrarMensaje(Mensaje.EQUIPO_NO_ENCONTRADO);
@@ -387,7 +391,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(Mensaje.FALTA_EQUIPO_SOLICITUD);
             return;
         }
-        periodo.setDiasRenta(negocio.diasRenta(periodo));
+        periodo.setDiasRenta(subsistema.diasRenta(periodo));
         ValidadorPresentacion.normalizar(solicitud.getRequerimientos());
         if (solicitud.getCliente() == null) {
             solicitud.setCliente(clienteActual);
@@ -427,9 +431,12 @@ public class ControlContratacionRenta implements IContratacionRenta {
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio(solicitud.getFolio());
         }
-        solicitudActual.setEstadoSolicitud("Cancelada");
         solicitudActual.setMotivoCancelacion(solicitud.getMotivoCancelacion().trim());
-        guardarSolicitud();
+        ResultadoCancelacionDTO resultado = subsistema.cancelarSolicitudRenta(solicitudActual);
+        if (!resultado.getCancelada()) {
+            coordinador.mostrarAviso(Mensaje.CANCELACION_NO_PERMITIDA, resultado.getMotivo());
+            return;
+        }
         coordinador.mostrarMensaje(Mensaje.CANCELACION_REGISTRADA);
         abrirMenuPrincipal();
     }
@@ -560,7 +567,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
             abrirEquiposCompatibles();
             return;
         }
-        evaluacion.getRecomendado().setAccesorios(negocio.accesoriosPropuestos(accesoriosDelRecomendado(), opcionalesElegidos));
+        evaluacion.getRecomendado().setAccesorios(subsistema.obtenerAccesoriosPropuestos(evaluacion.getRecomendado(), opcionalesElegidos));
         // con otro equipo u otros accesorios la cotización se vuelve a armar
         cotizacionActual = null;
         guardarSolicitud();
@@ -582,7 +589,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(Mensaje.UNIDAD_SIN_SELECCIONAR);
             return;
         }
-        if (!negocio.estaDisponible(unidad)) {
+        if (!subsistema.estaDisponible(unidad)) {
             coordinador.mostrarAviso(Mensaje.UNIDAD_NO_DISPONIBLE);
             return;
         }
@@ -630,9 +637,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
         EquipoDTO recomendado = evaluacion.getRecomendado();
         EquipoDTO alternativo = evaluacion.getAlternativo();
         // al alternativo se le proponen los mismos accesorios que se eligieron para el recomendado
-        EquipoDTO delCatalogo = almacen.buscarEquipoPorId(alternativo.getIdEquipo());
-        alternativo.setAccesorios(negocio.accesoriosPropuestos(delCatalogo == null ? null : delCatalogo.getAccesorios(),
-                recomendado == null ? null : recomendado.getAccesorios()));
+        alternativo.setAccesorios(subsistema.obtenerAccesoriosPropuestos(alternativo, recomendado == null ? null : recomendado.getAccesorios()));
         evaluacion.setRecomendado(alternativo);
         evaluacion.setAlternativo(recomendado);
         solicitudActual.setUnidadSeleccionada(null);
@@ -654,7 +659,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
         if (!haySolicitud()) {
             return;
         }
-        periodo.setDiasRenta(negocio.diasRenta(periodo));
+        periodo.setDiasRenta(subsistema.diasRenta(periodo));
         solicitudActual.setPeriodo(periodo);
         coordinador.mostrarPeriodoSolicitud(periodo);
         solicitudActual.setUnidadSeleccionada(null);
@@ -675,7 +680,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
             return;
         }
         solicitudActual.setRequisitos(requisitos);
-        if (!negocio.requisitosCumplidos(requisitos)) {
+        if (!subsistema.verificarRequisitosRenta(requisitos)) {
             coordinador.mostrarAviso(Mensaje.REQUISITOS_PENDIENTES);
             coordinador.mostrarRequisitosPendientes();
             return;
@@ -696,7 +701,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
         }
         decision.setFechaDecision(LocalDate.now());
         cotizacionActual.setDecision(decision);
-        almacen.actualizarCotizacion(cotizacionActual);
+        subsistema.actualizarCotizacion(cotizacionActual);
         contratacionActual = armarContratacion(decision);
         cotizacionContratacion = cotizacionDe(contratacionActual);
         String estado = contratacionActual.getEstado();
@@ -709,13 +714,13 @@ public class ControlContratacionRenta implements IContratacionRenta {
             // sin el accesorio indispensable no hay condiciones que revisar: la solicitud queda pendiente
             solicitudActual.setEstadoSolicitud("Pendiente por accesorio");
             guardarSolicitud();
-            contratacionActual = almacen.registrarContratacion(contratacionActual);
+            contratacionActual = subsistema.registrarContratacion(contratacionActual).getContratacion();
             coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionContratacion);
         } else if (!unidadSigueLibre()) {
             coordinador.mostrarAviso(Mensaje.UNIDAD_YA_NO_LIBRE);
             abrirVerificacionInventario();
         } else {
-            coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion, negocio.horarioEntrega());
+            coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion, subsistema.horarioEntrega());
         }
     }
 
@@ -742,17 +747,16 @@ public class ControlContratacionRenta implements IContratacionRenta {
         contratacion.setCondicionesAcordadas(revisada.getCondicionesAcordadas());
         contratacion.setEstado("FORMALIZADA");
         contratacion.setFechaFormalizacion(LocalDate.now());
-        contratacion.setOrdenEntrega(negocio.generarOrdenEntrega(solicitudActual));
-        almacen.registrarContratacion(contratacion);
+        contratacion.setOrdenEntrega(subsistema.generarOrdenEntrega(solicitudActual));
+        // la orden que se muestra es la que quedó registrada
+        contratacionActual = subsistema.registrarContratacion(contratacion).getContratacion();
         // la unidad queda apartada para el periodo de la renta
-        UnidadFisicaDTO unidad = almacen.buscarUnidadPorId(solicitudActual.getUnidadSeleccionada().getIdUnidad());
+        UnidadFisicaDTO unidad = subsistema.buscarUnidadPorId(solicitudActual.getUnidadSeleccionada().getIdUnidad());
         if (unidad != null) {
-            almacen.actualizarUnidad(negocio.ocuparUnidad(unidad, solicitudActual.getPeriodo()));
+            subsistema.ocuparUnidad(unidad, solicitudActual.getPeriodo());
         }
         solicitudActual.setEstadoSolicitud("Formalizada");
         guardarSolicitud();
-        // la orden que se muestra es la que quedó registrada
-        contratacionActual = almacen.buscarContratacionPorFolio(solicitudActual.getFolio());
         cotizacionContratacion = cotizacionDe(contratacionActual);
         coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionContratacion);
         coordinador.mostrarMensaje(Mensaje.ORDEN_REGISTRADA, solicitudActual.getFolio());
@@ -765,7 +769,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
             return;
         }
         contratacion.setEstado("PENDIENTE");
-        contratacionActual = almacen.registrarContratacion(contratacion);
+        contratacionActual = subsistema.registrarContratacion(contratacion).getContratacion();
         solicitudActual.setEstadoSolicitud("Pendiente por condiciones");
         guardarSolicitud();
         cotizacionContratacion = cotizacionDe(contratacionActual);
@@ -777,6 +781,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
         if (solicitudActual == null || !Objects.equals(solicitudActual.getFolio(), nueva.getFolio())) {
             return;
         }
+        nueva.setIdSolicitud(solicitudActual.getIdSolicitud());
         List<RequerimientoTecnicoDTO> requerimientos = ValidadorPresentacion.copia(solicitudActual.getRequerimientos());
         // la captura ya muestra el terreno del análisis: lo que diga al registrar es lo que queda
         ValidadorPresentacion.capturar(requerimientos, ValidadorPresentacion.TERRENO,
@@ -801,12 +806,14 @@ public class ControlContratacionRenta implements IContratacionRenta {
             return;
         }
         String buscado = folio.trim().toUpperCase();
-        SolicitudRentaDTO solicitud = almacen.buscarSolicitudPorFolio(buscado);
-        if (solicitud == null) {
+        SolicitudRentaDTO solicitud;
+        try {
+            solicitud = subsistema.consultarSolicitud(buscado);
+        } catch (IllegalArgumentException ex) {
             coordinador.mostrarMensaje(Mensaje.FOLIO_NO_ENCONTRADO, buscado);
             return;
         }
-        ContratacionRentaDTO contratacion = almacen.buscarContratacionPorFolio(buscado);
+        ContratacionRentaDTO contratacion = subsistema.consultarContratacion(buscado);
         if (contratacion == null) {
             coordinador.mostrarMensaje(Mensaje.SOLICITUD_SIN_ORDEN, buscado, solicitud.getEstadoSolicitud());
             return;
@@ -818,7 +825,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
     }
 
     // ================================================================ DTO que arma el control
-    // La contratación con lo que decidió el cliente; qué accesorios entran y el estado los responde el negocio simulado
+    // La contratación con lo que decidió el cliente; qué accesorios entran y el estado los responde el subsistema
     private ContratacionRentaDTO armarContratacion(DecisionClienteDTO decision) {
         ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
         contratacion.setFolioSolicitud(solicitudActual.getFolio());
@@ -826,18 +833,17 @@ public class ControlContratacionRenta implements IContratacionRenta {
         contratacion.setFechaInicio(solicitudActual.getPeriodo().getFechaInicio());
         contratacion.setFechaFin(solicitudActual.getPeriodo().getFechaFin());
         contratacion.setUnidad(solicitudActual.getUnidadSeleccionada());
-        contratacion.setEstado(negocio.estadoContratacion(decision.getTipoDecision()));
+        contratacion.setEstado(subsistema.estadoContratacion(decision.getTipoDecision()));
         EquipoDTO equipo = equipoRecomendado();
-        contratacion.setTarifaAcordada(negocio.tarifaDiaria(equipo));
-        contratacion.setAccesorios(negocio.accesoriosAceptados(decision.getTipoDecision(), equipo.getAccesorios()));
-        contratacion.setDepositoGarantia(negocio.depositoGarantia(solicitudActual.getRequisitos()));
+        contratacion.setTarifaAcordada(subsistema.tarifaDiaria(equipo));
+        contratacion.setAccesorios(subsistema.accesoriosAceptados(decision.getTipoDecision(), equipo.getAccesorios()));
+        contratacion.setDepositoGarantia(subsistema.depositoGarantia(solicitudActual.getRequisitos()));
         return contratacion;
     }
 
     // Los importes de la contratación (solo con los accesorios que aceptó el cliente)
     private CotizacionDTO cotizacionDe(ContratacionRentaDTO contratacion) {
-        CotizacionDTO cotizacion = negocio.cotizar(equipoRecomendado(), solicitudActual.getPeriodo().getDiasRenta(), contratacion.getAccesorios());
-        cotizacion.setFolioSolicitud(solicitudActual.getFolio());
+        CotizacionDTO cotizacion = subsistema.generarCotizacion(solicitudActual.getFolio(), equipoRecomendado(), solicitudActual.getPeriodo().getDiasRenta(), contratacion.getAccesorios());
         cotizacion.setDepositoGarantia(contratacion.getDepositoGarantia());
         return cotizacion;
     }
@@ -846,7 +852,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
     // (si se rehace porque el asesor regresó, se actualiza la que ya estaba)
     private boolean hayCotizacion() {
         if (solicitudActual.getRequisitos() == null || solicitudActual.getRequisitos().isEmpty()) {
-            solicitudActual.setRequisitos(almacen.obtenerRequisitosRenta());
+            solicitudActual.setRequisitos(subsistema.obtenerRequisitosRenta());
         }
         if (cotizacionActual != null) {
             return true;
@@ -857,15 +863,20 @@ public class ControlContratacionRenta implements IContratacionRenta {
             abrirEquiposCompatibles();
             return false;
         }
-        CotizacionDTO cotizacion = negocio.cotizar(equipo, solicitudActual.getPeriodo().getDiasRenta(), equipo.getAccesorios());
-        cotizacion.setFolioSolicitud(solicitudActual.getFolio());
-        cotizacion.setDepositoGarantia(negocio.depositoGarantia(solicitudActual.getRequisitos()));
-        CotizacionDTO anterior = almacen.buscarCotizacionPorFolio(solicitudActual.getFolio());
+        CotizacionDTO cotizacion;
+        try {
+            cotizacion = subsistema.generarCotizacion(solicitudActual.getFolio(), equipo, solicitudActual.getPeriodo().getDiasRenta(), equipo.getAccesorios());
+        } catch (IllegalStateException ex) {
+            coordinador.mostrarAviso(Mensaje.EQUIPO_SIN_TARIFA, equipo.getModelo());
+            return false;
+        }
+        cotizacion.setDepositoGarantia(subsistema.depositoGarantia(solicitudActual.getRequisitos()));
+        CotizacionDTO anterior = subsistema.consultarCotizacion(solicitudActual.getFolio());
         if (anterior == null) {
-            cotizacionActual = almacen.registrarCotizacion(cotizacion);
+            cotizacionActual = subsistema.registrarCotizacion(cotizacion);
         } else {
             cotizacion.setIdCotizacion(anterior.getIdCotizacion());
-            almacen.actualizarCotizacion(cotizacion);
+            subsistema.actualizarCotizacion(cotizacion);
             cotizacionActual = cotizacion;
         }
         return true;
@@ -887,13 +898,16 @@ public class ControlContratacionRenta implements IContratacionRenta {
     // Antes de formalizar se vuelve a preguntar si la unidad elegida sigue libre
     private boolean unidadSigueLibre() {
         UnidadFisicaDTO elegida = solicitudActual.getUnidadSeleccionada();
-        if (elegida == null) {
+        EquipoDTO equipo = equipoRecomendado();
+        if (elegida == null || equipo == null) {
             return false;
         }
-        List<UnidadFisicaDTO> registrada = new ArrayList<>();
-        UnidadFisicaDTO enAlmacen = almacen.buscarUnidadPorId(elegida.getIdUnidad());
-        registrada.add(enAlmacen == null ? elegida : enAlmacen);
-        return negocio.estaDisponible(negocio.disponibilidad(registrada, solicitudActual.getPeriodo()).get(0));
+        for (UnidadFisicaDTO unidad : subsistema.verificarDisponibilidadUnidades(equipo, solicitudActual.getPeriodo())) {
+            if (Objects.equals(unidad.getIdUnidad(), elegida.getIdUnidad())) {
+                return subsistema.estaDisponible(unidad);
+            }
+        }
+        return false;
     }
 
     // ---------------------------------------------------------------- evaluación técnica
@@ -923,7 +937,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
         List<EquipoDTO> pedidos = new ArrayList<>();
         for (EquipoSolicitadoDTO pedido : solicitudActual.getEquiposSolicitados()) {
             if (!ValidadorPresentacion.textoVacio(pedido.getDescripcionEquipo())) {
-                List<EquipoDTO> encontrados = almacen.buscarEquipos(pedido.getDescripcionEquipo());
+                List<EquipoDTO> encontrados = subsistema.buscarEquipos(pedido.getDescripcionEquipo());
                 if (!encontrados.isEmpty()) {
                     pedidos.add(encontrados.get(0));
                 }
@@ -950,12 +964,12 @@ public class ControlContratacionRenta implements IContratacionRenta {
     }
 
     // Si se vuelve a elegir el mismo equipo se queda el que ya estaba, con los accesorios que ya
-    // se habían propuesto; si es otro, se toma del catálogo del almacén
+    // se habían propuesto; si es otro, se toma del catálogo
     private EquipoDTO conservar(EquipoDTO anterior, EquipoDTO elegido) {
         if (anterior != null && Objects.equals(anterior.getIdEquipo(), elegido.getIdEquipo())) {
             return anterior;
         }
-        EquipoDTO delCatalogo = almacen.buscarEquipoPorId(elegido.getIdEquipo());
+        EquipoDTO delCatalogo = subsistema.buscarEquipoPorId(elegido.getIdEquipo());
         return delCatalogo == null ? elegido : delCatalogo;
     }
 
@@ -1019,15 +1033,15 @@ public class ControlContratacionRenta implements IContratacionRenta {
         return true;
     }
 
-    // La solicitud queda en el almacén temporal: se registra la primera vez y después se actualiza
+    // La primera vez se registra y el subsistema le pone su id; después se actualiza
     private void guardarSolicitud() {
         if (solicitudActual == null) {
             return;
         }
-        if (almacen.buscarSolicitudPorFolio(solicitudActual.getFolio()) != null) {
-            almacen.actualizarSolicitud(solicitudActual);
+        if (solicitudActual.getIdSolicitud() == null) {
+            solicitudActual = subsistema.registrarSolicitud(solicitudActual);
         } else {
-            solicitudActual = almacen.registrarSolicitud(solicitudActual);
+            subsistema.actualizarSolicitud(solicitudActual);
         }
     }
 
@@ -1043,7 +1057,7 @@ public class ControlContratacionRenta implements IContratacionRenta {
 
     private List<AccesorioDTO> accesoriosDelRecomendado() {
         EquipoDTO recomendado = equipoRecomendado();
-        EquipoDTO delCatalogo = recomendado == null ? null : almacen.buscarEquipoPorId(recomendado.getIdEquipo());
+        EquipoDTO delCatalogo = recomendado == null ? null : subsistema.buscarEquipoPorId(recomendado.getIdEquipo());
         return delCatalogo == null ? new ArrayList<>() : delCatalogo.getAccesorios();
     }
 
@@ -1052,7 +1066,12 @@ public class ControlContratacionRenta implements IContratacionRenta {
         if (recomendado == null) {
             return new ArrayList<>();
         }
-        return negocio.disponibilidad(almacen.obtenerUnidadesDeEquipo(recomendado.getIdEquipo()), solicitudActual.getPeriodo());
+        try {
+            return subsistema.verificarDisponibilidadUnidades(recomendado, solicitudActual.getPeriodo());
+        } catch (IllegalArgumentException ex) {
+            coordinador.mostrarAviso(Mensaje.EQUIPO_SIN_UNIDADES, recomendado.getModelo());
+            return new ArrayList<>();
+        }
     }
 
     @Override

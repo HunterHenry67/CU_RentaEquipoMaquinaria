@@ -13,7 +13,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>almacentemporal_maquinaria</artifactId>
+            <artifactId>negocios_subsistemaContratacionRenta</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_subsistemaInicioSesion</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

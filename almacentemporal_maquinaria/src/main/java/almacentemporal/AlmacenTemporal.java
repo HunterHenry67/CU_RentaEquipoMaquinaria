@@ -32,6 +32,8 @@ import objetosdto.UnidadFisicaDTO;
  */
 public class AlmacenTemporal implements IAlmacenTemporal {
 
+    private static AlmacenTemporal instance;
+
     private final List<ClienteDTO> clientes = new ArrayList<>();
     private final List<EquipoDTO> catalogoEquipos = new ArrayList<>();
     private final List<UnidadFisicaDTO> unidades = new ArrayList<>();
@@ -40,14 +42,23 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     private final List<SolicitudRentaDTO> solicitudes = new ArrayList<>();
     private final List<CotizacionDTO> cotizaciones = new ArrayList<>();
     private final List<ContratacionRentaDTO> contrataciones = new ArrayList<>();
+    private final List<OrdenEntregaDTO> ordenes = new ArrayList<>();
     private int siguienteNumeroFolio = 89241;
 
-    public AlmacenTemporal() {
+    private AlmacenTemporal() {
         cargarClientes();
         cargarCatalogo();
         cargarUnidades();
         requisitos.add(new RequisitoRentaDTO("Identificación oficial", true, "Cumplida", null));
         requisitos.add(new RequisitoRentaDTO("Depósito de garantía", true, "Cubierto", 3200.0));
+    }
+
+    // Hay un solo almacén mientras la aplicación está abierta: lo comparten todos los objetos de negocio
+    public static AlmacenTemporal getInstance() {
+        if (instance == null) {
+            instance = new AlmacenTemporal();
+        }
+        return instance;
     }
 
     // ---------------------------------------------------------------- datos de prueba
@@ -320,9 +331,6 @@ public class AlmacenTemporal implements IAlmacenTemporal {
     public ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion) {
         ContratacionRentaDTO nueva = copia(contratacion);
         nueva.setIdContratacion((long) contrataciones.size() + 1);
-        if (nueva.getOrdenEntrega() != null) {
-            nueva.getOrdenEntrega().setIdOrdenEntrega(nueva.getIdContratacion());
-        }
         contrataciones.add(nueva);
         return copia(nueva);
     }
@@ -346,6 +354,14 @@ public class AlmacenTemporal implements IAlmacenTemporal {
             lista.add(copia(c));
         }
         return lista;
+    }
+
+    @Override
+    public OrdenEntregaDTO registrarOrdenEntrega(OrdenEntregaDTO orden) {
+        OrdenEntregaDTO nueva = copia(orden);
+        nueva.setIdOrdenEntrega((long) ordenes.size() + 1);
+        ordenes.add(nueva);
+        return copia(nueva);
     }
 
     // ---------------------------------------------------------------- requisitos
@@ -480,10 +496,13 @@ public class AlmacenTemporal implements IAlmacenTemporal {
         nueva.setCliente(c.getCliente() == null ? null : copia(c.getCliente()));
         nueva.setUnidad(c.getUnidad() == null ? null : copia(c.getUnidad()));
         nueva.setAccesorios(copiaAccesorios(c.getAccesorios()));
-        OrdenEntregaDTO o = c.getOrdenEntrega();
-        nueva.setOrdenEntrega(o == null ? null : new OrdenEntregaDTO(o.getIdOrdenEntrega(), o.getFechaGeneracion(), o.getFechaEntrega(),
-                o.getDireccionEntrega(), o.getHorario(), o.getEstadoOrden()));
+        nueva.setOrdenEntrega(c.getOrdenEntrega() == null ? null : copia(c.getOrdenEntrega()));
         return nueva;
+    }
+
+    private OrdenEntregaDTO copia(OrdenEntregaDTO o) {
+        return new OrdenEntregaDTO(o.getIdOrdenEntrega(), o.getFechaGeneracion(), o.getFechaEntrega(),
+                o.getDireccionEntrega(), o.getHorario(), o.getEstadoOrden());
     }
 
     private String sinAcentos(String texto) {

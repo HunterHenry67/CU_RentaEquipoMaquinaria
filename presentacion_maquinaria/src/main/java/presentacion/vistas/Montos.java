@@ -77,7 +77,7 @@ public class Montos {
         return nombres.length() == 0 ? "Ninguno" : nombres.toString();
     }
 
-    // El depósito que el control puso en la cotización (respuesta del negocio simulado)
+    // El depósito que el control puso en la cotización (respuesta del subsistema)
     public static double deposito(CotizacionDTO cotizacion) {
         return cotizacion == null || cotizacion.getDepositoGarantia() == null ? 0 : cotizacion.getDepositoGarantia();
     }

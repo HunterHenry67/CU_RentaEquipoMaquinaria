@@ -10,6 +10,7 @@ public enum Mensaje {
     FALTAN_DATOS_SESION("Error de Inicio de Sesión", "Falta capturar: %s."),
     CORREO_SESION_INVALIDO("Error de Inicio de Sesión", "El correo no tiene un formato válido (por ejemplo julianmar12@gmail.com)."),
     CONTRASENIA_CORTA("Error de Inicio de Sesión", "La contraseña debe tener al menos 8 caracteres."),
+    CREDENCIALES_INCORRECTAS("Error de Inicio de Sesión", "El correo o la contraseña no corresponden a ningún usuario registrado."),
     SESION_INICIADA("Inicio de Sesión", "Inicio de Sesión Exitoso."),
 
     // Clientes
@@ -41,6 +42,7 @@ public enum Mensaje {
     CONFIRMAR_CANCELAR_SOLICITUD("Cancelación Solicitud", "¿Realmente desea cancelar la solicitud?"),
     FALTA_RAZON_CANCELACION("Error en el Registro de Cancelación", "Favor de describir la razón de su cancelación."),
     CONFIRMAR_REGISTRAR_CANCELACION("Registrar Cancelación", "¿Está seguro de que desea registrar la cancelación?"),
+    CANCELACION_NO_PERMITIDA("Registrar Cancelación", "La solicitud no se puede cancelar: %s."),
     CANCELACION_REGISTRADA("Solicitud Renta", "La cancelación de la solicitud ha sido registrada."),
 
     // Equipo adecuado
@@ -62,12 +64,14 @@ public enum Mensaje {
     UNIDAD_SIN_SELECCIONAR("Verificación de Inventario", "Selecciona una unidad de la tabla."),
     UNIDAD_NO_DISPONIBLE("Verificación de Inventario", "Solo puede seleccionarse una unidad disponible durante todo el periodo."),
     UNIDAD_DISPONIBLE("Verificación de Inventario", "La unidad está disponible: se puede seleccionar."),
+    EQUIPO_SIN_UNIDADES("Verificación de Inventario", "El equipo %s no tiene unidades registradas."),
     SIN_ALTERNATIVA("Usar la alternativa", "No se eligió un equipo alternativo; se abre Equipos compatibles para elegir otro."),
     FALTAN_FECHAS_PERIODO("Cambiar periodo", "Selecciona la fecha de inicio y la de fin."),
     FECHAS_PERIODO_INVALIDAS("Cambiar periodo", "La fecha de fin no puede ser anterior a la de inicio."),
 
     // Cotización, requisitos y decisión del cliente
     FALTA_EQUIPO_Y_PERIODO("Cotización", "Primero hay que elegir el equipo recomendado y el periodo."),
+    EQUIPO_SIN_TARIFA("Cotización", "El equipo %s no tiene tarifa registrada: no se puede cotizar con él."),
     REQUISITOS_PENDIENTES("Requisitos de la renta", "Hay requisitos obligatorios pendientes: la renta no puede continuar."),
     REQUISITOS_VALIDADOS("Requisitos de la renta", "Requisitos validados con éxito.\nLa renta puede continuar a su confirmación."),
     FALTA_MOTIVO_RECHAZO("Motivo del rechazo", "Favor de escribir el motivo del rechazo."),
