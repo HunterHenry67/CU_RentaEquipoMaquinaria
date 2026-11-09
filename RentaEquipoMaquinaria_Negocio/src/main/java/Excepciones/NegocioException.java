@@ -8,6 +8,9 @@ package Excepciones;
  *
  * @author Home
  */
-public class NegocioException {
+public class NegocioException extends Exception{
+    public NegocioException(String message) {
+        super(message);
+    }
     
 }

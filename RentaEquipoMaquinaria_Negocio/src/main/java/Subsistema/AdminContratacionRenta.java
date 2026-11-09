@@ -33,12 +33,12 @@ public class AdminContratacionRenta implements IAdminContratacionRenta{
     
     @Override
     public List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return gestorClientes.buscarPorFiltro();
     }
 
     @Override
-    public boolean registrarClienteNuevo(ClienteDTO cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ClienteDTO registrarClienteNuevo(ClienteDTO cliente) {
+        return gestorClientes.registrar(cliente);
     }
 
     @Override

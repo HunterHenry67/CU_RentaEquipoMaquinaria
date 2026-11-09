@@ -26,7 +26,7 @@ public interface IAdminContratacionRenta {
     
     public abstract List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono);
     
-    public abstract boolean registrarClienteNuevo(ClienteDTO cliente);
+    public abstract ClienteDTO registrarClienteNuevo(ClienteDTO cliente);
     
     public abstract SolicitudRentaDTO validarSolicitudRenta(String idSolicitud);
     
