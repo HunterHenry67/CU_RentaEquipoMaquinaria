@@ -25,28 +25,29 @@ public class GestorClientes {
     
     public ClienteDTO registrar(ClienteDTO cliente) throws NegocioException{
         
-       if(!validador.correoValido(cliente.getCorreo())){
+       if(!ValidadorCliente.correoValido(cliente.getCorreo())){
            throw new NegocioException("Favor de colocar un correo válido.");                    
        }
        
-       if(!validador.telefonoValido(cliente.getTelefono())){
+       if(!ValidadorCliente.telefonoValido(cliente.getTelefono())){
            throw new NegocioException("Favor de colocar un teléfono válido.");
        }
        
-       if(!validador.rfcValido(cliente.getRfc())){
+       if(!ValidadorCliente.rfcValido(cliente.getRfc())){
            throw new NegocioException("Favor de colocar un RFC válido.");
        }
        
        ClienteEmpresaDTO empresa = cliente instanceof ClienteEmpresaDTO e ? e : null;
        
        if(empresa != null){
-           if(validador.telefonoValido(empresa.getTelefonoEncargadoEmpresa())){
+           if(ValidadorCliente.telefonoValido(empresa.getTelefonoEncargadoEmpresa())){
                throw new NegocioException("Favor de colocar un teléfono válido.");
            }
-           if(validador.textoVacio(empresa.getArchivoIdentificacionEncargado())){
+           if(ValidadorCliente.textoVacio(empresa.getArchivoIdentificacionEncargado())){
                throw new NegocioException("Favor de colocar el archivo de su identificación.");
            }
        }
+       ClienteDTO clienteExistente = 
     }
     
     public boolean cumpleRequisitos(RequisitoRentaDTO requisitos){
