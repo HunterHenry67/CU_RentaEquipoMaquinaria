@@ -719,6 +719,9 @@ public class ControlContratacionRenta implements IContratacionRenta {
         } else if (!unidadSigueLibre()) {
             coordinador.mostrarAviso(Mensaje.UNIDAD_YA_NO_LIBRE);
             abrirVerificacionInventario();
+        }else if("ACEPTA".equals(decision.getTipoDecision())){
+            contratacionActual.setEstado("FORMALIZADA");
+            coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionActual);
         } else {
             coordinador.mostrarVerificacionCondicion(solicitudActual, contratacionActual, cotizacionContratacion, subsistema.horarioEntrega());
         }

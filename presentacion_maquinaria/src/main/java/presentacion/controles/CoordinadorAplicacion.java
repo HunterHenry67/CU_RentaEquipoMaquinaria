@@ -39,6 +39,7 @@ import presentacion.vistas.UnidadOcupadaView;
 import presentacion.vistas.VerificacionCondicionView;
 import presentacion.vistas.VerificacionInventarioView;
 import presentacion.vistas.MensajeDialog;
+import presentacion.vistas.Ventanas;
 
 /**
  * Coordinador de Aplicación. Guarda las ventanas (se crean una sola vez, así cada una conserva lo

@@ -1,9 +1,15 @@
 package presentacion.vistas;
 
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.AbstractButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import presentacion.controles.IContratacionRenta;
 
 /**
@@ -36,4 +42,5 @@ public class Ventanas {
             }
         });
     }
+
 }
