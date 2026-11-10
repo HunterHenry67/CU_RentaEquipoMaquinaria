@@ -14,6 +14,7 @@ import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
 import objetosdto.DecisionClienteDTO;
 import objetosdto.DetalleCotizacionDTO;
+import objetosdto.OcupacionUnidadDTO;
 import objetosdto.OrdenEntregaDTO;
 import objetosdto.RequisitoRentaDTO;
 import objetosdto.SolicitudRentaDTO;
@@ -103,7 +104,22 @@ public class GestorContratacion {
             }
         }
         
-        
+        UnidadFisicaDTO unidadAlmacen = almacenTemp.buscarUnidadPorId(unidad.getIdUnidad());
+        if (unidadAlmacen == null || !"Disponible".equalsIgnoreCase( unidadAlmacen.getEstadoUnidad())) {
+            return false;
+        }
+        if (unidadAlmacen.getOcupaciones() != null) {
+            for (OcupacionUnidadDTO ocupacion : unidadAlmacen.getOcupaciones()) {
+                if (ocupacion == null || ocupacion.getFechaInicio() == null || ocupacion.getFechaFin() == null) {
+                    continue;
+                }
+                boolean seCruzan = !fechaFin.isBefore(ocupacion.getFechaInicio()) && !fechaInicio.isAfter(ocupacion.getFechaFin());
+                if (seCruzan && !"Cancelada".equalsIgnoreCase( ocupacion.getEstadoOcupacion()) && !"Finalizada".equalsIgnoreCase(  ocupacion.getEstadoOcupacion())) {
+                    return false;
+                }
+            }
+        }
+        return true;          
     }
     
     public ContratacionRentaDTO crearContratacion( String folio, UnidadFisicaDTO unidad) throws NegocioException{
@@ -114,9 +130,6 @@ public class GestorContratacion {
         if (existente != null) {
             return existente;
         }
-        SolicitudRentaDTO solicitud = almacenTemp.buscarSolicitudPorFolio(folio);
-        CotizacionDTO cotizacion = almacenTemp.buscarCotizacionPorFolio(folio);
-        ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
         SolicitudRentaDTO solicitud = almacenTemp.buscarSolicitudPorFolio(folio);
         CotizacionDTO cotizacion = almacenTemp.buscarCotizacionPorFolio(folio);
         ContratacionRentaDTO contratacion = new ContratacionRentaDTO();
@@ -171,7 +184,7 @@ public class GestorContratacion {
         }
         orden.setIdOrdenEntrega(contratacion.getIdContratacion());
         contratacion.setOrdenEntrega(orden);
-        almacenTemp.actualizarCotratacion(contratacion);
+        almacenTemp.actualizarContratacion(contratacion);
         return orden;
     }
     
