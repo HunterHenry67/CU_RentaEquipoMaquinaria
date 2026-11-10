@@ -23,6 +23,10 @@ public class GestorClientes {
     private ValidadorCliente validador;
     private IAlmacenTemporal almacenTemp;
     
+    public GestorClientes(IAlmacenTemporal almacenTemp){
+        this.almacenTemp = almacenTemp;
+    } 
+       
     public List<ClienteDTO> buscarPorFiltro(String rfc, String nombre, String tipo, String telefono){
         List<ClienteDTO> clientesFiltrados = new ArrayList<>();
         
@@ -94,7 +98,6 @@ public class GestorClientes {
        
        return almacenTemp.registrarCliente(cliente);
     }
-    
     
     
     public boolean cumpleRequisitos(List<RequisitoRentaDTO> requisitos){
