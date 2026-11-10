@@ -16,6 +16,7 @@ import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
+import objetosdto.ResultadoCancelacionDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 
@@ -31,9 +32,9 @@ public interface IAdminContratacionRenta {
     
     public abstract SolicitudRentaDTO validarSolicitudRenta(String idSolicitud);
     
-    public abstract boolean cancelarSolicitudRenta(SolicitudRentaDTO solicitudRenta);
+    public abstract ResultadoCancelacionDTO cancelarSolicitudRenta(String folio, String motivo);
     
-    public abstract boolean agregarEquipoSolicitud(SolicitudRentaDTO solicitud, EquipoSolicitadoDTO equipo);
+    public abstract boolean agregarEquipoSolicitud(SolicitudRentaDTO solicitud, EquipoSolicitadoDTO equipo) throws NegocioException;
     
     public abstract List<EquipoDTO> buscarEquipoCompatibles(RequerimientoTecnicoDTO requerimiento);
     
