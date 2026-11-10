@@ -16,6 +16,7 @@ import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
+import objetosdto.ResultadoCancelacionDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 
@@ -23,34 +24,36 @@ import objetosdto.UnidadFisicaDTO;
  *
  * @author BALAMRUSH
  */
-public class AdminContratacionRenta implements IAdminContratacionRenta{
+public class AdminContratacionRenta implements IAdminContratacionRenta {
 
     private GestorClientes gestorClientes;
     private GestorContratacion gestorContratacion;
     private GestorCotizacion gestorCotizacion;
     private GestorDisponibilidad gestorDisponibilidad;
     private GestorSolicitud gestorSolicitud;
-    
-    
+
     @Override
     public List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono) {
-       return gestorClientes.buscarPorFiltro(rfc, nombre, tipo, telefono);
+        return gestorClientes.buscarPorFiltro(rfc, nombre, tipo, telefono);
     }
 
     @Override
-    public ClienteDTO registrarClienteNuevo(ClienteDTO cliente) throws NegocioException{
+    public ClienteDTO registrarClienteNuevo(ClienteDTO cliente) throws NegocioException {
         return gestorClientes.registrar(cliente);
     }
 
     @Override
-    public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) throws NegocioException{
+        return gestorSolicitud.buscarPorId(idSolicitud);
     }
 
-   
+    @Override
+    public ResultadoCancelacionDTO cancelarSolicitudRenta(String folio, String motivo) {
+        return gestorSolicitud.cancelar(folio, motivo);
+    }
 
     @Override
-    public boolean agregarEquipoSolicitud(SolicitudRentaDTO solicitud, EquipoSolicitadoDTO equipo) throws NegocioException{
+    public boolean agregarEquipoSolicitud(SolicitudRentaDTO solicitud, EquipoSolicitadoDTO equipo) throws NegocioException {
         return gestorSolicitud.agregarUnEQuipo(solicitud.getFolio(), equipo);
     }
 
@@ -108,5 +111,5 @@ public class AdminContratacionRenta implements IAdminContratacionRenta{
     public EquipoSolicitadoDTO recuperarEquipoSeleccionado() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 }
