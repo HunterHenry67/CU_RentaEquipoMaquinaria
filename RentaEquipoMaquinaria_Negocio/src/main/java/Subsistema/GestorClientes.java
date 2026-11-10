@@ -6,10 +6,12 @@ package Subsistema;
 
 import Excepciones.NegocioException;
 import Utilidades.ValidadorCliente;
+import almacentemporal.IAlmacenTemporal;
 import java.util.List;
 import objetosdto.ClienteDTO;
 import objetosdto.ClienteEmpresaDTO;
 import objetosdto.RequisitoRentaDTO;
+
 
 /**
  *
@@ -18,6 +20,7 @@ import objetosdto.RequisitoRentaDTO;
 public class GestorClientes {
     
     private ValidadorCliente validador;
+    private IAlmacenTemporal almacenTemp;
     
     public List<ClienteDTO> buscarPorFiltro(){
         
@@ -40,17 +43,32 @@ public class GestorClientes {
        ClienteEmpresaDTO empresa = cliente instanceof ClienteEmpresaDTO e ? e : null;
        
        if(empresa != null){
-           if(ValidadorCliente.telefonoValido(empresa.getTelefonoEncargadoEmpresa())){
+           if(!ValidadorCliente.telefonoValido(empresa.getTelefonoEncargadoEmpresa())){
                throw new NegocioException("Favor de colocar un teléfono válido.");
            }
            if(ValidadorCliente.textoVacio(empresa.getArchivoIdentificacionEncargado())){
                throw new NegocioException("Favor de colocar el archivo de su identificación.");
            }
        }
-       ClienteDTO clienteExistente = 
+       ClienteDTO clienteExistente = almacenTemp.buscarClientePorRfc(cliente.getRfc());
+       
+       if(clienteExistente != null){
+           throw new NegocioException("El cliente con el RFC ingresado ya existe.");
+       }
+       
+       return almacenTemp.registrarCliente(cliente);
     }
     
-    public boolean cumpleRequisitos(RequisitoRentaDTO requisitos){
+    public boolean cumpleRequisitos(List<RequisitoRentaDTO> requisitos){
+        if(requisitos == null){
+            return false;
+        }
         
+        for(RequisitoRentaDTO requisito : requisitos){
+            if(requisito.getEsObligatorio() && "Pendiente".equals(requisito.getEstadoRequisito())){
+                return false;
+            }
+        }
+        return true;
     }
 }
