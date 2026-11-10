@@ -18,17 +18,19 @@ public class OrdenEntregaDTO {
     private String direccionEntrega;
     private String horario;
     private String estadoOrden;
+    private String folioSolicitud;
 
     public OrdenEntregaDTO() {
     }
 
-    public OrdenEntregaDTO(Long idOrdenEntrega, LocalDate fechaGeneracion, LocalDate fechaEntrega, String direccionEntrega, String horario, String estadoOrden) {
+    public OrdenEntregaDTO(Long idOrdenEntrega, LocalDate fechaGeneracion, LocalDate fechaEntrega, String direccionEntrega, String horario, String estadoOrden, String folioSolicitud) {
         this.idOrdenEntrega = idOrdenEntrega;
         this.fechaGeneracion = fechaGeneracion;
         this.fechaEntrega = fechaEntrega;
         this.direccionEntrega = direccionEntrega;
         this.horario = horario;
         this.estadoOrden = estadoOrden;
+        this.folioSolicitud = folioSolicitud;
     }
 
     public Long getIdOrdenEntrega() {
@@ -79,4 +81,11 @@ public class OrdenEntregaDTO {
         this.estadoOrden = estadoOrden;
     }
 
+    public String getFolioSolicitud() {
+        return folioSolicitud;
+    }
+
+    public void setFolioSolicitud(String folioSolicitud) {
+        this.folioSolicitud = folioSolicitud;
+    }
 }

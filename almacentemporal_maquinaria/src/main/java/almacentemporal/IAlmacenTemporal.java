@@ -75,5 +75,7 @@ public interface IAlmacenTemporal {
 
     // Requisitos de la renta
     public abstract List<RequisitoRentaDTO> obtenerRequisitosRenta();
+    
+    public abstract void actualizarContratacion(ContratacionRentaDTO contratacion);
 
 }

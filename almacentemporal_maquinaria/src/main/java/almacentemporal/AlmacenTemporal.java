@@ -28,9 +28,10 @@ import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 
 /**
- * Los datos se cargan una vez con la información de prueba del escenario y se quedan mientras
- * la aplicación está abierta. Se guardan y se regresan copias: quien quiera cambiar algo lo tiene
- * que registrar o actualizar aquí. Solo guarda y busca; no decide nada del negocio.
+ * Los datos se cargan una vez con la información de prueba del escenario y se
+ * quedan mientras la aplicación está abierta. Se guardan y se regresan copias:
+ * quien quiera cambiar algo lo tiene que registrar o actualizar aquí. Solo
+ * guarda y busca; no decide nada del negocio.
  *
  * @author BALAMRUSH
  */
@@ -505,7 +506,7 @@ public class AlmacenTemporal implements IAlmacenTemporal {
         nueva.setAccesorios(copiaAccesorios(c.getAccesorios()));
         OrdenEntregaDTO o = c.getOrdenEntrega();
         nueva.setOrdenEntrega(o == null ? null : new OrdenEntregaDTO(o.getIdOrdenEntrega(), o.getFechaGeneracion(), o.getFechaEntrega(),
-                o.getDireccionEntrega(), o.getHorario(), o.getEstadoOrden()));
+                o.getDireccionEntrega(), o.getHorario(), o.getEstadoOrden(), o.getFolioSolicitud()));
         return nueva;
     }
 
@@ -514,5 +515,18 @@ public class AlmacenTemporal implements IAlmacenTemporal {
             return "";
         }
         return Normalizer.normalize(texto.trim(), Normalizer.Form.NFD).replaceAll("\\p{M}", "").toLowerCase();
+    }
+
+    @Override
+    public void actualizarContratacion(ContratacionRentaDTO contratacion) {
+        if (contratacion == null || contratacion.getIdContratacion() == null) {
+            return;
+        }
+        for (int i = 0; i < contrataciones.size(); i++) {
+            if (Objects.equals(contrataciones.get(i).getIdContratacion(), contratacion.getIdContratacion())) {
+                contrataciones.set(i, copia(contratacion));
+                return;
+            }
+        }
     }
 }
