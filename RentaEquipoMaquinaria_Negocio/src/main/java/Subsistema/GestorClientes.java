@@ -7,6 +7,7 @@ package Subsistema;
 import Excepciones.NegocioException;
 import Utilidades.ValidadorCliente;
 import almacentemporal.IAlmacenTemporal;
+import java.util.ArrayList;
 import java.util.List;
 import objetosdto.ClienteDTO;
 import objetosdto.ClienteEmpresaDTO;
@@ -22,9 +23,44 @@ public class GestorClientes {
     private ValidadorCliente validador;
     private IAlmacenTemporal almacenTemp;
     
-    public List<ClienteDTO> buscarPorFiltro(){
+    public List<ClienteDTO> buscarPorFiltro(String rfc, String nombre, String tipo, String telefono){
+        List<ClienteDTO> clientesFiltrados = new ArrayList<>();
         
+        List<ClienteDTO> clientes = almacenTemp.obtenerClientes();
+        
+        for(ClienteDTO cliente: clientes){
+            boolean clienteEncontrado = true;
+            
+            if(rfc != null && !rfc.isBlank() && !cliente.getRfc().equalsIgnoreCase(rfc)){
+                clienteEncontrado = false;
+            }
+            
+            if(nombre != null && !nombre.isEmpty() && !cliente.getNombre().equalsIgnoreCase(nombre)){
+                clienteEncontrado = false;
+            }
+            
+            if(telefono != null && !telefono.isEmpty() && !cliente.getTelefono().equalsIgnoreCase(telefono)){
+                clienteEncontrado = false;
+            }
+            
+            if(tipo != null && tipo.isBlank()){
+                
+                if(tipo.equalsIgnoreCase("Empresa") && !(cliente instanceof ClienteEmpresaDTO)){
+                    clienteEncontrado = false;
+                }
+                
+                if(tipo.equalsIgnoreCase("Particular") && cliente instanceof ClienteEmpresaDTO){
+                    clienteEncontrado = false;
+                }              
+            }
+            if(clienteEncontrado){
+                clientesFiltrados.add(cliente);
+            }
+        }
+        
+        return clientesFiltrados;
     }
+    
     
     public ClienteDTO registrar(ClienteDTO cliente) throws NegocioException{
         
@@ -58,6 +94,8 @@ public class GestorClientes {
        
        return almacenTemp.registrarCliente(cliente);
     }
+    
+    
     
     public boolean cumpleRequisitos(List<RequisitoRentaDTO> requisitos){
         if(requisitos == null){
