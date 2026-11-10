@@ -5,11 +5,13 @@
 package Subsistema;
 
 import Excepciones.NegocioException;
+import almacentemporal.IAlmacenTemporal;
 import java.util.List;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
 import objetosdto.ContratacionRentaDTO;
 import objetosdto.CotizacionDTO;
+import objetosdto.DecisionClienteDTO;
 import objetosdto.EquipoDTO;
 import objetosdto.EquipoSolicitadoDTO;
 import objetosdto.EvaluacionTecnicaDTO;
@@ -32,6 +34,14 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
     private GestorDisponibilidad gestorDisponibilidad;
     private GestorSolicitud gestorSolicitud;
 
+    public AdminContratacionRenta(IAlmacenTemporal almacenTemp) {
+        this.gestorClientes = new GestorClientes(almacenTemp);
+        this.gestorSolicitud = new GestorSolicitud(almacenTemp);
+        this.gestorDisponibilidad = new GestorDisponibilidad(almacenTemp);
+        this.gestorCotizacion = new GestorCotizacion(almacenTemp);
+        this.gestorContratacion = new GestorContratacion(almacenTemp);
+    }
+
     @Override
     public List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono) {
         return gestorClientes.buscarPorFiltro(rfc, nombre, tipo, telefono);
@@ -43,7 +53,7 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
     }
 
     @Override
-    public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) throws NegocioException{
+    public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) throws NegocioException {
         return gestorSolicitud.buscarPorId(idSolicitud);
     }
 
@@ -74,12 +84,12 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
 
     @Override
     public List<UnidadFisicaDTO> verificarDisponibilidadUnidades(EquipoDTO equipo, PeriodoSolicitadoDTO periodo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return gestorDisponibilidad.unidadesLibres(equipo, periodo);
     }
 
     @Override
-    public boolean registrarSeleccionAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> accesorios) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean registrarSeleccionAccesorios(SolicitudRentaDTO solicitud, List<AccesorioDTO> accesorios) throws NegocioException {
+        return gestorSolicitud.asignarAccesorio(solicitud.getFolio(), accesorios);
     }
 
     @Override
@@ -93,13 +103,13 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
     }
 
     @Override
-    public boolean aceptarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean aceptarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) throws NegocioException {
+        return gestorContratacion.registrarDecision(solicitud.getFolio(), cotizacion.getDecision());
     }
 
     @Override
-    public boolean rechazarPropuestaRenta(SolicitudRentaDTO solicitud, String motivo) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean rechazarPropuestaRenta(SolicitudRentaDTO solicitud, DecisionClienteDTO motivo) throws NegocioException {
+        return gestorContratacion.registrarDecision(solicitud.getFolio(), motivo);
     }
 
     @Override

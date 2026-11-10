@@ -29,8 +29,7 @@ public class GestorCotizacion {
         this.almacenTemp = almacenTemp;
     }
 
-    public List<DetalleCotizacionDTO> calcularDetalle(
-            SolicitudRentaDTO solicitud) throws NegocioException {
+    public List<DetalleCotizacionDTO> calcularDetalle(SolicitudRentaDTO solicitud) throws NegocioException {
 
         if (solicitud == null || solicitud.getPeriodo() == null) {
             throw new NegocioException("La solicitud no es valida.");
