@@ -4,6 +4,7 @@
  */
 package Subsistema;
 
+import Excepciones.NegocioException;
 import java.util.List;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
@@ -33,11 +34,11 @@ public class AdminContratacionRenta implements IAdminContratacionRenta{
     
     @Override
     public List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono) {
-        return gestorClientes.buscarPorFiltro();
+       return gestorClientes.buscarPorFiltro(rfc, nombre, tipo, telefono);
     }
 
     @Override
-    public ClienteDTO registrarClienteNuevo(ClienteDTO cliente) {
+    public ClienteDTO registrarClienteNuevo(ClienteDTO cliente) throws NegocioException{
         return gestorClientes.registrar(cliente);
     }
 

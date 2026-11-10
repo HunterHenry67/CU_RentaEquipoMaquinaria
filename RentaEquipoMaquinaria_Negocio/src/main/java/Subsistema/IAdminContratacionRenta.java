@@ -4,6 +4,7 @@
  */
 package Subsistema;
 
+import Excepciones.NegocioException;
 import java.util.List;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
@@ -26,7 +27,7 @@ public interface IAdminContratacionRenta {
     
     public abstract List<ClienteDTO> buscarCliente(String rfc, String nombre, String tipo, String telefono);
     
-    public abstract ClienteDTO registrarClienteNuevo(ClienteDTO cliente);
+    public abstract ClienteDTO registrarClienteNuevo(ClienteDTO cliente) throws NegocioException;
     
     public abstract SolicitudRentaDTO validarSolicitudRenta(String idSolicitud);
     
