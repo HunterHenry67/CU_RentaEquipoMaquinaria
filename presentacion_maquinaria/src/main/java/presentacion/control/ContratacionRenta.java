@@ -4,6 +4,7 @@
  */
 package presentacion.control;
 
+import Subsistema.IAdminContratacionRenta;
 import almacentemporal.IAlmacenTemporal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class ContratacionRenta implements IContratacionRenta {
     // Las condiciones que el asesor revisa antes de generar la orden (las casillas de la pantalla)
     private static final List<String> CONDICIONES = Arrays.asList("Cliente", "Equipo y Unidad", "Accesorios aceptados", "Periodo", "Tarifa");
 
+    private final IAdminContratacionRenta subsistemaAdminCon;
     private final IAlmacenTemporal almacen;
     private final INegocioSimulado negocio;
     private ICoordinadorAplicacion coordinador;
@@ -49,9 +51,10 @@ public class ContratacionRenta implements IContratacionRenta {
     private CotizacionDTO cotizacionContratacion;
     private Map<EquipoDTO, String> equiposEvaluados = new LinkedHashMap<>();
 
-    public ContratacionRenta(IAlmacenTemporal almacen, INegocioSimulado negocio) {
+    public ContratacionRenta(IAlmacenTemporal almacen, INegocioSimulado negocio, IAdminContratacionRenta subsistemaAdminCon) {
         this.almacen = almacen;
         this.negocio = negocio;
+        this.subsistemaAdminCon = subsistemaAdminCon;
     }
 
     public void setCoordinador(ICoordinadorAplicacion coordinador) {
