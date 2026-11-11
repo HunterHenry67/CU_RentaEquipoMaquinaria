@@ -123,4 +123,9 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    @Override
+    public ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion) throws NegocioException{
+        return gestorContratacion.registarContratacion(contratacion);
+    }
+
 }

@@ -187,6 +187,19 @@ public class GestorContratacion {
         almacenTemp.actualizarContratacion(contratacion);
         return orden;
     }
+     
+     public ContratacionRentaDTO registarContratacion(ContratacionRentaDTO contratacion) throws NegocioException{
+         if(contratacion == null || contratacion.getFolioSolicitud() == null || contratacion.getFolioSolicitud().isBlank() || contratacion.getEstado() == null || contratacion.getEstado().isBlank()){
+             throw new NegocioException("");
+         }
+         ContratacionRentaDTO existente = almacenTemp.buscarContratacionPorFolio(contratacion.getFolioSolicitud().trim());
+         
+         if(existente != null ){
+             throw new NegocioException("La contratacion que intenta agregar ya existe.");
+         }
+         
+         return almacenTemp.registrarContratacion(contratacion);
+     }
     
     
     

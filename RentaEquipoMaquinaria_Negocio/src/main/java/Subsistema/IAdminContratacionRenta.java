@@ -58,4 +58,8 @@ public interface IAdminContratacionRenta {
     public abstract boolean generarOrdenEntrega(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) throws NegocioException;
 
     public abstract EquipoSolicitadoDTO recuperarEquipoSeleccionado();
+    
+    public abstract ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion)throws NegocioException;
+        
+    
 }
