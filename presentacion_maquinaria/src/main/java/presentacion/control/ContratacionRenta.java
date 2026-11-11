@@ -338,7 +338,7 @@ public class ContratacionRenta implements IContratacionRenta {
             }
                 
         } else {
-            // Tdoavia esta pendinete el checar este método, aún no lo he implementado dentro del SS
+            // Tdoavia esta pendinete el checar este método, aún no lo he implementado dentro del subsistema
             almacen.actualizarCliente(cliente);
             mensaje = empresa != null ? Mensaje.EMPRESA_ACTUALIZADA : Mensaje.CLIENTE_ACTUALIZADO;
         }
