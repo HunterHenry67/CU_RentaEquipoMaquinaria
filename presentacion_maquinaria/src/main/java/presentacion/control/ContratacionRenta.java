@@ -423,9 +423,19 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio(solicitud.getFolio());
         }
-        solicitudActual.setMotivoCancelacion(solicitud.getMotivoCancelacion().trim());
-        ResultadoCancelacionDTO resultado
-        guardarSolicitud();
+        String folio = solicitudActual.getFolio();
+        String motivo = solicitudActual.getMotivoCancelacion();
+        
+        if(ValidadorPresentacion.textoVacio(folio)){
+            coordinador.mostrarAviso(Mensaje.FALTA_FOLIO);
+        }
+        ResultadoCancelacionDTO resultado = subsistemaAdminCon.cancelarSolicitudRenta(folio, motivo);
+        
+        if(resultado == null || !resultado.isExitoso()){
+            coordinador.mostrarMensaje(Mensaje.FOLIO_NO_ENCONTRADO, folio);
+        }
+        solicitudActual.setEstadoSolicitud(resultado.getEstado());
+        solicitudActual.setMotivoCancelacion(motivo);
         coordinador.mostrarMensaje(Mensaje.CANCELACION_REGISTRADA);
         abrirMenuPrincipal();
     }
@@ -777,7 +787,13 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         String buscado = folio.trim().toUpperCase();
-        SolicitudRentaDTO solicitud = almacen.buscarSolicitudPorFolio(buscado);
+        SolicitudRentaDTO solicitud;
+        try{
+            solicitud = subsistemaAdminCon.validarSolicitudRenta(buscado);
+        }catch(NegocioException ex){
+            coordinador.mostrarMensaje(Mensaje.RFC_INVALIDO, buscado);
+            return;
+        }
         if (solicitud == null) {
             coordinador.mostrarMensaje(Mensaje.FOLIO_NO_ENCONTRADO, buscado);
             return;
