@@ -49,7 +49,7 @@ public interface IAdminContratacionRenta {
 
     public abstract CotizacionDTO generarCotizacion(SolicitudRentaDTO solicitudRenta);
 
-    public abstract boolean verificarRequisitosRenta(RequisitoRentaDTO cliente);
+    public abstract boolean verificarRequisitosRenta(List<RequisitoRentaDTO> requisitos);
 
     public abstract boolean aceptarPropuestaRenta(SolicitudRentaDTO solicitud, CotizacionDTO cotizacion) throws NegocioException;
 

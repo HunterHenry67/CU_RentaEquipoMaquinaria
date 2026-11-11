@@ -4,6 +4,7 @@
  */
 package presentacion.control;
 
+import Excepciones.NegocioException;
 import Subsistema.IAdminContratacionRenta;
 import almacentemporal.IAlmacenTemporal;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ import objetosdto.EvaluacionTecnicaDTO;
 import objetosdto.PeriodoSolicitadoDTO;
 import objetosdto.RequerimientoTecnicoDTO;
 import objetosdto.RequisitoRentaDTO;
+import objetosdto.ResultadoCancelacionDTO;
 import objetosdto.SolicitudRentaDTO;
 import objetosdto.UnidadFisicaDTO;
 import objetosdto.UsuarioDTO;
@@ -327,9 +329,16 @@ public class ContratacionRenta implements IContratacionRenta {
         cliente.setRfc(cliente.getRfc().trim().toUpperCase());
         Mensaje mensaje;
         if (cliente.getIdCliente() == null) {
-            cliente = almacen.registrarCliente(cliente);
-            mensaje = empresa != null ? Mensaje.EMPRESA_REGISTRADA : Mensaje.CLIENTE_REGISTRADO;
+            try{
+                cliente = subsistemaAdminCon.registrarClienteNuevo(cliente);
+                mensaje = empresa != null ? Mensaje.EMPRESA_REGISTRADA : Mensaje.CLIENTE_REGISTRADO;
+            }catch(NegocioException ex){
+                coordinador.mostrarAviso(Mensaje.RFC_REPETIDO);
+                return;
+            }
+                
         } else {
+            // Tdoavia esta pendinete el checar este método, aún no lo he implementado dentro del SS
             almacen.actualizarCliente(cliente);
             mensaje = empresa != null ? Mensaje.EMPRESA_ACTUALIZADA : Mensaje.CLIENTE_ACTUALIZADO;
         }
@@ -405,7 +414,6 @@ public class ContratacionRenta implements IContratacionRenta {
         if (!coordinador.confirmar(Mensaje.CONFIRMAR_REGISTRAR_CANCELACION)) {
             return;
         }
-        // se cancela la solicitud que se estaba capturando, con el folio y el cliente de la pantalla
         if (solicitudActual == null) {
             solicitudActual = solicitud;
         }
@@ -415,8 +423,8 @@ public class ContratacionRenta implements IContratacionRenta {
         if (solicitudActual.getFolio() == null) {
             solicitudActual.setFolio(solicitud.getFolio());
         }
-        solicitudActual.setEstadoSolicitud("Cancelada");
         solicitudActual.setMotivoCancelacion(solicitud.getMotivoCancelacion().trim());
+        ResultadoCancelacionDTO resultado
         guardarSolicitud();
         coordinador.mostrarMensaje(Mensaje.CANCELACION_REGISTRADA);
         abrirMenuPrincipal();
@@ -674,10 +682,9 @@ public class ContratacionRenta implements IContratacionRenta {
             guardarSolicitud();
             coordinador.mostrarOrdenRechazada(solicitudActual, contratacionActual, cotizacionContratacion, decision.getObservaciones().trim());
         } else if ("PENDIENTE POR ACCESORIO".equals(estado)) {
-            // sin el accesorio indispensable no hay condiciones que revisar: la solicitud queda pendiente
             solicitudActual.setEstadoSolicitud("Pendiente por accesorio");
             guardarSolicitud();
-            contratacionActual = almacen.registrarContratacion(contratacionActual);
+            contratacionActual = subsistemaAdminCon.registrarContratacion(contratacionActual);
             coordinador.mostrarOrdenEntrega(solicitudActual, contratacionActual, cotizacionContratacion);
         } else if (!unidadSigueLibre()) {
             coordinador.mostrarAviso(Mensaje.UNIDAD_YA_NO_LIBRE);

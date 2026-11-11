@@ -6,6 +6,7 @@ package Subsistema;
 
 import Excepciones.NegocioException;
 import almacentemporal.IAlmacenTemporal;
+import java.time.LocalDate;
 import java.util.List;
 import objetosdto.AccesorioDTO;
 import objetosdto.ClienteDTO;
@@ -69,7 +70,7 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
 
     @Override
     public List<EquipoDTO> buscarEquipoCompatibles(RequerimientoTecnicoDTO requerimiento) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return gestorDisponibilidad.buscarPorNombre(ree);
     }
 
     @Override
@@ -98,8 +99,8 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
     }
 
     @Override
-    public boolean verificarRequisitosRenta(RequisitoRentaDTO cliente) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean verificarRequisitosRenta(List<RequisitoRentaDTO> requisitos) {
+        return gestorClientes.cumpleRequisitos(requisitos);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
 
     @Override
     public boolean generarOrdenEntrega(SolicitudRentaDTO solicitud, ContratacionRentaDTO contratacion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return gestorContratacion.construirOrden(contratacion, LocalDate.MIN, , solicitud.getDireccionObra());
     }
 
     @Override
