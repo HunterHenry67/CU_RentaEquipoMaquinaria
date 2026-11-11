@@ -652,7 +652,7 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         solicitudActual.setRequisitos(requisitos);
-        if (!negocio.requisitosCumplidos(requisitos)) {
+        if (requisitos != null && !subsistemaAdminCon.verificarRequisitosRenta(requisitos)) {
             coordinador.mostrarAviso(Mensaje.REQUISITOS_PENDIENTES);
             coordinador.mostrarRequisitosPendientes();
             return;
@@ -992,7 +992,7 @@ public class ContratacionRenta implements IContratacionRenta {
         if (recomendado == null) {
             return new ArrayList<>();
         }
-        return negocio.disponibilidad(almacen.obtenerUnidadesDeEquipo(recomendado.getIdEquipo()), solicitudActual.getPeriodo());
+        return subsistemaAdminCon.verificarDisponibilidadUnidades(recomendado, solicitudActual.getPeriodo());
     }
 
     @Override
