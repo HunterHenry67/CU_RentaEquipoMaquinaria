@@ -260,7 +260,32 @@ public class ContratacionRenta implements IContratacionRenta {
             coordinador.mostrarAviso(Mensaje.TELEFONO_BUSQUEDA_INVALIDO);
             return;
         }
-        List<ClienteDTO> encontrados = almacen.buscarClientes(filtro, texto);
+        String valor = ValidadorPresentacion.textoVacio(texto) ? null : texto.trim();
+        String nombre = null;
+        String rfc = null;
+        String tipo = null;
+        String telefono = null;
+        
+        if(valor != null){
+            switch(filtro){
+                case "RFC":
+                    rfc = valor;
+                    break;
+                case "Nombre":
+                    nombre = valor;
+                    break;
+                case "Tipo":
+                    tipo = valor;
+                    break;
+                case "Teléfono":
+                    telefono = valor;
+                    break;
+                default:
+                    return;
+            }
+                                    
+        }
+        List<ClienteDTO> encontrados = subsistemaAdminCon.buscarCliente(rfc, nombre, tipo, telefono);
         coordinador.mostrarClientesEncontrados(encontrados);
         if (encontrados.isEmpty()) {
             coordinador.mostrarMensaje(Mensaje.CLIENTE_NO_ENCONTRADO);
@@ -549,10 +574,16 @@ public class ContratacionRenta implements IContratacionRenta {
             return;
         }
         evaluacion.getRecomendado().setAccesorios(negocio.accesoriosPropuestos(accesoriosDelRecomendado(), opcionalesElegidos));
-        // con otro equipo u otros accesorios la cotización se vuelve a armar
-        cotizacionActual = null;
-        guardarSolicitud();
-        abrirEvaluacionTecnica();
+        try{
+            boolean registrado = subsistemaAdminCon.registrarSeleccionAccesorios(solicitudActual, evaluacion.getRecomendado().getAccesorios());
+            if(!registrado){
+                return;
+            }
+            cotizacionActual = null;
+            abrirEvaluacionTecnica();
+        }catch(NegocioException ex){
+            coordinador.mostrarAviso(Mensaje.);
+        }    
     }
 
     @Override
@@ -745,12 +776,12 @@ public class ContratacionRenta implements IContratacionRenta {
 
     // No generar orden: la solicitud queda pendiente y la unidad no se aparta
     @Override
-    public void pasarDatosSolicitudPendiente(ContratacionRentaDTO contratacion) {
+    public void pasarDatosSolicitudPendiente(ContratacionRentaDTO contratacion){
         if (!haySolicitud() || !hayCotizacion()) {
             return;
         }
         contratacion.setEstado("PENDIENTE");
-        contratacionActual = almacen.registrarContratacion(contratacion);
+        contratacionActual = subsistemaAdminCon.registrarContratacion(contratacion);
         solicitudActual.setEstadoSolicitud("Pendiente por condiciones");
         guardarSolicitud();
         cotizacionContratacion = cotizacionDe(contratacionActual);

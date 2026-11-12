@@ -52,6 +52,10 @@ public enum Mensaje {
     EQUIPOS_IGUALES("Equipos Compatibles", "El equipo recomendado y la alternativa tienen que ser distintos."),
     FALTA_RECOMENDADO("Selección de Accesorios", "Primero hay que elegir el equipo recomendado."),
     EVALUACION_REGISTRADA("Evaluación Técnica", "Evaluación técnica registrada con éxito.\nSolicitud enviada a verificación de inventario."),
+    ERROR_REGISTRAR_ACCESORIOS(
+    "Selección de Accesorios",
+    "No fue posible registrar los accesorios seleccionados."
+),
 
     // Disponibilidad
     UNIDAD_SIN_SELECCIONAR("Verificación de Inventario", "Selecciona una unidad de la tabla."),
