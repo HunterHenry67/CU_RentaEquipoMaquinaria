@@ -29,6 +29,20 @@ public class GestorCotizacion {
         this.almacenTemp = almacenTemp;
     }
 
+    public CotizacionDTO generarCotizacion(SolicitudRentaDTO solicitud, List<AccesorioDTO> accesorios) throws NegocioException {
+        if (solicitud == null || solicitud.getPeriodo() == null || solicitud.getPeriodo().getDiasRenta() == null || solicitud.getEquiposSolicitados() == null || solicitud.getEquiposSolicitados().isEmpty()) {
+            throw new NegocioException("La solcitud no tiene los datos suficientes para generar la cotizacion.");
+        }
+
+        EquipoSolicitadoDTO solicitado = solicitud.getEquiposSolicitados().get(0);
+
+        if (solicitado == null || solicitado.getEvaluacion() == null || solicitado.getEvaluacion().getRecomendado() == null) {
+            throw new NegocioException("No hay un equipo recomendado para cotizar.");
+        }
+        
+        EquipoDTO 
+    }
+
     public List<DetalleCotizacionDTO> calcularDetalle(SolicitudRentaDTO solicitud) throws NegocioException {
 
         if (solicitud == null || solicitud.getPeriodo() == null) {

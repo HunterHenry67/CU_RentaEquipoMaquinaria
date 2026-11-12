@@ -31,6 +31,8 @@ public interface IAdminContratacionRenta {
 
     public abstract ClienteDTO registrarClienteNuevo(ClienteDTO cliente) throws NegocioException;
 
+    public abstract SolicitudRentaDTO registrarSolcitud(SolicitudRentaDTO solicitud) throws NegocioException;
+    
     public abstract SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) throws NegocioException;
 
     public abstract ResultadoCancelacionDTO cancelarSolicitudRenta(String folio, String motivo);

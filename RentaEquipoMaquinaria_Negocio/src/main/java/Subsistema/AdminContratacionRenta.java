@@ -54,6 +54,11 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
     }
 
     @Override
+    public SolicitudRentaDTO registrarSolcitud(SolicitudRentaDTO solicitud) throws NegocioException {
+        return gestorSolicitud.crear(solicitud);
+    }
+    
+    @Override
     public SolicitudRentaDTO validarSolicitudRenta(String idSolicitud) throws NegocioException {
         return gestorSolicitud.buscarPorId(idSolicitud);
     }
@@ -127,5 +132,7 @@ public class AdminContratacionRenta implements IAdminContratacionRenta {
     public ContratacionRentaDTO registrarContratacion(ContratacionRentaDTO contratacion) throws NegocioException{
         return gestorContratacion.registarContratacion(contratacion);
     }
+
+    
 
 }
