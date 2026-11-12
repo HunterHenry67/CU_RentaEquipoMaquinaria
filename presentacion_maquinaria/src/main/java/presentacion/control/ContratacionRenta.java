@@ -582,7 +582,8 @@ public class ContratacionRenta implements IContratacionRenta {
             cotizacionActual = null;
             abrirEvaluacionTecnica();
         }catch(NegocioException ex){
-            coordinador.mostrarAviso(Mensaje.);
+            coordinador.mostrarAviso(Mensaje.ERROR_REGISTRAR_ACCESORIOS);
+            return;
         }    
     }
 
@@ -759,8 +760,7 @@ public class ContratacionRenta implements IContratacionRenta {
         contratacion.setEstado("FORMALIZADA");
         contratacion.setFechaFormalizacion(LocalDate.now());
         contratacion.setOrdenEntrega(negocio.generarOrdenEntrega(solicitudActual));
-        almacen.registrarContratacion(contratacion);
-        // la unidad queda apartada para el periodo de la renta
+        subsistemaAdminCon.registrarContratacion(contratacion);
         UnidadFisicaDTO unidad = almacen.buscarUnidadPorId(solicitudActual.getUnidadSeleccionada().getIdUnidad());
         if (unidad != null) {
             almacen.actualizarUnidad(negocio.ocuparUnidad(unidad, solicitudActual.getPeriodo()));
